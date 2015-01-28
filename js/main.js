@@ -15,24 +15,20 @@
  | See the License for the specific language governing permissions and
  | limitations under the License.
  */
-define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on", "dojo/parser", "dijit/layout/ContentPane", "dojo/domReady!"], function (
+define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on", "dojo/domReady!"], function (
   declare,
   lang,
   arcgisUtils,
   dom,
   domClass,
-  on,
-  parser,
-  ContentPane
+  on
 ) {
-  //parser.parse();
   return declare(null, {
     config: {},
     startup: function (config) {
       // config will contain application and user defined info for the template such as i18n strings, the web map id
       // and application id
       // any url parameters and any application specific configuration information.
-      parser.parse();
       if (config) {
         this.config = config;
         //supply either the webmap id or, if available, the item info

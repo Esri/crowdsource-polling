@@ -43,48 +43,14 @@
       <span>This site requires JavaScript.</span>
     </div>
   </noscript>
-
-  <!-- The ArcGIS API for JavaScript provides bidirectional support.  When viewing the application in an right to left (rtl) language like Hebrew and Arabic the map needs to remain in left-to-right (ltr) mode. Specify this by setting the dir attribute on the div to ltr. -->
-  <div data-dojo-type="dijit/layout/BorderContainer" style="width:100%;height:100%;">
-    <div id="mapDiv" dir= "ltr" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'"></div>
-    <div id= "sideBC" class="sideBC" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="region:'right'" style="height:100%;">
-
-  <!-- Section-Header -->
-
-  <div id="headerSection" class="headerSection" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
-    <button id="signIn" class="signIn" data-dojo-type="dijit/form/Button" type="button" >
-         Sign In
-    </button>
-    <div id= "title">
-        The Idea Wall
-    <div id="help" class="help">
-      <img id="helpIcon" src="images/help.png" style="margin-left:2px">
-    </div>
+  <div id="contentDiv" class="fill" data-dojo-type="dijit/layout/LayoutContainer" data-dojo-props="design: 'sidebar'">
+    <!-- The ArcGIS API for JavaScript provides bidirectional support.  When viewing the application in an right to left (rtl) language like Hebrew and Arabic the map needs to remain in left-to-right (ltr) mode. Specify this by setting the dir attribute on the div to ltr. -->
+    <div id="mapDiv" dir="ltr" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'"></div>
+    <div id="sidebar" class="fill" data-dojo-type="dijit/layout/LayoutContainer" data-dojo-props="region:'right', design: 'headline'">
+      <div id="sidebarHeading" class="fill" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'"></div>
+      <div id="sidebarContent" class="fill" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'"></div>
     </div>
   </div>
-
-  <!-- Section-Content -->
-
-  <div id="contentSection" class="contentSection" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
-      <!--<img src="images/left.png" style="margin:2px;vertical-align:left"> Popup Title
-      <div class="arrow-left"></div>-->
-      <div class=box> Popup Title </div>
-      <!--<div id= "popupTitle" class="popupTitle">Popup Title </div>-->
-  </div>
-
-  <!-- Section-Footer -->
-
-  <div class="footerSection" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'bottom'">
-    <div class= "footer">
-       <!--<svg id="add" overflow ="hiddent" width="100" height="100" src="images/add.svg" style="margin:4px;vertical-align:middle">
-         Submit an Idea
-        </svg> -->
-        <img id="add" src="images/add.png" style="margin:4px;vertical-align:middle">
-           Submit an Idea
-    </div>
- </div>
- </div>
-
   <script type="text/javascript">
     var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
     var dojoConfig = {

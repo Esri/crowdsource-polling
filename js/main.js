@@ -16,7 +16,8 @@
  | limitations under the License.
  */
 define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on",
-    "dojo/parser",
+    "dojo/parser", "dojo/json", "dojo/_base/fx",
+    "dojo/Deferred", "dojo/promise/first",
     "dijit/layout/LayoutContainer", "dijit/layout/ContentPane",
     "dojo/domReady!"], function (
   declare,
@@ -25,7 +26,11 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
   dom,
   domClass,
   on,
-  parser
+  parser,
+  JSON,
+  fx,
+  Deferred,
+  first
 ) {
   return declare(null, {
     config: {},
@@ -39,7 +44,7 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
         this.config = config;
         //supply either the webmap id or, if available, the item info
         var itemInfo = this.config.itemInfo || this.config.webmap;
-        this._createWebMap(itemInfo);
+        this._launch(itemInfo);
       } else {
         var error = new Error("Main:: Config is not defined");
         this.reportError(error);
@@ -63,14 +68,61 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
         }
       }
     },
-    // Sample function
-    _helloWorld: function () {
-      console.log("Hello World!");
-      console.log("My Map:", this.map);
-      console.log("My Config:", this.config);
+
+    //========================================================================================================================//
+
+    /**
+     * Launches app.
+     * @param {object|string} itemInfo Configuration object created by template.js or webmap id
+     */
+    _launch: function (itemInfo) {
+      var setupUI, processMap, createMap;
+
+      // Perform setups in parallel
+      setupUI = this._setupUI();
+      processMap = this._processMap();
+      createMap = this._createWebMap(itemInfo);
+
+      // Show the app when the first of the setups completes
+      first([setupUI, processMap, createMap]).then(lang.hitch(this, function (results) {
+        this._revealApp();
+      }));
     },
-    // create a map based on the input web map id
+
+    /**
+     * Sets up UI.
+     * @return {object} Deferred
+     */
+    _setupUI: function () {
+      var deferred = new Deferred();
+      setTimeout(lang.hitch(this, function(){
+        deferred.resolve();
+        dom.byId("sidebarHeading").innerHTML = "Heading";
+      }), 500);
+      return deferred.promise;
+    },
+
+    /**
+     * Process the configuration's map information to extract layers and fields.
+     * @return {object} Deferred
+     */
+    _processMap: function () {
+      var deferred = new Deferred();
+      setTimeout(lang.hitch(this, function(){
+        deferred.resolve();
+        dom.byId("sidebarContent").innerHTML = "Content";
+      }), 2000);
+      return deferred.promise;
+    },
+
+    /**
+     * Creates a map based on the input item info or web map id.
+     * @param {object|string} itemInfo Configuration object created by template.js or webmap id
+     * @return {object} Deferred
+     */
     _createWebMap: function (itemInfo) {
+      var deferred = new Deferred();
+
       arcgisUtils.createMap(itemInfo, "mapDiv", {
         mapOptions: {
           // Optionally define additional map config here for example you can
@@ -86,13 +138,34 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
         // Here' we'll use it to update the application to match the specified color theme.
         // console.log(this.config);
         this.map = response.map;
-        // remove loading class from body
+        // make sure map is loaded
+        if (this.map.loaded) {
+            deferred.resolve();
+        } else {
+            on.once(this.map, "load", lang.hitch(this, function () {
+                deferred.resolve();
+            }));
+        }
+      }), lang.hitch(this, function (err) {
+        this.reportError(err);
+        deferred.reject();
+      }));
+
+      return deferred.promise;
+    },
+
+    /**
+     * Hides the loading indicator and reveals the content.
+     */
+    _revealApp: function () {
         domClass.remove(document.body, "app-loading");
-        // Start writing my code
-        this._helloWorld();
-        // map has been created. You can start using it.
-        // If you need map to be loaded, listen for it's load event.
-      }), this.reportError);
+        fx.fadeIn({
+            node: "contentDiv",
+            duration: 1000,
+            onEnd: function () {
+                domClass.remove("contentDiv", "transparent");
+            }
+        }).play();
     }
   });
 });

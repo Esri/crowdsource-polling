@@ -89,14 +89,19 @@
       packages: [{
         name: "application",
         location: package_path + '/js'
-            }, {
+      }, {
         name: "config",
         location: package_path + '/config'
-            }, {
+      }, {
         name: "arcgis_templates",
         location: package_path + '/..'
-            }]
+      }]
     };
+
+    // Have to handle a locale parameter before dojo is loaded
+    if (location.search.match(/locale=([\w\-]+)/)) {
+        dojoConfig.locale = RegExp.$1;
+    }
   </script>
   <script type="text/javascript" src="//jsdev.arcgis.com/3.13/"></script>
   <script type="text/javascript">

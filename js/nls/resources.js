@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
- | Version 10.2
- | Copyright 2012 Esri
+/*global define */
+/*
+ | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
  | you may not use this file except in compliance with the License.
@@ -14,15 +13,12 @@
  | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  | See the License for the specific language governing permissions and
  | limitations under the License.
--->
-<configuration>
-    <system.webServer>
-        <staticContent>
-            <!-- Configure site to serve JSON files -->
-            <remove fileExtension=".json" />
-            <mimeMap fileExtension=".json" mimeType="application/json" />
-            <!-- Configure site to serve Markdown files -->
-            <mimeMap fileExtension=".md" mimeType="text/x-markdown;charset=UTF-8" />
-        </staticContent>
-    </system.webServer>
-</configuration>
+ */
+define({
+  root: ({
+    map: {
+      error: "Unable to create map"
+    }
+  }),
+  "fr": 1
+});

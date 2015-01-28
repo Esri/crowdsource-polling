@@ -1,0 +1,6 @@
+commit 429400c14d976408816d9e833af39e6a13495306
+Merge: 2320637 fdf711b
+Author: MikeTschudi <mtschudi@esri.com>
+Date:   Wed Jan 28 15:34:00 2015 -0800
+
+    Merge branch 'social-and-help-popups' into develop

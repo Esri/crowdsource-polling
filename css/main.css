@@ -53,6 +53,8 @@ body {
 
 /*============================================================================================================================*/
 
+/* general app layout */
+
 .fill {
     margin:0;
     padding:0 !important;
@@ -64,15 +66,56 @@ body {
     font-size: large;
 }
 .transparent {
-    opacity:0.0;filter:Alpha(opacity=0);
+    opacity: 0.0;filter:Alpha(opacity=0);
 }
-
 #sidebar {
     width: 320px;
     border-left: 1px solid gray;
 }
+
+/*============================================================================================================================*/
+
+/* sidebar-header widget */
+
 #sidebarHeading {
     height: 100px;
     border-bottom: 1px solid gray;
 }
 
+.sideHdrBtns {
+    height: 22px;
+    padding: 5px;
+}
+
+.sideHdrSign {
+    color: #007ac2;
+    display: inline-block;
+    padding: 4px;
+    float: left;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.sideHdrSign:hover {
+    background-color: #007ac2;
+    color: white;
+}
+
+.sideHdrHelp {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+}
+
+.sideHdrTitle {
+    height: 68px;
+    line-height: 68px;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

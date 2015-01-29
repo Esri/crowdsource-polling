@@ -16,8 +16,9 @@
  | limitations under the License.
  */
 define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on",
-    "dojo/parser", "dojo/json", "dojo/_base/fx",
+    "dojo/parser", "dojo/json", "dojo/_base/fx", "dojo/dom-style",
     "dojo/Deferred", "dojo/promise/first",
+    "dojo/_base/Color", "dojox/color/_base",
     "dijit/layout/LayoutContainer", "dijit/layout/ContentPane",
     "dojo/domReady!"], function (
   declare,
@@ -29,8 +30,11 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
   parser,
   JSON,
   fx,
+  domStyle,
   Deferred,
-  first
+  first,
+  Color,
+  ColorX
 ) {
   return declare(null, {
     config: {},
@@ -96,9 +100,27 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
     _setupUI: function () {
       var deferred = new Deferred();
       setTimeout(lang.hitch(this, function(){
+
+        // Set the theme
+        if (new Color(this.config.color).toHsl().l > 60) {
+          this.config.theme = {
+            "background": this.config.color,
+            "foreground": "black",
+            "shading": "white"
+          };
+        } else {
+          this.config.theme = {
+            "background": this.config.color,
+            "foreground": "white",
+            "shading": "black"
+          };
+        }
+
+
         deferred.resolve();
-        dom.byId("sidebarHeading").innerHTML = "Heading";
-      }), 500);
+        domStyle.set("sidebarHeading", "background-color", this.config.theme.background);
+        dom.byId("sidebarHeading").innerHTML = "<span style='background-color:" + this.config.theme.shading + ";color:" + this.config.theme.foreground + "'>Heading</span>";
+      }), 1);
       return deferred.promise;
     },
 

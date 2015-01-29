@@ -1,4 +1,4 @@
-/*global define,dojo */
+﻿/*global define,dojo */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2015 Esri
@@ -26,32 +26,21 @@ define([
     "dojo/_base/lang",
     "dojo/on",
     "application/lib/SvgHelper"
-
-/*
-    "dojo/dom-construct",
-    "dojo/dom-style",
-    "dojo/dom-attr",
-    "dojo/dom-class",
-    "dojo/string",
-    "dojo/query",
-    "esri/Color",
-    "esri/graphic",
-    "esri/geometry/Point",
-    "esri/geometry/Polyline",
-    "esri/geometry/Polygon",
-    "esri/layers/FeatureLayer",
-    "esri/layers/GraphicsLayer",
-    "esri/symbols/SimpleMarkerSymbol",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/symbols/SimpleFillSymbol",
-    "esri/tasks/query",
-    */
-], function (declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, template,
-    dom, lang, on,
-/*    domConstruct, domStyle, domAttr, domClass, string, query, issueItemTemplate, issueDetailsTemplate, Color, Graphic, Point, Polyline, Polygon, FeatureLayer, GraphicsLayer, SimpleMarkerSymbol, SimpleLineSymbol, SimpleFillSymbol, Query, IssueComments */
-    SvgHelper) {
+], function (
+    declare,
+    _WidgetBase,
+    _TemplatedMixin,
+    _WidgetsInTemplateMixin,
+    template,
+    dom,
+    lang,
+    on,
+    SvgHelper
+) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
+        signInBtnOnClick: null,
+        helpBtnOnClick: null,
 
         /**
          * Widget constructor
@@ -79,8 +68,47 @@ define([
             this.helpBtn.title = i18n.helpButtonTooltip;
 
             this.appTitle.innerHTML = this.title || "";
-        }
+        },
 
+        /**
+         * Sets the onClick handler for the sign-in button.
+         * @param {function} clickHandler Function to be called when the sign-in button is clicked;
+         * callback function will receive this widget as 'this'
+         * @example
+         * var widget = new SidebarHeader(this.config);
+         * widget.placeAt("sidebarHeading");
+         * widget.startup();
+         * widget.set("signInBtnOnClick", function () {
+         *     console.log("Clicked sign-in button");
+         * });
+         */
+        _setSignInBtnOnClickAttr: function (clickHandler) {
+            if (this.signInBtnOnClick) {
+                this.signInBtnOnClick.remove();
+            }
+            this.signInBtnOnClick = on(this.signInBtn, "click", lang.hitch(this, clickHandler));
+            this.own(this.signInBtnOnClick);
+        },
+
+        /**
+         * Sets the onClick handler for the help button.
+         * @param {function} clickHandler Function to be called when the help button is clicked;
+         * callback function will receive this widget as 'this'
+         * @example
+         * var widget = new SidebarHeader(this.config);
+         * widget.placeAt("sidebarHeading");
+         * widget.startup();
+         * widget.set("helpBtnOnClick", function () {
+         *     console.log("Clicked help button");
+         * });
+         */
+        _setHelpBtnOnClickAttr: function (clickHandler) {
+            if (this.helpBtnOnClick) {
+                this.helpBtnOnClick.remove();
+            }
+            this.helpBtnOnClick = on(this.helpBtn, "click", lang.hitch(this, clickHandler));
+            this.own(this.helpBtnOnClick);
+        }
 
     });
 });

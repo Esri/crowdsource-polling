@@ -1,4 +1,4 @@
-/*global define,document,setTimeout */
+/*global define,document,setTimeout,console */
 /*jslint sloppy:true,nomen:true */
 /*
  | Copyright 2014 Esri
@@ -15,14 +15,24 @@
  | See the License for the specific language governing permissions and
  | limitations under the License.
  */
-define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on",
-    "dojo/parser", "dojo/_base/fx", "dojo/dom-style",
-    "dojo/Deferred", "dojo/promise/first",
-    "dojo/_base/Color", "dojox/color/_base",
+define([
+    "dojo/_base/declare",
+    "dojo/_base/lang",
+    "esri/arcgis/utils",
+    "dojo/dom",
+    "dojo/dom-class",
+    "dojo/on",
+    "dojo/parser",
+    "dojo/_base/fx",
+    "dojo/Deferred",
+    "dojo/promise/first",
+    "dojo/_base/Color",
     "application/widgets/SidebarHeader/SidebarHeader",
-    "dijit/layout/LayoutContainer", "dijit/layout/ContentPane",
+    "dijit/layout/LayoutContainer",
+    "dijit/layout/ContentPane",
+    "dojox/color/_base",
     "dojo/domReady!"
-    ], function (
+], function (
     declare,
     lang,
     arcgisUtils,
@@ -31,11 +41,9 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
     on,
     parser,
     fx,
-    domStyle,
     Deferred,
     first,
     Color,
-    ColorX,
     SidebarHeader
 ) {
     return declare(null, {
@@ -120,8 +128,16 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
                     };
                 }
 
+                // Add the widgets
                 var widget = new SidebarHeader(this.config);
                 widget.placeAt("sidebarHeading");
+                widget.startup();
+                widget.set("signInBtnOnClick", function () {
+                    console.log("Clicked sign-in button");
+                });
+                widget.set("helpBtnOnClick", function () {
+                    console.log("Clicked help button");
+                });
 
                 deferred.resolve();
             }));

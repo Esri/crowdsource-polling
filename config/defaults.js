@@ -19,7 +19,7 @@ define({
   //Default configuration settings for the application. This is where you'll define things like a bing maps key,
   //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
   "appid": "",
-  "webmap": "24e01ef45d40423f95300ad2abc5038a",
+  "webmap": "85a0cb1b165c45a0bf1321ce0d44b25b",
   "oauthappid": null, //"AFTKRmv16wj14N3z",
   //Group templates must support a group url parameter. This will contain the id of the group.
   "group": "",
@@ -34,8 +34,8 @@ define({
   //Defaults to arcgis.com. Set this value to your portal or organization host name.
   "sharinghost": location.protocol + "//" + "www.arcgis.com",
   "units": null,
-  //If your applcation needs to edit feature layer fields set this value to true. When false the map will
-  //be dreated with layers that are not set to editable which allows the FeatureLayer to load features optimally. 
+  //If your application needs to edit feature layer fields set this value to true. When false the map will
+  //be created with layers that are not set to editable which allows the FeatureLayer to load features optimally.
   "editable": false,
   "helperServices": {
     "geometry": {

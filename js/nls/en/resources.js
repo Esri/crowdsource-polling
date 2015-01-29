@@ -16,11 +16,11 @@
  */
 define(({
     map: {
-        error: "Impossible de créer la carte"
+        error: "Unable to create map"
     },
     sidebar_header: {
-        signInButton: "Se Connecter",
-        signInButtonTooltip: "Se connecter à un média social",
-        helpButtonTooltip: "Pour en savoir plus sur cette application"
+        signInButton: "Sign In",
+        signInButtonTooltip: "Sign in to a social medium",
+        helpButtonTooltip: "Find out more about this app"
     }
 }));

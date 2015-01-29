@@ -1,5 +1,5 @@
-/*global define,document,setTimeout,console */
-/*jslint sloppy:true,nomen:true */
+﻿/*global define,console */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
  |

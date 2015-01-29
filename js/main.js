@@ -16,8 +16,9 @@
  | limitations under the License.
  */
 define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on",
-    "dojo/parser", "dojo/_base/fx",
+    "dojo/parser", "dojo/_base/fx", "dojo/dom-style",
     "dojo/Deferred", "dojo/promise/first",
+    "dojo/_base/Color", "dojox/color/_base",
     "application/widgets/SidebarHeader/SidebarHeader",
     "dijit/layout/LayoutContainer", "dijit/layout/ContentPane",
     "dojo/domReady!"
@@ -30,8 +31,11 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
     on,
     parser,
     fx,
+    domStyle,
     Deferred,
     first,
+    Color,
+    ColorX,
     SidebarHeader
 ) {
     return declare(null, {
@@ -100,8 +104,25 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
         _setupUI: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
+
+                // Set the theme
+                if (new Color(this.config.color).toHsl().l > 60) {
+                    this.config.theme = {
+                        "background": this.config.color,
+                        "foreground": "black",
+                        "shading": "white"
+                    };
+                } else {
+                    this.config.theme = {
+                        "background": this.config.color,
+                        "foreground": "white",
+                        "shading": "black"
+                    };
+                }
+
                 var widget = new SidebarHeader(this.config);
                 widget.placeAt("sidebarHeading");
+
                 deferred.resolve();
             }));
             return deferred.promise;

@@ -45,6 +45,7 @@ define([
         /**
          * Widget constructor
          * @param {object} config Application configuration
+         * @constructor
          */
         constructor: function (config) {
             lang.mixin({}, this, config);

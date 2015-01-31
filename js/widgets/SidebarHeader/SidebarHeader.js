@@ -20,7 +20,6 @@ define([
     "dojo/_base/declare",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
-    "dijit/_WidgetsInTemplateMixin",
     "dojo/text!./templates/SidebarHeader.html",
     "dojo/dom",
     "dojo/_base/lang",
@@ -30,14 +29,13 @@ define([
     declare,
     _WidgetBase,
     _TemplatedMixin,
-    _WidgetsInTemplateMixin,
     template,
     dom,
     lang,
     on,
     SvgHelper
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         signInBtnOnClick: null,
         helpBtnOnClick: null,
@@ -45,6 +43,7 @@ define([
         /**
          * Widget constructor
          * @param {object} config Application configuration
+         * @constructor
          */
         constructor: function (config) {
             lang.mixin({}, this, config);

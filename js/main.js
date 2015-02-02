@@ -1,5 +1,5 @@
-/*global define,document,setTimeout */
-/*jslint sloppy:true,nomen:true */
+﻿/*global define,console*/
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
  |
@@ -15,27 +15,37 @@
  | See the License for the specific language governing permissions and
  | limitations under the License.
  */
-define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom", "dojo/dom-class", "dojo/on",
-    "dojo/parser", "dojo/_base/fx", "dojo/dom-style",
-    "dojo/Deferred", "dojo/promise/first",
-    "dojo/_base/Color", "dojox/color/_base",
+define([
+    "dojo/_base/declare",
+    "dojo/_base/lang",
+    "esri/arcgis/utils",
+    "esri/dijit/LocateButton",
+    "dojo/dom",
+    "dojo/dom-class",
+    "dojo/on",
+    "dojo/parser",
+    "dojo/_base/fx",
+    "dojo/Deferred",
+    "dojo/promise/first",
+    "dojo/_base/Color",
     "application/widgets/SidebarHeader/SidebarHeader",
-    "dijit/layout/LayoutContainer", "dijit/layout/ContentPane",
+    "dijit/layout/LayoutContainer",
+    "dijit/layout/ContentPane",
+    "dojox/color/_base",
     "dojo/domReady!"
-    ], function (
+], function (
     declare,
     lang,
     arcgisUtils,
+    LocateButton,
     dom,
     domClass,
     on,
     parser,
     fx,
-    domStyle,
     Deferred,
     first,
     Color,
-    ColorX,
     SidebarHeader
 ) {
     return declare(null, {
@@ -120,8 +130,16 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
                     };
                 }
 
+                // Add the widgets
                 var widget = new SidebarHeader(this.config);
                 widget.placeAt("sidebarHeading");
+                widget.startup();
+                widget.set("signInBtnOnClick", function () {
+                    console.log("Clicked sign-in button");
+                });
+                widget.set("helpBtnOnClick", function () {
+                    console.log("Clicked help button");
+                });
 
                 deferred.resolve();
             }));
@@ -163,6 +181,12 @@ define(["dojo/_base/declare", "dojo/_base/lang", "esri/arcgis/utils", "dojo/dom"
                 // Here' we'll use it to update the application to match the specified color theme.
                 // console.log(this.config);
                 this.map = response.map;
+                // start up locate widget
+                var geoLocate = new LocateButton({
+                    map: this.map
+                }, "LocateButton");
+                geoLocate.startup();
+
                 // make sure map is loaded
                 if (this.map.loaded) {
                     deferred.resolve();

@@ -1,4 +1,4 @@
-﻿/*global define,console */
+﻿/*global define,console*/
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -19,6 +19,7 @@ define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "esri/arcgis/utils",
+    "esri/dijit/LocateButton",
     "dojo/dom",
     "dojo/dom-class",
     "dojo/on",
@@ -36,6 +37,7 @@ define([
     declare,
     lang,
     arcgisUtils,
+    LocateButton,
     dom,
     domClass,
     on,
@@ -179,6 +181,12 @@ define([
                 // Here' we'll use it to update the application to match the specified color theme.
                 // console.log(this.config);
                 this.map = response.map;
+                // start up locate widget
+                var geoLocate = new LocateButton({
+                    map: this.map
+                }, "LocateButton");
+                geoLocate.startup();
+
                 // make sure map is loaded
                 if (this.map.loaded) {
                     deferred.resolve();

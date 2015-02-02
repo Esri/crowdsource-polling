@@ -1,4 +1,4 @@
-﻿/*global define,console,mapDiv */
+﻿/*global define,console*/
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -183,7 +183,7 @@ define([
                 this.map = response.map;
                 // start up locate widget
                 var geoLocate = new LocateButton({
-                    map: mapDiv
+                    map: this.map
                 }, "LocateButton");
                 geoLocate.startup();
 

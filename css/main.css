@@ -87,10 +87,11 @@ body {
 #sidebarHeading {
     height: 100px;
     border-bottom: 1px solid gray;
+    overflow: hidden;
 }
 
 .sideHdrBtns {
-    height: 22px;
+    height: 27px;
     padding: 5px;
 }
 
@@ -116,8 +117,8 @@ body {
 }
 
 .sideHdrTitle {
-    height: 68px;
-    line-height: 68px;
+    height: 60px;
+    line-height: 60px;
     font-size: 30px;
     font-weight: bold;
     text-align: center;

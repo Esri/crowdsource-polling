@@ -37,6 +37,7 @@ define([
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
+        _config: null,
         signInBtnOnClick: null,
         helpBtnOnClick: null,
 
@@ -46,14 +47,14 @@ define([
          * @constructor
          */
         constructor: function (config) {
-            lang.mixin({}, this, config);
+            this._config = config;
         },
 
         /**
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var svgHelper, i18n = this.i18n.sidebar_header;
+            var svgHelper, i18n = this._config.i18n.sidebar_header;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -63,10 +64,10 @@ define([
             this.signInBtn.title = i18n.signInButtonTooltip;
 
             svgHelper = new SvgHelper();
-            svgHelper.createSVGItem(this.helpIcon, this.helpBtn, 19, 19);
+            svgHelper.createSVGItem(this._config.helpIcon, this.helpBtn, 19, 19);
             this.helpBtn.title = i18n.helpButtonTooltip;
 
-            this.appTitle.innerHTML = this.title || "";
+            this.appTitle.innerHTML = this._config.title || "";
         },
 
         /**

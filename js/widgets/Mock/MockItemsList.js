@@ -1,0 +1,83 @@
+﻿/*global define,dojo */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
+/*
+ | Copyright 2015 Esri
+ |
+ | Licensed under the Apache License, Version 2.0 (the "License");
+ | you may not use this file except in compliance with the License.
+ | You may obtain a copy of the License at
+ |
+ |    http://www.apache.org/licenses/LICENSE-2.0
+ |
+ | Unless required by applicable law or agreed to in writing, software
+ | distributed under the License is distributed on an "AS IS" BASIS,
+ | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ | See the License for the specific language governing permissions and
+ | limitations under the License.
+ */
+//============================================================================================================================//
+define([
+    "dojo/_base/declare",
+    "application/widgets/Mock/MockWidget",
+    "dojo/_base/lang",
+    "dojo/dom",
+    "dojo/dom-construct",
+    "dojo/dom-style",
+    "dojo/json",
+    "dojo/on"
+], function (
+    declare,
+    MockWidget,
+    lang,
+    dom,
+    domConstruct,
+    domStyle,
+    JSON,
+    on
+) {
+    return declare([MockWidget], {
+        _itemFormat: "",
+
+        /**
+         * Widget constructor
+         * @param {object} initialProps Initialization properties:
+         *     appConfig: Application configuration
+         *     label: Text to put into app's div for labeling
+         * @constructor
+         */
+
+        /**
+         * Initializes the widget once the DOM structure is ready
+         */
+        postCreate: function () {
+            // Run any parent postCreate processes - can be done at any point
+            this.inherited(arguments);
+        },
+
+        /**
+         * Sets the format to be used to display an item.
+         * @param {string} format Format string with attributes enclosed within braces ("${}") using the format expected by
+         * Dojo's dojo/string parameterized substitution function substitute()
+         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
+         */
+        setItemFormat: function (format) {
+            this._itemFormat = format;
+        },
+
+        /**
+         * Sets the items to be displayed in the list.
+         * @param {object} items Items to display; items are as returned by the feature layer query
+         */
+        setItems: function (items) {
+            try {
+                console.log("items: " + JSON.stringify(items));
+                domConstruct.create("div", {
+                    innerHTML: "<br><b>items</b><br>" + JSON.stringify(items)
+                }, this.mockContent);
+            } catch (ignore) {
+                debugger;
+            }
+        }
+
+    });
+});

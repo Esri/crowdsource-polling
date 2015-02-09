@@ -21,8 +21,8 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dojo/text!./templates/SidebarHeader.html",
-    "dojo/dom",
     "dojo/_base/lang",
+    "dojo/dom",
     "dojo/on",
     "application/lib/SvgHelper"
 ], function (
@@ -30,31 +30,28 @@ define([
     _WidgetBase,
     _TemplatedMixin,
     template,
-    dom,
     lang,
+    dom,
     on,
     SvgHelper
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
-        _config: null,
         signInBtnOnClick: null,
         helpBtnOnClick: null,
 
         /**
          * Widget constructor
-         * @param {object} config Application configuration
+         * @param {object} initialProps Initialization properties:
+         *     appConfig: Application configuration
          * @constructor
          */
-        constructor: function (config) {
-            this._config = config;
-        },
 
         /**
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var svgHelper, i18n = this._config.i18n.sidebar_header;
+            var svgHelper, i18n = this.appConfig.i18n.sidebar_header;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -64,10 +61,10 @@ define([
             this.signInBtn.title = i18n.signInButtonTooltip;
 
             svgHelper = new SvgHelper();
-            svgHelper.createSVGItem(this._config.helpIcon, this.helpBtn, 19, 19);
+            svgHelper.createSVGItem(this.appConfig.helpIcon, this.helpBtn, 19, 19);
             this.helpBtn.title = i18n.helpButtonTooltip;
 
-            this.appTitle.innerHTML = this._config.title || "";
+            this.appTitle.innerHTML = this.appConfig.title || "";
         },
 
         /**

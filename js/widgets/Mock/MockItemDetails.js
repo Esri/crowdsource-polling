@@ -90,7 +90,8 @@ define([
                         } else {
                             return undefined;
                         }
-                    })
+                    }),
+                    style: "font-size: 60%"
                 }, this.mockContent);
              } catch (ignore) {
                  debugger;
@@ -104,7 +105,8 @@ define([
         setComments: function (comments) {
             try {
                 domConstruct.create("div", {
-                    innerHTML: "<br><b>comments</b><br>" + JSON.stringify(comments)
+                    innerHTML: "<br><b>comments</b><br>" + JSON.stringify(comments),
+                    style: "font-size: 60%"
                 }, this.mockContent);
             } catch (ignore) {
                 debugger;

@@ -72,7 +72,8 @@ define([
             try {
                 console.log("items: " + JSON.stringify(items));
                 domConstruct.create("div", {
-                    innerHTML: "<br><b>items</b><br>" + JSON.stringify(items)
+                    innerHTML: "<br><b>items</b><br>" + JSON.stringify(items),
+                    style: "font-size: 60%"
                 }, this.mockContent);
             } catch (ignore) {
                 debugger;

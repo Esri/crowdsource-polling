@@ -34,8 +34,6 @@ define([
     on
 ) {
     return declare([_WidgetBase], {
-        _config: null,
-        _label: "",
 
         /**
          * Widget constructor
@@ -60,14 +58,25 @@ define([
             this.mockContent.title = this.label;
         },
 
+        /**
+         * Causes the widget to become visible.
+         */
         show: function () {
             domStyle.set(this.domNode, "display", "block");
         },
 
+        /**
+         * Causes the widget to become hidden.
+         */
         hide: function () {
             domStyle.set(this.domNode, "display", "none");
         },
 
+        /**
+         * Adds a button to the content or root div of the widget for mocking behavior.
+         * @param {string} label Button's label
+         * @param {function} clickHandler Function to run when button is clicked
+         */
         createMockClickSource: function (label, clickHandler) {
             var button = domConstruct.create("button", {
                 innerHTML: label,

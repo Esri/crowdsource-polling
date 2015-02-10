@@ -1,4 +1,4 @@
-﻿/*global define,dojo */
+﻿/*global define,dojo,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -23,6 +23,9 @@ define([
     "dojo/json",
     "dojo/on",
     "dojo/topic",
+    "esri/dijit/PopupTemplate",
+    "esri/graphic",
+    "esri/InfoTemplate",
     "esri/layers/FeatureLayer",
     "esri/tasks/query",
     "esri/tasks/RelationshipQuery",
@@ -34,6 +37,9 @@ define([
     JSON,
     on,
     topic,
+    PopupTemplate,
+    Graphic,
+    InfoTemplate,
     FeatureLayer,
     Query,
     RelationshipQuery
@@ -45,6 +51,7 @@ define([
         appConfig: null,
         _itemFields: null,
         _commentFields: null,
+        _foreignKey: null,  // "ParentID"
 
         /**
          * Encapsulates the management of a layer and its related table.
@@ -61,12 +68,12 @@ define([
                 "name": ideaFieldsSplit[0].trim(),
                 "date": ideaFieldsSplit[1].trim(),
                 "votes": ideaFieldsSplit[2].trim()
-            }
+            };
 
             // Save the names of comment table fields that we'll need to interact with
             this._commentFields = {
                 "name": this.appConfig.commentFields.trim()
-            }
+            };
         },
 
         /**
@@ -76,7 +83,6 @@ define([
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
-                var relatedTableURL;
 
                 // Operational layer provides item fields and formats
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
@@ -84,15 +90,6 @@ define([
 
                 // Provides _itemFields[n].{alias, editable, length, name, nullable, type}
                 this._itemFields = this._itemLayer.fields;
-
-                // Formatting of item display; if description is null, we're to use a fieldlist
-                if (this._itemLayerInWebmap.popupInfo) {
-                    this._itemSummaryFormat = (this._itemLayerInWebmap.popupInfo.title || "").replace(/\{/g, "${");
-                    this._itemDetailsFormat = (this._itemLayerInWebmap.popupInfo.description || "").replace(/\{/g, "${");
-                } else {
-                    this._itemSummaryFormat = "${" + this._ideaFields["name"] + "}";
-                }
-
 
                 // Related table provides comment fields and formats
                 this._commentTableInWebmap = this.appConfig.itemInfo.itemData.tables[0];
@@ -104,12 +101,11 @@ define([
                     // Provides _commentFields[n].{alias, editable, length, name, nullable, type}
                     this._commentFields = this._commentTable.fields;
 
-                    // Formatting of comment display; if description is null, we're to use a fieldlist
+                    // Formatting of comment display
                     if (this._commentTableInWebmap.popupInfo) {
-                        this._commentSummaryFormat = (this._commentTableInWebmap.popupInfo.title || "").replace(/\{/g, "${");
-                        this._commentDetailsFormat = (this._commentTableInWebmap.popupInfo.description || "").replace(/\{/g, "${");
+                        this._commentPopupTemplate = new PopupTemplate(this._commentTableInWebmap.popupInfo);
                     } else {
-                        this._commentSummaryFormat = "${" + this._commentFields["name"] + "}";
+                        this._commentInfoTemplate = new InfoTemplate();
                     }
 
                     deferred.resolve();
@@ -135,37 +131,6 @@ define([
         },
 
         /**
-         * Returns the format to use to display an item summary.
-         * @return {string} Format string with attributes enclosed within braces ("${}") using the format expected by
-         * Dojo's dojo/string parameterized substitution function substitute()
-         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
-         */
-        getItemSummaryFormat: function () {
-            return this._itemSummaryFormat;
-        },
-
-        /**
-         * Returns the format to use to display item details.
-         * @return {string} Format string with attributes enclosed within braces ("${}") using the format expected by
-         * Dojo's dojo/string parameterized substitution function substitute()
-         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
-         */
-        getItemDetailFormat: function () {
-            return this._itemDetailsFormat;
-        },
-
-        /**
-         * Returns the format to use to display comment details.
-         * @return {string} Format string with attributes enclosed within braces ("${}") using the format expected by
-         * Dojo's dojo/string parameterized substitution function substitute()
-         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
-         */
-        getCommentDetailFormat: function () {
-            // operationalLayers[n].itemProperties.popInfo.description; if null, we're using a fieldlist
-            return "${Comment} by ${Name} on ${Date}";
-        },
-
-        /**
          * Retrieves the items within the map extent.
          * @param {Extent} [extent] Outer bounds of items to retrieve
          * @return {publish} "updatedItemsList" with results of query
@@ -174,45 +139,17 @@ define([
             var updateQuery = new Query();
             updateQuery.where = "1=1";
             updateQuery.returnGeometry = true;
-            updateQuery.orderByFields = [this._ideaFields["date"] + " DESC"];
+            updateQuery.orderByFields = [this._ideaFields.date + " DESC"];
             updateQuery.outFields = ["*"];
             if (extent) {
                 updateQuery.geometry = extent;
             }
 
             this._itemLayer.queryFeatures(updateQuery, lang.hitch(this, function (results) {
-                topic.publish("updatedItemsList", (results) ? results.features : []);
+                topic.publish("updatedItemsList", results ? results.features : []);
             }), lang.hitch(this, function (err) {
                 console.log(JSON.stringify(err));
             }));
-        },
-
-        /**
-         * Retrieves the comments associated with an item.
-         * @param {objectID} item Item whose comments are sought
-         * @return {publish} "updatedCommentsList" with results of query
-         */
-        queryComments: function (item) {
-           var updateQuery = new RelationshipQuery();
-           updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
-           updateQuery.returnGeometry = true;
-           updateQuery.orderByFields = [this._ideaFields["date"] + " DESC"];
-           updateQuery.outFields = ["*"];
-           updateQuery.relationshipId = 0;
-
-           this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
-               var fset = results[item.attributes[this._itemLayer.objectIdField]];
-               topic.publish("updatedCommentsList", (fset) ? fset.features : []);
-           }), lang.hitch(this, function (err) {
-                console.log(JSON.stringify(err));
-           }));
-        },
-
-        /**
-         * Increments the designated "votes" field for the specified item.
-         * @param {string} itemId Identifier of item to modify
-         */
-        incrementVote: function (itemId) {
         },
 
         /**
@@ -225,9 +162,89 @@ define([
         /**
          * Adds a comment to the comment table.
          * @param {string} itemId Identifier of item to modify
-         * @param {object} comment Comment to be added for the specified item
+         * @param {object} comment Comment as a set of attributes to be added for the specified item
+         * @return {publish} "commentAdded" with copy of comment arg amended with foreign key
          */
         addComment: function (itemId, comment) {
+            var attr, gra;
+
+            attr = lang.clone(comment);
+            if (this._foreignKey) {
+                attr[this._foreignKey] = itemId;
+            }
+
+            gra = new Graphic(null, null, attr);
+            this._commentTable.applyEdits([gra], null, null,
+                lang.hitch(this, function (results) {
+                    if (results[0].error) {
+                        console.log(JSON.stringify(results[0].error));
+                    } else {
+                        topic.publish("commentAdded", attr);
+                        console.log("commentAdded: " + JSON.stringify(results));
+                    }
+                }),
+                lang.hitch(this, function (err) {
+                    console.log(JSON.stringify(err));
+                }));
+        },
+
+        /**
+         * Retrieves the comments associated with an item.
+         * @param {objectID} item Item whose comments are sought
+         * @return {publish} "updatedCommentsList" with results of query
+         */
+        queryComments: function (item) {
+            var expr, updateQuery;
+
+            // Relationship based on explicit foreign key
+            if (this._foreignKey) {
+                expr =  this._foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
+                updateQuery = new Query();
+                updateQuery.where = expr;
+                updateQuery.returnGeometry = false;
+                updateQuery.orderByFields = [this._commentTable.date + " DESC"];
+                updateQuery.outFields = ["*"];
+
+                this._commentTable.queryFeatures(updateQuery, lang.hitch(this, function (results) {
+                    var i, features;
+                    features = results ? results.features : [];
+                    for (i = 0; i < features.length; ++i) {
+                        features[i].setInfoTemplate(this._commentPopupTemplate);
+                    }
+                    topic.publish("updatedCommentsList", features);
+                }), lang.hitch(this, function (err) {
+                    console.log(JSON.stringify(err));
+                }));
+
+            // Relationship based on GUIDs
+            } else {
+                updateQuery = new RelationshipQuery();
+                updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
+                updateQuery.returnGeometry = true;
+                updateQuery.orderByFields = [this._commentFields.date + " DESC"];
+                updateQuery.outFields = ["*"];
+                updateQuery.relationshipId = 0;
+
+                this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
+                    var fset, i, features;
+                    fset = results[item.attributes[this._itemLayer.objectIdField]];
+                    features = fset ? fset.features : [];
+                    for (i = 0; i < features.length; ++i) {
+                        features[i].setInfoTemplate(this._commentPopupTemplate);
+                    }
+                    topic.publish("updatedCommentsList", features);
+                }), lang.hitch(this, function (err) {
+                    console.log(JSON.stringify(err));
+                }));
+            }
+        },
+
+        /**
+         * Increments the designated "votes" field for the specified item.
+         * @param {string} itemId Identifier of item to modify
+         */
+        incrementVote: function (itemId) {
+            return null;
         }
 
     });

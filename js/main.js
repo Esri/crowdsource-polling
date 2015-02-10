@@ -33,7 +33,6 @@ define([
     "dojo/topic",
     "esri/arcgis/utils",
     "esri/dijit/LocateButton",
-    "esri/geometry/Point",  //???
     "application/lib/LayerAndTableMgmt",
     "application/widgets/Mock/MockDialog",
     "application/widgets/Mock/ItemDetails",
@@ -63,7 +62,6 @@ define([
     topic,
     arcgisUtils,
     LocateButton,
-    Point,  //???
     LayerAndTableMgmt,
     MockDialog,
     ItemDetails,
@@ -168,13 +166,6 @@ define([
                 });
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     var itemExtent;
-
-                    //???
-                    if(!item) {
-                        item = new Point(JSON.parse(
-                            '{"geometry":{"x":-13046642,"y":4036747,"spatialReference":{"wkid":102100,"latestWkid":3857}},"attributes":{"OBJECTID":1,"Idea":"first idea","Name":"my name","Date":1417392000000,"Votes":0,"GlobalID":"773da25c-abf1-4856-8bb8-323c07284398"}}'));
-                    }
-                    //???
 
                     this._itemDetails.setItem(item);
                     this._sidebarCnt.showPanel("ideaDetails");

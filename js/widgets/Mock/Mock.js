@@ -52,8 +52,8 @@ define([
 
             this.label = this.label || "";
 
-            domStyle.set(this.mockContent, "color", this.appConfig.theme.foreground);
-            domStyle.set(this.mockContent, "background-color", this.appConfig.theme.background);
+            domStyle.set(this.domNode, "color", this.appConfig.theme.foreground);
+            domStyle.set(this.domNode, "background-color", this.appConfig.theme.background);
             this.mockContent.innerHTML = this.label + "<br>";
             this.mockContent.title = this.label;
         },
@@ -81,7 +81,7 @@ define([
             var button = domConstruct.create("button", {
                 innerHTML: label,
                 style: "margin:10px;z-index:200"
-            }, this.mockContent || this.domNode);
+            }, this.mockActions || this.domNode);
             this.own(on(button, "click", lang.hitch(this, clickHandler)));
         }
 

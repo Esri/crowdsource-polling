@@ -23,7 +23,7 @@ define([
     "dojo/dom",
     "dojo/dom-construct",
     "dojo/dom-style",
-    "dojo/on",
+    "dojo/on"
 ], function (
     declare,
     _WidgetBase,

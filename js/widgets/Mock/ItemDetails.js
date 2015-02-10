@@ -62,17 +62,17 @@ define([
          * @param {object} item Item to display
          */
         setItem: function (item) {
-             var rec;
+            var rec;
 
-             // Clear the results area
-             domConstruct.empty(this.mockContent);
+            // Clear the results area
+            domConstruct.empty(this.mockContent);
 
-             // Show the popup for the item
-             rec = domConstruct.create("div", {}, this.mockContent);
-             new ContentPane({
-                 content: item.getContent()
-             }, rec).startup();
-             domStyle.set(rec, "border-bottom", "1px solid #ccc");
+            // Show the popup for the item
+            rec = domConstruct.create("div", {}, this.mockContent);
+            new ContentPane({
+                content: item.getContent()
+            }, rec).startup();
+            domStyle.set(rec, "border-bottom", "1px solid #ccc");
         },
 
         /**

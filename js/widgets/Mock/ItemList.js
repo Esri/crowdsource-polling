@@ -70,6 +70,11 @@ define([
             // Clear the results area
             domConstruct.empty(this.mockContent);
 
+            // Set up item-click notification outside of loop
+            function notify(item) {
+                topic.publish("itemSelected", item);
+            }
+
             // Add a summary entry for each item
             if (items && items.length) {
                 for (i = 0; i < items.length; i++) {
@@ -83,9 +88,7 @@ define([
                     domStyle.set(rec, "border-bottom", "1px solid #ccc");
 
                     // Forward a click on the item's display
-                    on(rec, "click", lang.hitch(this, function (item) {
-                        topic.publish("itemSelected", item);
-                    }, item));
+                    on(rec, "click", lang.hitch(this, notify, item));
                 }
             }
         }

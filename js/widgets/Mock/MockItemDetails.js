@@ -23,8 +23,10 @@ define([
     "dojo/dom",
     "dojo/dom-construct",
     "dojo/dom-style",
-    "dojo/json",
-    "dojo/on"
+    "dojo/on",
+    "dojo/string",
+    "dojo/topic",
+    "dijit/layout/ContentPane"
 ], function (
     declare,
     MockWidget,
@@ -32,11 +34,13 @@ define([
     dom,
     domConstruct,
     domStyle,
-    JSON,
-    on
+    on,
+    string,
+    topic,
+    ContentPane
 ) {
     return declare([MockWidget], {
-        _itemFormat: "",
+        _itemSummaryFormat: "",
         _commentFormat: "",
 
         /**
@@ -56,13 +60,13 @@ define([
         },
 
         /**
-         * Sets the format to be used to display an item.
+         * Sets the format to be used to display an item's summary.
          * @param {string} format Format string with attributes enclosed within braces ("${}") using the format expected by
          * Dojo's dojo/string parameterized substitution function substitute()
          * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
          */
-        setItemFormat: function (format) {
-            this._itemFormat = format;
+        setItemSummaryFormat: function (format) {
+            this._itemSummaryFormat = format;
         },
 
         /**
@@ -77,39 +81,51 @@ define([
 
         /**
          * Sets the item to be displayed.
-         * @param {object} item Item to display; items are as returned by the feature layer query
+         * @param {object} item Item to display
          */
         setItem: function (item) {
-            try {
-                domConstruct.create("div", {
-                    innerHTML: "<br><b>item details for</b><br>" + JSON.stringify(item, function (key, value) {
-                        if (key === "") {
-                            return value;
-                        } else if (key === "type" || key === "attributes" || key === "geometry") {
-                            return JSON.stringify(value);
-                        } else {
-                            return undefined;
-                        }
-                    }),
-                    style: "font-size: 60%"
-                }, this.mockContent);
-             } catch (ignore) {
-                 debugger;
+             var rec, recDisplay;
+             if (item.getContent) {
+                 recDisplay = item.getContent();
+             } else {
+                 recDisplay = "";
              }
+
+             // Clear the results area
+             domConstruct.empty(this.mockContent);
+
+             // Show the popup for the item
+             rec = domConstruct.create("div", {}, this.mockContent);
+             new ContentPane({
+                 content: recDisplay
+             }, rec).startup();
+             domStyle.set(rec, "border-bottom", "1px solid #ccc");
         },
 
         /**
          * Sets the comments to be displayed in the list.
-         * @param {object} items Items to display; items are as returned by the related table query
+         * @param {object} comments Comments to display; comments are as returned by the features part of the
+         * result of a related table query
          */
         setComments: function (comments) {
-            try {
-                domConstruct.create("div", {
-                    innerHTML: "<br><b>comments</b><br>" + JSON.stringify(comments),
-                    style: "font-size: 60%"
-                }, this.mockContent);
-            } catch (ignore) {
-                debugger;
+            var i, comment, rec, recDisplay;
+
+            // Show each of the comments retrieved
+            if (comments && comments.length) {
+                for (i = 0; i < comments.length; i++) {
+                    comment = comments[i];
+                    try {
+                        recDisplay = string.substitute(this._commentFormat, comment.attributes);
+                    } catch (ignore) {
+                        recDisplay = this._itemSummaryFormat;
+                    }
+
+                    rec = domConstruct.create("div", {}, this.mockContent);
+                    new ContentPane({
+                        content: recDisplay
+                    }, rec).startup();
+                    domStyle.set(rec, "border-bottom", "1px solid #ccc");
+                }
             }
         }
 

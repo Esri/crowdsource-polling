@@ -197,6 +197,11 @@ define([
                     this._sidebarCnt.showPanel("ideasList");
                 }));
 
+                // Published by LayerAndTableManagement after comment is added
+                topic.subscribe("commentAdded", lang.hitch(this, function (comment) {
+                    console.log("commentAdded: " + JSON.stringify(comment));
+                }));
+
                 // Published when an item is selected and after a comment is added
                 topic.subscribe("updateCommentsList", lang.hitch(this, function (item) {
                     this._mapData.queryComments(item);

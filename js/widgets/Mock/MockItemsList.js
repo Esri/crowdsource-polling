@@ -42,7 +42,6 @@ define([
     ContentPane
 ) {
     return declare([MockWidget], {
-        _itemSummaryFormat: "",
 
         /**
          * Widget constructor
@@ -61,16 +60,6 @@ define([
         },
 
         /**
-         * Sets the format to be used to display an item's summary.
-         * @param {string} format Format string with attributes enclosed within braces ("${}") using the format expected by
-         * Dojo's dojo/string parameterized substitution function substitute()
-         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
-         */
-        setItemSummaryFormat: function (format) {
-            this._itemSummaryFormat = format;
-        },
-
-        /**
          * Sets the items to be displayed in the list.
          * @param {object} items Items to display; items are as returned by the features part of the
          * result of a feature layer query
@@ -85,21 +74,18 @@ define([
             if (items && items.length) {
                 for (i = 0; i < items.length; i++) {
                     gra = items[i];
-                    try {
-                        summary = string.substitute(this._itemSummaryFormat, gra.attributes);
-                    } catch (ignore) {
-                        summary = this._itemSummaryFormat;
-                    }
 
+                    // Create the item's display
                     rec = domConstruct.create("div", {style: "cursor: pointer"}, this.mockContent);
                     new ContentPane({
-                        content: summary
+                        content: gra.getTitle()
                     }, rec).startup();
                     if (i === 0) {
                         domStyle.set(rec, "border-top", "1px solid #ccc");
                     }
                     domStyle.set(rec, "border-bottom", "1px solid #ccc");
 
+                    // Forward a click on the item's display
                     on(rec, "click", lang.hitch(this, function (gra) {
                         topic.publish("itemSelected", gra);
                     }, gra));

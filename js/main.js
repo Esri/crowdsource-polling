@@ -135,6 +135,7 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+                var itemSummaryFormat;
 
                 // Published by SidebarHeader
                 topic.subscribe("socialConnectSelected", lang.hitch(this, function () {
@@ -161,7 +162,7 @@ define([
                 }));
 
                 // Published by layer click handler and by ItemList
-                on(this._mapData.getGeometryLayer(), "click", function (evt) {
+                on(this._mapData.getItemLayer(), "click", function (evt) {
                     if (evt.graphic) {
                         topic.publish("itemSelected", evt.graphic);
                     }
@@ -209,10 +210,14 @@ define([
                     this._sidebarCnt.showBusy(false);
                 }));
 
+
                 // Display formats are defined by the webmap
-                this._itemsList.setItemFormat(this._mapData.getItemSummaryFormat());
-                this._itemDetails.setItemFormat(this._mapData.getItemDetailFormat());
+                itemSummaryFormat = this._mapData.getItemSummaryFormat();
+                this._itemsList.setItemSummaryFormat(itemSummaryFormat);
+                this._itemDetails.setItemSummaryFormat(itemSummaryFormat);
+
                 this._itemDetails.setCommentFormat(this._mapData.getCommentDetailFormat());
+
 
                 // Initial population of items list
                 topic.publish("updateItemsList");

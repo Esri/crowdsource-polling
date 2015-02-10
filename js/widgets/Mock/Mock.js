@@ -83,6 +83,22 @@ define([
                 style: "margin:10px;z-index:200"
             }, this.mockActions || this.domNode);
             this.own(on(button, "click", lang.hitch(this, clickHandler)));
+        },
+
+        /**
+         * Changes nulls in the supplied object to the specified string.
+         * @param {object} obj Object to modify
+         * @param {string} showNullValueAs String to replace each null with
+         */
+        stringizeNullValues: function (obj, showNullValueAs) {
+            var index;
+            for (index in obj) {
+                if (obj.hasOwnProperty(index)) {
+                    if (!obj[index]) {
+                        obj[index] = showNullValueAs;
+                    }
+                }
+            }
         }
 
     });

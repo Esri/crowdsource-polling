@@ -24,7 +24,10 @@ define([
     "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/json",
-    "dojo/on"
+    "dojo/on",
+    "dojo/string",
+    "dojo/topic",
+    "dijit/layout/ContentPane"
 ], function (
     declare,
     MockWidget,
@@ -33,10 +36,13 @@ define([
     domConstruct,
     domStyle,
     JSON,
-    on
+    on,
+    string,
+    topic,
+    ContentPane
 ) {
     return declare([MockWidget], {
-        _itemFormat: "",
+        _itemSummaryFormat: "",
 
         /**
          * Widget constructor
@@ -55,28 +61,49 @@ define([
         },
 
         /**
-         * Sets the format to be used to display an item.
+         * Sets the format to be used to display an item's summary.
          * @param {string} format Format string with attributes enclosed within braces ("${}") using the format expected by
          * Dojo's dojo/string parameterized substitution function substitute()
          * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
          */
-        setItemFormat: function (format) {
-            this._itemFormat = format;
+        setItemSummaryFormat: function (format) {
+            this._itemSummaryFormat = format;
         },
 
         /**
          * Sets the items to be displayed in the list.
-         * @param {object} items Items to display; items are as returned by the feature layer query
+         * @param {object} items Items to display; items are as returned by the features part of the
+         * result of a feature layer query
          */
         setItems: function (items) {
-            try {
-                console.log("items: " + JSON.stringify(items));
-                domConstruct.create("div", {
-                    innerHTML: "<br><b>items</b><br>" + JSON.stringify(items),
-                    style: "font-size: 60%"
-                }, this.mockContent);
-            } catch (ignore) {
-                debugger;
+            var i, gra, rec, summary;
+
+            // Clear the results area
+            domConstruct.empty(this.mockContent);
+
+            // Add a summary entry for each item
+            if (items && items.length) {
+                for (i = 0; i < items.length; i++) {
+                    gra = items[i];
+                    try {
+                        summary = string.substitute(this._itemSummaryFormat, gra.attributes);
+                    } catch (ignore) {
+                        summary = this._itemSummaryFormat;
+                    }
+
+                    rec = domConstruct.create("div", {style: "cursor: pointer"}, this.mockContent);
+                    new ContentPane({
+                        content: summary
+                    }, rec).startup();
+                    if (i === 0) {
+                        domStyle.set(rec, "border-top", "1px solid #ccc");
+                    }
+                    domStyle.set(rec, "border-bottom", "1px solid #ccc");
+
+                    on(rec, "click", lang.hitch(this, function (gra) {
+                        topic.publish("itemSelected", gra);
+                    }, gra));
+                }
             }
         }
 

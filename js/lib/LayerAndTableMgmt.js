@@ -20,24 +20,30 @@ define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "dojo/Deferred",
+    "dojo/json",
     "dojo/on",
     "dojo/topic",
     "esri/layers/FeatureLayer",
+    "esri/tasks/query",
+    "esri/tasks/RelationshipQuery",
     "dojo/domReady!"
 ], function (
     declare,
     lang,
     Deferred,
+    JSON,
     on,
     topic,
-    FeatureLayer
+    FeatureLayer,
+    Query,
+    RelationshipQuery
 ) {
 
     //========================================================================================================================//
 
     return declare([], {
-        _config: null,
-        _ideasFields: null,
+        appConfig: null,
+        _itemFields: null,
         _commentFields: null,
 
         /**
@@ -46,36 +52,68 @@ define([
          * @constructor
          */
         constructor: function (config) {
-            this._config = config;
+            var ideaFieldsSplit;
+            this.appConfig = config;
+
+            // Save the names of ideas layer fields that we'll need to interact with
+            ideaFieldsSplit = this.appConfig.ideaFields.trim().split(",").concat("", "");  // provide defaults
+            this._ideaFields = {
+                "name": ideaFieldsSplit[0].trim(),
+                "date": ideaFieldsSplit[1].trim(),
+                "votes": ideaFieldsSplit[2].trim()
+            }
+
+            // Save the names of comment table fields that we'll need to interact with
+            this._commentFields = {
+                "name": this.appConfig.commentFields.trim()
+            }
         },
 
         /**
-         * Loads the layer and its table from the configuration information.
+         * Extracts the layer and loads its table from the configuration information.
          * @return {object} Deferred for notification of completed load
          */
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
-                var itemTitle, relatedTableId, relatedTableURL;
+                var relatedTableURL;
 
-                this._operationalLayer = this._config.itemInfo.itemData.operationalLayers[0];
-                itemTitle = this._operationalLayer.popupInfo.title;
-                relatedTableURL = this._config.itemInfo.itemData.tables[0].url;
+                // Operational layer provides item fields and formats
+                this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
+                this._itemLayer = this._itemLayerInWebmap.layerObject;
 
-                this._ideasFields = this._operationalLayer.popupInfo.fieldInfos;
+                // Provides _itemFields[n].{alias, editable, length, name, nullable, type}
+                this._itemFields = this._itemLayer.fields;
 
-                this._commentsTable = new FeatureLayer(relatedTableURL);
-                on.once(this._commentsTable, "load", lang.hitch(this, function (evt) {
-                    console.log("Loaded comments table");
-                    this._commentFields = evt.layer.fields;
-                    // Use _commentFields[n].{alias, editable, length, name, nullable, type}
+                // Formatting of item display; if description is null, we're to use a fieldlist
+                if (this._itemLayerInWebmap.popupInfo) {
+                    this._itemSummaryFormat = (this._itemLayerInWebmap.popupInfo.title || "").replace(/\{/g, "${");
+                    this._itemDetailsFormat = (this._itemLayerInWebmap.popupInfo.description || "").replace(/\{/g, "${");
+                } else {
+                    this._itemSummaryFormat = "${" + this._ideaFields["name"] + "}";
+                }
 
 
+                // Related table provides comment fields and formats
+                this._commentTableInWebmap = this.appConfig.itemInfo.itemData.tables[0];
 
+                // Fetch the related table for the comments
+                this._commentTable = new FeatureLayer(this._commentTableInWebmap.url);
+                on.once(this._commentTable, "load", lang.hitch(this, function (evt) {
+
+                    // Provides _commentFields[n].{alias, editable, length, name, nullable, type}
+                    this._commentFields = this._commentTable.fields;
+
+                    // Formatting of comment display; if description is null, we're to use a fieldlist
+                    if (this._commentTableInWebmap.popupInfo) {
+                        this._commentSummaryFormat = (this._commentTableInWebmap.popupInfo.title || "").replace(/\{/g, "${");
+                        this._commentDetailsFormat = (this._commentTableInWebmap.popupInfo.description || "").replace(/\{/g, "${");
+                    } else {
+                        this._commentSummaryFormat = "${" + this._commentFields["name"] + "}";
+                    }
+
+                    deferred.resolve();
                 }));
-
-
-                deferred.resolve();
             }));
             return deferred;
         },
@@ -84,8 +122,16 @@ define([
          * Returns the feature layer holding the items.
          * @return {object} Feature layer
          */
-        getGeometryLayer: function () {
-            return this._operationalLayer.layerObject;
+        getItemLayer: function () {
+            return this._itemLayer;
+        },
+
+        /**
+         * Returns the table holding the comments.
+         * @return {object} Table
+         */
+        getCommentTable: function () {
+            return this._commentTable;
         },
 
         /**
@@ -95,7 +141,7 @@ define([
          * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
          */
         getItemSummaryFormat: function () {
-            return "Ideas: {Name}";
+            return this._itemSummaryFormat;
         },
 
         /**
@@ -105,8 +151,7 @@ define([
          * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
          */
         getItemDetailFormat: function () {
-            // operationalLayers[n].itemProperties.popInfo.description; if null, we're using a fieldlist
-            return "${Idea} by ${Name}<div>on ${Date}</div>";
+            return this._itemDetailsFormat;
         },
 
         /**
@@ -122,14 +167,24 @@ define([
 
         /**
          * Retrieves the items within the map extent.
-         * @param {Extent} extent Outer bounds of items to retrieve
+         * @param {Extent} [extent] Outer bounds of items to retrieve
          * @return {publish} "updatedItemsList" with results of query
          */
         queryItems: function (extent) {
-            var results = {"objectIdFieldName":"OBJECTID","globalIdFieldName":"","geometryType":"esriGeometryPoint","spatialReference":{"wkid":102100,"latestWkid":3857},"fields":[{"name":"OBJECTID","type":"esriFieldTypeOID","alias":"OBJECTID","sqlType":"sqlTypeOther","domain":null,"defaultValue":null},{"name":"Idea","type":"esriFieldTypeString","alias":"Idea","sqlType":"sqlTypeOther","length":255,"domain":null,"defaultValue":null},{"name":"Name","type":"esriFieldTypeString","alias":"Name","sqlType":"sqlTypeOther","length":50,"domain":null,"defaultValue":null},{"name":"Date","type":"esriFieldTypeDate","alias":"Date","sqlType":"sqlTypeOther","length":8,"domain":null,"defaultValue":null},{"name":"Votes","type":"esriFieldTypeSmallInteger","alias":"Votes","sqlType":"sqlTypeOther","domain":null,"defaultValue":null}],"features":[{"attributes":{"OBJECTID":4,"Idea":"","Name":"","Date":1420525290553,"Votes":0},"geometry":{"x":-13046856.38424792,"y":4037275.1940484862}},{"attributes":{"OBJECTID":3,"Idea":"","Name":"My Name is Moderately Long","Date":1420524782564,"Votes":20},"geometry":{"x":-13046889.377574572,"y":4037251.3074771543}},{"attributes":{"OBJECTID":6,"Idea":"a properly-dated idea","Name":"fred","Date":1420497265187,"Votes":0},"geometry":{"x":-13046785.91886249,"y":4037314.0097269}},{"attributes":{"OBJECTID":5,"Idea":"","Name":"","Date":1420496807344,"Votes":0},"geometry":{"x":-13045852.700378427,"y":4037523.6143904249}},{"attributes":{"OBJECTID":1,"Idea":"first idea","Name":"my name","Date":1417392000000,"Votes":1},"geometry":{"x":-13046642,"y":4036747}},{"attributes":{"OBJECTID":2,"Idea":"Penn Ave","Name":"My Name is Very Long and Will be Cut Off","Date":null,"Votes":0},"geometry":{"x":-13045728.490207464,"y":4038765.7161000567}}]};
-            setTimeout(function () {
-                topic.publish("updatedItemsList", results);
-            }, 2000);
+            var updateQuery = new Query();
+            updateQuery.where = "1=1";
+            updateQuery.returnGeometry = true;
+            updateQuery.orderByFields = [this._ideaFields["date"] + " DESC"];
+            updateQuery.outFields = ["*"];
+            if (extent) {
+                updateQuery.geometry = extent;
+            }
+
+            this._itemLayer.queryFeatures(updateQuery, lang.hitch(this, function (results) {
+                topic.publish("updatedItemsList", (results) ? results.features : []);
+            }), lang.hitch(this, function (err) {
+                console.log(JSON.stringify(err));
+            }));
         },
 
         /**
@@ -138,10 +193,19 @@ define([
          * @return {publish} "updatedCommentsList" with results of query
          */
         queryComments: function (item) {
-           var results = {"objectIdFieldName":"OBJECTID","globalIdFieldName":"","geometryType":"esriGeometryPoint","spatialReference":{"wkid":102100,"latestWkid":3857},"fields":[{"name":"OBJECTID","type":"esriFieldTypeOID","alias":"OBJECTID","sqlType":"sqlTypeOther","domain":null,"defaultValue":null},{"name":"Idea","type":"esriFieldTypeString","alias":"Idea","sqlType":"sqlTypeOther","length":255,"domain":null,"defaultValue":null},{"name":"Name","type":"esriFieldTypeString","alias":"Name","sqlType":"sqlTypeOther","length":50,"domain":null,"defaultValue":null},{"name":"Date","type":"esriFieldTypeDate","alias":"Date","sqlType":"sqlTypeOther","length":8,"domain":null,"defaultValue":null},{"name":"Votes","type":"esriFieldTypeSmallInteger","alias":"Votes","sqlType":"sqlTypeOther","domain":null,"defaultValue":null}],"features":[{"attributes":{"OBJECTID":4,"Idea":"","Name":"","Date":1420525290553,"Votes":0},"geometry":{"x":-13046856.38424792,"y":4037275.1940484862}},{"attributes":{"OBJECTID":3,"Idea":"","Name":"My Name is Moderately Long","Date":1420524782564,"Votes":20},"geometry":{"x":-13046889.377574572,"y":4037251.3074771543}},{"attributes":{"OBJECTID":6,"Idea":"a properly-dated idea","Name":"fred","Date":1420497265187,"Votes":0},"geometry":{"x":-13046785.91886249,"y":4037314.0097269}},{"attributes":{"OBJECTID":5,"Idea":"","Name":"","Date":1420496807344,"Votes":0},"geometry":{"x":-13045852.700378427,"y":4037523.6143904249}},{"attributes":{"OBJECTID":1,"Idea":"first idea","Name":"my name","Date":1417392000000,"Votes":1},"geometry":{"x":-13046642,"y":4036747}},{"attributes":{"OBJECTID":2,"Idea":"Penn Ave","Name":"My Name is Very Long and Will be Cut Off","Date":null,"Votes":0},"geometry":{"x":-13045728.490207464,"y":4038765.7161000567}}]};
-           setTimeout(function () {
-               topic.publish("updatedCommentsList", results);
-           }, 2000);
+           var updateQuery = new RelationshipQuery();
+           updateQuery.objectIds = [item.attributes.OBJECTID];
+           updateQuery.returnGeometry = true;
+           updateQuery.orderByFields = [this._ideaFields["date"] + " DESC"];
+           updateQuery.outFields = ["*"];
+           updateQuery.relationshipId = 0;
+
+           this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
+               var fset = results[item.attributes.OBJECTID];
+               topic.publish("updatedCommentsList", (fset) ? fset.features : []);
+           }), lang.hitch(this, function (err) {
+                console.log(JSON.stringify(err));
+           }));
         },
 
         /**

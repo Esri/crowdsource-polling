@@ -21,6 +21,8 @@ define([
     "esri/arcgis/utils",
     "dojo/dom",
     "dojo/dom-class",
+    "dojo/dom-geometry",
+    "dojo/dom-style",
     "dojo/on",
     "dojo/parser",
     "dojo/_base/fx",
@@ -28,6 +30,8 @@ define([
     "dojo/promise/first",
     "dojo/_base/Color",
     "application/widgets/SidebarHeader/SidebarHeader",
+    "application/widgets/PopupWindow/PopupWindow",
+    "application/widgets/TextDisplay/TextDisplay",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
     "dojox/color/_base",
@@ -38,13 +42,17 @@ define([
     arcgisUtils,
     dom,
     domClass,
+    domGeom,
+    style,
     on,
     parser,
     fx,
     Deferred,
     first,
     Color,
-    SidebarHeader
+    SidebarHeader,
+    PopupWindow,
+    TextDisplay
 ) {
     return declare(null, {
         config: {},
@@ -136,9 +144,19 @@ define([
                     console.log("Clicked sign-in button");
                 });
                 widget.set("helpBtnOnClick", function () {
-                    console.log("Clicked help button");
-                });
+                    var popupWidget, textDisplayWidget;
+                    
+                   // Create popup widget and place it
+                    popupWidget = new PopupWindow({
+                        i18n: this.i18n,
+                        showClose: true
+                    }).placeAt(document.body);
 
+                    // Create helpContent widget and place it in genericPopupContainer
+                    textDisplayWidget = new TextDisplay();
+                    popupWidget.setContent(textDisplayWidget);
+                    popupWidget.show();
+                });
                 deferred.resolve();
             }));
             return deferred.promise;

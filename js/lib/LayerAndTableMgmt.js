@@ -194,14 +194,14 @@ define([
          */
         queryComments: function (item) {
            var updateQuery = new RelationshipQuery();
-           updateQuery.objectIds = [item.attributes.OBJECTID];
+           updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
            updateQuery.returnGeometry = true;
            updateQuery.orderByFields = [this._ideaFields["date"] + " DESC"];
            updateQuery.outFields = ["*"];
            updateQuery.relationshipId = 0;
 
            this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
-               var fset = results[item.attributes.OBJECTID];
+               var fset = results[item.attributes[this._itemLayer.objectIdField]];
                topic.publish("updatedCommentsList", (fset) ? fset.features : []);
            }), lang.hitch(this, function (err) {
                 console.log(JSON.stringify(err));

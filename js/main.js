@@ -36,8 +36,8 @@ define([
     "esri/geometry/Point",  //???
     "application/lib/LayerAndTableMgmt",
     "application/widgets/Mock/MockDialog",
-    "application/widgets/Mock/MockItemDetails",
-    "application/widgets/Mock/MockItemsList",
+    "application/widgets/Mock/ItemDetails",
+    "application/widgets/Mock/ItemList",
     "application/widgets/Mock/MockWidget",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
@@ -66,8 +66,8 @@ define([
     Point,  //???
     LayerAndTableMgmt,
     MockDialog,
-    MockItemDetails,
-    MockItemsList,
+    ItemDetails,
+    ItemList,
     MockWidget,
     SidebarContentController,
     SidebarHeader
@@ -135,7 +135,6 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var itemSummaryFormat;
 
                 // Published by SidebarHeader
                 topic.subscribe("socialConnectSelected", lang.hitch(this, function () {
@@ -212,10 +211,7 @@ define([
 
 
                 // Display formats are defined by the webmap
-                itemSummaryFormat = this._mapData.getItemSummaryFormat();
-                this._itemsList.setItemSummaryFormat(itemSummaryFormat);
-                this._itemDetails.setItemSummaryFormat(itemSummaryFormat);
-
+                this._itemDetails.setItemSummaryFormat(this._mapData.getItemSummaryFormat());
                 this._itemDetails.setCommentFormat(this._mapData.getCommentDetailFormat());
 
 
@@ -295,17 +291,14 @@ define([
                 }).placeAt("sidebarContent");
                 this._sidebarCnt.startup();
 
-                this._itemsList = new MockItemsList({
+                this._itemsList = new ItemList({
                     "appConfig": this.config,
                     "label": "Ideas List"
                 }).placeAt("sidebarContent");
                 this._itemsList.startup();
-                this._itemsList.createMockClickSource("an idea", lang.hitch(this, function () {
-                    topic.publish("itemSelected");
-                }));
                 this._sidebarCnt.addPanel("ideasList", this._itemsList);
 
-                this._itemDetails = new MockItemDetails({
+                this._itemDetails = new ItemDetails({
                     "appConfig": this.config,
                     "label": "Idea Details"
                 }).placeAt("sidebarContent");

@@ -114,12 +114,16 @@ define([
             if (comments && comments.length) {
                 for (i = 0; i < comments.length; i++) {
                     comment = comments[i];
+
+                    // Create the summary content
+                    this.stringizeNullValues(comment.attributes, this.appConfig.showNullValueAs);
                     try {
                         recDisplay = string.substitute(this._commentFormat, comment.attributes);
                     } catch (ignore) {
                         recDisplay = this._itemSummaryFormat;
                     }
 
+                    // Create the comment's display
                     rec = domConstruct.create("div", {}, this.mockContent);
                     new ContentPane({
                         content: recDisplay

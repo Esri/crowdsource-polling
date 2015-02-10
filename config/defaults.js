@@ -42,6 +42,7 @@ define({
     "allowGoogle": false,
     "ideasLayer": null,
     "commentsTable": null,
+    "showNullValueAs": "",
 
 
 

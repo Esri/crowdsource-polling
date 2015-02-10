@@ -127,3 +127,50 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
+/* ---------- sidebar content ---------- */
+#sidebarContent {
+  background-color: #eee;
+}
+
+
+/* ---------- ItemList ---------- */
+
+.itemList {
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: #eee;
+}
+
+.itemList .itemSummary {
+  padding: 10px;
+  line-height: 3em;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.itemList .itemSummary:hover {
+  background-color: white;
+}
+
+.itemSummary > div, .itemFav > div {
+  display: inline-block;
+}
+
+.itemSummary .itemFav {
+  float: right;
+  font-size: 20px;
+  color: rgb(150, 150, 150);
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.itemVotes {
+  margin-right: 0.5em;
+}
+
+.itemList .itemSummary.selected {
+  background-color: #007ac2;
+  color: white;
+}

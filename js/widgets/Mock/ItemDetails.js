@@ -40,8 +40,6 @@ define([
     ContentPane
 ) {
     return declare([MockWidget], {
-        _itemSummaryFormat: "",
-        _commentFormat: "",
 
         /**
          * Widget constructor
@@ -60,36 +58,11 @@ define([
         },
 
         /**
-         * Sets the format to be used to display an item's summary.
-         * @param {string} format Format string with attributes enclosed within braces ("${}") using the format expected by
-         * Dojo's dojo/string parameterized substitution function substitute()
-         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
-         */
-        setItemSummaryFormat: function (format) {
-            this._itemSummaryFormat = format;
-        },
-
-        /**
-         * Sets the format to be used to display a comment.
-         * @param {string} format Format string with attributes enclosed within braces ("${}") using the format expected by
-         * Dojo's dojo/string parameterized substitution function substitute()
-         * @see <a href="http://dojotoolkit.org/reference-guide/1.10/dojo/string.html#substitute">substitute</a>
-         */
-        setCommentFormat: function (format) {
-            this._commentFormat = format;
-        },
-
-        /**
          * Sets the item to be displayed.
          * @param {object} item Item to display
          */
         setItem: function (item) {
-             var rec, recDisplay;
-             if (item.getContent) {
-                 recDisplay = item.getContent();
-             } else {
-                 recDisplay = "";
-             }
+             var rec;
 
              // Clear the results area
              domConstruct.empty(this.mockContent);
@@ -97,7 +70,7 @@ define([
              // Show the popup for the item
              rec = domConstruct.create("div", {}, this.mockContent);
              new ContentPane({
-                 content: recDisplay
+                 content: item.getContent()
              }, rec).startup();
              domStyle.set(rec, "border-bottom", "1px solid #ccc");
         },
@@ -108,27 +81,18 @@ define([
          * result of a related table query
          */
         setComments: function (comments) {
-            var i, comment, rec, recDisplay;
+            var i, comment, rec;
 
             // Show each of the comments retrieved
             if (comments && comments.length) {
                 for (i = 0; i < comments.length; i++) {
                     comment = comments[i];
 
-                    // Create the summary content
-                    this.stringizeNullValues(comment.attributes, this.appConfig.showNullValueAs);
-                    try {
-                        recDisplay = string.substitute(this._commentFormat, comment.attributes);
-                    } catch (ignore) {
-                        recDisplay = this._itemSummaryFormat;
-                    }
-
                     // Create the comment's display
                     rec = domConstruct.create("div", {}, this.mockContent);
                     new ContentPane({
-                        content: recDisplay
+                        content: comment.getContent()
                     }, rec).startup();
-                    domStyle.set(rec, "border-bottom", "1px solid #ccc");
                 }
             }
         }

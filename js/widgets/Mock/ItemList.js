@@ -65,7 +65,7 @@ define([
          * result of a feature layer query
          */
         setItems: function (items) {
-            var i, gra, rec, summary;
+            var i, item, rec;
 
             // Clear the results area
             domConstruct.empty(this.mockContent);
@@ -73,22 +73,19 @@ define([
             // Add a summary entry for each item
             if (items && items.length) {
                 for (i = 0; i < items.length; i++) {
-                    gra = items[i];
+                    item = items[i];
 
                     // Create the item's display
                     rec = domConstruct.create("div", {style: "cursor: pointer"}, this.mockContent);
                     new ContentPane({
-                        content: gra.getTitle()
+                        content: item.getTitle()
                     }, rec).startup();
-                    if (i === 0) {
-                        domStyle.set(rec, "border-top", "1px solid #ccc");
-                    }
                     domStyle.set(rec, "border-bottom", "1px solid #ccc");
 
                     // Forward a click on the item's display
-                    on(rec, "click", lang.hitch(this, function (gra) {
-                        topic.publish("itemSelected", gra);
-                    }, gra));
+                    on(rec, "click", lang.hitch(this, function (item) {
+                        topic.publish("itemSelected", item);
+                    }, item));
                 }
             }
         }

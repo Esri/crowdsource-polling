@@ -214,12 +214,6 @@ define([
                     this._sidebarCnt.showBusy(false);
                 }));
 
-
-                // Display formats are defined by the webmap
-                this._itemDetails.setItemSummaryFormat(this._mapData.getItemSummaryFormat());
-                this._itemDetails.setCommentFormat(this._mapData.getCommentDetailFormat());
-
-
                 // Initial population of items list
                 topic.publish("updateItemsList");
 

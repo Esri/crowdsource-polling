@@ -51,7 +51,6 @@ define([
         appConfig: null,
         itemSpecialFields: null,
         commentSpecialFields: null,
-        _foreignKey: "ParentID",
 
         /**
          * Encapsulates the management of a layer and its related table.
@@ -74,7 +73,8 @@ define([
             fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("", "");  // provide defaults
             this.commentSpecialFields = {
                 "name": fieldsSplit[0].trim(),
-                "date": fieldsSplit[1].trim()
+                "date": fieldsSplit[1].trim(),
+                "foreignKey": fieldsSplit[2].trim()
             };
         },
 
@@ -89,10 +89,20 @@ define([
 
         /**
          * Returns the layer fields names of the item comment table's special-purpose fields.
-         * @return {object} Returns the table field name serving the role of "name"
+         * @return {object} Returns the table field name serving the role of "name",
+         * "date", and "foreignKey"
          */
         getCommentSpecialFields: function () {
             return this.commentSpecialFields;
+        },
+
+        /**
+         * Removes the protocol from a URL.
+         * @param {string} url URL to modify
+         * @return {string} URL with everything before "//" removed
+         */
+        deprotocolUrl: function (url) {
+            return url.substring(url.indexOf("//"));
         },
 
         /**
@@ -102,6 +112,7 @@ define([
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
+                var commentTableURL;
 
                 // Operational layer provides item fields and formats
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
@@ -113,8 +124,12 @@ define([
                 // Related table provides comment fields and formats
                 this._commentTableInWebmap = this.appConfig.itemInfo.itemData.tables[0];
 
+                // Remove the protocol from the comment table's URL so that it can be loaded in
+                // http or https environments
+                commentTableURL = this.deprotocolUrl(this._commentTableInWebmap.url);
+
                 // Fetch the related table for the comments
-                this._commentTable = new FeatureLayer(this._commentTableInWebmap.url);
+                this._commentTable = new FeatureLayer(commentTableURL);
                 on.once(this._commentTable, "load", lang.hitch(this, function (evt) {
 
                     // Provides _commentFields[n].{alias, editable, length, name, nullable, type}
@@ -188,8 +203,8 @@ define([
             var attr, gra;
 
             attr = lang.clone(comment);
-            if (this._foreignKey) {
-                attr[this._foreignKey] = itemId;
+            if (this.commentSpecialFields.foreignKey !== "") {
+                attr[this.commentSpecialFields.foreignKey] = itemId;
             }
 
             gra = new Graphic(null, null, attr);
@@ -215,8 +230,8 @@ define([
             var expr, updateQuery;
 
             // Relationship based on explicit foreign key
-            if (this._foreignKey) {
-                expr =  this._foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
+            if (this.commentSpecialFields.foreignKey !== "") {
+                expr =  this.commentSpecialFields.foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
                 updateQuery = new Query();
                 updateQuery.where = expr;
                 updateQuery.returnGeometry = false;

@@ -34,9 +34,9 @@ define([
     "esri/arcgis/utils",
     "esri/dijit/LocateButton",
     "application/lib/LayerAndTableMgmt",
+    "application/widgets/ItemList/ItemList",
     "application/widgets/Mock/MockDialog",
     "application/widgets/Mock/ItemDetails",
-    "application/widgets/Mock/ItemList",
     "application/widgets/Mock/MockWidget",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
@@ -63,9 +63,9 @@ define([
     arcgisUtils,
     LocateButton,
     LayerAndTableMgmt,
+    ItemList,
     MockDialog,
     ItemDetails,
-    ItemList,
     MockWidget,
     SidebarContentController,
     SidebarHeader
@@ -133,6 +133,9 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+
+                // Let the item list widget know the names of the special-purpose item layer fields
+                this._itemsList.setFields(this._mapData.getItemSpecialFields());
 
                 // Published by SidebarHeader
                 topic.subscribe("socialConnectSelected", lang.hitch(this, function () {
@@ -282,8 +285,7 @@ define([
                 this._sidebarCnt.startup();
 
                 this._itemsList = new ItemList({
-                    "appConfig": this.config,
-                    "label": "Ideas List"
+                    "appConfig": this.config
                 }).placeAt("sidebarContent");
                 this._itemsList.startup();
                 this._sidebarCnt.addPanel("ideasList", this._itemsList);

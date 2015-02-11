@@ -62,9 +62,9 @@ define([
             domStyle.set(this.domNode, 'display', 'none');
         },
 
-        setFields: function (fieldsArr) {
-            this.nameField = fieldsArr[0];
-            this.votesField = fieldsArr[2];
+        setFields: function (fields) {
+            this.nameField = fields.name;
+            this.votesField = fields.votes;
         },
 
         setItems: function (items) {

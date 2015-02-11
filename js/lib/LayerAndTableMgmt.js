@@ -49,8 +49,8 @@ define([
 
     return declare([], {
         appConfig: null,
-        _itemFields: null,
-        _commentFields: null,
+        itemSpecialFields: null,
+        commentSpecialFields: null,
         _foreignKey: null,  // "ParentID"
 
         /**
@@ -59,21 +59,40 @@ define([
          * @constructor
          */
         constructor: function (config) {
-            var ideaFieldsSplit;
+            var fieldsSplit;
             this.appConfig = config;
 
             // Save the names of ideas layer fields that we'll need to interact with
-            ideaFieldsSplit = this.appConfig.ideaFields.trim().split(",").concat("", "");  // provide defaults
-            this._ideaFields = {
-                "name": ideaFieldsSplit[0].trim(),
-                "date": ideaFieldsSplit[1].trim(),
-                "votes": ideaFieldsSplit[2].trim()
+            fieldsSplit = this.appConfig.ideaFields.trim().split(",").concat("", "");  // provide defaults
+            this.itemSpecialFields = {
+                "name": fieldsSplit[0].trim(),
+                "date": fieldsSplit[1].trim(),
+                "votes": fieldsSplit[2].trim()
             };
 
             // Save the names of comment table fields that we'll need to interact with
-            this._commentFields = {
-                "name": this.appConfig.commentFields.trim()
+            fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("", "");  // provide defaults
+            this.commentSpecialFields = {
+                "name": fieldsSplit[0].trim(),
+                "date": fieldsSplit[1].trim()
             };
+        },
+
+        /**
+         * Returns the layer fields names of the item layer's special-purpose fields.
+         * @return {object} Returns the layer field names serving the roles of "name",
+         * "date", and "votes"
+         */
+        getItemSpecialFields: function () {
+            return this.itemSpecialFields;
+        },
+
+        /**
+         * Returns the layer fields names of the item comment table's special-purpose fields.
+         * @return {object} Returns the table field name serving the role of "name"
+         */
+        getCommentSpecialFields: function () {
+            return this.commentSpecialFields;
         },
 
         /**
@@ -139,7 +158,7 @@ define([
             var updateQuery = new Query();
             updateQuery.where = "1=1";
             updateQuery.returnGeometry = true;
-            updateQuery.orderByFields = [this._ideaFields.date + " DESC"];
+            updateQuery.orderByFields = [this.itemSpecialFields.date + " DESC"];
             updateQuery.outFields = ["*"];
             if (extent) {
                 updateQuery.geometry = extent;
@@ -180,7 +199,6 @@ define([
                         console.log(JSON.stringify(results[0].error));
                     } else {
                         topic.publish("commentAdded", attr);
-                        console.log("commentAdded: " + JSON.stringify(results));
                     }
                 }),
                 lang.hitch(this, function (err) {
@@ -202,7 +220,7 @@ define([
                 updateQuery = new Query();
                 updateQuery.where = expr;
                 updateQuery.returnGeometry = false;
-                updateQuery.orderByFields = [this._commentTable.date + " DESC"];
+                updateQuery.orderByFields = [this.commentSpecialFields.date + " DESC"];
                 updateQuery.outFields = ["*"];
 
                 this._commentTable.queryFeatures(updateQuery, lang.hitch(this, function (results) {
@@ -221,7 +239,7 @@ define([
                 updateQuery = new RelationshipQuery();
                 updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
                 updateQuery.returnGeometry = true;
-                updateQuery.orderByFields = [this._commentFields.date + " DESC"];
+                updateQuery.orderByFields = [this.commentSpecialFields.date + " DESC"];
                 updateQuery.outFields = ["*"];
                 updateQuery.relationshipId = 0;
 

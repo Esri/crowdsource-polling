@@ -19,7 +19,8 @@ define({
     //Default configuration settings for the application. This is where you'll define things like a bing maps key,
     //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
-    "webmap": "85a0cb1b165c45a0bf1321ce0d44b25b",
+    //"webmap": "93da2f2c4ffa47d5813aa01521b4d188",  // no popups
+    "webmap": "2cc54188f4c84c9fa368a5e44ed9ce9d",  // with popups
     "oauthappid": null, //"AFTKRmv16wj14N3z",
     //Group templates must support a group url parameter. This will contain the id of the group.
     "group": "",
@@ -35,12 +36,17 @@ define({
     "likeIcon": "[{'shape': {'type': 'path', 'path': 'm 11.017346,1.9360981 c -0.3,-0.7 -0.800001,-1.30000004 -1.6000008,-1.6 -0.7,-0.3 -1.4,-0.4 -2.1,-0.2 -0.7,0.2 -1.3,0.69999996 -1.7,1.3 -0.4,-0.60000004 -1,-1.1 -1.7,-1.3 -0.7,-0.2 -1.4,-0.2 -2.1,0.2 -0.8,0.39999996 -1.30000006,0.9 -1.60000006,1.6 -0.3,0.7 -0.3,1.5 0.1,2.3 0.70000006,1.7 5.20000006,5.7000001 5.20000006,5.7999999 0,-0.1 4.4999998,-4.0999999 5.2000008,-5.7999999 0.6,-0.8 0.6,-1.6 0.3,-2.3 z'},'fill':{'r':0,'g':0,'b':0,'a':.35}}]",
     "commentIcon": "M 1,7 1,10 4,7 11,7 11,0 0,0 0,7 ",
 
+    "ideaFields": "Name,Date,Votes",
+    "commentFields": "Name,Date",
 
     "allowUpVotes": false,
     "allowFacebook": false,
     "allowGoogle": false,
     "ideasLayer": null,
     "commentsTable": null,
+    "showNullValueAs": "",
+
+
 
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
     //Defaults to arcgis.com. Set this value to your portal or organization host name.

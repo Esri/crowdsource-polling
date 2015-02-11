@@ -97,12 +97,22 @@ define([
         },
 
         /**
+         * Removes the protocol from a URL.
+         * @param {string} url URL to modify
+         * @return {string} URL with everything before "//" removed
+         */
+        deprotocolUrl: function (url) {
+            return url.substring(url.indexOf("//"));
+        },
+
+        /**
          * Extracts the layer and loads its table from the configuration information.
          * @return {object} Deferred for notification of completed load
          */
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
+                var commentTableURL;
 
                 // Operational layer provides item fields and formats
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
@@ -114,8 +124,12 @@ define([
                 // Related table provides comment fields and formats
                 this._commentTableInWebmap = this.appConfig.itemInfo.itemData.tables[0];
 
+                // Remove the protocol from the comment table's URL so that it can be loaded in
+                // http or https environments
+                commentTableURL = this.deprotocolUrl(this._commentTableInWebmap.url);
+
                 // Fetch the related table for the comments
-                this._commentTable = new FeatureLayer(this._commentTableInWebmap.url);
+                this._commentTable = new FeatureLayer(commentTableURL);
                 on.once(this._commentTable, "load", lang.hitch(this, function (evt) {
 
                     // Provides _commentFields[n].{alias, editable, length, name, nullable, type}

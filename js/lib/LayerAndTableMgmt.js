@@ -147,6 +147,16 @@ define([
                         this._commentPopupTemplate = new InfoTemplate();
                     }
 
+                    // Override related record check from the point of view of the comments
+                    // table--it's not needed
+                    if (this._commentPopupTemplate._getRelatedRecords) {
+                        this._commentPopupTemplate._getRelatedRecords = function () {
+                            var def = new Deferred();
+                            def.resolve();
+                            return def.promise;
+                        };
+                    }
+
                     deferred.resolve();
                 }), lang.hitch(this, function () {
                     deferred.reject(this.appConfig.i18n.map.missingComments);

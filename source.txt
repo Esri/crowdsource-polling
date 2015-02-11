@@ -1,6 +1,5 @@
-commit a91f7c0193afa7ea5faacf4adaaf420e2da8237b
-Merge: ccf88d1 9c7dfb6
+commit f3c804ea2d7171e773d36c1066eb239d3101bf91
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Feb 4 11:30:43 2015 -0800
+Date:   Tue Feb 10 17:19:59 2015 -0800
 
-    Merge branch 'sidebar-header' into develop
+    Switched to explicit foreign key version

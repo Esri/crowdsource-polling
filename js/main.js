@@ -38,8 +38,10 @@ define([
     "application/widgets/Mock/MockDialog",
     "application/widgets/Mock/ItemDetails",
     "application/widgets/Mock/MockWidget",
+    "application/widgets/PopupWindow/PopupWindow",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
+    "application/widgets/TextDisplay/TextDisplay",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
     "dojox/color/_base",
@@ -67,8 +69,10 @@ define([
     MockDialog,
     ItemDetails,
     MockWidget,
+    PopupWindow,
     SidebarContentController,
-    SidebarHeader
+    SidebarHeader,
+    TextDisplay
 ) {
     return declare(null, {
         config: {},
@@ -144,7 +148,8 @@ define([
 
                 // Published by SidebarHeader
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
-                    this._helpDialog.show();
+                    this._helpDialogContainer.setTextContent("text to display");
+                    this._helpDialogContainer.show();
                 }));
 
                 // Published upon startup and by click on button to reset item list to match
@@ -269,14 +274,17 @@ define([
                     topic.publish("signedIn");
                 }));
 
-                this._helpDialog = new MockDialog({
+                this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,
-                    "label": "Help"
+                    "showClose": true
                 }).placeAt(document.body);
+                this._helpDialogContainer.startup();
+
+                this._helpDialog = new TextDisplay({
+                    "appConfig": this.config
+                });
                 this._helpDialog.startup();
-                this._helpDialog.createMockClickSource("close", lang.hitch(this, function () {
-                    this._helpDialog.hide();
-                }));
+                //this._helpDialogContainer.setContent(textDisplayWidget);
 
 
                 this._sidebarCnt = new SidebarContentController({

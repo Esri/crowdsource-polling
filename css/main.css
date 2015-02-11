@@ -87,7 +87,7 @@ body {
 }
 #sidebar {
     width: 320px;
-    border-left: 1px solid gray;
+    border-left: 1px solid #CCC;
     z-index: 40;
 }
 .busy {
@@ -109,7 +109,7 @@ body {
 
 #sidebarHeading {
     height: 100px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #CCC;
     overflow: hidden;
 }
 
@@ -169,13 +169,25 @@ body {
 
 .itemList .itemSummary {
   padding: 10px;
-  line-height: 3em;
+  line-height: 0; /* reset */
   border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
 
 .itemList .itemSummary:hover {
   background-color: white;
+}
+
+.itemSummary .itemTitle {
+  width: 80%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.itemList .itemTitle,
+.itemList .itemFav {
+  line-height: 30px;
 }
 
 .itemSummary > div, .itemFav > div {
@@ -196,4 +208,48 @@ body {
 .itemList .itemSummary.selected {
   background-color: #007ac2;
   color: white;
+}
+
+/* ---------- Popup ---------- */
+
+.popupWidget {
+    position:absolute;
+    display:none;
+    top: 50%;
+    left: 50%;
+    border: 1px solid #CCC;
+    /*margin-left: -100px;
+    margin-top:-150px;*/
+    background-color: white;
+
+}
+.popupTitle {
+    height: 24px;
+    line-height: 24px;
+    background-color:none;
+}
+.popupTitleText{
+    margin-left:5px;
+    color:white;
+}
+.popupContent {
+    padding: 10px;
+    max-width:350px;
+    max-height:300px;
+    overflow:auto;
+}
+.popupClose {
+    display:none;
+    position:absolute;
+    top:0px;
+    right: 0px;
+    height:24px;
+}
+#textDisplay{
+    color: black;
+    display: inline-block;
+    padding: 4px;
+    float: left;
+    font-size: 25px;
+    font-weight: normal;
 }

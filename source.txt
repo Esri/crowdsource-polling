@@ -1,5 +1,6 @@
-commit f3c804ea2d7171e773d36c1066eb239d3101bf91
+commit a2e9572f739339ee21481a9778b55d963483a141
+Merge: 0d8a742 ebb63cf
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Tue Feb 10 17:19:59 2015 -0800
+Date:   Wed Feb 11 07:19:45 2015 -0800
 
-    Switched to explicit foreign key version
+    Merge branch 'layer-and-table-mgmt' into develop

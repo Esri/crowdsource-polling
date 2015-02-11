@@ -26,7 +26,7 @@ define({
         },
         popup_Close: {
             closeButtonTooltip: "Close"
-        }        
+        }
     }),
     "ar": 1,
     "cs": 1,

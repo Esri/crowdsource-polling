@@ -23,7 +23,7 @@ define(({
         signInButtonTooltip: "Sign in to a social medium",
         helpButtonTooltip: "Find out more about this app"
     },
-    popup_Close:{
-        closeButtonTooltip: "Close", 
+    popup_Close: {
+        closeButtonTooltip: "Close"
     }
 }));

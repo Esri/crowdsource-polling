@@ -169,13 +169,25 @@ body {
 
 .itemList .itemSummary {
   padding: 10px;
-  line-height: 3em;
+  line-height: 0; /* reset */
   border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
 
 .itemList .itemSummary:hover {
   background-color: white;
+}
+
+.itemSummary .itemTitle {
+  width: 80%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.itemList .itemTitle,
+.itemList .itemFav {
+  line-height: 30px;
 }
 
 .itemSummary > div, .itemFav > div {

@@ -1,6 +1,6 @@
-commit a2e9572f739339ee21481a9778b55d963483a141
-Merge: 0d8a742 ebb63cf
+commit eff6c778319533324d8d52afc2ab039529029392
+Merge: a2e9572 e1a7431
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Feb 11 07:19:45 2015 -0800
+Date:   Wed Feb 11 08:55:39 2015 -0800
 
-    Merge branch 'layer-and-table-mgmt' into develop
+    Merge branch 'social-and-help-popups' into develop

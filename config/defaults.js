@@ -37,7 +37,7 @@ define({
     "commentIcon": "M 1,7 1,10 4,7 11,7 11,0 0,0 0,7 ",
 
     "ideaFields": "Name,Date,Votes",
-    "commentFields": "Name,Date",
+    "commentFields": "Name,Date,ParentID",
 
     "allowUpVotes": false,
     "allowFacebook": false,

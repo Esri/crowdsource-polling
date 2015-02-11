@@ -51,7 +51,6 @@ define([
         appConfig: null,
         itemSpecialFields: null,
         commentSpecialFields: null,
-        _foreignKey: "ParentID",
 
         /**
          * Encapsulates the management of a layer and its related table.
@@ -74,7 +73,8 @@ define([
             fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("", "");  // provide defaults
             this.commentSpecialFields = {
                 "name": fieldsSplit[0].trim(),
-                "date": fieldsSplit[1].trim()
+                "date": fieldsSplit[1].trim(),
+                "foreignKey": fieldsSplit[2].trim()
             };
         },
 
@@ -89,7 +89,8 @@ define([
 
         /**
          * Returns the layer fields names of the item comment table's special-purpose fields.
-         * @return {object} Returns the table field name serving the role of "name"
+         * @return {object} Returns the table field name serving the role of "name",
+         * "date", and "foreignKey"
          */
         getCommentSpecialFields: function () {
             return this.commentSpecialFields;
@@ -188,8 +189,8 @@ define([
             var attr, gra;
 
             attr = lang.clone(comment);
-            if (this._foreignKey) {
-                attr[this._foreignKey] = itemId;
+            if (this.commentSpecialFields.foreignKey !== "") {
+                attr[this.commentSpecialFields.foreignKey] = itemId;
             }
 
             gra = new Graphic(null, null, attr);
@@ -215,8 +216,8 @@ define([
             var expr, updateQuery;
 
             // Relationship based on explicit foreign key
-            if (this._foreignKey) {
-                expr =  this._foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
+            if (this.commentSpecialFields.foreignKey !== "") {
+                expr =  this.commentSpecialFields.foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
                 updateQuery = new Query();
                 updateQuery.where = expr;
                 updateQuery.returnGeometry = false;

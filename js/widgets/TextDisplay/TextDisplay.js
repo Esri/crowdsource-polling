@@ -21,7 +21,7 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-    "dojo/text!./templates/textDisplay.html",
+    "dojo/text!./templates/TextDisplay.html",
     "dojo/_base/lang"
 ], function (
     declare,

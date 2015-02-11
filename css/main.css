@@ -1,3 +1,4 @@
+/* application-boilerplate */
 html,
 body {
   padding: 0;
@@ -41,6 +42,7 @@ body {
 .app-error .loading-message {
   /* Error status */
   background-position: top center;
+  background-image: url(../images/error.png);
   background-repeat: no-repeat;
   padding-top: 60px;
   width: 100%;
@@ -52,6 +54,21 @@ body {
 }
 
 /*============================================================================================================================*/
+
+/* application-boilerplate mods */
+
+.app-error .loading-message {
+    background-image: none;
+}
+
+/* map */
+
+#LocateButton {
+    position: absolute;
+    top: 95px;
+    left: 20px;
+    z-index: 50;
+}
 
 /* general app layout */
 
@@ -71,6 +88,19 @@ body {
 #sidebar {
     width: 320px;
     border-left: 1px solid gray;
+    z-index: 40;
+}
+.busy {
+  /* Loading overlay image */
+  background-position: center center;
+  background-image: url(../images/ajax-loader.gif);
+  background-repeat: no-repeat;
+  opacity: 0.5;filter:Alpha(opacity=50);
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 
 /*============================================================================================================================*/
@@ -80,10 +110,11 @@ body {
 #sidebarHeading {
     height: 100px;
     border-bottom: 1px solid gray;
+    overflow: hidden;
 }
 
 .sideHdrBtns {
-    height: 22px;
+    height: 27px;
     padding: 5px;
 }
 
@@ -109,8 +140,8 @@ body {
 }
 
 .sideHdrTitle {
-    height: 68px;
-    line-height: 68px;
+    height: 60px;
+    line-height: 60px;
     font-size: 30px;
     font-weight: bold;
     text-align: center;
@@ -118,4 +149,51 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+
+/* ---------- sidebar content ---------- */
+#sidebarContent {
+  background-color: #eee;
+}
+
+
+/* ---------- ItemList ---------- */
+
+.itemList {
+  font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: #eee;
+}
+
+.itemList .itemSummary {
+  padding: 10px;
+  line-height: 3em;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.itemList .itemSummary:hover {
+  background-color: white;
+}
+
+.itemSummary > div, .itemFav > div {
+  display: inline-block;
+}
+
+.itemSummary .itemFav {
+  float: right;
+  font-size: 20px;
+  color: rgb(150, 150, 150);
+  color: rgba(0, 0, 0, 0.35);
+}
+
+.itemVotes {
+  margin-right: 0.5em;
+}
+
+.itemList .itemSummary.selected {
+  background-color: #007ac2;
+  color: white;
 }

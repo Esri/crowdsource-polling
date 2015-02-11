@@ -144,7 +144,7 @@ define([
                     if (this._commentTableInWebmap.popupInfo) {
                         this._commentPopupTemplate = new PopupTemplate(this._commentTableInWebmap.popupInfo);
                     } else {
-                        this._commentInfoTemplate = new InfoTemplate();
+                        this._commentPopupTemplate = new InfoTemplate();
                     }
 
                     deferred.resolve();

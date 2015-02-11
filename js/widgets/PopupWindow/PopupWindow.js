@@ -1,4 +1,4 @@
-/*global define,dojo */
+﻿/*global define,dojo */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2015 Esri
@@ -55,18 +55,17 @@ define([
 
         /**
          * Widget constructor
-         * @param {object} config Application configuration
+         * @param {object} initialProps Initialization properties:
+         *     appConfig: Application configuration
+         *     showClose: Indicates if close button should be shown
+         * @constructor
          */
-        constructor: function (config) {
-            lang.mixin({}, this, config);
-        },
-
 
         /**
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var svgHelper, i18n = this.i18n.popup_Close;
+            var i18n = this.appConfig.i18n.popup_Close;
 
              // Get a DOM node reference for the root of our widget
             //domNode = this.domNode;
@@ -74,8 +73,7 @@ define([
             this.inherited(arguments);
 
             // Set up the UI
-            svgHelper = new SvgHelper();
-            svgHelper.createSVGItem(this.closeIcon, this.closeBtn, 19, 19);
+            SvgHelper.createSVGItem(this.closeIcon, this.closeBtn, 19, 19);
             this.closeBtn.title = i18n.closeButtonTooltip;
 
             //check the value of showClose Button
@@ -84,7 +82,7 @@ define([
             }
         },
 
-        // Implement a method for adding a display text 
+        // Implement a method for adding a display text
         setTextContent: function (text) {
             this.popupContent.innerHTML = text;
         },
@@ -113,9 +111,18 @@ define([
             });
         },
 
-        // event listener for close button
+        /**
+         * Causes the widget to become hidden.
+         */
+        hide: function () {
+            domStyle.set(this.domNode, "display", "none");
+        },
+
+        /**
+         * Handles click event for close button by hiding the widget.
+         */
         onCloseClick: function () {
-            this.destroy();
+            this.hide();
         }
     });
 });

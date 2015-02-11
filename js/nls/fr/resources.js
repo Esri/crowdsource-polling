@@ -22,5 +22,8 @@ define(({
         signInButton: "Se Connecter",
         signInButtonTooltip: "Se connecter à un média social",
         helpButtonTooltip: "Pour en savoir plus sur cette application"
+    },
+    popup_Close: {
+        closeButtonTooltip: "Fermer"
     }
 }));

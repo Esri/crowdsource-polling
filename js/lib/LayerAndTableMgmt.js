@@ -118,6 +118,11 @@ define([
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
 
+                if (!this._itemLayer) {
+                    deferred.reject(this.appConfig.i18n.map.missingItems);
+                    return;
+                }
+
                 // Provides _itemFields[n].{alias, editable, length, name, nullable, type}
                 this._itemFields = this._itemLayer.fields;
 
@@ -143,6 +148,8 @@ define([
                     }
 
                     deferred.resolve();
+                }), lang.hitch(this, function () {
+                    deferred.reject(this.appConfig.i18n.map.missingComments);
                 }));
             }));
             return deferred;

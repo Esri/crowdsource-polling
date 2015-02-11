@@ -51,7 +51,7 @@ define([
         appConfig: null,
         itemSpecialFields: null,
         commentSpecialFields: null,
-        _foreignKey: null,  // "ParentID"
+        _foreignKey: "ParentID",
 
         /**
          * Encapsulates the management of a layer and its related table.

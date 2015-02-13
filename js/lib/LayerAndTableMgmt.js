@@ -18,6 +18,7 @@
 //============================================================================================================================//
 define([
     "dojo/_base/declare",
+    "dojo/_base/array",
     "dojo/_base/lang",
     "dojo/Deferred",
     "dojo/json",
@@ -32,6 +33,7 @@ define([
     "dojo/domReady!"
 ], function (
     declare,
+    array,
     lang,
     Deferred,
     JSON,
@@ -49,8 +51,8 @@ define([
 
     return declare([], {
         appConfig: null,
-        itemSpecialFields: null,
-        commentSpecialFields: null,
+        _itemSpecialFields: null,
+        _commentSpecialFields: null,
 
         /**
          * Encapsulates the management of a layer and its related table.
@@ -63,7 +65,7 @@ define([
 
             // Save the names of ideas layer fields that we'll need to interact with
             fieldsSplit = this.appConfig.ideaFields.trim().split(",").concat("", "");  // provide defaults
-            this.itemSpecialFields = {
+            this._itemSpecialFields = {
                 "name": fieldsSplit[0].trim(),
                 "date": fieldsSplit[1].trim(),
                 "votes": fieldsSplit[2].trim()
@@ -71,7 +73,7 @@ define([
 
             // Save the names of comment table fields that we'll need to interact with
             fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("", "");  // provide defaults
-            this.commentSpecialFields = {
+            this._commentSpecialFields = {
                 "name": fieldsSplit[0].trim(),
                 "date": fieldsSplit[1].trim(),
                 "foreignKey": fieldsSplit[2].trim()
@@ -79,21 +81,53 @@ define([
         },
 
         /**
-         * Returns the layer fields names of the item layer's special-purpose fields.
+         * Returns the layer field names of the item layer's special-purpose fields.
          * @return {object} Returns the layer field names serving the roles of "name",
          * "date", and "votes"
          */
         getItemSpecialFields: function () {
-            return this.itemSpecialFields;
+            return this._itemSpecialFields;
         },
 
         /**
-         * Returns the layer fields names of the item comment table's special-purpose fields.
+         * Returns the layer field names of the item comment table's special-purpose fields.
          * @return {object} Returns the table field name serving the role of "name",
          * "date", and "foreignKey"
          */
         getCommentSpecialFields: function () {
-            return this.commentSpecialFields;
+            return this._commentSpecialFields;
+        },
+
+        /**
+         * Returns the fields of the feature layer holding the items.
+         * @return {array} List of fields
+         */
+        getItemFields: function () {
+            return this._itemFields;
+        },
+
+        /**
+         * Returns the fields of the table holding the comments.
+         * @return {array} List of fields
+         */
+        getCommentFields: function () {
+            return this._commentFields;
+        },
+
+        /**
+         * Returns the feature layer holding the items.
+         * @return {object} Feature layer
+         */
+        getItemLayer: function () {
+            return this._itemLayer;
+        },
+
+        /**
+         * Returns the table holding the comments.
+         * @return {object} Table
+         */
+        getCommentTable: function () {
+            return this._commentTable;
         },
 
         /**
@@ -118,8 +152,12 @@ define([
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
 
-                // Provides _itemFields[n].{alias, editable, length, name, nullable, type}
-                this._itemFields = this._itemLayer.fields;
+                // Provides _itemFields[n].{alias, editable, length, name, nullable, type} after adjusting
+                // to the presence of editing and visibility controls in the optional popup
+                this._itemFields = this.applyWebmapControlsToFields(
+                    this._itemLayer.fields,
+                    this._itemLayerInWebmap.popupInfo
+                );
 
                 // Related table provides comment fields and formats
                 this._commentTableInWebmap = this.appConfig.itemInfo.itemData.tables[0];
@@ -132,8 +170,12 @@ define([
                 this._commentTable = new FeatureLayer(commentTableURL);
                 on.once(this._commentTable, "load", lang.hitch(this, function (evt) {
 
-                    // Provides _commentFields[n].{alias, editable, length, name, nullable, type}
-                    this._commentFields = this._commentTable.fields;
+                    // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
+                // to the presence of editing and visibility controls in the optional popup
+                    this._commentFields = this.applyWebmapControlsToFields(
+                        this._commentTable.fields,
+                        this._commentTableInWebmap.popupInfo
+                    );
 
                     // Formatting of comment display
                     if (this._commentTableInWebmap.popupInfo) {
@@ -149,19 +191,34 @@ define([
         },
 
         /**
-         * Returns the feature layer holding the items.
-         * @return {object} Feature layer
+         * Amends fields in fields list with popup editing and visibility settings.
+         * @param {array} fields Fields associated with layer or table
+         * @param {object} [webmapPopup] Popup associated with layer or table
+         * @return {array} Amends list with "dtIsEditable" and "dtIsVisible"; if webmapPopup or its fieldInfos
+         * property are undefined, dtIsEditable is a copy of "editable" and dtIsVisible is true; otherwise,
+         * dtIsEditable is a copy of the popup's fieldInfo's "isEditable" and dtIsVisible is a copy of its
+         * "visible" (we have to use dtIs* to avoid conflicts with the API's use of "editable")
          */
-        getItemLayer: function () {
-            return this._itemLayer;
-        },
+        applyWebmapControlsToFields: function (fields, webmapPopup) {
+            var fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
+            array.forEach(fields, function (field) {
+                // Cover no-popup and unmatched fieldname cases
+                field.dtIsEditable = field.editable;
+                field.dtIsVisible = true;
 
-        /**
-         * Returns the table holding the comments.
-         * @return {object} Table
-         */
-        getCommentTable: function () {
-            return this._commentTable;
+                // If we have a popup, seek to update settings
+                if (fieldInfos) {
+                    array.some(fieldInfos, function (fieldInfo) {
+                        if (field.name === fieldInfo.fieldName) {
+                            field.dtIsEditable = fieldInfo.isEditable;
+                            field.dtIsVisible = fieldInfo.visible;
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            });
+            return fields;
         },
 
         /**
@@ -173,7 +230,7 @@ define([
             var updateQuery = new Query();
             updateQuery.where = "1=1";
             updateQuery.returnGeometry = true;
-            updateQuery.orderByFields = [this.itemSpecialFields.date + " DESC"];
+            updateQuery.orderByFields = [this._itemSpecialFields.date + " DESC"];
             updateQuery.outFields = ["*"];
             if (extent) {
                 updateQuery.geometry = extent;
@@ -187,37 +244,32 @@ define([
         },
 
         /**
-         * Returns the generated form for adding comments.
-         */
-        getAddCommentForm: function () {
-            return null;
-        },
-
-        /**
          * Adds a comment to the comment table.
-         * @param {string} itemId Identifier of item to modify
-         * @param {object} comment Comment as a set of attributes to be added for the specified item
+         * @param {string} item Item associated with this comment
+         * @param {object} comment Comment as a set of attributes to be added for the item
          * @return {publish} "commentAdded" with copy of comment arg amended with foreign key
+         * or "commentAddFailed" with an error message
          */
-        addComment: function (itemId, comment) {
+        addComment: function (item, comment) {
             var attr, gra;
 
             attr = lang.clone(comment);
-            if (this.commentSpecialFields.foreignKey !== "") {
-                attr[this.commentSpecialFields.foreignKey] = itemId;
+            if (this._commentSpecialFields.foreignKey !== "") {
+                attr[this._commentSpecialFields.foreignKey] =
+                    item.attributes[item.getLayer().objectIdField];
             }
 
             gra = new Graphic(null, null, attr);
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
                     if (results[0].error) {
-                        console.log(JSON.stringify(results[0].error));
+                        topic.publish("commentAddFailed", results[0].error);
                     } else {
                         topic.publish("commentAdded", attr);
                     }
                 }),
                 lang.hitch(this, function (err) {
-                    console.log(JSON.stringify(err));
+                    topic.publish("commentAddFailed", JSON.stringify(err));
                 }));
         },
 
@@ -230,12 +282,12 @@ define([
             var expr, updateQuery;
 
             // Relationship based on explicit foreign key
-            if (this.commentSpecialFields.foreignKey !== "") {
-                expr =  this.commentSpecialFields.foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
+            if (this._commentSpecialFields.foreignKey !== "") {
+                expr =  this._commentSpecialFields.foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
                 updateQuery = new Query();
                 updateQuery.where = expr;
                 updateQuery.returnGeometry = false;
-                updateQuery.orderByFields = [this.commentSpecialFields.date + " DESC"];
+                updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
                 updateQuery.outFields = ["*"];
 
                 this._commentTable.queryFeatures(updateQuery, lang.hitch(this, function (results) {
@@ -254,7 +306,7 @@ define([
                 updateQuery = new RelationshipQuery();
                 updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
                 updateQuery.returnGeometry = true;
-                updateQuery.orderByFields = [this.commentSpecialFields.date + " DESC"];
+                updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
                 updateQuery.outFields = ["*"];
                 updateQuery.relationshipId = 0;
 

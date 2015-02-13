@@ -53,7 +53,6 @@ define([
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
 
-            domStyle.set(this.domNode, "display", "none");
             domStyle.set(this.domNode, "position", "absolute");
             domStyle.set(this.domNode, "left", "16px");
             domStyle.set(this.domNode, "right", "16px");

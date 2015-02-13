@@ -52,8 +52,6 @@ define([
         postCreate: function () {
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
-
-            domStyle.set(this.domNode, "display", "none");
         }
 
     });

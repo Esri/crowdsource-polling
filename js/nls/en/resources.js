@@ -16,7 +16,10 @@
  */
 define(({
     map: {
-        error: "Unable to create map"
+        error: "Unable to create map",
+        layerLoad: "Unable to fully load map",
+        missingItems: "Item feature layer is missing",
+        missingComments: "Comment table is missing"
     },
     sidebar_header: {
         signInButton: "Sign In",
@@ -25,5 +28,11 @@ define(({
     },
     popup_Close: {
         closeButtonTooltip: "Close"
+    },
+    dynamic_form: {
+        optional: " (optional)",
+        charactersRemaining: "Characters remaining",
+        cancel: "Cancel",
+        submit: "Submit Comment"
     }
 }));

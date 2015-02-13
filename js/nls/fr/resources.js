@@ -16,7 +16,10 @@
  */
 define(({
     map: {
-        error: "Impossible de créer la carte"
+        error: "Impossible de créer la carte",
+        layerLoad: "Impossible de charger entièrement la carte",
+        missingItems: "La couche de questions est manquant",
+        missingComments: "Le tableau des commentaires est manquant"
     },
     sidebar_header: {
         signInButton: "Se Connecter",
@@ -25,5 +28,11 @@ define(({
     },
     popup_Close: {
         closeButtonTooltip: "Fermer"
+    },
+    dynamic_form: {
+        optional: " (facultatif)",
+        charactersRemaining: "Caractères restants",
+        cancel: "Annuler",
+        submit: "Envoyer le commentaire"
     }
 }));

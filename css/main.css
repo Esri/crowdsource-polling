@@ -105,7 +105,7 @@ body {
 
 /*============================================================================================================================*/
 
-/* sidebar-header widget */
+/* ---------- SidebarHeader ---------- */
 
 #sidebarHeading {
     height: 100px;
@@ -152,7 +152,8 @@ body {
 }
 
 
-/* ---------- sidebar content ---------- */
+/* ---------- SidebarContentController ---------- */
+
 #sidebarContent {
   background-color: #eee;
 }
@@ -253,3 +254,54 @@ body {
     font-size: 25px;
     font-weight: normal;
 }
+
+/* ---------- DynamicForm ---------- */
+
+.dynamicFormPanel {
+    background-color: white;
+}
+
+.dynamicForm {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 44px;
+    padding: 12px;
+    overflow-y: auto;
+}
+
+.dynamicFormRow {
+    position: relative;
+    margin: 10px 10px 10px 10px;
+    height: auto;
+    line-height: 18px;
+}
+
+.dynamicFormInputCtl {
+    width: 95%;
+    height: 24px;
+}
+
+
+.dynamicFormTextAreaCtl {
+    width: 95%;
+    height: 60px;
+    resize: none;
+}
+
+.dynamicFormCharactersRemaining {
+    float: right;
+    padding-right: 7px;
+}
+
+.dynamicFormActions {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 20px;
+    padding: 12px;
+    text-align: center;
+}
+

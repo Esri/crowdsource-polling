@@ -1,5 +1,6 @@
-commit 0198f9eb7470eda8c8b0c19185ac4ec42b40c70d
+commit a633bcd287627e07a2b79f1e0a6c9b8544e59d37
+Merge: 0198f9e 98beebf
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Feb 13 10:20:25 2015 -0800
+Date:   Fri Feb 13 10:29:56 2015 -0800
 
-    Removed trailing space
+    Merge branch 'layer-and-table-mgmt' into develop

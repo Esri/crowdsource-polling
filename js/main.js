@@ -1,4 +1,4 @@
-﻿/*global define,console */
+﻿/*global define,console,mockCurrentItem:true */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -34,6 +34,7 @@ define([
     "esri/arcgis/utils",
     "esri/dijit/LocateButton",
     "application/lib/LayerAndTableMgmt",
+    "application/widgets/DynamicForm/DynamicForm",
     "application/widgets/ItemList/ItemList",
     "application/widgets/Mock/MockDialog",
     "application/widgets/Mock/ItemDetails",
@@ -64,6 +65,7 @@ define([
     arcgisUtils,
     LocateButton,
     LayerAndTableMgmt,
+    DynamicForm,
     ItemList,
     MockDialog,
     ItemDetails,
@@ -76,6 +78,7 @@ define([
         config: {},
         map: null,
         mapData: null,
+        mockCurrentItem: null,  //???
 
         startup: function (config) {
             var itemInfo, error;
@@ -136,8 +139,9 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
 
-                // Let the item list widget know the names of the special-purpose item layer fields
+                // Let widgets know about the map data fields
                 this._itemsList.setFields(this._mapData.getItemSpecialFields());
+                this._itemAddComment.setFields(this._mapData.getCommentFields());
 
                 // Published by SidebarHeader
                 topic.subscribe("socialConnectSelected", lang.hitch(this, function () {
@@ -172,6 +176,7 @@ define([
                 });
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     var itemExtent;
+                    mockCurrentItem = item;  //???
 
                     this._itemDetails.setItem(item);
                     this._sidebarCnt.showPanel("ideaDetails");
@@ -194,9 +199,34 @@ define([
                     this._sidebarCnt.showPanel("ideasList");
                 }));
 
+                // Published by DynamicForm
+                topic.subscribe("cancelForm", lang.hitch(this, function () {
+                    this._sidebarCnt.showPanel("ideaDetails");
+                }));
+
+                // Published by DynamicForm
+                topic.subscribe("submitForm", lang.hitch(this, function (item, comment) {
+                    this._mapData.addComment(item, comment);
+                    this._sidebarCnt.showPanel("ideaDetails");
+                }));
+
+                // Published by ItemDetails
+                topic.subscribe("addComment", lang.hitch(this, function (item) {
+                    this._itemAddComment.setItem(item);
+                    this._sidebarCnt.showPanel("addComment");
+                }));
+
+                // Published by LayerAndTableManagement after comment add fails
+                topic.subscribe("commentAddFailed", lang.hitch(this, function (error) {
+                    console.log("commentAddFailed: " + error);
+                    this._sidebarCnt.showPanel("ideaDetails");
+                }));
+
                 // Published by LayerAndTableManagement after comment is added
                 topic.subscribe("commentAdded", lang.hitch(this, function (comment) {
                     console.log("commentAdded: " + JSON.stringify(comment));
+                    topic.publish("updateCommentsList");
+                    this._sidebarCnt.showPanel("ideaDetails");
                 }));
 
                 // Published when an item is selected and after a comment is added
@@ -295,9 +325,22 @@ define([
                 }).placeAt("sidebarContent");
                 this._itemDetails.startup();
                 this._itemDetails.createMockClickSource("back", lang.hitch(this, function () {
+                    mockCurrentItem = null;
                     topic.publish("showItemsList");
                 }));
+                this._itemDetails.createMockClickSource("like", lang.hitch(this, function () {
+                    topic.publish("addLike", mockCurrentItem);
+                }));
+                this._itemDetails.createMockClickSource("comment", lang.hitch(this, function () {
+                    topic.publish("addComment", mockCurrentItem);
+                }));
                 this._sidebarCnt.addPanel("ideaDetails", this._itemDetails);
+
+                this._itemAddComment = new DynamicForm({
+                    "appConfig": this.config
+                }).placeAt("sidebarContent");
+                this._itemAddComment.startup();
+                this._sidebarCnt.addPanel("addComment", this._itemAddComment);
 
 
 

@@ -148,7 +148,7 @@ define([
                 //----- Catch published messages and wire them to their actions -----
                 topic.subscribe("addLike", lang.hitch(this, function (item) {
                     console.log(">addLike>", item);  //???
-                    //???this._mapData.addLike(item);
+                    this._mapData.incrementVote(item);
                 }));
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {

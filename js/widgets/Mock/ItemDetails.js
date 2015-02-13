@@ -81,7 +81,7 @@ define([
          * result of a related table query
          */
         setComments: function (comments) {
-            var i, comment, rec;
+            var i, comment, rec, recContent;
 
             // Show each of the comments retrieved
             if (comments && comments.length) {
@@ -90,9 +90,10 @@ define([
 
                     // Create the comment's display
                     rec = domConstruct.create("div", {}, this.mockContent);
-                    new ContentPane({
+                    recContent = new ContentPane({
                         content: comment.getContent()
-                    }, rec).startup();
+                    }, rec);
+                    recContent.startup();
                 }
             }
         }

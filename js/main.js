@@ -41,7 +41,6 @@ define([
     "application/widgets/PopupWindow/PopupWindow",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
-    "application/widgets/TextDisplay/TextDisplay",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
     "dojox/color/_base",
@@ -71,8 +70,7 @@ define([
     MockWidget,
     PopupWindow,
     SidebarContentController,
-    SidebarHeader,
-    TextDisplay
+    SidebarHeader
 ) {
     return declare(null, {
         config: {},
@@ -148,7 +146,7 @@ define([
 
                 // Published by SidebarHeader
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
-                    this._helpDialogContainer.setTextContent("text to display");
+                    this._helpDialogContainer.set("displayText", this.config.displayText);
                     this._helpDialogContainer.show();
                 }));
 
@@ -280,13 +278,6 @@ define([
                 }).placeAt(document.body);
                 this._helpDialogContainer.startup();
 
-                this._helpDialog = new TextDisplay({
-                    "appConfig": this.config
-                });
-                this._helpDialog.startup();
-                //this._helpDialogContainer.setContent(textDisplayWidget);
-
-
                 this._sidebarCnt = new SidebarContentController({
                     "appConfig": this.config
                 }).placeAt("sidebarContent");
@@ -356,8 +347,7 @@ define([
                     }));
                 }
             }), function (err) {
-                //this.reportError(err);
-                mapCreateDeferred.reject("Unable to create map" + (err ? ": " + err : ""));
+                mapCreateDeferred.reject((err ? ": " + err : ""));
             });
 
             // Once the map and its first layer are loaded, get the layer's data
@@ -367,10 +357,12 @@ define([
                 this._mapData = new LayerAndTableMgmt(this.config);
                 this._mapData.load().then(function () {
                     mapDataReadyDeferred.resolve("map data");
-                });
-            }), function (err) {
-                mapDataReadyDeferred.reject();
-            });
+                }, lang.hitch(this, function (err) {
+                    mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
+                }));
+            }), lang.hitch(this, function (err) {
+                mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
+            }));
 
             return mapDataReadyDeferred.promise;
         },

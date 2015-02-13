@@ -152,6 +152,11 @@ define([
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
 
+                if (!this._itemLayer) {
+                    deferred.reject(this.appConfig.i18n.map.missingItems);
+                    return;
+                }
+
                 // Provides _itemFields[n].{alias, editable, length, name, nullable, type} after adjusting
                 // to the presence of editing and visibility controls in the optional popup
                 this._itemFields = this.applyWebmapControlsToFields(
@@ -181,10 +186,22 @@ define([
                     if (this._commentTableInWebmap.popupInfo) {
                         this._commentPopupTemplate = new PopupTemplate(this._commentTableInWebmap.popupInfo);
                     } else {
-                        this._commentInfoTemplate = new InfoTemplate();
+                        this._commentPopupTemplate = new InfoTemplate();
+                    }
+
+                    // Override related record check from the point of view of the comments
+                    // table--it's not needed
+                    if (this._commentPopupTemplate._getRelatedRecords) {
+                        this._commentPopupTemplate._getRelatedRecords = function () {
+                            var def = new Deferred();
+                            def.resolve();
+                            return def.promise;
+                        };
                     }
 
                     deferred.resolve();
+                }), lang.hitch(this, function () {
+                    deferred.reject(this.appConfig.i18n.map.missingComments);
                 }));
             }));
             return deferred;

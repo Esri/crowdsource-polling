@@ -23,6 +23,7 @@ define([
     "dojo/text!./templates/SidebarHeader.html",
     "dojo/dom",
     "dojo/_base/lang",
+    "dojo/dom-style",
     "dojo/on",
     "dojo/topic",
     "application/lib/SvgHelper"
@@ -33,6 +34,7 @@ define([
     template,
     dom,
     lang,
+    domStyle,
     on,
     topic,
     SvgHelper
@@ -60,8 +62,7 @@ define([
             this.inherited(arguments);
 
             // Set up the UI
-            this.signInBtn.innerHTML = i18n.signInButton;
-            this.signInBtn.title = i18n.signInButtonTooltip;
+            domStyle.set(this.signInBtn, "display", "none");
 
             SvgHelper.createSVGItem(this.appConfig.helpIcon, this.helpBtn, 19, 19);
             this.helpBtn.title = i18n.helpButtonTooltip;
@@ -78,6 +79,29 @@ define([
                 topic.publish("helpSelected");
             });
             this.own(this._helpBtnOnClick);
+        },
+
+        /**
+         * Updates the signed-in display based on the signed-in state.
+         * @param {object} signedInUser Description of signed-in user: "name" {string},
+         * "canSignOut" {boolean}; null indicates that no one is signed in
+         */
+        updateSignin: function (signedInUser) {
+            var i18n = this.appConfig.i18n.sidebar_header;
+
+            if (!signedInUser) {
+                this.signInBtn.innerHTML = i18n.signInButton;
+                this.signInBtn.title = i18n.signInButtonTooltip;
+                domStyle.set(this.signInBtn, "display", "block");
+
+            } else if (signedInUser.canSignOut) {
+                this.signInBtn.innerHTML = i18n.signOutButton;
+                this.signInBtn.title = i18n.signOutButtonTooltip;
+                domStyle.set(this.signInBtn, "display", "block");
+
+            } else {
+                domStyle.set(this.signInBtn, "display", "none");
+            }
         }
 
     });

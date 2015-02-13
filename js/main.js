@@ -219,7 +219,7 @@ define([
 
                 topic.subscribe("signinUpdate", lang.hitch(this, function () {
                     console.log(">signinUpdate>");  //???
-                    //???this._sidebarHdr.updateSignin();
+                    this._sidebarHdr.updateSignin(this._socialDialog.getSignedInUser());
                 }));
 
                 topic.subscribe("socialSelected", lang.hitch(this, function () {
@@ -272,6 +272,7 @@ define([
                 // Start with items list
                 topic.publish("showPanel", "itemsList");
                 topic.publish("updateItems");
+                topic.publish("signinUpdate");
 
 
                 //----- Done -----
@@ -323,6 +324,13 @@ define([
                 }));
                 this._socialDialog.createMockClickSource("sign in", lang.hitch(this, function () {
                     topic.publish("signinUpdate");
+                }));
+                this._socialDialog.createMockFunction("getSignedInUser", lang.hitch(this, function () {
+                    // Description of signed-in user: "name" {string}, "canSignOut" {boolean};
+                    // null indicates that no one is signed in
+                    //return {"name": "Fred", "canSignOut": true};
+                    //return {"name": "Fred", "canSignOut": false};
+                    return null;
                 }));
 
                 // Popup window for help, error messages, social media

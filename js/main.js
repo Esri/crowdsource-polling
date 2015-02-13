@@ -78,7 +78,6 @@ define([
         config: {},
         map: null,
         mapData: null,
-        _currentUser: null,
         mockCurrentItem: null,  //???
 
         startup: function (config) {
@@ -139,6 +138,7 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+                var commentNameField = this._mapData.getCommentSpecialFields().name;
 
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(this._mapData.getItemSpecialFields());
@@ -174,8 +174,16 @@ define([
 
                 topic.subscribe("getComment", lang.hitch(this, function (item) {
                     console.log(">getComment>", item);  //???
+                    var userInfo = this._socialDialog.getSignedInUser();
                     this._itemAddComment.setItem(item);
-                    //???this._itemAddComment.setUser(this._currentUser);
+
+                    // See if we can pre-set its value
+                    if (userInfo && userInfo.name) {
+                        this._itemAddComment.presetFieldValue(commentNameField, userInfo.name);
+                    } else {
+                        this._itemAddComment.presetFieldValue(commentNameField, null);
+                    }
+
                     topic.publish("showPanel", "getComment");
                 }));
 
@@ -329,7 +337,7 @@ define([
                     // Description of signed-in user: "name" {string}, "canSignOut" {boolean};
                     // null indicates that no one is signed in
                     //return {"name": "Fred", "canSignOut": true};
-                    //return {"name": "Fred", "canSignOut": false};
+                    //return {"name": "Ginger", "canSignOut": false};
                     return null;
                 }));
 

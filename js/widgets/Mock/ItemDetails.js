@@ -83,6 +83,9 @@ define([
         setComments: function (comments) {
             var i, comment, rec, recContent;
 
+            // Clear the results area (comments might be update while keeping the same item)
+            domConstruct.empty(this.mockContent);
+
             // Show each of the comments retrieved
             if (comments && comments.length) {
                 for (i = 0; i < comments.length; i++) {

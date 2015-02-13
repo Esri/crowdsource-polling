@@ -24,6 +24,7 @@ define([
     "dojo/dom",
     "dojo/_base/lang",
     "dojo/on",
+    "dojo/topic",
     "application/lib/SvgHelper"
 ], function (
     declare,
@@ -33,13 +34,14 @@ define([
     dom,
     lang,
     on,
+    topic,
     SvgHelper
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         _config: null,
-        signInBtnOnClick: null,
-        helpBtnOnClick: null,
+        _signInBtnOnClick: null,
+        _helpBtnOnClick: null,
 
         /**
          * Widget constructor
@@ -65,46 +67,17 @@ define([
             this.helpBtn.title = i18n.helpButtonTooltip;
 
             this.appTitle.innerHTML = this.appConfig.title || "";
-        },
 
-        /**
-         * Sets the onClick handler for the sign-in button.
-         * @param {function} clickHandler Function to be called when the sign-in button is clicked;
-         * callback function will receive this widget as 'this'
-         * @example
-         * var widget = new SidebarHeader(this.config);
-         * widget.placeAt("sidebarHeading");
-         * widget.startup();
-         * widget.set("signInBtnOnClick", function () {
-         *     console.log("Clicked sign-in button");
-         * });
-         */
-        _setSignInBtnOnClickAttr: function (clickHandler) {
-            if (this.signInBtnOnClick) {
-                this.signInBtnOnClick.remove();
-            }
-            this.signInBtnOnClick = on(this.signInBtn, "click", lang.hitch(this, clickHandler));
-            this.own(this.signInBtnOnClick);
-        },
+            // Set up the button click handlers
+            this._signInBtnOnClick = on(this.signInBtn, "click", function () {
+                topic.publish("socialSelected");
+            });
+            this.own(this._signInBtnOnClick);
 
-        /**
-         * Sets the onClick handler for the help button.
-         * @param {function} clickHandler Function to be called when the help button is clicked;
-         * callback function will receive this widget as 'this'
-         * @example
-         * var widget = new SidebarHeader(this.config);
-         * widget.placeAt("sidebarHeading");
-         * widget.startup();
-         * widget.set("helpBtnOnClick", function () {
-         *     console.log("Clicked help button");
-         * });
-         */
-        _setHelpBtnOnClickAttr: function (clickHandler) {
-            if (this.helpBtnOnClick) {
-                this.helpBtnOnClick.remove();
-            }
-            this.helpBtnOnClick = on(this.helpBtn, "click", lang.hitch(this, clickHandler));
-            this.own(this.helpBtnOnClick);
+            this._helpBtnOnClick = on(this.helpBtn, "click", function () {
+                topic.publish("helpSelected");
+            });
+            this.own(this._helpBtnOnClick);
         }
 
     });

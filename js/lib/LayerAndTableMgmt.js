@@ -264,7 +264,7 @@ define([
          * Adds a comment to the comment table.
          * @param {string} item Item associated with this comment
          * @param {object} comment Comment as a set of attributes to be added for the item
-         * @return {publish} "commentAdded" with copy of comment arg amended with foreign key
+         * @return {publish} "commentAdded" with the item associated with this comment
          * or "commentAddFailed" with an error message
          */
         addComment: function (item, comment) {
@@ -282,7 +282,7 @@ define([
                     if (results[0].error) {
                         topic.publish("commentAddFailed", results[0].error);
                     } else {
-                        topic.publish("commentAdded", attr);
+                        topic.publish("commentAdded", item);
                     }
                 }),
                 lang.hitch(this, function (err) {

@@ -347,8 +347,7 @@ define([
                     }));
                 }
             }), function (err) {
-                //this.reportError(err);
-                mapCreateDeferred.reject("Unable to create map" + (err ? ": " + err : ""));
+                mapCreateDeferred.reject((err ? ": " + err : ""));
             });
 
             // Once the map and its first layer are loaded, get the layer's data
@@ -358,10 +357,12 @@ define([
                 this._mapData = new LayerAndTableMgmt(this.config);
                 this._mapData.load().then(function () {
                     mapDataReadyDeferred.resolve("map data");
-                });
-            }), function (err) {
-                mapDataReadyDeferred.reject();
-            });
+                }, lang.hitch(this, function (err) {
+                    mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
+                }));
+            }), lang.hitch(this, function (err) {
+                mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
+            }));
 
             return mapDataReadyDeferred.promise;
         },

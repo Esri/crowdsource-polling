@@ -78,6 +78,7 @@ define([
         config: {},
         map: null,
         mapData: null,
+        _currentUser: null,
         mockCurrentItem: null,  //???
 
         startup: function (config) {
@@ -139,48 +140,59 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
 
-                // Let widgets know about the map data fields
+                //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(this._mapData.getItemSpecialFields());
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
-                // Published by SidebarHeader
-                topic.subscribe("socialConnectSelected", lang.hitch(this, function () {
-                    this._socialDialog.show();
+
+                //----- Catch published messages and wire them to their actions -----
+                topic.subscribe("addLike", lang.hitch(this, function (item) {
+                    console.log(">addLike>", item);  //???
+                    //???this._mapData.addLike(item);
                 }));
 
-                // Published by SidebarHeader
+                topic.subscribe("cancelForm", lang.hitch(this, function () {
+                    console.log(">cancelForm>");  //???
+                    topic.publish("showPanel", "itemDetails");
+                }));
+
+                topic.subscribe("commentAdded", lang.hitch(this, function (item) {
+                    console.log(">commentAdded>", item);  //???
+                    topic.publish("updateComments", item);
+                }));
+
+                topic.subscribe("commentAddFailed", lang.hitch(this, function (err) {
+                    console.log(">commentAddFailed>", err);  //???
+                    this._sidebarCnt.showBusy(false);
+                    topic.publish("showError", err);
+                }));
+
+                topic.subscribe("detailsCancel", lang.hitch(this, function () {
+                    console.log(">detailsCancel>");  //???
+                    topic.publish("showPanel", "itemsList");
+                }));
+
+                topic.subscribe("getComment", lang.hitch(this, function (item) {
+                    console.log(">getComment>", item);  //???
+                    this._itemAddComment.setItem(item);
+                    //???this._itemAddComment.setUser(this._currentUser);
+                    topic.publish("showPanel", "getComment");
+                }));
+
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
+                    console.log(">helpSelected>");  //???
                     this._helpDialogContainer.set("displayText", this.config.displayText);
                     this._helpDialogContainer.show();
                 }));
 
-                // Published upon startup and by click on button to reset item list to match
-                // current map extents
-                topic.subscribe("updateItemsList", lang.hitch(this, function () {
-                    this._mapData.queryItems(this.map.extent);
-                    this._sidebarCnt.showPanel("ideasList");
-                    this._sidebarCnt.showBusy(true);
-                }));
-
-                // Published by LayerAndTableManagement
-                topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
-                    this._itemsList.setItems(items);
-                    this._sidebarCnt.showBusy(false);
-                }));
-
-                // Published by layer click handler and by ItemList
-                on(this._mapData.getItemLayer(), "click", function (evt) {
-                    if (evt.graphic) {
-                        topic.publish("itemSelected", evt.graphic);
-                    }
-                });
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
+                    console.log(">itemSelected>", item);  //???
                     var itemExtent;
                     mockCurrentItem = item;  //???
 
                     this._itemDetails.setItem(item);
-                    this._sidebarCnt.showPanel("ideaDetails");
-                    topic.publish("updateCommentsList", item);
+                    topic.publish("updateComments", item);
+                    topic.publish("showPanel", "itemDetails");
 
                     // Zoom to item if possible
                     if (item.geometry.getExtent) {
@@ -194,62 +206,76 @@ define([
                     }
                 }));
 
-                // Published by ItemDetails
-                topic.subscribe("showItemsList", lang.hitch(this, function () {
-                    this._sidebarCnt.showPanel("ideasList");
+                topic.subscribe("showError", lang.hitch(this, function (err) {
+                    console.log(">showError>", err);  //???
+                    this._helpDialogContainer.set("displayText", err);
+                    this._helpDialogContainer.show();
                 }));
 
-                // Published by DynamicForm
-                topic.subscribe("cancelForm", lang.hitch(this, function () {
-                    this._sidebarCnt.showPanel("ideaDetails");
+                topic.subscribe("showPanel", lang.hitch(this, function (name) {
+                    console.log(">showPanel>", name);  //???
+                    this._sidebarCnt.showPanel(name);
                 }));
 
-                // Published by DynamicForm
+                topic.subscribe("signinUpdate", lang.hitch(this, function () {
+                    console.log(">signinUpdate>");  //???
+                    //???this._sidebarHdr.updateSignin();
+                }));
+
+                topic.subscribe("socialSelected", lang.hitch(this, function () {
+                    console.log(">socialSelected>");  //???
+                    this._socialDialog.show();
+                }));
+
                 topic.subscribe("submitForm", lang.hitch(this, function (item, comment) {
-                    this._mapData.addComment(item, comment);
-                    this._sidebarCnt.showPanel("ideaDetails");
-                }));
-
-                // Published by ItemDetails
-                topic.subscribe("addComment", lang.hitch(this, function (item) {
-                    this._itemAddComment.setItem(item);
-                    this._sidebarCnt.showPanel("addComment");
-                }));
-
-                // Published by LayerAndTableManagement after comment add fails
-                topic.subscribe("commentAddFailed", lang.hitch(this, function (error) {
-                    console.log("commentAddFailed: " + error);
-                    this._sidebarCnt.showPanel("ideaDetails");
-                }));
-
-                // Published by LayerAndTableManagement after comment is added
-                topic.subscribe("commentAdded", lang.hitch(this, function (comment) {
-                    console.log("commentAdded: " + JSON.stringify(comment));
-                    topic.publish("updateCommentsList");
-                    this._sidebarCnt.showPanel("ideaDetails");
-                }));
-
-                // Published when an item is selected and after a comment is added
-                topic.subscribe("updateCommentsList", lang.hitch(this, function (item) {
-                    this._mapData.queryComments(item);
+                    console.log(">submitForm>", item, comment);  //???
                     this._sidebarCnt.showBusy(true);
+                    this._mapData.addComment(item, comment);
+                    topic.publish("showPanel", "itemDetails");
                 }));
 
-                // Published by LayerAndTableManagement
+                topic.subscribe("updateComments", lang.hitch(this, function (item) {
+                    console.log(">updateComments>", item);  //???
+                    this._sidebarCnt.showBusy(true);
+                    this._mapData.queryComments(item);
+                }));
+
                 topic.subscribe("updatedCommentsList", lang.hitch(this, function (comments) {
+                    console.log(">updatedCommentsList>", comments);  //???
                     this._itemDetails.setComments(comments);
                     this._sidebarCnt.showBusy(false);
                 }));
 
-                // Initial population of items list
-                topic.publish("updateItemsList");
+                topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
+                    console.log(">updatedItemsList>", items);  //???
+                    this._itemsList.setItems(items);
+                    this._sidebarCnt.showBusy(false);
+                }));
+
+                topic.subscribe("updateItems", lang.hitch(this, function () {
+                    console.log(">updateItems>");  //???
+                    this._sidebarCnt.showBusy(true);
+                    this._mapData.queryItems(this.map.extent);
+                }));
 
 
-                //??? Cancellation handling: e.g., select two+ items from map or items list rapidly
+                //----- Set up controller-published messages (other than -----
+                //----- those that are forwards from subscriptions)      -----
+
+                // Click on an item in the map
+                on(this._mapData.getItemLayer(), "click", function (evt) {
+                    if (evt.graphic) {
+                        topic.publish("itemSelected", evt.graphic);
+                    }
+                });
+
+                // Start with items list
+                topic.publish("showPanel", "itemsList");
+                topic.publish("updateItems");
 
 
-
-                console.log("app is ready: " + JSON.stringify(statusList));
+                //----- Done -----
+                console.log("app is ready");
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
             }));
@@ -278,18 +304,15 @@ define([
                     };
                 }
 
-                // Add the widgets
+                //----- Add the widgets -----
+
+                // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config
                 }).placeAt("sidebarHeading");
                 this._sidebarHdr.startup();
-                this._sidebarHdr.set("signInBtnOnClick", lang.hitch(this, function () {
-                    topic.publish("socialConnectSelected");
-                }));
-                this._sidebarHdr.set("helpBtnOnClick", lang.hitch(this, function () {
-                    topic.publish("helpSelected");
-                }));
 
+                // Social media
                 this._socialDialog = new MockDialog({
                     "appConfig": this.config,
                     "label": "Social Media Sign-in"
@@ -299,26 +322,30 @@ define([
                     this._socialDialog.hide();
                 }));
                 this._socialDialog.createMockClickSource("sign in", lang.hitch(this, function () {
-                    topic.publish("signedIn");
+                    topic.publish("signinUpdate");
                 }));
 
+                // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,
                     "showClose": true
                 }).placeAt(document.body);
                 this._helpDialogContainer.startup();
 
+                // Sidebar content controller
                 this._sidebarCnt = new SidebarContentController({
                     "appConfig": this.config
                 }).placeAt("sidebarContent");
                 this._sidebarCnt.startup();
 
+                // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config
                 }).placeAt("sidebarContent");
                 this._itemsList.startup();
-                this._sidebarCnt.addPanel("ideasList", this._itemsList);
+                this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
+                // Item details
                 this._itemDetails = new ItemDetails({
                     "appConfig": this.config,
                     "label": "Idea Details"
@@ -326,21 +353,22 @@ define([
                 this._itemDetails.startup();
                 this._itemDetails.createMockClickSource("back", lang.hitch(this, function () {
                     mockCurrentItem = null;
-                    topic.publish("showItemsList");
+                    topic.publish("detailsCancel");
                 }));
                 this._itemDetails.createMockClickSource("like", lang.hitch(this, function () {
                     topic.publish("addLike", mockCurrentItem);
                 }));
                 this._itemDetails.createMockClickSource("comment", lang.hitch(this, function () {
-                    topic.publish("addComment", mockCurrentItem);
+                    topic.publish("getComment", mockCurrentItem);
                 }));
-                this._sidebarCnt.addPanel("ideaDetails", this._itemDetails);
+                this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 
+                // Add comment
                 this._itemAddComment = new DynamicForm({
                     "appConfig": this.config
                 }).placeAt("sidebarContent");
                 this._itemAddComment.startup();
-                this._sidebarCnt.addPanel("addComment", this._itemAddComment);
+                this._sidebarCnt.addPanel("getComment", this._itemAddComment);
 
 
 

@@ -56,6 +56,8 @@ define([
             domStyle.set(this.domNode, "background-color", this.appConfig.theme.background);
             this.mockContent.innerHTML = this.label + "<br>";
             this.mockContent.title = this.label;
+
+            this.hide();
         },
 
         /**

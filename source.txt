@@ -1,6 +1,6 @@
-commit a633bcd287627e07a2b79f1e0a6c9b8544e59d37
-Merge: 0198f9e 98beebf
+commit 6b08c0149422716d6d712ae94ea0f2ecacabfad0
+Merge: d867435 a112052
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Feb 13 10:29:56 2015 -0800
+Date:   Fri Feb 13 10:48:09 2015 -0800
 
-    Merge branch 'layer-and-table-mgmt' into develop
+    Merge branch 'add-comment' into develop

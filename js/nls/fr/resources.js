@@ -28,5 +28,11 @@ define(({
     },
     popup_Close: {
         closeButtonTooltip: "Fermer"
+    },
+    dynamic_form: {
+        optional: " (facultatif)",
+        charactersRemaining: "Caractères restants",
+        cancel: "Annuler",
+        submit: "Envoyer le commentaire"
     }
 }));

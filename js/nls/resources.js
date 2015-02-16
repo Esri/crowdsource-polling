@@ -1,4 +1,4 @@
-﻿/*global define */
+/*global define */
 /*
  | Copyright 2014 Esri
  |
@@ -35,6 +35,9 @@ define({
             charactersRemaining: "Characters remaining",
             cancel: "Cancel",
             submit: "Submit Comment"
+        },
+        item_list: {
+            untitledItem: "Untitled Item"
         }
     }),
     "ar": 1,

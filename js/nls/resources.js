@@ -23,6 +23,9 @@ define({
             signInButton: "Sign In",
             signInButtonTooltip: "Sign in to a social medium",
             helpButtonTooltip: "Find out more about this app"
+        },
+        item_list: {
+            untitledItem: "Untitled Item"
         }
     }),
     "ar": 1,

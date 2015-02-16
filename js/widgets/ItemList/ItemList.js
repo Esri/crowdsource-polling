@@ -42,52 +42,92 @@ define([
         id: 'itemList',
         baseClass: 'itemList',
 
+        /**
+         * Widget constructor. Placeholder if future functionality is needed in the 
+         * widget creation life cycle.
+         * @constructor
+         */
         constructor: function () {
             this.inherited(arguments);
         },
 
+        /**
+         * Widget post-create, called automatically in widget creation
+         * life cycle, after constructor. Sets class variables.
+         */
         postCreate: function () {
             this.inherited(arguments);
+            this.i18n = this.appConfig.i18n.item_list;
         },
 
+        /**
+         * Widget startup. Placeholder if functionality is needed in the
+         * widget creation life cycle
+         *
+         */
         startup: function () {
             this.inherited(arguments);
         },
 
+        /**
+         * Shows the widget with a simple display: ''
+         */
         show: function () {
             domStyle.set(this.domNode, 'display', '');
         },
 
+        /**
+         * Hides the widget with a simple display: 'none'
+         */
         hide: function () {
             domStyle.set(this.domNode, 'display', 'none');
         },
 
+        /**
+         * Sets the fields that are needed to display feature information in this list (name and number of votes).
+         * Needs to be called before first setItems to tell the widget which fields to look for.
+         * @param {object} fields with name and votes properties.
+         */
         setFields: function (fields) {
             this.nameField = fields.name;
             this.votesField = fields.votes;
         },
 
+        /**
+         * Sets the items to be displayed in the items list, and then builds the list.
+         * @param {array} items feature collection or array
+         */
         setItems: function (items) {
             this.items = items;
             this.clearList();
             this.buildList();
         },
 
+        /**
+         * Clears the items list
+         */
         clearList: function () {
             domConstruct.empty(this.domNode);
         },
 
+        /**
+         * Builds the items list
+         */
         buildList: function () {
             arrayUtil.forEach(this.items, lang.hitch(this, this.buildItemSummary));
         },
 
-        buildItemSummary: function (item, idx, arr) {
+        /**
+         * Builds an individual item summary given an item.
+         * @param  {feature} item to display in the list
+         */
+        buildItemSummary: function (item) {
 
             var itemTitle, itemVotes, itemSummaryDiv, favDiv, iconDiv;
 
             itemTitle = item.getTitle ? item.getTitle() : null;
             if (!itemTitle || itemTitle === item.getLayer().name + ':') {
-                itemTitle += ' ' + (item.attributes[this.nameField] || 'Untitled item');
+                itemTitle += ' ' + (item.attributes[this.nameField] || this.i18n.untitledItem);
             }
 
             itemVotes = item.attributes[this.votesField] || 0;
@@ -111,22 +151,19 @@ define([
                 'innerHTML': itemVotes
             }, favDiv);
 
-            // iconDiv = domConstruct.create('img', {
-            //     'src': this.appConfig.likeIcon,
-            //     'alt': 'likeIcon',
-            //     'class': 'fav',
-            //     'height': '10px',
-            //     'width': '10px'
-            // }, itemSummaryDiv);
-            //
             iconDiv = domConstruct.create('div', {
                 'class': 'fav'
             }, favDiv);
 
             SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
-
         },
 
+        /**
+         * Called on an item summary click
+         * @param  {context} self The widget itself, since 'this' is the row that was clicked
+         * @param  {feature} feat The feature that corresponds to the row that was clicked
+         * @param  {mouse event} evt  The click event on the row that was clicked
+         */
         summaryClick: function (self, feat, evt) {
             // 'this' = row click
             self.clearSelected();
@@ -134,6 +171,9 @@ define([
             topic.publish('itemSelected', feat);
         },
 
+        /**
+         * Clears the visual indication of any rows being selected
+         */
         clearSelected: function () {
             dojoQuery('.itemSummary', this.domNode).removeClass('selected');
         }

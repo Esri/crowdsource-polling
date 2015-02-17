@@ -260,16 +260,16 @@ define([
                     this._sidebarCnt.showBusy(false);
                 }));
 
-                topic.subscribe("updateItems", lang.hitch(this, function () {
-                    console.log(">updateItems>");  //???
+                topic.subscribe("updateItems", lang.hitch(this, function (useMapExtents) {
+                    console.log(">updateItems>", useMapExtents);  //???
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(this.map.extent);
+                    this._mapData.queryItems(useMapExtents ? this.map.extent : null);
                 }));
 
                 topic.subscribe("updateVotes", lang.hitch(this, function (item) {
                     console.log(">updateVotes>", item);  //???
                     //this._itemsList.updateVotes(item);
-                    topic.publish("updateItems");
+                    topic.publish("updateItems", false);
                 }));
 
                 topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
@@ -295,7 +295,7 @@ define([
 
                 // Start with items list
                 topic.publish("showPanel", "itemsList");
-                topic.publish("updateItems");
+                topic.publish("updateItems", true);
                 topic.publish("signinUpdate");
 
 

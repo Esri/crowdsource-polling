@@ -49,6 +49,7 @@ define([
         templateString: template,
         _formFields : [],
         _entryForm: [],
+        _presets: {},
 
         /**
          * Widget constructor
@@ -107,6 +108,16 @@ define([
          */
         setFields: function (formFields) {
             this._formFields = formFields || [];
+        },
+
+        /**
+         * Adds the value of a field to the set of presets.
+         * @param {string} fieldname Name of field
+         * @param {any} value Value to assign to the field; a null value effectively
+         * removes the field from the set of presets
+         */
+        presetFieldValue: function (fieldname, value) {
+            this._presets[fieldname] = value;
         },
 
         /**
@@ -224,6 +235,10 @@ define([
                     if (esriLang.isDefined(inputItem)) {
                         if (disabledFlag) {
                             inputItem.disabled = true;
+                        }
+
+                        if (this._presets[field.name]) {
+                            inputItem.value = this._presets[field.name];
                         }
 
                         form.push({

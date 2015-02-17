@@ -78,7 +78,6 @@ define([
         config: {},
         map: null,
         mapData: null,
-        _currentUser: null,
         mockCurrentItem: null,  //???
 
         startup: function (config) {
@@ -139,6 +138,7 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+                var commentNameField = this._mapData.getCommentSpecialFields().name;
 
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(this._mapData.getItemSpecialFields());
@@ -146,9 +146,13 @@ define([
 
 
                 //----- Catch published messages and wire them to their actions -----
+
+                /**
+                 * @param {object} item Item whose vote was updated
+                 */
                 topic.subscribe("addLike", lang.hitch(this, function (item) {
                     console.log(">addLike>", item);  //???
-                    //???this._mapData.addLike(item);
+                    this._mapData.incrementVote(item);
                 }));
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
@@ -156,11 +160,17 @@ define([
                     topic.publish("showPanel", "itemDetails");
                 }));
 
+                /**
+                 * @param {object} item Item that received a comment
+                 */
                 topic.subscribe("commentAdded", lang.hitch(this, function (item) {
                     console.log(">commentAdded>", item);  //???
                     topic.publish("updateComments", item);
                 }));
 
+                /**
+                 * @param {string} err Error message for when an item's comment add failed
+                 */
                 topic.subscribe("commentAddFailed", lang.hitch(this, function (err) {
                     console.log(">commentAddFailed>", err);  //???
                     this._sidebarCnt.showBusy(false);
@@ -172,10 +182,21 @@ define([
                     topic.publish("showPanel", "itemsList");
                 }));
 
+                /**
+                 * @param {object} item Item for which a comment might be submitted
+                 */
                 topic.subscribe("getComment", lang.hitch(this, function (item) {
                     console.log(">getComment>", item);  //???
+                    var userInfo = this._socialDialog.getSignedInUser();
                     this._itemAddComment.setItem(item);
-                    //???this._itemAddComment.setUser(this._currentUser);
+
+                    // See if we can pre-set its value
+                    if (userInfo && userInfo.name) {
+                        this._itemAddComment.presetFieldValue(commentNameField, userInfo.name);
+                    } else {
+                        this._itemAddComment.presetFieldValue(commentNameField, null);
+                    }
+
                     topic.publish("showPanel", "getComment");
                 }));
 
@@ -185,6 +206,9 @@ define([
                     this._helpDialogContainer.show();
                 }));
 
+                /**
+                 * @param {object} item Item to find out more about
+                 */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
@@ -206,12 +230,18 @@ define([
                     }
                 }));
 
+                /**
+                 * @param {string} err Error message to display
+                 */
                 topic.subscribe("showError", lang.hitch(this, function (err) {
                     console.log(">showError>", err);  //???
                     this._helpDialogContainer.set("displayText", err);
                     this._helpDialogContainer.show();
                 }));
 
+                /**
+                 * @param {string} name Name of sidebar content panel to switch to
+                 */
                 topic.subscribe("showPanel", lang.hitch(this, function (name) {
                     console.log(">showPanel>", name);  //???
                     this._sidebarCnt.showPanel(name);
@@ -219,7 +249,7 @@ define([
 
                 topic.subscribe("signinUpdate", lang.hitch(this, function () {
                     console.log(">signinUpdate>");  //???
-                    //???this._sidebarHdr.updateSignin();
+                    this._sidebarHdr.updateSignin(this._socialDialog.getSignedInUser());
                 }));
 
                 topic.subscribe("socialSelected", lang.hitch(this, function () {
@@ -227,6 +257,10 @@ define([
                     this._socialDialog.show();
                 }));
 
+                /**
+                 * @param {object} item Item to receive a comment
+                 * @param {object} comment Comment to add to item
+                 */
                 topic.subscribe("submitForm", lang.hitch(this, function (item, comment) {
                     console.log(">submitForm>", item, comment);  //???
                     this._sidebarCnt.showBusy(true);
@@ -234,28 +268,66 @@ define([
                     topic.publish("showPanel", "itemDetails");
                 }));
 
+                /**
+                 * @param {object} item Item whose comments list is to be refreshed
+                 */
                 topic.subscribe("updateComments", lang.hitch(this, function (item) {
                     console.log(">updateComments>", item);  //???
                     this._sidebarCnt.showBusy(true);
                     this._mapData.queryComments(item);
                 }));
 
+                /**
+                 * @param {array} comments List of comments for the current item
+                 */
                 topic.subscribe("updatedCommentsList", lang.hitch(this, function (comments) {
                     console.log(">updatedCommentsList>", comments);  //???
                     this._itemDetails.setComments(comments);
                     this._sidebarCnt.showBusy(false);
                 }));
 
+                /**
+                 * @param {array} items List of items matching update request
+                 */
                 topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
                     console.log(">updatedItemsList>", items);  //???
                     this._itemsList.setItems(items);
                     this._sidebarCnt.showBusy(false);
                 }));
 
-                topic.subscribe("updateItems", lang.hitch(this, function () {
-                    console.log(">updateItems>");  //???
+                /**
+                 * @param {extent} extent Extent limit for the items to search for; use null
+                 * only items within the current map display extents (true) are to be queried
+                 */
+                topic.subscribe("updateItems", lang.hitch(this, function (extent) {
+                    console.log(">updateItems>", extent);  //???
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(this.map.extent);
+                    this._mapData.queryItems(extent);
+                }));
+
+                /**
+                 * @param {object} item Item whose votes count is to be refreshed
+                 */
+                topic.subscribe("updateVotes", lang.hitch(this, function (item) {
+                    console.log(">updateVotes>", item);  //???
+                    //this._itemsList.updateVotes(item);
+                    topic.publish("updateItems");
+                }));
+
+                /**
+                 * @param {object} item Item whose votes count was changed
+                 */
+                topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
+                    console.log(">voteUpdated>", item);  //???
+                    topic.publish("updateVotes", item);
+                }));
+
+                /**
+                 * @param {string} err Error message for when an item's votes count change failed
+                 */
+                topic.subscribe("voteUpdateFailed", lang.hitch(this, function (err) {
+                    console.log(">voteUpdateFailed>", err);  //???
+                    topic.publish("showError", err);
                 }));
 
 
@@ -269,9 +341,10 @@ define([
                     }
                 });
 
-                // Start with items list
+                // Start with items list using map display extents to limit
                 topic.publish("showPanel", "itemsList");
-                topic.publish("updateItems");
+                topic.publish("updateItems", this.map.extent);
+                topic.publish("signinUpdate");
 
 
                 //----- Done -----
@@ -323,6 +396,13 @@ define([
                 }));
                 this._socialDialog.createMockClickSource("sign in", lang.hitch(this, function () {
                     topic.publish("signinUpdate");
+                }));
+                this._socialDialog.createMockFunction("getSignedInUser", lang.hitch(this, function () {
+                    // Description of signed-in user: "name" {string}, "canSignOut" {boolean};
+                    // null indicates that no one is signed in
+                    //return {"name": "Fred", "canSignOut": true};
+                    //return {"name": "Ginger", "canSignOut": false};
+                    return null;
                 }));
 
                 // Popup window for help, error messages, social media

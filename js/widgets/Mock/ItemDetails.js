@@ -62,6 +62,16 @@ define([
          * @param {object} item Item to display
          */
         setItem: function (item) {
+            this._currentItem = item;
+
+            // Refresh the results area
+            this.refreshCurrentItem();
+        },
+
+        /**
+         * Clears the results area and draws the current details item.
+         */
+        refreshCurrentItem: function () {
             var rec;
 
             // Clear the results area
@@ -70,7 +80,7 @@ define([
             // Show the popup for the item
             rec = domConstruct.create("div", {}, this.mockContent);
             new ContentPane({
-                content: item.getContent()
+                content: this._currentItem.getContent()
             }, rec).startup();
             domStyle.set(rec, "border-bottom", "1px solid #ccc");
         },
@@ -83,8 +93,8 @@ define([
         setComments: function (comments) {
             var i, comment, rec, recContent;
 
-            // Clear the results area (comments might be update while keeping the same item)
-            domConstruct.empty(this.mockContent);
+            // Refresh the results area
+            this.refreshCurrentItem();
 
             // Show each of the comments retrieved
             if (comments && comments.length) {

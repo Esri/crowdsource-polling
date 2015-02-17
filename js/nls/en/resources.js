@@ -36,5 +36,8 @@ define(({
         charactersRemaining: "Characters remaining",
         cancel: "Cancel",
         submit: "Submit Comment"
+    },
+    item_list: {
+        linkToMapView: "Lier les articles avec la carte"
     }
 }));

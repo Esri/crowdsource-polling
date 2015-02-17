@@ -37,6 +37,9 @@ define({
             charactersRemaining: "Characters remaining",
             cancel: "Cancel",
             submit: "Submit Comment"
+        },
+        item_list: {
+            linkToMapView: "Link to map view"
         }
     }),
     "ar": 1,

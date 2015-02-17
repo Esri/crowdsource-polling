@@ -266,6 +266,22 @@ define([
                     this._mapData.queryItems(this.map.extent);
                 }));
 
+                topic.subscribe("updateVotes", lang.hitch(this, function (item) {
+                    console.log(">updateVotes>", item);  //???
+                    //this._itemsList.updateVotes(item);
+                    topic.publish("updateItems");
+                }));
+
+                topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
+                    console.log(">voteUpdated>", item);  //???
+                    topic.publish("updateVotes", item);
+                }));
+
+                topic.subscribe("voteUpdateFailed", lang.hitch(this, function (err) {
+                    console.log(">voteUpdateFailed>", err);  //???
+                    topic.publish("showError", err);
+                }));
+
 
                 //----- Set up controller-published messages (other than -----
                 //----- those that are forwards from subscriptions)      -----

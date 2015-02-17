@@ -88,6 +88,15 @@ define([
         },
 
         /**
+         * Adds a function to the mock.
+         * @param {string} name Name of function
+         * @param {function} embodiment Body of function
+         */
+        createMockFunction: function (name, embodiment) {
+            this[name] = embodiment;
+        },
+
+        /**
          * Changes nulls in the supplied object to the specified string.
          * @param {object} obj Object to modify
          * @param {string} showNullValueAs String to replace each null with

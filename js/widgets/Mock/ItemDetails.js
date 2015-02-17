@@ -69,6 +69,15 @@ define([
         },
 
         /**
+         * Sets the item fieldnames.
+         * @param {object} fieldnames Names of special item fields serving the roles of "name",
+         * "date", and "votes"
+         */
+        setFields: function (fieldnames) {
+            return null;
+        },
+
+        /**
          * Clears the results area and draws the current details item.
          */
         refreshCurrentItem: function () {

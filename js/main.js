@@ -138,10 +138,12 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var commentNameField = this._mapData.getCommentSpecialFields().name;
+                var itemSpecialFields = this._mapData.getItemSpecialFields(),
+                    commentNameField = this._mapData.getCommentSpecialFields().name;
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(this._mapData.getItemSpecialFields());
+                this._itemsList.setFields(itemSpecialFields);
+                this._itemDetails.setFields(itemSpecialFields);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 

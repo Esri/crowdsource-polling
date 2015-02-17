@@ -356,16 +356,15 @@ define([
             }
             item.attributes[itemVotesField] = numVotes;
 
-            this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (results) {
-                if (results.length === 0) {
-                    topic.publish("voteUpdateFailed", "missing field");  //???
-                } else if (results[0].error) {
-                    topic.publish("voteUpdateFailed", results[0].error);
+            this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
+                if (updates.length === 0) {
+                    topic.publish("voteUpdateFailed", "missing field");
+                } else if (updates[0].error) {
+                    topic.publish("voteUpdateFailed", updates[0].error);
                 } else {
                     topic.publish("voteUpdated", item);
                 }
-            }),
-            lang.hitch(this, function (err) {
+            }), lang.hitch(this, function (err) {
                 topic.publish("voteUpdateFailed", JSON.stringify(err));
             }));
         }

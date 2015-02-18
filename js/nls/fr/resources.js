@@ -36,5 +36,8 @@ define(({
         charactersRemaining: "Caractères restants",
         cancel: "Annuler",
         submit: "Envoyer le commentaire"
+    },
+    item_list: {
+        linkToMapView: "Link to map view"
     }
 }));

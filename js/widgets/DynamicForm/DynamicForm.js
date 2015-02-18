@@ -66,16 +66,18 @@ define([
             this.inherited(arguments);
             this.hide();
 
-            this.dynamicFormCancel.innerHTML = this.appConfig.i18n.dynamic_form.cancel;
+            this.dynamicFormCancelText.innerHTML = this.appConfig.i18n.dynamic_form.cancel;
             on(this.dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
             }));
 
-            this.dynamicFormSubmit.innerHTML = this.appConfig.i18n.dynamic_form.submit;
+            this.dynamicFormSubmitText.innerHTML = this.appConfig.i18n.dynamic_form.submit;
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
                 topic.publish("submitForm", this._item, submission);
             }));
+            domStyle.set(this.dynamicFormSubmit, "color", this.appConfig.theme.foreground);
+            domStyle.set(this.dynamicFormSubmit, "background-color", this.appConfig.theme.background);
         },
 
         /**

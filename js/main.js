@@ -78,6 +78,7 @@ define([
         config: {},
         map: null,
         mapData: null,
+        _linkToMapView: true,
         mockCurrentItem: null,  //???
 
         startup: function (config) {
@@ -138,10 +139,12 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var commentNameField = this._mapData.getCommentSpecialFields().name;
+                var itemSpecialFields = this._mapData.getItemSpecialFields(),
+                    commentNameField = this._mapData.getCommentSpecialFields().name;
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(this._mapData.getItemSpecialFields());
+                this._itemsList.setFields(itemSpecialFields);
+                this._itemDetails.setFields(itemSpecialFields);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 
@@ -230,6 +233,13 @@ define([
                     }
                 }));
 
+                topic.subscribe("linkToMapViewSelected", lang.hitch(this, function () {
+                    console.log(">linkToMapViewSelected>", !this._linkToMapView);  //???
+                    this._linkToMapView = !this._linkToMapView;
+                    //this._itemsList.setLinkToMapView(this._linkToMapView);
+                    topic.publish("updateItems");
+                }));
+
                 /**
                  * @param {string} err Error message to display
                  */
@@ -245,6 +255,10 @@ define([
                 topic.subscribe("showPanel", lang.hitch(this, function (name) {
                     console.log(">showPanel>", name);  //???
                     this._sidebarCnt.showPanel(name);
+
+                    if (name === "itemsList") {
+                        topic.publish("updateItems");
+                    }
                 }));
 
                 topic.subscribe("signinUpdate", lang.hitch(this, function () {
@@ -295,14 +309,10 @@ define([
                     this._sidebarCnt.showBusy(false);
                 }));
 
-                /**
-                 * @param {extent} extent Extent limit for the items to search for; use null
-                 * only items within the current map display extents (true) are to be queried
-                 */
-                topic.subscribe("updateItems", lang.hitch(this, function (extent) {
-                    console.log(">updateItems>", extent);  //???
+                topic.subscribe("updateItems", lang.hitch(this, function () {
+                    console.log(">updateItems>");  //???
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(extent);
+                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null);
                 }));
 
                 /**
@@ -311,7 +321,6 @@ define([
                 topic.subscribe("updateVotes", lang.hitch(this, function (item) {
                     console.log(">updateVotes>", item);  //???
                     //this._itemsList.updateVotes(item);
-                    topic.publish("updateItems");
                 }));
 
                 /**
@@ -341,9 +350,15 @@ define([
                     }
                 });
 
-                // Start with items list using map display extents to limit
+                // Support option to reset items list whenever the map is resized
+                on(this.map, "extent-change", lang.hitch(this, function (evt) {
+                    if (this._linkToMapView) {
+                        topic.publish("updateItems");
+                    }
+                }));
+
+                // Start with items list
                 topic.publish("showPanel", "itemsList");
-                topic.publish("updateItems", this.map.extent);
                 topic.publish("signinUpdate");
 
 

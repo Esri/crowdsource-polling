@@ -28,16 +28,16 @@ define([
 
     'application/lib/SvgHelper',
 
-    'esri/dijit/_EventedWidget',
+    'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
 
     'dojo/text!./ItemListView.html'
 ], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, dojoQuery, topic, nld,
     SvgHelper,
-    _EventedWidget, _TemplatedMixin,
+    _WidgetBase, _TemplatedMixin,
     template) {
 
-    return declare([_EventedWidget, _TemplatedMixin], {
+    return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         id: 'itemList',
         baseClass: 'itemList',
@@ -125,12 +125,9 @@ define([
 
             var itemTitle, itemVotes, itemSummaryDiv, favDiv, iconDiv;
 
-            itemTitle = item.getTitle ? item.getTitle() : null;
-            if (!itemTitle || itemTitle === item.getLayer().name + ':') {
-                itemTitle += ' ' + (item.attributes[this.nameField] || this.i18n.untitledItem);
-            }
+            itemTitle = this.getItemTitle(item);
 
-            itemVotes = item.attributes[this.votesField] || 0;
+            itemVotes = this.getItemVotes(item);
 
             itemSummaryDiv = domConstruct.create('div', {
                 'class': 'itemSummary',
@@ -156,6 +153,38 @@ define([
             }, favDiv);
 
             SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
+        },
+
+        /**
+         * Gets title of feature for list display
+         * @param  {feature} item The feature for which to get the title
+         * @return {string}      The title of the feature
+         */
+        getItemTitle: function (item) {
+
+            var returnTitle = item.getTitle ? item.getTitle() : null;
+
+            return returnTitle || this.i18n.untitledItem;
+
+            // alternative title calculating
+            /*switch (returnTitle) {
+            case item.getLayer().name + ':':
+                returnTitle += ' ';
+                // there's no break statement here on purpose!
+            case null:
+                returnTitle += item.attributes[this.nameField] || this.i18n.untitledItem;
+                break;
+            }
+            return returnTitle;*/
+        },
+
+        /**
+         * Gets the number of votes for an item
+         * @param  {feature} item The feature for which to get the vote count
+         * @return {integer}      Vote count for the item
+         */
+        getItemVotes: function (item) {
+            return item.attributes[this.votesField] || 0;
         },
 
         /**

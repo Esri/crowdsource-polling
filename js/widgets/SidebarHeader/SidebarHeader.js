@@ -64,7 +64,6 @@ define([
             // Set up the UI
             domStyle.set(this.signInBtn, "display", "none");
 
-            SvgHelper.createSVGItem(this.appConfig.helpIcon, this.helpBtn, 19, 19);
             this.helpBtn.title = i18n.helpButtonTooltip;
 
             this.appTitle.innerHTML = this.appConfig.title || "";

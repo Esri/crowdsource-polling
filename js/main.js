@@ -1,4 +1,4 @@
-﻿/*global define,console,mockCurrentItem:true */
+﻿/*global define,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -35,9 +35,9 @@ define([
     "esri/dijit/LocateButton",
     "application/lib/LayerAndTableMgmt",
     "application/widgets/DynamicForm/DynamicForm",
+    "application/widgets/ItemDetails/ItemDetailsController",
     "application/widgets/ItemList/ItemList",
     "application/widgets/Mock/MockDialog",
-    "application/widgets/Mock/ItemDetails",
     "application/widgets/Mock/MockWidget",
     "application/widgets/PopupWindow/PopupWindow",
     "application/widgets/SidebarContentController/SidebarContentController",
@@ -66,9 +66,9 @@ define([
     LocateButton,
     LayerAndTableMgmt,
     DynamicForm,
+    ItemDetails,
     ItemList,
     MockDialog,
-    ItemDetails,
     MockWidget,
     PopupWindow,
     SidebarContentController,
@@ -79,7 +79,6 @@ define([
         map: null,
         mapData: null,
         _linkToMapView: true,
-        mockCurrentItem: null,  //???
 
         startup: function (config) {
             var itemInfo, error;
@@ -144,7 +143,7 @@ define([
 
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(itemSpecialFields);
-                this._itemDetails.setFields(itemSpecialFields);
+                this._itemDetails.setItemFields(itemSpecialFields);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 
@@ -215,7 +214,6 @@ define([
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
-                    mockCurrentItem = item;  //???
 
                     this._itemDetails.setItem(item);
                     topic.publish("updateComments", item);
@@ -321,6 +319,7 @@ define([
                 topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
                     console.log(">voteUpdated>", item);  //???
                     //this._itemsList.updateVotes(item);
+                    this._itemDetails.updateItem(item);
                 }));
 
                 /**
@@ -428,26 +427,14 @@ define([
                 // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config
-                }).placeAt("sidebarContent");
-                this._itemsList.startup();
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
                 // Item details
                 this._itemDetails = new ItemDetails({
-                    "appConfig": this.config,
-                    "label": "Idea Details"
-                }).placeAt("sidebarContent");
-                this._itemDetails.startup();
-                this._itemDetails.createMockClickSource("back", lang.hitch(this, function () {
-                    mockCurrentItem = null;
-                    topic.publish("detailsCancel");
-                }));
-                this._itemDetails.createMockClickSource("like", lang.hitch(this, function () {
-                    topic.publish("addLike", mockCurrentItem);
-                }));
-                this._itemDetails.createMockClickSource("comment", lang.hitch(this, function () {
-                    topic.publish("getComment", mockCurrentItem);
-                }));
+                    "appConfig": this.config
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
+                this._itemDetails.hide();
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 
                 // Add comment

@@ -38,6 +38,7 @@ define([
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         _panels: {},
+        _currentPanelName: null,
         _currentPanel: null,
 
         /**
@@ -64,8 +65,17 @@ define([
             if (this._currentPanel) {
                 this._currentPanel.hide();
             }
+            this._currentPanelName = name;
             this._currentPanel = this._panels[name];
             this._currentPanel.show();
+        },
+
+        /**
+         * Returns the name of the current panel.
+         * @return {string} Name or, if showPanel has not yet been called, null
+         */
+        getCurrentPanelName: function () {
+            return this._currentPanelName;
         },
 
         /**

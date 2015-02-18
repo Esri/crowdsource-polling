@@ -37,7 +37,12 @@ define(({
         cancel: "Cancel",
         submit: "Submit Comment"
     },
+    item_details: {
+        untitledItem: "Untitled Item",
+        anonymousUser: "Anonymous"
+    },
     item_list: {
-        linkToMapView: "Lier les articles avec la carte"
+        untitledItem: "Untitled Item",
+        linkToMapView: "Link to map view"
     }
 }));

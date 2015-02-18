@@ -37,7 +37,7 @@ define([
     "application/widgets/DynamicForm/DynamicForm",
     "application/widgets/ItemList/ItemList",
     "application/widgets/Mock/MockDialog",
-    "application/widgets/Mock/ItemDetails",
+    "application/widgets/ItemDetails/ItemDetailsController",
     "application/widgets/Mock/MockWidget",
     "application/widgets/PopupWindow/PopupWindow",
     "application/widgets/SidebarContentController/SidebarContentController",
@@ -142,6 +142,8 @@ define([
 
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(this._mapData.getItemSpecialFields());
+                this._itemDetails.setItemFields(this._mapData.getItemSpecialFields());
+                this._itemDetails.setCommentFields(this._mapData.getCommentSpecialFields());
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 
@@ -341,26 +343,15 @@ define([
                 // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config
-                }).placeAt("sidebarContent");
-                this._itemsList.startup();
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
                 // Item details
                 this._itemDetails = new ItemDetails({
                     "appConfig": this.config,
                     "label": "Idea Details"
-                }).placeAt("sidebarContent");
-                this._itemDetails.startup();
-                this._itemDetails.createMockClickSource("back", lang.hitch(this, function () {
-                    mockCurrentItem = null;
-                    topic.publish("detailsCancel");
-                }));
-                this._itemDetails.createMockClickSource("like", lang.hitch(this, function () {
-                    topic.publish("addLike", mockCurrentItem);
-                }));
-                this._itemDetails.createMockClickSource("comment", lang.hitch(this, function () {
-                    topic.publish("getComment", mockCurrentItem);
-                }));
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
+                this._itemDetails.hide();
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 
                 // Add comment

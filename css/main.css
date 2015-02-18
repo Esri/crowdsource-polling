@@ -170,9 +170,12 @@ body {
 
 .itemList .itemSummary {
   padding: 10px;
-  line-height: 0; /* reset */
   border-bottom: 1px solid #ccc;
   cursor: pointer;
+}
+
+.itemSummary {
+  line-height: 0; /* reset */
 }
 
 .itemList .itemSummary:hover {
@@ -202,13 +205,127 @@ body {
   color: rgba(0, 0, 0, 0.35);
 }
 
-.itemVotes {
+.itemList .itemVotes {
   margin-right: 0.5em;
 }
 
 .itemList .itemSummary.selected {
   background-color: #007ac2;
   color: white;
+}
+
+/* ---------- itemDetail ---------- */
+.itemDetail .itemSummary {
+  background-color: #007ac2;
+}
+
+.itemDetail > .itemSummary > div {
+  padding: 10px;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.itemDetail .itemSummary .back {
+  background-color: rgb(15, 68, 109);
+  background-color: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  line-height: 0;
+  float: left;
+}
+
+.itemDetail .itemSummary .itemTitle {
+  width: 70%;
+  color: white;
+  padding-right: 5px;
+}
+
+.itemDetail .itemSummary .itemFav {
+  font-size: inherit;
+  padding-left: 5px;
+}
+
+.itemDetail .itemFav .icon {
+  font-size: 20px;
+}
+
+.itemDetail .itemDescription {
+  background-color: #fff;
+  color: #999;
+  padding: 10px;
+}
+
+.itemDetail .header {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.itemDetail .userName {
+  display: inline-block;
+}
+
+.itemDetail .btn {
+  color: #007ac2;
+  border: 1px solid #ccc;
+  display: inline-block;
+  margin-right: 5px;
+  padding: 4px 6px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.itemDetail .float-right {
+  float: right;
+  margin-right: 0;
+  margin-left: 5px;
+}
+
+.itemDetail .space-below {
+  margin-bottom: 10px;
+}
+
+.itemDetail .large-text {
+  font-size: 16px;
+}
+
+.itemDetail .medium-text {
+  font-size: 14px;
+}
+
+.itemDetail .small-text {
+  font-size: 12px;
+}
+
+.itemDetail .itemComments {
+  background-color: #eee;
+  padding: 10px;
+}
+
+.btn > div {
+  display: inline-block;
+}
+
+.btn .icon {
+  margin-right: 2px;
+  position: relative;
+  top: 2px;
+}
+
+.btn .icon svg path,
+.btn .icon svg polyline {
+  fill: #007ac2;
+  fill-opacity: 1;
+}
+
+.hide {
+  display: none !important;
+}
+
+.center-please {
+  text-align: center;
+}
+
+.itemDetail .attachmentsSection {
+  display: none;
 }
 
 /* ---------- Popup ---------- */

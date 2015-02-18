@@ -1,4 +1,4 @@
-﻿/*global define,console,mockCurrentItem:true */
+﻿/*global define,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -35,9 +35,9 @@ define([
     "esri/dijit/LocateButton",
     "application/lib/LayerAndTableMgmt",
     "application/widgets/DynamicForm/DynamicForm",
+    "application/widgets/ItemDetails/ItemDetailsController",
     "application/widgets/ItemList/ItemList",
     "application/widgets/Mock/MockDialog",
-    "application/widgets/Mock/ItemDetails",
     "application/widgets/Mock/MockWidget",
     "application/widgets/PopupWindow/PopupWindow",
     "application/widgets/SidebarContentController/SidebarContentController",
@@ -66,9 +66,9 @@ define([
     LocateButton,
     LayerAndTableMgmt,
     DynamicForm,
+    ItemDetails,
     ItemList,
     MockDialog,
-    ItemDetails,
     MockWidget,
     PopupWindow,
     SidebarContentController,
@@ -78,7 +78,7 @@ define([
         config: {},
         map: null,
         mapData: null,
-        mockCurrentItem: null,  //???
+        _linkToMapView: false,
 
         startup: function (config) {
             var itemInfo, error;
@@ -138,10 +138,12 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var commentNameField = this._mapData.getCommentSpecialFields().name;
+                var itemSpecialFields = this._mapData.getItemSpecialFields(),
+                    commentNameField = this._mapData.getCommentSpecialFields().name;
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(this._mapData.getItemSpecialFields());
+                this._itemsList.setFields(itemSpecialFields);
+                this._itemDetails.setItemFields(itemSpecialFields);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 
@@ -212,7 +214,6 @@ define([
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
-                    mockCurrentItem = item;  //???
 
                     this._itemDetails.setItem(item);
                     topic.publish("updateComments", item);
@@ -230,6 +231,13 @@ define([
                     }
                 }));
 
+                topic.subscribe("linkToMapViewSelected", lang.hitch(this, function () {
+                    console.log(">linkToMapViewSelected>", !this._linkToMapView);  //???
+                    this._linkToMapView = !this._linkToMapView;
+                    //this._itemsList.setLinkToMapView(this._linkToMapView);
+                    topic.publish("updateItems");
+                }));
+
                 /**
                  * @param {string} err Error message to display
                  */
@@ -245,6 +253,10 @@ define([
                 topic.subscribe("showPanel", lang.hitch(this, function (name) {
                     console.log(">showPanel>", name);  //???
                     this._sidebarCnt.showPanel(name);
+
+                    if (name === "itemsList") {
+                        topic.publish("updateItems");
+                    }
                 }));
 
                 topic.subscribe("signinUpdate", lang.hitch(this, function () {
@@ -295,23 +307,10 @@ define([
                     this._sidebarCnt.showBusy(false);
                 }));
 
-                /**
-                 * @param {extent} extent Extent limit for the items to search for; use null
-                 * only items within the current map display extents (true) are to be queried
-                 */
-                topic.subscribe("updateItems", lang.hitch(this, function (extent) {
-                    console.log(">updateItems>", extent);  //???
+                topic.subscribe("updateItems", lang.hitch(this, function () {
+                    console.log(">updateItems>");  //???
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(extent);
-                }));
-
-                /**
-                 * @param {object} item Item whose votes count is to be refreshed
-                 */
-                topic.subscribe("updateVotes", lang.hitch(this, function (item) {
-                    console.log(">updateVotes>", item);  //???
-                    //this._itemsList.updateVotes(item);
-                    topic.publish("updateItems");
+                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null);
                 }));
 
                 /**
@@ -319,7 +318,7 @@ define([
                  */
                 topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
                     console.log(">voteUpdated>", item);  //???
-                    topic.publish("updateVotes", item);
+                    this._itemDetails.updateItem(item);
                 }));
 
                 /**
@@ -341,9 +340,16 @@ define([
                     }
                 });
 
-                // Start with items list using map display extents to limit
+                // Support option to reset items list whenever the map is resized while the items
+                // list is visible
+                on(this.map, "extent-change", lang.hitch(this, function (evt) {
+                    if (this._linkToMapView && this._sidebarCnt.getCurrentPanelName() === "itemsList") {
+                        topic.publish("updateItems");
+                    }
+                }));
+
+                // Start with items list
                 topic.publish("showPanel", "itemsList");
-                topic.publish("updateItems", this.map.extent);
                 topic.publish("signinUpdate");
 
 
@@ -421,26 +427,14 @@ define([
                 // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config
-                }).placeAt("sidebarContent");
-                this._itemsList.startup();
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
                 // Item details
                 this._itemDetails = new ItemDetails({
-                    "appConfig": this.config,
-                    "label": "Idea Details"
-                }).placeAt("sidebarContent");
-                this._itemDetails.startup();
-                this._itemDetails.createMockClickSource("back", lang.hitch(this, function () {
-                    mockCurrentItem = null;
-                    topic.publish("detailsCancel");
-                }));
-                this._itemDetails.createMockClickSource("like", lang.hitch(this, function () {
-                    topic.publish("addLike", mockCurrentItem);
-                }));
-                this._itemDetails.createMockClickSource("comment", lang.hitch(this, function () {
-                    topic.publish("getComment", mockCurrentItem);
-                }));
+                    "appConfig": this.config
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
+                this._itemDetails.hide();
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 
                 // Add comment

@@ -36,5 +36,13 @@ define(({
         charactersRemaining: "Caractères restants",
         cancel: "Annuler",
         submit: "Envoyer le commentaire"
+    },
+    item_details: {
+        untitledItem: "Sans Titre",
+        anonymousUser: "Anonyme"
+    },
+    item_list: {
+        untitledItem: "Sans Titre",
+        linkToMapView: "Lier les articles avec la carte"
     }
 }));

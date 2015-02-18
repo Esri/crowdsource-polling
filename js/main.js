@@ -78,7 +78,7 @@ define([
         config: {},
         map: null,
         mapData: null,
-        _linkToMapView: true,
+        _linkToMapView: false,
 
         startup: function (config) {
             var itemInfo, error;
@@ -340,9 +340,10 @@ define([
                     }
                 });
 
-                // Support option to reset items list whenever the map is resized
+                // Support option to reset items list whenever the map is resized while the items
+                // list is visible
                 on(this.map, "extent-change", lang.hitch(this, function (evt) {
-                    if (this._linkToMapView) {
+                    if (this._linkToMapView && this._sidebarCnt.getCurrentPanelName() === "itemsList") {
                         topic.publish("updateItems");
                     }
                 }));

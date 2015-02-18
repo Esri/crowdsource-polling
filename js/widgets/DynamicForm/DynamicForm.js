@@ -49,6 +49,7 @@ define([
         templateString: template,
         _formFields : [],
         _entryForm: [],
+        _presets: {},
 
         /**
          * Widget constructor
@@ -65,16 +66,18 @@ define([
             this.inherited(arguments);
             this.hide();
 
-            this.dynamicFormCancel.innerHTML = this.appConfig.i18n.dynamic_form.cancel;
+            this.dynamicFormCancelText.innerHTML = this.appConfig.i18n.dynamic_form.cancel;
             on(this.dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
             }));
 
-            this.dynamicFormSubmit.innerHTML = this.appConfig.i18n.dynamic_form.submit;
+            this.dynamicFormSubmitText.innerHTML = this.appConfig.i18n.dynamic_form.submit;
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
                 topic.publish("submitForm", this._item, submission);
             }));
+            domStyle.set(this.dynamicFormSubmit, "color", this.appConfig.theme.foreground);
+            domStyle.set(this.dynamicFormSubmit, "background-color", this.appConfig.theme.background);
         },
 
         /**
@@ -107,6 +110,16 @@ define([
          */
         setFields: function (formFields) {
             this._formFields = formFields || [];
+        },
+
+        /**
+         * Adds the value of a field to the set of presets.
+         * @param {string} fieldname Name of field
+         * @param {any} value Value to assign to the field; a null value effectively
+         * removes the field from the set of presets
+         */
+        presetFieldValue: function (fieldname, value) {
+            this._presets[fieldname] = value;
         },
 
         /**
@@ -224,6 +237,10 @@ define([
                     if (esriLang.isDefined(inputItem)) {
                         if (disabledFlag) {
                             inputItem.disabled = true;
+                        }
+
+                        if (this._presets[field.name]) {
+                            inputItem.value = this._presets[field.name];
                         }
 
                         form.push({

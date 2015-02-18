@@ -24,6 +24,8 @@ define(({
     sidebar_header: {
         signInButton: "Se Connecter",
         signInButtonTooltip: "Se connecter à un média social",
+        signOutButton: "Se déconnecter",
+        signOutButtonTooltip: "Se déconnecter cette application de votre média social",
         helpButtonTooltip: "Pour en savoir plus sur cette application"
     },
     popup_Close: {
@@ -34,5 +36,8 @@ define(({
         charactersRemaining: "Caractères restants",
         cancel: "Annuler",
         submit: "Envoyer le commentaire"
+    },
+    item_list: {
+        linkToMapView: "Link to map view"
     }
 }));

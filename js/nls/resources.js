@@ -25,6 +25,8 @@ define({
         sidebar_header: {
             signInButton: "Sign In",
             signInButtonTooltip: "Sign in to a social medium",
+            signOutButton: "Sign Out",
+            signOutButtonTooltip: "Disconnect this app from your social medium",
             helpButtonTooltip: "Find out more about this app"
         },
         popup_Close: {
@@ -36,12 +38,8 @@ define({
             cancel: "Cancel",
             submit: "Submit Comment"
         },
-        item_details: {
-            untitledItem: "Untitled Item",
-            anonymousUser: "Anonymous"
-        },
         item_list: {
-            untitledItem: "Untitled Item"
+            linkToMapView: "Link to map view"
         }
     }),
     "ar": 1,

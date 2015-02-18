@@ -1,4 +1,4 @@
-﻿/*global define,console,mockCurrentItem:true */
+/*global define,console,mockCurrentItem:true */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -37,7 +37,7 @@ define([
     "application/widgets/DynamicForm/DynamicForm",
     "application/widgets/ItemList/ItemList",
     "application/widgets/Mock/MockDialog",
-    "application/widgets/ItemDetails/ItemDetailsController",
+    "application/widgets/Mock/ItemDetails",
     "application/widgets/Mock/MockWidget",
     "application/widgets/PopupWindow/PopupWindow",
     "application/widgets/SidebarContentController/SidebarContentController",
@@ -78,7 +78,7 @@ define([
         config: {},
         map: null,
         mapData: null,
-        _currentUser: null,
+        _linkToMapView: true,
         mockCurrentItem: null,  //???
 
         startup: function (config) {
@@ -139,18 +139,23 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+                var itemSpecialFields = this._mapData.getItemSpecialFields(),
+                    commentNameField = this._mapData.getCommentSpecialFields().name;
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(this._mapData.getItemSpecialFields());
-                this._itemDetails.setItemFields(this._mapData.getItemSpecialFields());
-                this._itemDetails.setCommentFields(this._mapData.getCommentSpecialFields());
+                this._itemsList.setFields(itemSpecialFields);
+                this._itemDetails.setFields(itemSpecialFields);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 
                 //----- Catch published messages and wire them to their actions -----
+
+                /**
+                 * @param {object} item Item whose vote was updated
+                 */
                 topic.subscribe("addLike", lang.hitch(this, function (item) {
                     console.log(">addLike>", item);  //???
-                    //???this._mapData.addLike(item);
+                    this._mapData.incrementVote(item);
                 }));
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
@@ -158,11 +163,17 @@ define([
                     topic.publish("showPanel", "itemDetails");
                 }));
 
+                /**
+                 * @param {object} item Item that received a comment
+                 */
                 topic.subscribe("commentAdded", lang.hitch(this, function (item) {
                     console.log(">commentAdded>", item);  //???
                     topic.publish("updateComments", item);
                 }));
 
+                /**
+                 * @param {string} err Error message for when an item's comment add failed
+                 */
                 topic.subscribe("commentAddFailed", lang.hitch(this, function (err) {
                     console.log(">commentAddFailed>", err);  //???
                     this._sidebarCnt.showBusy(false);
@@ -174,10 +185,21 @@ define([
                     topic.publish("showPanel", "itemsList");
                 }));
 
+                /**
+                 * @param {object} item Item for which a comment might be submitted
+                 */
                 topic.subscribe("getComment", lang.hitch(this, function (item) {
                     console.log(">getComment>", item);  //???
+                    var userInfo = this._socialDialog.getSignedInUser();
                     this._itemAddComment.setItem(item);
-                    //???this._itemAddComment.setUser(this._currentUser);
+
+                    // See if we can pre-set its value
+                    if (userInfo && userInfo.name) {
+                        this._itemAddComment.presetFieldValue(commentNameField, userInfo.name);
+                    } else {
+                        this._itemAddComment.presetFieldValue(commentNameField, null);
+                    }
+
                     topic.publish("showPanel", "getComment");
                 }));
 
@@ -187,6 +209,9 @@ define([
                     this._helpDialogContainer.show();
                 }));
 
+                /**
+                 * @param {object} item Item to find out more about
+                 */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
@@ -208,20 +233,37 @@ define([
                     }
                 }));
 
+                topic.subscribe("linkToMapViewSelected", lang.hitch(this, function () {
+                    console.log(">linkToMapViewSelected>", !this._linkToMapView);  //???
+                    this._linkToMapView = !this._linkToMapView;
+                    //this._itemsList.setLinkToMapView(this._linkToMapView);
+                    topic.publish("updateItems");
+                }));
+
+                /**
+                 * @param {string} err Error message to display
+                 */
                 topic.subscribe("showError", lang.hitch(this, function (err) {
                     console.log(">showError>", err);  //???
                     this._helpDialogContainer.set("displayText", err);
                     this._helpDialogContainer.show();
                 }));
 
+                /**
+                 * @param {string} name Name of sidebar content panel to switch to
+                 */
                 topic.subscribe("showPanel", lang.hitch(this, function (name) {
                     console.log(">showPanel>", name);  //???
                     this._sidebarCnt.showPanel(name);
+
+                    if (name === "itemsList") {
+                        topic.publish("updateItems");
+                    }
                 }));
 
                 topic.subscribe("signinUpdate", lang.hitch(this, function () {
                     console.log(">signinUpdate>");  //???
-                    //???this._sidebarHdr.updateSignin();
+                    this._sidebarHdr.updateSignin(this._socialDialog.getSignedInUser());
                 }));
 
                 topic.subscribe("socialSelected", lang.hitch(this, function () {
@@ -229,6 +271,10 @@ define([
                     this._socialDialog.show();
                 }));
 
+                /**
+                 * @param {object} item Item to receive a comment
+                 * @param {object} comment Comment to add to item
+                 */
                 topic.subscribe("submitForm", lang.hitch(this, function (item, comment) {
                     console.log(">submitForm>", item, comment);  //???
                     this._sidebarCnt.showBusy(true);
@@ -236,18 +282,27 @@ define([
                     topic.publish("showPanel", "itemDetails");
                 }));
 
+                /**
+                 * @param {object} item Item whose comments list is to be refreshed
+                 */
                 topic.subscribe("updateComments", lang.hitch(this, function (item) {
                     console.log(">updateComments>", item);  //???
                     this._sidebarCnt.showBusy(true);
                     this._mapData.queryComments(item);
                 }));
 
+                /**
+                 * @param {array} comments List of comments for the current item
+                 */
                 topic.subscribe("updatedCommentsList", lang.hitch(this, function (comments) {
                     console.log(">updatedCommentsList>", comments);  //???
                     this._itemDetails.setComments(comments);
                     this._sidebarCnt.showBusy(false);
                 }));
 
+                /**
+                 * @param {array} items List of items matching update request
+                 */
                 topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
                     console.log(">updatedItemsList>", items);  //???
                     this._itemsList.setItems(items);
@@ -257,7 +312,31 @@ define([
                 topic.subscribe("updateItems", lang.hitch(this, function () {
                     console.log(">updateItems>");  //???
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(this.map.extent);
+                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null);
+                }));
+
+                /**
+                 * @param {object} item Item whose votes count is to be refreshed
+                 */
+                topic.subscribe("updateVotes", lang.hitch(this, function (item) {
+                    console.log(">updateVotes>", item);  //???
+                    //this._itemsList.updateVotes(item);
+                }));
+
+                /**
+                 * @param {object} item Item whose votes count was changed
+                 */
+                topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
+                    console.log(">voteUpdated>", item);  //???
+                    topic.publish("updateVotes", item);
+                }));
+
+                /**
+                 * @param {string} err Error message for when an item's votes count change failed
+                 */
+                topic.subscribe("voteUpdateFailed", lang.hitch(this, function (err) {
+                    console.log(">voteUpdateFailed>", err);  //???
+                    topic.publish("showError", err);
                 }));
 
 
@@ -271,9 +350,16 @@ define([
                     }
                 });
 
+                // Support option to reset items list whenever the map is resized
+                on(this.map, "extent-change", lang.hitch(this, function (evt) {
+                    if (this._linkToMapView) {
+                        topic.publish("updateItems");
+                    }
+                }));
+
                 // Start with items list
                 topic.publish("showPanel", "itemsList");
-                topic.publish("updateItems");
+                topic.publish("signinUpdate");
 
 
                 //----- Done -----
@@ -326,6 +412,13 @@ define([
                 this._socialDialog.createMockClickSource("sign in", lang.hitch(this, function () {
                     topic.publish("signinUpdate");
                 }));
+                this._socialDialog.createMockFunction("getSignedInUser", lang.hitch(this, function () {
+                    // Description of signed-in user: "name" {string}, "canSignOut" {boolean};
+                    // null indicates that no one is signed in
+                    //return {"name": "Fred", "canSignOut": true};
+                    //return {"name": "Ginger", "canSignOut": false};
+                    return null;
+                }));
 
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
@@ -343,15 +436,26 @@ define([
                 // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
+                }).placeAt("sidebarContent");
+                this._itemsList.startup();
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
                 // Item details
                 this._itemDetails = new ItemDetails({
                     "appConfig": this.config,
                     "label": "Idea Details"
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
-                this._itemDetails.hide();
+                }).placeAt("sidebarContent");
+                this._itemDetails.startup();
+                this._itemDetails.createMockClickSource("back", lang.hitch(this, function () {
+                    mockCurrentItem = null;
+                    topic.publish("detailsCancel");
+                }));
+                this._itemDetails.createMockClickSource("like", lang.hitch(this, function () {
+                    topic.publish("addLike", mockCurrentItem);
+                }));
+                this._itemDetails.createMockClickSource("comment", lang.hitch(this, function () {
+                    topic.publish("getComment", mockCurrentItem);
+                }));
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 
                 // Add comment

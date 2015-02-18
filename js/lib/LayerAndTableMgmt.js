@@ -279,7 +279,9 @@ define([
             gra = new Graphic(null, null, attr);
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
-                    if (results[0].error) {
+                    if (results.length === 0) {
+                        topic.publish("commentAddFailed", "missing field");  //???
+                    } else if (results[0].error) {
                         topic.publish("commentAddFailed", results[0].error);
                     } else {
                         topic.publish("commentAdded", item);
@@ -315,7 +317,7 @@ define([
                     }
                     topic.publish("updatedCommentsList", features);
                 }), lang.hitch(this, function (err) {
-                    console.log(JSON.stringify(err));
+                    console.log(JSON.stringify(err));  //???
                 }));
 
             // Relationship based on GUIDs
@@ -336,17 +338,35 @@ define([
                     }
                     topic.publish("updatedCommentsList", features);
                 }), lang.hitch(this, function (err) {
-                    console.log(JSON.stringify(err));
+                    console.log(JSON.stringify(err));  //???
                 }));
             }
         },
 
         /**
          * Increments the designated "votes" field for the specified item.
-         * @param {string} itemId Identifier of item to modify
+         * @param {object} item Item to update
          */
-        incrementVote: function (itemId) {
-            return null;
+        incrementVote: function (item) {
+            var numVotes, itemVotesField = this._itemSpecialFields.votes;
+
+            numVotes = 1;
+            if (item.attributes[itemVotesField]) {
+                numVotes = item.attributes[itemVotesField] + 1;
+            }
+            item.attributes[itemVotesField] = numVotes;
+
+            this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
+                if (updates.length === 0) {
+                    topic.publish("voteUpdateFailed", "missing field");
+                } else if (updates[0].error) {
+                    topic.publish("voteUpdateFailed", updates[0].error);
+                } else {
+                    topic.publish("voteUpdated", item);
+                }
+            }), lang.hitch(this, function (err) {
+                topic.publish("voteUpdateFailed", JSON.stringify(err));
+            }));
         }
 
     });

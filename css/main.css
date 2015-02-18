@@ -384,7 +384,7 @@ body {
     left: 0px;
     right: 0px;
     top: 0px;
-    bottom: 44px;
+    bottom: 52px;
     padding: 12px;
     overflow-y: auto;
 }
@@ -418,8 +418,8 @@ body {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    height: 48px;
-    padding: 4px 20px;
+    height: 42px;
+    padding: 5px 8px;
 }
 
 .dynamicFormAction {

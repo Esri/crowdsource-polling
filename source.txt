@@ -1,5 +1,6 @@
-commit 892baaf4a57b571e493b129eebf0dd44aa59adbd
+commit 5697900f1b4783bc97e9c4394d570c3cee70fb53
+Merge: 892baaf d9eb13d
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Feb 18 11:45:29 2015 -0800
+Date:   Wed Feb 18 12:51:20 2015 -0800
 
-    Tuned sidebar header help icon
+    Merge branch 'itemDetail' into develop

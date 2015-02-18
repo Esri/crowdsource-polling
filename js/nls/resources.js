@@ -38,7 +38,12 @@ define({
             cancel: "Cancel",
             submit: "Submit Comment"
         },
+        item_details: {
+            untitledItem: "Untitled Item",
+            anonymousUser: "Anonymous"
+        },
         item_list: {
+            untitledItem: "Untitled Item",
             linkToMapView: "Link to map view"
         }
     }),

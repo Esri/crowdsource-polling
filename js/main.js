@@ -314,19 +314,12 @@ define([
                 }));
 
                 /**
-                 * @param {object} item Item whose votes count is to be refreshed
-                 */
-                topic.subscribe("updateVotes", lang.hitch(this, function (item) {
-                    console.log(">updateVotes>", item);  //???
-                    //this._itemsList.updateVotes(item);
-                }));
-
-                /**
                  * @param {object} item Item whose votes count was changed
                  */
                 topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
                     console.log(">voteUpdated>", item);  //???
-                    topic.publish("updateVotes", item);
+                    //this._itemsList.updateVotes(item);
+                    this._itemDetails.updateItem(item);
                 }));
 
                 /**

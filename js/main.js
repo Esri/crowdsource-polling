@@ -318,7 +318,6 @@ define([
                  */
                 topic.subscribe("voteUpdated", lang.hitch(this, function (item) {
                     console.log(">voteUpdated>", item);  //???
-                    //this._itemsList.updateVotes(item);
                     this._itemDetails.updateItem(item);
                 }));
 

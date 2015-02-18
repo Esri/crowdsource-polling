@@ -43,7 +43,7 @@ define([
         baseClass: 'itemList',
 
         /**
-         * Widget constructor. Placeholder if future functionality is needed in the 
+         * Widget constructor. Placeholder if future functionality is needed in the
          * widget creation life cycle.
          * @constructor
          */
@@ -58,6 +58,7 @@ define([
         postCreate: function () {
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
+            this.hide();
         },
 
         /**

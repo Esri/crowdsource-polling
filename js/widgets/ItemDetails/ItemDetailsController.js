@@ -58,6 +58,7 @@ define([
             this.i18n = this.appConfig.i18n.item_details;
             this.initTemplateIcons();
             this.initContentPane();
+            this.hide();
         },
 
         startup: function () {

@@ -1,5 +1,5 @@
 ﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
+/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,bitwise:true */
 /*
  | Copyright 2015 Esri
  |
@@ -50,9 +50,13 @@ define([
         _formFields : [],
         _entryForm: [],
         _presets: {},
+        _requiredFieldsStatus: 0,
 
         /**
          * Widget constructor
+         * <br>
+         * N.B.: Restricted to a maximum of 31 required fields because of the way that required fields
+         * are tracked to control the visibility of the "submit" button.
          * @param {object} initialProps Initialization properties:
          *     appConfig: Application configuration
          * @constructor
@@ -78,6 +82,7 @@ define([
             }));
             domStyle.set(this.dynamicFormSubmit, "color", this.appConfig.theme.foreground);
             domStyle.set(this.dynamicFormSubmit, "background-color", this.appConfig.theme.background);
+            domStyle.set(this.dynamicFormSubmit, "display", "none");
         },
 
         /**
@@ -86,6 +91,7 @@ define([
         show: function () {
             this._entryForm = this.generateForm(this.dynamicForm, this._formFields);
             domStyle.set(this.domNode, "display", "block");
+            this.tryEnableSubmit();
         },
 
         /**
@@ -94,6 +100,18 @@ define([
         hide: function () {
             domStyle.set(this.domNode, "display", "none");
             this.clearForm();
+        },
+
+        /**
+         * Enables the submit button if all required form items have content.
+         */
+        tryEnableSubmit: function () {
+            var isEnabled = false;
+
+            //if (this._entryForm.length > 0) {
+            //}
+
+            domStyle.set(this.dynamicFormSubmit, "display", (isEnabled ? "table" : "none"));
         },
 
         /**
@@ -123,6 +141,30 @@ define([
         },
 
         /**
+         * Sets event handlers for change, keyup, cut, and paste for an input item.
+         * @param {object} inputItem Input item to receive handlers
+         * @param {function} handler Function to call
+         */
+        setInputWatchers: function (inputItem, handler) {
+            this.own(
+                // For cut & paste, the change doesn't get noticed until the next keyup or
+                // a loss of focus, so we'll use setTimeout to give the inputItem a chance to update
+                on(inputItem, "change", function (evt) {
+                    handler();
+                }),
+                on(inputItem, "keyup", function (evt) {
+                    handler();
+                }),
+                on(inputItem, "cut", function (evt) {
+                    setTimeout(handler, 100);
+                }),
+                on(inputItem, "paste", function (evt) {
+                    setTimeout(handler, 100);
+                })
+            );
+        },
+
+        /**
          * Generates a form in a div using a set of fields.
          * @param {string} formDivName Div to receive form UI
          * @param {array} fields Fields with which to generate form
@@ -130,7 +172,7 @@ define([
          * "field" ({string}, name of field) and "input" ({object}, UI form item)
          */
         generateForm: function (formDivName, fields) {
-            var formDiv, form, i18n = this.appConfig.i18n.dynamic_form;
+            var pThis = this, formDiv, form, nextReqFldStatusFlag = 1, i18n = this.appConfig.i18n.dynamic_form;
 
             // Clear out the existing form
             formDiv = dom.byId(formDivName);
@@ -165,6 +207,27 @@ define([
                     count.innerHTML = field.length - inputItem.value.length;
                 }
 
+                /**
+                 * Updates the required-field input status with this item's status
+                 */
+                function updateRequiredFieldStatus() {
+                    if (row.requiredFieldFlag) {
+                        // Update the field for this item
+                        if (inputItem.value.toString().length > 0) {
+                            // Have value, so clear spot in mask
+                            pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
+                        } else {
+                            // No value, so set spot in mask
+                            pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                        }
+
+                        // Update the visibility of the save button based on status all of
+                        // the required fields taken together
+                        domStyle.set(pThis.dynamicFormSubmit, "display",
+                            (pThis._requiredFieldsStatus === 0 ? "table-cell" : "none"));
+                    }
+                }
+
                 if (field.dtIsVisible) {
                     disabledFlag = field.dtIsEditable ? null : "disabled";
 
@@ -194,20 +257,7 @@ define([
                         }
 
                         // Keep the content within the field's length limit
-                        // For cut & paste, the change in text doesn't get noticed until the next keyup or
-                        // a loss of focus, so we'll use setTimeout to give the inputItem a chance to update
-                        on(inputItem, "change", function (evt) {
-                            updateCharactersCount();
-                        });
-                        on(inputItem, "keyup", function (evt) {
-                            updateCharactersCount();
-                        });
-                        on(inputItem, "cut", function (evt) {
-                            setTimeout(updateCharactersCount, 100);
-                        });
-                        on(inputItem, "paste", function (evt) {
-                            setTimeout(updateCharactersCount, 100);
-                        });
+                        this.setInputWatchers(inputItem, updateCharactersCount);
 
                     } else {
                         if (field.type === "esriFieldTypeSmallInteger" || field.type === "esriFieldTypeInteger") {
@@ -235,14 +285,29 @@ define([
                     }
 
                     if (esriLang.isDefined(inputItem)) {
+                        // Disabled setting for all but DateTextBox
                         if (disabledFlag) {
                             inputItem.disabled = true;
                         }
 
+                        // Set its initial value if supplied
                         if (this._presets[field.name]) {
                             inputItem.value = this._presets[field.name];
                         }
 
+                        // If required, set its status in the required-value status flag
+                        if (!field.nullable) {
+                            row.requiredFieldFlag = nextReqFldStatusFlag;
+                            updateRequiredFieldStatus();
+
+                            // Set up handlers to keep flag up-to-date
+                            this.setInputWatchers(inputItem, updateRequiredFieldStatus);
+
+                            // Set up next flag
+                            nextReqFldStatusFlag *= 2;
+                        }
+
+                        // Save to the form definition
                         form.push({
                             "field": field,
                             "input": inputItem

@@ -1,6 +1,5 @@
-commit 19ef85928e814eb95fef57035ee17381ece3dc8d
-Merge: de87f96 871a010
+commit 892baaf4a57b571e493b129eebf0dd44aa59adbd
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Feb 18 04:59:15 2015 -0800
+Date:   Wed Feb 18 11:45:29 2015 -0800
 
-    Merge branch 'main-frame' into develop
+    Tuned sidebar header help icon

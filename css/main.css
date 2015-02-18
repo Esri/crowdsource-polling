@@ -125,7 +125,6 @@ body {
     float: left;
     font-size: 15px;
     font-weight: bold;
-    border: 1px solid #ccc;
     cursor: pointer;
 }
 .sideHdrSign:hover {
@@ -137,6 +136,8 @@ body {
     display: inline-block;
     float: right;
     cursor: pointer;
+    padding-top: 4px;
+    padding-right: 4px;
 }
 
 .sideHdrTitle {

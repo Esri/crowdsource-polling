@@ -1,4 +1,4 @@
-/*global define,console,mockCurrentItem:true */
+﻿/*global define,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -79,7 +79,6 @@ define([
         map: null,
         mapData: null,
         _linkToMapView: true,
-        mockCurrentItem: null,  //???
 
         startup: function (config) {
             var itemInfo, error;
@@ -215,7 +214,6 @@ define([
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
-                    mockCurrentItem = item;  //???
 
                     this._itemDetails.setItem(item);
                     topic.publish("updateComments", item);

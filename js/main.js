@@ -231,10 +231,12 @@ define([
                     }
                 }));
 
-                topic.subscribe("linkToMapViewSelected", lang.hitch(this, function () {
-                    console.log(">linkToMapViewSelected>", !this._linkToMapView);  //???
-                    this._linkToMapView = !this._linkToMapView;
-                    //this._itemsList.setLinkToMapView(this._linkToMapView);
+                /**
+                 * @param {boolean} isSelected New state of setting
+                 */
+                topic.subscribe("linkToMapViewChanged", lang.hitch(this, function (isSelected) {
+                    console.log(">linkToMapViewChanged>", isSelected);  //???
+                    this._linkToMapView = isSelected;
                     topic.publish("updateItems");
                 }));
 
@@ -426,7 +428,8 @@ define([
 
                 // Items list
                 this._itemsList = new ItemList({
-                    "appConfig": this.config
+                    "appConfig": this.config,
+                    "linkToMapView": this._linkToMapView
                 }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 

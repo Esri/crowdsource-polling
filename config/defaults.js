@@ -36,7 +36,7 @@ define({
     "backIcon": "[{'shape': {'type': 'polyline', 'points': [{x: 12, y: 18.3}, {x: 3.4, y: 9.9}, {x: 11.8, y: 1.7}, {x: 10.2, y: 0}, {x: 1.7, y: 8.3}, {x: 1.7, y: 8.2}, {x: 0, y: 9.9}, {x: 0, y: 9.9}, {x: 0, y: 9.9}, {x: 1.7, y: 11.6}, {x: 1.7, y: 11.6}, {x: 10.3, y: 20}]}, 'fill':{'r':255,'g':255,'b':255}}]",
     "commentIcon": "[{'shape': {'type': 'polyline', 'points': [{x: 0, y: 0}, {x: 0, y: 7}, {x: 1, y: 7}, {x: 1, y: 10}, {x: 4, y: 7}, {x: 11, y: 7}, {x: 11, y: 0}]}, 'fill':{'r':255,'g':255,'b':255}}]",
     "galleryIcon": "[{'shape': {'type': 'path', 'path': 'M310.7,391.8v8.3h-9.4v-8.3H310.7 M311.5,391h-11v10h11V391L311.5,391z M302.1,398.5h7.9l-1.6-5l-2.4,3.3l-1.6-1.7 L302.1,398.5z M302.9,393.5c-0.4,0-0.8,0.4-0.8,0.8c0,0.5,0.4,0.8,0.8,0.8c0.4,0,0.8-0.4,0.8-0.8 C303.6,393.9,303.3,393.5,302.9,393.5z'},'fill':{'r':0,'g':0,'b':0,'a':.35}}]",
-    "displayText": "The crowdsource polling application allows potential citizens and businesses to explore a community.",
+    "displayText": "The crowdsource polling application allows potential citizens and businesses to explore a community. <b>Welcome to The crowdsource polling</b><br/><hr/><br/>The <b>The  crowdsource polling</b> application helps residents locate a government facility and obtain information about curbside and dropoff services provided by a government agency.<br/> <br/>To locate a service, simply enter an address or activity in the search box, or use your current location.  Your location will then be highlighted on the map and relevant information about available curbside and dropoff services will be presented to the user.<br/><br/>",
 
     "ideaFields": "Name,Date,Votes",
     "commentFields": "Name,Date,ParentID",

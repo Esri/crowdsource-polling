@@ -22,6 +22,7 @@ define([
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/dom-class',
+    'dojo/on',
     'dojo/query',
     'dojo/topic',
     'dojo/NodeList-dom',
@@ -32,15 +33,13 @@ define([
     'dijit/_TemplatedMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, dojoQuery, topic, nld,
+], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, on, dojoQuery, topic, nld,
     SvgHelper,
     _WidgetBase, _TemplatedMixin,
     template) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
-        id: 'itemList',
-        baseClass: 'itemList',
 
         /**
          * Widget constructor. Placeholder if future functionality is needed in the
@@ -59,6 +58,11 @@ define([
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
             this.hide();
+
+            this.linkActionBox.checked = this.linkToMapView;
+            this.own(on(this.linkActionBox, "change", lang.hitch(this, function () {
+                topic.publish("linkToMapViewChanged", this.linkActionBox.checked);
+            })));
         },
 
         /**
@@ -108,7 +112,7 @@ define([
          * Clears the items list
          */
         clearList: function () {
-            domConstruct.empty(this.domNode);
+            domConstruct.empty(this.list);
         },
 
         /**

@@ -1,6 +1,6 @@
-commit f040ac01220349d3d0d5d66dd62bccd9cebf24e8
-Merge: ad3d6eb 557bab5
+commit d0f867ba7626502488d46de8485dc0b57564bdc7
+Merge: f040ac0 236c598
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Feb 19 09:20:11 2015 -0800
+Date:   Thu Feb 19 12:20:37 2015 -0800
 
-    Merge branch 'ItemList' into develop
+    Merge branch 'social-and-help-popups' into develop

@@ -450,6 +450,7 @@ body {
 }
 
 .dynamicFormAction span {
+    height: 40px;
     display: table-cell;
     vertical-align: middle;
 }

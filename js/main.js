@@ -23,8 +23,6 @@ define([
     "dojo/Deferred",
     "dojo/dom",
     "dojo/dom-class",
-    "dojo/dom-construct",
-    "dojo/dom-style",
     "dojo/json",
     "dojo/on",
     "dojo/parser",
@@ -37,9 +35,8 @@ define([
     "application/widgets/DynamicForm/DynamicForm",
     "application/widgets/ItemDetails/ItemDetailsController",
     "application/widgets/ItemList/ItemList",
-    "application/widgets/Mock/MockDialog",
-    "application/widgets/Mock/MockWidget",
     "application/widgets/PopupWindow/PopupWindow",
+    "application/widgets/PopupWindow/SocialMediaSignin",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
     "dijit/layout/LayoutContainer",
@@ -54,8 +51,6 @@ define([
     Deferred,
     dom,
     domClass,
-    domConstruct,
-    domStyle,
     JSON,
     on,
     parser,
@@ -68,9 +63,8 @@ define([
     DynamicForm,
     ItemDetails,
     ItemList,
-    MockDialog,
-    MockWidget,
     PopupWindow,
+    SocialMediaSignin,
     SidebarContentController,
     SidebarHeader
 ) {
@@ -390,41 +384,24 @@ define([
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config
-                }).placeAt("sidebarHeading");
-                this._sidebarHdr.startup();
+                }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
 
                 // Social media
-                this._socialDialog = new MockDialog({
+                this._socialDialog = new SocialMediaSignin({
                     "appConfig": this.config,
-                    "label": "Social Media Sign-in"
-                }).placeAt(document.body);
-                this._socialDialog.startup();
-                this._socialDialog.createMockClickSource("close", lang.hitch(this, function () {
-                    this._socialDialog.hide();
-                }));
-                this._socialDialog.createMockClickSource("sign in", lang.hitch(this, function () {
-                    topic.publish("signinUpdate");
-                }));
-                this._socialDialog.createMockFunction("getSignedInUser", lang.hitch(this, function () {
-                    // Description of signed-in user: "name" {string}, "canSignOut" {boolean};
-                    // null indicates that no one is signed in
-                    //return {"name": "Fred", "canSignOut": true};
-                    //return {"name": "Ginger", "canSignOut": false};
-                    return null;
-                }));
+                    "showClose": true
+                }).placeAt(document.body); // placeAt triggers a startup call to _socialDialog
 
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,
                     "showClose": true
-                }).placeAt(document.body);
-                this._helpDialogContainer.startup();
+                }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
 
                 // Sidebar content controller
                 this._sidebarCnt = new SidebarContentController({
                     "appConfig": this.config
-                }).placeAt("sidebarContent");
-                this._sidebarCnt.startup();
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _sidebarCnt
 
                 // Items list
                 this._itemsList = new ItemList({
@@ -443,8 +420,7 @@ define([
                 // Add comment
                 this._itemAddComment = new DynamicForm({
                     "appConfig": this.config
-                }).placeAt("sidebarContent");
-                this._itemAddComment.startup();
+                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemAddComment
                 this._sidebarCnt.addPanel("getComment", this._itemAddComment);
 
 

@@ -20,22 +20,16 @@ define([
     "dojo/_base/declare",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
-    "dijit/_WidgetsInTemplateMixin",
-    "dojo/text!./templates/PopupWindow.html",
-    "dojo/dom",
-    "dojo/dom-style",
-    "dojo/on"
+    "dojo/text!./PopupWindow.html",
+    "dojo/dom-style"
 ], function (
     declare,
     _WidgetBase,
     _TemplatedMixin,
-    _WidgetsInTemplateMixin,
     template,
-    dom,
-    domStyle,
-    on
+    domStyle
 ) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         baseClass: "popupWidget",
         showClose: false,

@@ -374,6 +374,23 @@ body {
     background-color:none;
 }
 
+.socialMediaDisclaimer {
+    font-size: smaller;
+}
+
+.socialMediaButtonArea {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.socialMediaButton {
+    width: 29px;
+    height: 29px;
+    display: none;
+    margin: 8px;
+    cursor: pointer;
+}
+
 /* ---------- DynamicForm ---------- */
 
 .dynamicFormPanel {

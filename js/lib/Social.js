@@ -97,6 +97,14 @@ define([
         },
 
         /**
+         * Returns the signed-in state.
+         * @param {boolean} Logged in or not
+         */
+        isSignedIn: function () {
+            return this._loggedIn;
+        },
+
+        /**
          * Updates the information held about the signed-in user.
          * @param {object} [response] Service-specific response object
          * @memberOf social#

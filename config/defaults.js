@@ -48,6 +48,16 @@ define({
     "commentsTable": null,
     "showNullValueAs": "",
 
+    "facebookAppId": "808394189204220",
+    "facebookAppScope": "public_profile",
+    "googleplusClientId": "862973275076-qadao43h9btc27oui3mfhj846rh4so6o.apps.googleusercontent.com",
+    "googleplusScope": "https://www.googleapis.com/auth/userinfo.profile",
+    "twitterSigninUrl": location.protocol + "//utility.arcgis.com/tproxy/signin",
+    "twitterUserUrl": location.protocol + "//utility.arcgis.com/tproxy/proxy/1.1/account/verify_credentials.json?q=&include_entities=true&skip_status=true&locale=en",
+    "twitterCallbackPage": "/oauth-callback.html",
+    "socialMediaDisclaimer": "<b>Disclaimer</b><hr>Proin tristique volutpat velit ut mollis. Nulla tincidunt diam nec orci lobortis cursus et ut metus. Duis vel posuere nulla, sit amet sollicitudin tellus. Vivamus molestie vestibulum velit, nec lobortis felis scelerisque a. Ut ac ex odio. Nam finibus elit auctor turpis varius bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut augue ipsum, eleifend at ante ut, tincidunt sollicitudin justo. In vitae magna faucibus, mattis arcu sed, dictum justo. Sed porta sem velit, eu egestas odio pretium at. Quisque condimentum efficitur consequat. Suspendisse eu eros volutpat, ultrices nunc quis, pellentesque turpis. In vitae sodales sapien, eget tincidunt lectus. Proin vitae tempus nisi, quis posuere urna. Mauris vestibulum augue vel nisi lobortis sollicitudin. Maecenas elementum, ante vel auctor pharetra, nisl nunc tempor ante, quis blandit dolor enim at ex.<br><br>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce non neque accumsan, elementum sem vel, blandit odio. Etiam scelerisque iaculis aliquet. Ut varius turpis felis, fringilla placerat purus aliquet vitae. Integer orci elit, iaculis et diam eu, ultricies luctus magna. Donec semper felis et rutrum egestas. Phasellus congue scelerisque diam, sit amet fringilla ipsum aliquam sed. Ut scelerisque, ipsum sit amet suscipit elementum, leo massa eleifend dui, nec pretium ligula urna mollis ipsum. Donec porttitor dui eget porta facilisis. Proin ullamcorper sapien sit amet ultricies fringilla. Nunc ex velit, lobortis at urna in, pellentesque feugiat risus.<br><br>Nam pellentesque enim ex, a pulvinar ante placerat ac. Proin at leo sit amet metus aliquam tincidunt eget eu urna. Nulla ullamcorper facilisis facilisis. Pellentesque non erat orci. Suspendisse odio arcu, porta tempus aliquam ac, elementum in nibh. Etiam suscipit orci at turpis tempor rutrum. Fusce mollis orci in diam iaculis elementum. Vivamus ligula elit, vestibulum nec lectus vel, porta vulputate turpis. Nunc ut libero pellentesque, pellentesque est in, ultrices felis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed gravida vitae mi vel placerat. Ut consectetur consectetur diam, at blandit quam posuere vel.",
+
+
 
 
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps

@@ -19,7 +19,7 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
-    "application/social"
+    "application/lib/Social"
 ], function (
     declare,
     lang,

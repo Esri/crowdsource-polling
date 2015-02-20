@@ -20,7 +20,7 @@ define([
     "dojo/_base/declare",
     "dojo/_base/lang",
     "esri/request",
-    "application/social"
+    "application/lib/Social"
 ], function (
     declare,
     lang,

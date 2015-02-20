@@ -1,6 +1,5 @@
-commit 989bc97cee9eb494a4c3b894463848c2c08ed4ce
-Merge: d0f867b bcdff8d
+commit e10b4bfbcb814c0d5c00c79962609d493782eeb2
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Feb 19 17:04:30 2015 -0800
+Date:   Thu Feb 19 18:26:41 2015 -0800
 
-    Merge branch 'social-and-help-popups' into develop
+    Fix GitHub casing problem, step 2

@@ -262,7 +262,14 @@ define([
 
                 topic.subscribe("socialSelected", lang.hitch(this, function () {
                     console.log(">socialSelected>");  //???
-                    this._socialDialog.show();
+                    var signedInUser = this._socialDialog.getSignedInUser();
+                    if (!signedInUser) {
+                        // Show the social media sign-in screen so that the user can sign in
+                        this._socialDialog.show();
+                    } else {
+                        // Simply sign out
+                        this._socialDialog.signOut(signedInUser);
+                    }
                 }));
 
                 /**

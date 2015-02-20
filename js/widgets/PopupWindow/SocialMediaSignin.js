@@ -48,7 +48,7 @@ define([
     return declare([PopupWindow, _TemplatedMixin], {
         templateString: template,
 
-        // Description of signed-in user: "name" {string}, "canSignOut" {boolean}, "network" {string};
+        // Description of signed-in user: "name" {string}, "canSignOut" {boolean}, "provider" {string};
         // null indicates that no one is signed in
         _signedInUser: {},
 
@@ -74,15 +74,17 @@ define([
             // Facebook
             function FBCallback(response) {
                 pThis._signedInUser = null;
+                pThis._currentProvider = null;
                 var facebookUser = response;
                 if (facebookUser) {
                     if (facebookUser.name) {
                         pThis.buttonFB.title = i18n.signOutOfFacebook;
                         pThis._signedInUser = {
                             "name": facebookUser.name,
-                            "canSignOut": false,
-                            "network": "Facebook"
+                            "canSignOut": true,
+                            "provider": "Facebook"
                         };
+                        pThis._currentProvider = facebook;
                         pThis.hide();
                     } else {
                         pThis.buttonFB.title = i18n.signIntoFacebook;
@@ -107,15 +109,17 @@ define([
             // Google+
             function GPCallback(response) {
                 pThis._signedInUser = null;
+                pThis._currentProvider = null;
                 var googleUser = response;
                 if (googleUser) {
                     if (googleUser.name) {
                         pThis.buttonGP.title = i18n.signOutOfGooglePlus;
                         pThis._signedInUser = {
                             "name": googleUser.name,
-                            "canSignOut": false,
-                            "network": "GooglePlus"
+                            "canSignOut": true,
+                            "provider": "GooglePlus"
                         };
+                        pThis._currentProvider = google;
                         pThis.hide();
                     } else {
                         pThis.buttonGP.title = i18n.signIntoGooglePlus;
@@ -140,6 +144,7 @@ define([
             // Twitter
             function TWCallback(response) {
                 pThis._signedInUser = null;
+                pThis._currentProvider = null;
                 var twitterUser = response;
                 if (twitterUser) {
                     if (twitterUser.name) {
@@ -147,8 +152,9 @@ define([
                         pThis._signedInUser = {
                             "name": twitterUser.name,
                             "canSignOut": false,
-                            "network": "Twitter"
+                            "provider": "Twitter"
                         };
+                        pThis._currentProvider = twitter;
                         pThis.hide();
                     } else {
                         pThis.buttonTW.title = i18n.signIntoTwitter;
@@ -193,10 +199,21 @@ define([
         /**
          * Returns a description of the currently-signed in user.
          * @return {object} Description of signed-in user: "name" {string}, "canSignOut" {boolean},
-         * "network" {string}; null indicates that no one is signed in
+         * "provider" {string}; null indicates that no one is signed in
          */
         getSignedInUser: function () {
             return this._signedInUser;
+        },
+
+        /**
+         * Signs the user out of the currently-signed-in provider
+         * @param {object} signedInUser User info as provided by a successful sign-in
+         */
+        signOut: function (signedInUser) {
+            if (signedInUser && signedInUser.provider && signedInUser.canSignOut && this._currentProvider) {
+                this._currentProvider.signOut();
+                this._currentProvider = null;
+            }
         },
 
         /**

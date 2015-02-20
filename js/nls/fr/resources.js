@@ -31,6 +31,14 @@ define(({
     popup_Close: {
         closeButtonTooltip: "Fermer"
     },
+    social_media: {
+        signIntoFacebook: "Connectez-vous à Facebook",
+        signIntoGooglePlus: "Connectez-vous à Google+",
+        signIntoTwitter: "Connectez-vous à Twitter",
+        signOutOfFacebook: "Se déconnecter de Facebook",
+        signOutOfGooglePlus: "Se déconnecter de Google+",
+        signOutOfTwitter: "Se déconnecter de Twitter"
+    },
     dynamic_form: {
         optional: " (facultatif)",
         charactersRemaining: "Caractères restants",

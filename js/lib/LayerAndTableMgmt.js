@@ -222,6 +222,8 @@ define([
                 // Cover no-popup and unmatched fieldname cases
                 field.dtIsEditable = field.editable;
                 field.dtIsVisible = true;
+                field.dtStringFieldOption = null;
+                field.dtTooltip = null;
 
                 // If we have a popup, seek to update settings
                 if (fieldInfos) {
@@ -229,6 +231,8 @@ define([
                         if (field.name === fieldInfo.fieldName) {
                             field.dtIsEditable = fieldInfo.isEditable;
                             field.dtIsVisible = fieldInfo.visible;
+                            field.dtStringFieldOption = fieldInfo.stringFieldOption;
+                            field.dtTooltip = fieldInfo.tooltip;
                             return true;
                         }
                         return false;

@@ -156,7 +156,7 @@ body {
 /* ---------- SidebarContentController ---------- */
 
 #sidebarContent {
-  background-color: #eee;
+    background-color: #eee;
 }
 
 
@@ -167,6 +167,18 @@ body {
   font-weight: bold;
   font-size: 16px;
   background-color: #eee;
+}
+
+.itemListActions {
+    height: 20px;
+    font-size: 12px;
+    padding: 6px;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+}
+
+.itemListAction {
+    vertical-align: middle;
 }
 
 .itemList .itemSummary {
@@ -332,45 +344,51 @@ body {
 /* ---------- Popup ---------- */
 
 .popupWidget {
-    position:absolute;
-    display:none;
+    position: absolute;
+    display: none;
+    z-index:50;
     top: 50%;
     left: 50%;
     border: 1px solid #CCC;
-    /*margin-left: -100px;
-    margin-top:-150px;*/
     background-color: white;
-
 }
 .popupTitle {
-    height: 24px;
-    line-height: 24px;
+    height: 32px;
+    line-height: 32px;
     background-color:none;
-}
-.popupTitleText{
-    margin-left:5px;
-    color:white;
 }
 .popupContent {
     padding: 10px;
-    max-width:350px;
-    max-height:300px;
+    padding-top:0px;
+    max-width: 350px;
+    max-height: 300px;
     overflow:auto;
 }
 .popupClose {
-    display:none;
-    position:absolute;
-    top:0px;
-    right: 0px;
-    height:24px;
-}
-#textDisplay{
-    color: black;
-    display: inline-block;
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    height: 20px;
     padding: 4px;
-    float: left;
-    font-size: 25px;
-    font-weight: normal;
+    right: 2px;
+    background-color:none;
+}
+
+.socialMediaDisclaimer {
+    font-size: smaller;
+}
+
+.socialMediaButtonArea {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.socialMediaButton {
+    width: 29px;
+    height: 29px;
+    display: none;
+    margin: 8px;
+    cursor: pointer;
 }
 
 /* ---------- DynamicForm ---------- */
@@ -423,7 +441,7 @@ body {
 }
 
 .dynamicFormAction {
-    width: 48%;
+    width: 145px;
     height: 40px;
     display: table;
     text-align: center;
@@ -432,6 +450,8 @@ body {
 }
 
 .dynamicFormAction span {
+    width: 145px;
+    height: 40px;
     display: table-cell;
     vertical-align: middle;
 }

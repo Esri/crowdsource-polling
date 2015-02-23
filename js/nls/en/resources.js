@@ -20,6 +20,7 @@ define(({
         layerLoad: "Unable to fully load map",
         missingItems: "Item feature layer is missing",
         missingComments: "Comment table is missing",
+        unsupportedRelationship: "Only a 1:1 relationship between the feature layer and the comment table is supported",
         missingVotesField: "Need to configure a field name for votes in 'ideaFields'"
     },
     sidebar_header: {

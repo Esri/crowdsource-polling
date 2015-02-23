@@ -133,7 +133,7 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
                 var itemSpecialFields = this._mapData.getItemSpecialFields(),
-                    commentNameField = this._mapData.getCommentSpecialFields().name;
+                    commentSpecialFields = this._mapData.getCommentSpecialFields();
 
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(itemSpecialFields);
@@ -188,10 +188,13 @@ define([
 
                     // See if we can pre-set its value
                     if (userInfo && userInfo.name) {
-                        this._itemAddComment.presetFieldValue(commentNameField, userInfo.name);
+                        this._itemAddComment.presetFieldValue(commentSpecialFields.name, userInfo.name);
                     } else {
-                        this._itemAddComment.presetFieldValue(commentNameField, null);
+                        this._itemAddComment.presetFieldValue(commentSpecialFields.name, null);
                     }
+
+                    // Pre-set the date stamp
+                    this._itemAddComment.presetFieldValue(commentSpecialFields.date, new Date());
 
                     topic.publish("showPanel", "getComment");
                 }));

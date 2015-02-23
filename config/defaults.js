@@ -19,8 +19,7 @@ define({
     //Default configuration settings for the application. This is where you'll define things like a bing maps key,
     //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
-    //"webmap": "93da2f2c4ffa47d5813aa01521b4d188",  // no popups
-    "webmap": "2cc54188f4c84c9fa368a5e44ed9ce9d",  // with popups
+    "webmap": "83c8c21e424d4548bbc2a7f82251149b",
     "oauthappid": null, //"AFTKRmv16wj14N3z",
     //Group templates must support a group url parameter. This will contain the id of the group.
     "group": "",
@@ -39,7 +38,7 @@ define({
     "displayText": "<b>Welcome to the crowdsource polling application</b><hr/> The crowdsource polling application helps residents locate a government facility and obtain information about curbside and dropoff services provided by a government agency. To locate a service, simply enter an address or activity in the search box, or use your current location. Your location will then be highlighted on the map and relevant information about available curbside and dropoff services will be presented to the user. It allows the general public to contribute missing site address locations and provide contact information for current addresses. It is used to enlist citizens and members of the general public in the continuous improvement of address and contact information across our community. ",
 
     "ideaFields": "Name,Date,Votes",
-    "commentFields": "Name,Date,ParentID",
+    "commentFields": "Name,Date",
 
     "allowUpVotes": false,
     "allowFacebook": false,

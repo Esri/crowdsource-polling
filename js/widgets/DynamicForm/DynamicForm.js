@@ -91,7 +91,6 @@ define([
         show: function () {
             this._entryForm = this.generateForm(this.dynamicForm, this._formFields);
             domStyle.set(this.domNode, "display", "block");
-            this.tryEnableSubmit();
         },
 
         /**
@@ -100,18 +99,6 @@ define([
         hide: function () {
             domStyle.set(this.domNode, "display", "none");
             this.clearForm();
-        },
-
-        /**
-         * Enables the submit button if all required form items have content.
-         */
-        tryEnableSubmit: function () {
-            var isEnabled = false;
-
-            //if (this._entryForm.length > 0) {
-            //}
-
-            domStyle.set(this.dynamicFormSubmit, "display", (isEnabled ? "table" : "none"));
         },
 
         /**
@@ -149,16 +136,16 @@ define([
             this.own(
                 // For cut & paste, the change doesn't get noticed until the next keyup or
                 // a loss of focus, so we'll use setTimeout to give the inputItem a chance to update
-                on(inputItem, "change", function (evt) {
+                on(inputItem, "change", function () {
                     handler();
                 }),
-                on(inputItem, "keyup", function (evt) {
+                on(inputItem, "keyup", function () {
                     handler();
                 }),
-                on(inputItem, "cut", function (evt) {
+                on(inputItem, "cut", function () {
                     setTimeout(handler, 100);
                 }),
-                on(inputItem, "paste", function (evt) {
+                on(inputItem, "paste", function () {
                     setTimeout(handler, 100);
                 })
             );
@@ -293,6 +280,10 @@ define([
                         // Set its initial value if supplied
                         if (this._presets[field.name]) {
                             inputItem.value = this._presets[field.name];
+                            on.emit(inputItem, "change", {
+                                "bubbles": true,
+                                "cancelable": false
+                            });
                         }
 
                         // If required, set its status in the required-value status flag

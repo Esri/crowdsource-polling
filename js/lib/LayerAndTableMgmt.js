@@ -255,7 +255,9 @@ define([
             var updateQuery = new Query();
             updateQuery.where = "1=1";
             updateQuery.returnGeometry = true;
-            updateQuery.orderByFields = [this._itemSpecialFields.date + " DESC"];
+            if (this._itemSpecialFields.date.length > 0) {
+                updateQuery.orderByFields = [this._itemSpecialFields.date + " DESC"];
+            }
             updateQuery.outFields = ["*"];
             if (extent) {
                 updateQuery.geometry = extent;
@@ -314,7 +316,9 @@ define([
                 updateQuery = new Query();
                 updateQuery.where = expr;
                 updateQuery.returnGeometry = false;
-                updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
+                if (this._commentSpecialFields.date.length > 0) {
+                    updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
+                }
                 updateQuery.outFields = ["*"];
 
                 this._commentTable.queryFeatures(updateQuery, lang.hitch(this, function (results) {
@@ -333,7 +337,9 @@ define([
                 updateQuery = new RelationshipQuery();
                 updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
                 updateQuery.returnGeometry = true;
-                updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
+                if (this._commentSpecialFields.date.length > 0) {
+                    updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
+                }
                 updateQuery.outFields = ["*"];
                 updateQuery.relationshipId = 0;
 
@@ -358,23 +364,27 @@ define([
         incrementVote: function (item) {
             var numVotes, itemVotesField = this._itemSpecialFields.votes;
 
-            numVotes = 1;
-            if (item.attributes[itemVotesField]) {
-                numVotes = item.attributes[itemVotesField] + 1;
-            }
-            item.attributes[itemVotesField] = numVotes;
-
-            this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
-                if (updates.length === 0) {
-                    topic.publish("voteUpdateFailed", "missing field");
-                } else if (updates[0].error) {
-                    topic.publish("voteUpdateFailed", updates[0].error);
-                } else {
-                    topic.publish("voteUpdated", item);
+            if (itemVotesField.length > 0) {
+                numVotes = 1;
+                if (item.attributes[itemVotesField]) {
+                    numVotes = item.attributes[itemVotesField] + 1;
                 }
-            }), lang.hitch(this, function (err) {
-                topic.publish("voteUpdateFailed", JSON.stringify(err));
-            }));
+                item.attributes[itemVotesField] = numVotes;
+
+                this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
+                    if (updates.length === 0) {
+                        topic.publish("voteUpdateFailed", "missing field");
+                    } else if (updates[0].error) {
+                        topic.publish("voteUpdateFailed", updates[0].error);
+                    } else {
+                        topic.publish("voteUpdated", item);
+                    }
+                }), lang.hitch(this, function (err) {
+                    topic.publish("voteUpdateFailed", JSON.stringify(err));
+                }));
+            } else {
+                topic.publish("voteUpdateFailed", this.appConfig.i18n.map.missingVotesField);
+            }
         }
 
     });

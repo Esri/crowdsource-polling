@@ -124,7 +124,9 @@ define([
          * removes the field from the set of presets
          */
         presetFieldValue: function (fieldname, value) {
-            this._presets[fieldname] = value;
+            if (fieldname && fieldname.length > 0) {
+                this._presets[fieldname] = value;
+            }
         },
 
         /**
@@ -156,7 +158,8 @@ define([
          * @param {string} formDivName Div to receive form UI
          * @param {array} fields Fields with which to generate form
          * @return {array} List of form entries, each of which is an object containing
-         * "field" ({string}, name of field) and "input" ({object}, UI form item)
+         * "field" ({string}, name of field) and "input" ({object}, UI form item) or
+         * "value ({object} invisible form item value)
          */
         generateForm: function (formDivName, fields) {
             var pThis = this, formDiv, form, nextReqFldStatusFlag = 1, i18n = this.appConfig.i18n.dynamic_form;
@@ -215,6 +218,7 @@ define([
                     }
                 }
 
+                // Visible fields get added to the form
                 if (field.dtIsVisible) {
                     disabledFlag = field.dtIsEditable ? null : "disabled";
 
@@ -275,7 +279,6 @@ define([
                             row = createRow();
                             domConstruct.create("br", {}, row);
                             inputItem = new DateTextBox({
-                                value: new Date(),
                                 disabled: disabledFlag  // needs to be done in constructor
                             }, domConstruct.create("div", {}, row));
                         }
@@ -289,7 +292,11 @@ define([
 
                         // Set its initial value if supplied
                         if (this._presets[field.name]) {
-                            inputItem.value = this._presets[field.name];
+                            if (inputItem.set) {  // Dojo item
+                                inputItem.set("value", this._presets[field.name]);
+                            } else {              // HTML item
+                                inputItem.value = this._presets[field.name];
+                            }
                             on.emit(inputItem, "change", {
                                 "bubbles": true,
                                 "cancelable": false
@@ -323,6 +330,13 @@ define([
                             "input": inputItem
                         });
                     }
+
+                // If a form item is invisible but preset, add it to the form
+                } else if (this._presets[field.name]) {
+                    form.push({
+                        "field": field,
+                        "value": this._presets[field.name]
+                    });
                 }
             }));
 
@@ -332,7 +346,8 @@ define([
         /**
          * Assembles an attribute object from the form.
          * @param {array} form List of form entries, each of which is an object containing
-         * "field" ({string}, name of field) and "input" ({object}, UI form item)
+         * "field" ({string}, name of field) and "input" ({object}, UI form item) or
+         * "value ({object} invisible form item value)
          * @return {object} Structure containing properties matching the form field names
          * each of which has a value matching its corresponding input form item's value
          */
@@ -342,7 +357,11 @@ define([
             if (form.length > 0) {
                 // Assemble the attributes for the submission from the form
                 array.forEach(form, lang.hitch(this, function (entry) {
-                    attr[entry.field.name] = entry.input.value;
+                    if (entry.input) {
+                        attr[entry.field.name] = entry.input.value;
+                    } else if (entry.value) {
+                        attr[entry.field.name] = entry.value;
+                    }
                 }));
             }
 

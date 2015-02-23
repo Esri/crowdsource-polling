@@ -19,7 +19,8 @@ define(({
         error: "Unable to create map",
         layerLoad: "Unable to fully load map",
         missingItems: "Item feature layer is missing",
-        missingComments: "Comment table is missing"
+        missingComments: "Comment table is missing",
+        missingVotesField: "Need to configure a field name for votes in 'ideaFields'"
     },
     sidebar_header: {
         signInButton: "Sign In",

@@ -149,10 +149,14 @@ define([
                 var commentTableURL;
 
                 // Operational layer provides item fields and formats
+                if (this.appConfig.itemInfo.itemData.operationalLayers.length === 0) {
+                    deferred.reject(this.appConfig.i18n.map.missingItems);
+                    return;
+                }
+
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
-
-                if (!this._itemLayer) {
+                if (!this._itemLayerInWebmap) {
                     deferred.reject(this.appConfig.i18n.map.missingItems);
                     return;
                 }

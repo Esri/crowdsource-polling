@@ -91,7 +91,6 @@ define([
         show: function () {
             this._entryForm = this.generateForm(this.dynamicForm, this._formFields);
             domStyle.set(this.domNode, "display", "block");
-            this.tryEnableSubmit();
         },
 
         /**
@@ -100,18 +99,6 @@ define([
         hide: function () {
             domStyle.set(this.domNode, "display", "none");
             this.clearForm();
-        },
-
-        /**
-         * Enables the submit button if all required form items have content.
-         */
-        tryEnableSubmit: function () {
-            var isEnabled = false;
-
-            //if (this._entryForm.length > 0) {
-            //}
-
-            domStyle.set(this.dynamicFormSubmit, "display", (isEnabled ? "table" : "none"));
         },
 
         /**
@@ -137,7 +124,9 @@ define([
          * removes the field from the set of presets
          */
         presetFieldValue: function (fieldname, value) {
-            this._presets[fieldname] = value;
+            if (fieldname && fieldname.length > 0) {
+                this._presets[fieldname] = value;
+            }
         },
 
         /**
@@ -149,16 +138,16 @@ define([
             this.own(
                 // For cut & paste, the change doesn't get noticed until the next keyup or
                 // a loss of focus, so we'll use setTimeout to give the inputItem a chance to update
-                on(inputItem, "change", function (evt) {
+                on(inputItem, "change", function () {
                     handler();
                 }),
-                on(inputItem, "keyup", function (evt) {
+                on(inputItem, "keyup", function () {
                     handler();
                 }),
-                on(inputItem, "cut", function (evt) {
+                on(inputItem, "cut", function () {
                     setTimeout(handler, 100);
                 }),
-                on(inputItem, "paste", function (evt) {
+                on(inputItem, "paste", function () {
                     setTimeout(handler, 100);
                 })
             );
@@ -169,7 +158,10 @@ define([
          * @param {string} formDivName Div to receive form UI
          * @param {array} fields Fields with which to generate form
          * @return {array} List of form entries, each of which is an object containing
-         * "field" ({string}, name of field) and "input" ({object}, UI form item)
+         * "field" ({string}, name of field) and "input" ({object}, UI form item) or
+         * "value ({object} invisible form item value); may also publish "showError" with
+         * the i18n dynamic_form.unsettableRequiredField message if there's an invisible
+         * and uninitialized required field
          */
         generateForm: function (formDivName, fields) {
             var pThis = this, formDiv, form, nextReqFldStatusFlag = 1, i18n = this.appConfig.i18n.dynamic_form;
@@ -183,7 +175,7 @@ define([
             // Find the editable attributes and create a form from them
             form = [];
             array.forEach(fields, lang.hitch(this, function (field) {
-                var row, disabledFlag, inputItem, count;
+                var row, disabledFlag, inputItem, count, useTextArea;
 
                 /**
                  * Creates a div to hold a visual row.
@@ -228,6 +220,7 @@ define([
                     }
                 }
 
+                // Visible fields get added to the form
                 if (field.dtIsVisible) {
                     disabledFlag = field.dtIsEditable ? null : "disabled";
 
@@ -243,7 +236,17 @@ define([
 
                         domConstruct.create("br", {}, row);
 
-                        if (field.length > 32) {
+                        // If the popup has defined a text-entry type, we'll use it;
+                        // otherwise, we'll choose based on a field length that will fit into
+                        // a single line versus one that will not
+                        if (field.dtStringFieldOption) {
+                            useTextArea = field.dtStringFieldOption === "textarea" ||
+                                field.dtStringFieldOption === "richtext";
+                        } else {
+                            useTextArea = field.length > 32;
+                        }
+
+                        if (useTextArea) {
                             inputItem = domConstruct.create("textArea", {
                                 value: field.value || "",
                                 className: "dynamicFormTextAreaCtl"
@@ -278,7 +281,6 @@ define([
                             row = createRow();
                             domConstruct.create("br", {}, row);
                             inputItem = new DateTextBox({
-                                value: new Date(),
                                 disabled: disabledFlag  // needs to be done in constructor
                             }, domConstruct.create("div", {}, row));
                         }
@@ -292,7 +294,24 @@ define([
 
                         // Set its initial value if supplied
                         if (this._presets[field.name]) {
-                            inputItem.value = this._presets[field.name];
+                            if (inputItem.set) {  // Dojo item
+                                inputItem.set("value", this._presets[field.name]);
+                            } else {              // HTML item
+                                inputItem.value = this._presets[field.name];
+                            }
+                            on.emit(inputItem, "change", {
+                                "bubbles": true,
+                                "cancelable": false
+                            });
+                        }
+
+                        // Apply the tooltip if we have one
+                        if (field.dtTooltip && field.dtTooltip.length > 0) {
+                            if (inputItem.set) {  // Dojo item
+                                inputItem.set("title", field.dtTooltip);
+                            } else {              // HTML item
+                                inputItem.title = field.dtTooltip;
+                            }
                         }
 
                         // If required, set its status in the required-value status flag
@@ -313,6 +332,22 @@ define([
                             "input": inputItem
                         });
                     }
+
+                // Special handling for invisible yet editable form items
+                } else if (field.dtIsEditable) {
+                    // If a form item is invisible but pre-set, add it to the form
+                    if (this._presets[field.name]) {
+                        form.push({
+                            "field": field,
+                            "value": this._presets[field.name]
+                        });
+
+                    // If a form item is invisible and required but not pre-set, then the form
+                    // can't meet the condition for submission that all required fields have values
+                    } else if (!field.nullable) {
+                        topic.publish("showError", "[" + field.alias + "]<br>"
+                            + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
+                    }
                 }
             }));
 
@@ -322,7 +357,8 @@ define([
         /**
          * Assembles an attribute object from the form.
          * @param {array} form List of form entries, each of which is an object containing
-         * "field" ({string}, name of field) and "input" ({object}, UI form item)
+         * "field" ({string}, name of field) and "input" ({object}, UI form item) or
+         * "value ({object} invisible form item value)
          * @return {object} Structure containing properties matching the form field names
          * each of which has a value matching its corresponding input form item's value
          */
@@ -332,7 +368,11 @@ define([
             if (form.length > 0) {
                 // Assemble the attributes for the submission from the form
                 array.forEach(form, lang.hitch(this, function (entry) {
-                    attr[entry.field.name] = entry.input.value;
+                    if (entry.input) {
+                        attr[entry.field.name] = entry.input.value;
+                    } else if (entry.value) {
+                        attr[entry.field.name] = entry.value;
+                    }
                 }));
             }
 

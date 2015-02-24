@@ -72,11 +72,10 @@ define([
             };
 
             // Save the names of comment table fields that we'll need to interact with
-            fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("", "");  // provide defaults
+            fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("");  // provide defaults
             this._commentSpecialFields = {
                 "name": fieldsSplit[0].trim(),
-                "date": fieldsSplit[1].trim(),
-                "foreignKey": fieldsSplit[2].trim()
+                "date": fieldsSplit[1].trim()
             };
         },
 
@@ -91,8 +90,8 @@ define([
 
         /**
          * Returns the layer field names of the item comment table's special-purpose fields.
-         * @return {object} Returns the table field name serving the role of "name",
-         * "date", and "foreignKey"
+         * @return {object} Returns the table field name serving the role of "name" and
+         * "date"
          */
         getCommentSpecialFields: function () {
             return this._commentSpecialFields;
@@ -149,10 +148,14 @@ define([
                 var commentTableURL;
 
                 // Operational layer provides item fields and formats
+                if (this.appConfig.itemInfo.itemData.operationalLayers.length === 0) {
+                    deferred.reject(this.appConfig.i18n.map.missingItems);
+                    return;
+                }
+
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
-
-                if (!this._itemLayer) {
+                if (!this._itemLayerInWebmap) {
                     deferred.reject(this.appConfig.i18n.map.missingItems);
                     return;
                 }
@@ -176,7 +179,7 @@ define([
                 on.once(this._commentTable, "load", lang.hitch(this, function (evt) {
 
                     // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
-                // to the presence of editing and visibility controls in the optional popup
+                    // to the presence of editing and visibility controls in the optional popup
                     this._commentFields = this.applyWebmapControlsToFields(
                         this._commentTable.fields,
                         this._commentTableInWebmap.popupInfo
@@ -198,6 +201,17 @@ define([
                             return def.promise;
                         };
                     }
+
+                    // Test that the items layer is related to the comments table and that
+                    // the two are not involved in any other relationships
+                    if (this._itemLayer.relationships.length !== 1 ||
+                            this._commentTable.relationships.length !== 1 ||
+                            this._itemLayer.relationships[0].relatedTableId !== this._commentTable.layerId ||
+                            this._itemLayer.layerId !== this._commentTable.relationships[0].relatedTableId) {
+                        deferred.reject(this.appConfig.i18n.map.unsupportedRelationship);
+                    }
+                    this._primaryKeyField = this._itemLayer.relationships[0].keyField;
+                    this._foreignKeyField = this._commentTable.relationships[0].keyField;
 
                     deferred.resolve();
                 }), lang.hitch(this, function () {
@@ -222,6 +236,8 @@ define([
                 // Cover no-popup and unmatched fieldname cases
                 field.dtIsEditable = field.editable;
                 field.dtIsVisible = true;
+                field.dtStringFieldOption = null;
+                field.dtTooltip = null;
 
                 // If we have a popup, seek to update settings
                 if (fieldInfos) {
@@ -229,6 +245,8 @@ define([
                         if (field.name === fieldInfo.fieldName) {
                             field.dtIsEditable = fieldInfo.isEditable;
                             field.dtIsVisible = fieldInfo.visible;
+                            field.dtStringFieldOption = fieldInfo.stringFieldOption;
+                            field.dtTooltip = fieldInfo.tooltip;
                             return true;
                         }
                         return false;
@@ -247,7 +265,9 @@ define([
             var updateQuery = new Query();
             updateQuery.where = "1=1";
             updateQuery.returnGeometry = true;
-            updateQuery.orderByFields = [this._itemSpecialFields.date + " DESC"];
+            if (this._itemSpecialFields.date.length > 0) {
+                updateQuery.orderByFields = [this._itemSpecialFields.date + " DESC"];
+            }
             updateQuery.outFields = ["*"];
             if (extent) {
                 updateQuery.geometry = extent;
@@ -270,12 +290,12 @@ define([
         addComment: function (item, comment) {
             var attr, gra;
 
+            // Amend a copy of the comment with the foreign key pointing to the
+            // associated item
             attr = lang.clone(comment);
-            if (this._commentSpecialFields.foreignKey !== "") {
-                attr[this._commentSpecialFields.foreignKey] =
-                    item.attributes[item.getLayer().objectIdField];
-            }
+            attr[this._foreignKeyField] = item.attributes[this._primaryKeyField];
 
+            // Add the comment to the comment table
             gra = new Graphic(null, null, attr);
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
@@ -298,49 +318,26 @@ define([
          * @return {publish} "updatedCommentsList" with results of query
          */
         queryComments: function (item) {
-            var expr, updateQuery;
-
-            // Relationship based on explicit foreign key
-            if (this._commentSpecialFields.foreignKey !== "") {
-                expr =  this._commentSpecialFields.foreignKey + " = " + item.attributes[this._itemLayer.objectIdField];
-                updateQuery = new Query();
-                updateQuery.where = expr;
-                updateQuery.returnGeometry = false;
+            var updateQuery = new RelationshipQuery();
+            updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
+            updateQuery.returnGeometry = true;
+            if (this._commentSpecialFields.date.length > 0) {
                 updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
-                updateQuery.outFields = ["*"];
-
-                this._commentTable.queryFeatures(updateQuery, lang.hitch(this, function (results) {
-                    var i, features;
-                    features = results ? results.features : [];
-                    for (i = 0; i < features.length; ++i) {
-                        features[i].setInfoTemplate(this._commentPopupTemplate);
-                    }
-                    topic.publish("updatedCommentsList", features);
-                }), lang.hitch(this, function (err) {
-                    console.log(JSON.stringify(err));  //???
-                }));
-
-            // Relationship based on GUIDs
-            } else {
-                updateQuery = new RelationshipQuery();
-                updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
-                updateQuery.returnGeometry = true;
-                updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
-                updateQuery.outFields = ["*"];
-                updateQuery.relationshipId = 0;
-
-                this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
-                    var fset, i, features;
-                    fset = results[item.attributes[this._itemLayer.objectIdField]];
-                    features = fset ? fset.features : [];
-                    for (i = 0; i < features.length; ++i) {
-                        features[i].setInfoTemplate(this._commentPopupTemplate);
-                    }
-                    topic.publish("updatedCommentsList", features);
-                }), lang.hitch(this, function (err) {
-                    console.log(JSON.stringify(err));  //???
-                }));
             }
+            updateQuery.outFields = ["*"];
+            updateQuery.relationshipId = 0;
+
+            this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
+                var fset, i, features;
+                fset = results[item.attributes[this._itemLayer.objectIdField]];
+                features = fset ? fset.features : [];
+                for (i = 0; i < features.length; ++i) {
+                    features[i].setInfoTemplate(this._commentPopupTemplate);
+                }
+                topic.publish("updatedCommentsList", features);
+            }), lang.hitch(this, function (err) {
+                console.log(JSON.stringify(err));  //???
+            }));
         },
 
         /**
@@ -350,23 +347,27 @@ define([
         incrementVote: function (item) {
             var numVotes, itemVotesField = this._itemSpecialFields.votes;
 
-            numVotes = 1;
-            if (item.attributes[itemVotesField]) {
-                numVotes = item.attributes[itemVotesField] + 1;
-            }
-            item.attributes[itemVotesField] = numVotes;
-
-            this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
-                if (updates.length === 0) {
-                    topic.publish("voteUpdateFailed", "missing field");
-                } else if (updates[0].error) {
-                    topic.publish("voteUpdateFailed", updates[0].error);
-                } else {
-                    topic.publish("voteUpdated", item);
+            if (itemVotesField.length > 0) {
+                numVotes = 1;
+                if (item.attributes[itemVotesField]) {
+                    numVotes = item.attributes[itemVotesField] + 1;
                 }
-            }), lang.hitch(this, function (err) {
-                topic.publish("voteUpdateFailed", JSON.stringify(err));
-            }));
+                item.attributes[itemVotesField] = numVotes;
+
+                this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
+                    if (updates.length === 0) {
+                        topic.publish("voteUpdateFailed", "missing field");
+                    } else if (updates[0].error) {
+                        topic.publish("voteUpdateFailed", updates[0].error);
+                    } else {
+                        topic.publish("voteUpdated", item);
+                    }
+                }), lang.hitch(this, function (err) {
+                    topic.publish("voteUpdateFailed", JSON.stringify(err));
+                }));
+            } else {
+                topic.publish("voteUpdateFailed", this.appConfig.i18n.map.missingVotesField);
+            }
         }
 
     });

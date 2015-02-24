@@ -30,26 +30,31 @@
             "type": "boolean",
             "tooltip": "Display and enable button for a Google+ sign-in"
         }, {
-            "label": "Ideas layer and 'up-votes' field",
-            "fieldName": "ideasLayer",
-            "type": "layerandfieldselector",
-            "tooltip": "Choose the layer to hold ideas and its field to hold the count of up-votes",
-            "layerOptions": {
-                "supportedTypes": ["FeatureLayer"],
-                "geometryTypes": ["esriGeometryPoint", "esriGeometryLine", "esriGeometryPolyline", "esriGeometryPolygon"]
-            },
-            "fieldOptions": {
-                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"]
-            }
+            "label": "Idea fields",
+            "fieldName": "ideaFields",
+            "type": "string",
+            "placeholder": "Name,Date,Votes",
+            "tooltip": "Field names for the 'name', 'date', and 'votes' fields separated by commas"
         }]
     }],
     "values": {
         "title": "Title",
+        "displayText": "",
         "color": "#206bdb",
         "allowUpVotes": false,
-        "allowFacebook": false,
-        "allowGoogle": false,
-        "ideasLayer": null,
-        "commentsTable": null
+        "allowFacebook": true,
+        "allowGoogle": true,
+        "allowTwitter": true,
+        "ideaFields": "Name,Date,Votes",
+        "commentFields": "Name,Date",
+        "facebookAppId": "",
+        "facebookAppScope": "",
+        "googleplusClientId": "",
+        "googleplusScope": "",
+        "twitterSigninUrl": "",
+        "twitterUserUrl": "",
+        "twitterCallbackPage": "",
+        "socialMediaDisclaimer": ""
     }
 }
+

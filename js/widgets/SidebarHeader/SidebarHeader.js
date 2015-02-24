@@ -48,7 +48,8 @@ define([
         /**
          * Widget constructor
          * @param {object} initialProps Initialization properties:
-         *     appConfig: Application configuration
+         *     appConfig: Application configuration,
+         *     showSignin: {boolean} Indicates if sign-in is to be available
          * @constructor
          */
 
@@ -63,21 +64,21 @@ define([
 
             // Set up the UI
             domStyle.set(this.signInBtn, "display", "none");
+            if (this.showSignin) {
+                // Set up the button click handlers
+                this._signInBtnOnClick = on(this.signInBtn, "click", function () {
+                    topic.publish("socialSelected");
+                });
+                this.own(this._signInBtnOnClick);
+            }
 
             this.helpBtn.title = i18n.helpButtonTooltip;
-
-            this.appTitle.innerHTML = this.appConfig.title || "";
-
-            // Set up the button click handlers
-            this._signInBtnOnClick = on(this.signInBtn, "click", function () {
-                topic.publish("socialSelected");
-            });
-            this.own(this._signInBtnOnClick);
-
             this._helpBtnOnClick = on(this.helpBtn, "click", function () {
                 topic.publish("helpSelected");
             });
             this.own(this._helpBtnOnClick);
+
+            this.appTitle.innerHTML = this.appConfig.title || "";
         },
 
         /**

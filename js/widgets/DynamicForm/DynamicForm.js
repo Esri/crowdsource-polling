@@ -159,7 +159,9 @@ define([
          * @param {array} fields Fields with which to generate form
          * @return {array} List of form entries, each of which is an object containing
          * "field" ({string}, name of field) and "input" ({object}, UI form item) or
-         * "value ({object} invisible form item value)
+         * "value ({object} invisible form item value); may also publish "showError" with
+         * the i18n dynamic_form.unsettableRequiredField message if there's an invisible
+         * and uninitialized required field
          */
         generateForm: function (formDivName, fields) {
             var pThis = this, formDiv, form, nextReqFldStatusFlag = 1, i18n = this.appConfig.i18n.dynamic_form;

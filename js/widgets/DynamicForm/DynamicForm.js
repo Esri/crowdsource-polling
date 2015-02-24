@@ -333,17 +333,21 @@ define([
                         });
                     }
 
-                // If a form item is invisible but pre-set, add it to the form
-                } else if (this._presets[field.name]) {
-                    form.push({
-                        "field": field,
-                        "value": this._presets[field.name]
-                    });
+                // Special handling for invisible yet editable form items
+                } else if (field.dtIsEditable) {
+                    // If a form item is invisible but pre-set, add it to the form
+                    if (this._presets[field.name]) {
+                        form.push({
+                            "field": field,
+                            "value": this._presets[field.name]
+                        });
 
-                // If a form item is invisible and required but not pre-set, then the form
-                // can't meet the condition for submission that all required fields have values
-                } else if (!field.nullable) {
-                    topic.publish("showError", this.appConfig.i18n.dynamic_form.unsettableRequiredField);
+                    // If a form item is invisible and required but not pre-set, then the form
+                    // can't meet the condition for submission that all required fields have values
+                    } else if (!field.nullable) {
+                        topic.publish("showError", "[" + field.alias + "]<br>"
+                            + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
+                    }
                 }
             }));
 

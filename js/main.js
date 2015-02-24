@@ -393,7 +393,8 @@ define([
 
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
-                    "appConfig": this.config
+                    "appConfig": this.config,
+                    "showSignin": this.config.allowFacebook || this.config.allowGoogle || this.config.allowTwitter
                 }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
 
                 // Social media

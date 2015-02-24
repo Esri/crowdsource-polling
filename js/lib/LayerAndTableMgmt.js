@@ -206,8 +206,8 @@ define([
                     // the two are not involved in any other relationships
                     if (this._itemLayer.relationships.length !== 1 ||
                             this._commentTable.relationships.length !== 1 ||
-                            this._itemLayer.relationships[0].name !== this._commentTable.name ||
-                            this._itemLayer.name !== this._commentTable.relationships[0].name) {
+                            this._itemLayer.relationships[0].relatedTableId !== this._commentTable.layerId ||
+                            this._itemLayer.layerId !== this._commentTable.relationships[0].relatedTableId) {
                         deferred.reject(this.appConfig.i18n.map.unsupportedRelationship);
                     }
                     this._primaryKeyField = this._itemLayer.relationships[0].keyField;

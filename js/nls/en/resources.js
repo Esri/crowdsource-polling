@@ -43,6 +43,7 @@ define(({
     },
     dynamic_form: {
         optional: " (optional)",
+        unsettableRequiredField: "A required field is neither invisible nor initialized",
         charactersRemaining: "Characters remaining",
         cancel: "Cancel",
         submit: "Submit Comment"

@@ -94,17 +94,19 @@ define([
                 topic.publish("signinUpdate");
             }
 
-            facebook = new SocialFB(this.appConfig);
-            facebook.init(FBCallback);
+            if (this.appConfig.allowFacebook) {
+                facebook = new SocialFB(this.appConfig);
+                facebook.init(FBCallback);
 
-            this.buttonFB = this.addButton("images/FB-f-Logo__blue_29.png", i18n.signIntoFacebook);
-            on(this.buttonFB, "click", function () {
-                if (facebook.isSignedIn()) {
-                    facebook.signOut();
-                } else {
-                    facebook.signIn();
-                }
-            });
+                this.buttonFB = this.addButton("images/FB-f-Logo__blue_29.png", i18n.signIntoFacebook);
+                on(this.buttonFB, "click", function () {
+                    if (facebook.isSignedIn()) {
+                        facebook.signOut();
+                    } else {
+                        facebook.signIn();
+                    }
+                });
+            }
 
             // Google+
             function GPCallback(response) {
@@ -129,17 +131,19 @@ define([
                 topic.publish("signinUpdate");
             }
 
-            google = new SocialGP(this.appConfig);
-            google.init(GPCallback);
+            if (this.appConfig.allowGoogle) {
+                google = new SocialGP(this.appConfig);
+                google.init(GPCallback);
 
-            this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlus);
-            on(this.buttonGP, "click", function () {
-                if (google.isSignedIn()) {
-                    google.signOut();
-                } else {
-                    google.signIn();
-                }
-            });
+                this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlus);
+                on(this.buttonGP, "click", function () {
+                    if (google.isSignedIn()) {
+                        google.signOut();
+                    } else {
+                        google.signIn();
+                    }
+                });
+            }
 
             // Twitter
             function TWCallback(response) {
@@ -164,17 +168,19 @@ define([
                 topic.publish("signinUpdate");
             }
 
-            twitter = new SocialTW(this.appConfig);
-            twitter.init(TWCallback);
+            if (this.appConfig.allowTwitter) {
+                twitter = new SocialTW(this.appConfig);
+                twitter.init(TWCallback);
 
-            this.buttonTW = this.addButton("images/Twitter_logo_blue_29.png", i18n.signIntoTwitter);
-            on(this.buttonTW, "click", function () {
-                if (twitter.isSignedIn()) {
-                    twitter.signOut();
-                } else {
-                    twitter.signIn();
-                }
-            });
+                this.buttonTW = this.addButton("images/Twitter_logo_blue_29.png", i18n.signIntoTwitter);
+                on(this.buttonTW, "click", function () {
+                    if (twitter.isSignedIn()) {
+                        twitter.signOut();
+                    } else {
+                        twitter.signIn();
+                    }
+                });
+            }
 
             // Add the note before the sign-in buttons
             this.disclaimer.innerHTML = this.appConfig.socialMediaDisclaimer;

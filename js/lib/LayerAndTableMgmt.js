@@ -321,18 +321,36 @@ define([
             var updateQuery = new RelationshipQuery();
             updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
             updateQuery.returnGeometry = true;
-            if (this._commentSpecialFields.date.length > 0) {
-                updateQuery.orderByFields = [this._commentSpecialFields.date + " DESC"];
-            }
             updateQuery.outFields = ["*"];
             updateQuery.relationshipId = 0;
 
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
-                var fset, i, features;
+                var pThis = this, fset, i, features;
+
+                // Function for descending-date-order sort
+                function sortByDate(a, b) {
+                    if (a.attributes[pThis._commentSpecialFields.date] > b.attributes[pThis._commentSpecialFields.date]) {
+                        return -1;  // order a before b
+                    }
+                    if (a.attributes[pThis._commentSpecialFields.date] < b.attributes[pThis._commentSpecialFields.date]) {
+                        return 1;  // order b before a
+                    }
+                    return 0;  // a & b have same date, so relative order doesn't matter
+                }
+
                 fset = results[item.attributes[this._itemLayer.objectIdField]];
                 features = fset ? fset.features : [];
-                for (i = 0; i < features.length; ++i) {
-                    features[i].setInfoTemplate(this._commentPopupTemplate);
+
+                if (features.length > 0) {
+                    // Sort by descending date order
+                    if (this._commentSpecialFields.date.length > 0) {
+                        features.sort(sortByDate);
+                    }
+
+                    // Add the comment table popup
+                    for (i = 0; i < features.length; ++i) {
+                        features[i].setInfoTemplate(this._commentPopupTemplate);
+                    }
                 }
                 topic.publish("updatedCommentsList", features);
             }), lang.hitch(this, function (err) {

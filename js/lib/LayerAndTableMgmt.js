@@ -51,8 +51,6 @@ define([
 
     return declare([], {
         appConfig: null,
-        _itemSpecialFields: null,
-        _commentSpecialFields: null,
 
         /**
          * Encapsulates the management of a layer and its related table.
@@ -60,41 +58,7 @@ define([
          * @constructor
          */
         constructor: function (config) {
-            var fieldsSplit;
             this.appConfig = config;
-
-            // Save the names of ideas layer fields that we'll need to interact with
-            fieldsSplit = this.appConfig.ideaFields.trim().split(",").concat("", "");  // provide defaults
-            this._itemSpecialFields = {
-                "name": fieldsSplit[0].trim(),
-                "date": fieldsSplit[1].trim(),
-                "votes": fieldsSplit[2].trim()
-            };
-
-            // Save the names of comment table fields that we'll need to interact with
-            fieldsSplit = this.appConfig.commentFields.trim().split(",").concat("");  // provide defaults
-            this._commentSpecialFields = {
-                "name": fieldsSplit[0].trim(),
-                "date": fieldsSplit[1].trim()
-            };
-        },
-
-        /**
-         * Returns the layer field names of the item layer's special-purpose fields.
-         * @return {object} Returns the layer field names serving the roles of "name",
-         * "date", and "votes"
-         */
-        getItemSpecialFields: function () {
-            return this._itemSpecialFields;
-        },
-
-        /**
-         * Returns the layer field names of the item comment table's special-purpose fields.
-         * @return {object} Returns the table field name serving the role of "name" and
-         * "date"
-         */
-        getCommentSpecialFields: function () {
-            return this._commentSpecialFields;
         },
 
         /**
@@ -265,9 +229,7 @@ define([
             var updateQuery = new Query();
             updateQuery.where = "1=1";
             updateQuery.returnGeometry = true;
-            if (this._itemSpecialFields.date.length > 0) {
-                updateQuery.orderByFields = [this._itemSpecialFields.date + " DESC"];
-            }
+            updateQuery.orderByFields = [this._itemLayer.objectIdField + " DESC"];
             updateQuery.outFields = ["*"];
             if (extent) {
                 updateQuery.geometry = extent;
@@ -327,12 +289,12 @@ define([
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
                 var pThis = this, fset, i, features;
 
-                // Function for descending-date-order sort
-                function sortByDate(a, b) {
-                    if (a.attributes[pThis._commentSpecialFields.date] > b.attributes[pThis._commentSpecialFields.date]) {
+                // Function for descending-OID-order sort
+                function sortByOID(a, b) {
+                    if (a.attributes[pThis._commentTable.objectIdField] > b.attributes[pThis._commentTable.objectIdField]) {
                         return -1;  // order a before b
                     }
-                    if (a.attributes[pThis._commentSpecialFields.date] < b.attributes[pThis._commentSpecialFields.date]) {
+                    if (a.attributes[pThis._commentTable.objectIdField] < b.attributes[pThis._commentTable.objectIdField]) {
                         return 1;  // order b before a
                     }
                     return 0;  // a & b have same date, so relative order doesn't matter
@@ -342,10 +304,8 @@ define([
                 features = fset ? fset.features : [];
 
                 if (features.length > 0) {
-                    // Sort by descending date order
-                    if (this._commentSpecialFields.date.length > 0) {
-                        features.sort(sortByDate);
-                    }
+                    // Sort by descending OID order
+                    features.sort(sortByOID);
 
                     // Add the comment table popup
                     for (i = 0; i < features.length; ++i) {
@@ -363,14 +323,14 @@ define([
          * @param {object} item Item to update
          */
         incrementVote: function (item) {
-            var numVotes, itemVotesField = this._itemSpecialFields.votes;
+            var numVotes;
 
-            if (itemVotesField.length > 0) {
+            if (this.appConfig.itemVotesField.length > 0) {
                 numVotes = 1;
-                if (item.attributes[itemVotesField]) {
-                    numVotes = item.attributes[itemVotesField] + 1;
+                if (item.attributes[this.appConfig.itemVotesField]) {
+                    numVotes = item.attributes[this.appConfig.itemVotesField] + 1;
                 }
-                item.attributes[itemVotesField] = numVotes;
+                item.attributes[this.appConfig.itemVotesField] = numVotes;
 
                 this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
                     if (updates.length === 0) {
@@ -383,8 +343,6 @@ define([
                 }), lang.hitch(this, function (err) {
                     topic.publish("voteUpdateFailed", JSON.stringify(err));
                 }));
-            } else {
-                topic.publish("voteUpdateFailed", this.appConfig.i18n.map.missingVotesField);
             }
         }
 

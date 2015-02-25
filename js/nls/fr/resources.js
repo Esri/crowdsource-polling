@@ -20,8 +20,7 @@ define(({
         layerLoad: "Impossible de charger entièrement la carte",
         missingItems: "La couche de questions est manquant",
         missingComments: "Le tableau des commentaires est manquant",
-        unsupportedRelationship: "Seule une relation 1:1 entre la couche d'entités et la table de commentaire est soutenu",
-        missingVotesField: "Il est nécessaire de configurer un nom de domaine pour les votes dans 'ideaFields'"
+        unsupportedRelationship: "Seule une relation 1:1 entre la couche d'entités et la table de commentaire est soutenu"
     },
     sidebar_header: {
         signInButton: "Se Connecter",

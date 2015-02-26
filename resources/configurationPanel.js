@@ -73,18 +73,13 @@
         "title": "Title",
         "displayText": "",
         "color": "#206bdb",
+        "commentNameField": "",
+        "itemVotesField": "",
         "allowFacebook": true,
         "allowGoogle": true,
         "allowTwitter": true,
-        "ideaFields": "Name,Date,Votes",
-        "commentFields": "Name,Date",
         "facebookAppId": "",
-        "facebookAppScope": "",
         "googleplusClientId": "",
-        "googleplusScope": "",
-        "twitterSigninUrl": "",
-        "twitterUserUrl": "",
-        "twitterCallbackPage": "",
         "socialMediaDisclaimer": ""
     }
 }

@@ -205,12 +205,22 @@ define([
                 function updateRequiredFieldStatus() {
                     if (row.requiredFieldFlag) {
                         // Update the field for this item
-                        if (inputItem.value.toString().length > 0) {
-                            // Have value, so clear spot in mask
-                            pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
-                        } else {
-                            // No value, so set spot in mask
-                            pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                        if (inputItem.attr) {  // Dojo item
+                            if (inputItem.attr("value") !== null) {
+                                // Have value, so clear spot in mask
+                                pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
+                            } else {
+                                // No value, so set spot in mask
+                                pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                            }
+                        } else {               // HTML item
+                            if (inputItem.value.toString().length > 0) {
+                                // Have value, so clear spot in mask
+                                pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
+                            } else {
+                                // No value, so set spot in mask
+                                pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                            }
                         }
 
                         // Update the visibility of the save button based on status all of

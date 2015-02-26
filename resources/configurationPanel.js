@@ -26,7 +26,7 @@
             "fieldName": "commentNameField",
             "type": "string",
             "placeHolder": "",
-            "tooltip": "Name of field in the table that stores the commenter’s name"
+            "tooltip": "Name of field in the table that stores the commenter's name"
         }, {
             "label": "Votes Field",
             "fieldName": "itemVotesField",
@@ -73,18 +73,13 @@
         "title": "Title",
         "displayText": "",
         "color": "#206bdb",
+        "commentNameField": "",
+        "itemVotesField": "",
         "allowFacebook": true,
         "allowGoogle": true,
         "allowTwitter": true,
-        "ideaFields": "Name,Date,Votes",
-        "commentFields": "Name,Date",
         "facebookAppId": "",
-        "facebookAppScope": "",
         "googleplusClientId": "",
-        "googleplusScope": "",
-        "twitterSigninUrl": "",
-        "twitterUserUrl": "",
-        "twitterCallbackPage": "",
         "socialMediaDisclaimer": ""
     }
 }

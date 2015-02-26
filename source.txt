@@ -1,5 +1,5 @@
-commit 3f3576c75350b6c008695648f6c431e66890197e
+commit d877ce1a4d8b84a9ff40cda96b93034b320967e6
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Feb 26 10:44:23 2015 -0800
+Date:   Thu Feb 26 11:03:43 2015 -0800
 
-    Synchronized configuration and defaults
+    Only show help button if it has anything in it

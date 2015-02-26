@@ -26,7 +26,7 @@
             "fieldName": "commentNameField",
             "type": "string",
             "placeHolder": "",
-            "tooltip": "Name of field in the table that stores the commenter’s name"
+            "tooltip": "Name of field in the table that stores the commenter's name"
         }, {
             "label": "Votes Field",
             "fieldName": "itemVotesField",

@@ -31,36 +31,46 @@ define({
     "title": "Title",
     "displayText": "<b>Welcome to the crowdsource polling application</b><hr/> The crowdsource polling application helps residents locate a government facility and obtain information about curbside and dropoff services provided by a government agency. To locate a service, simply enter an address or activity in the search box, or use your current location. Your location will then be highlighted on the map and relevant information about available curbside and dropoff services will be presented to the user. It allows the general public to contribute missing site address locations and provide contact information for current addresses. It is used to enlist citizens and members of the general public in the continuous improvement of address and contact information across our community. ",
     "color": "#206bdb",
-    "allowUpVotes": false,
+    "commentNameField": "Name",
+    "itemVotesField": "Votes",
     "allowFacebook": true,
     "allowGoogle": true,
     "allowTwitter": true,
-    "ideaFields": "Name,Date,Votes",
-    "commentFields": "Name,Date",
     "facebookAppId": "808394189204220",
-    "facebookAppScope": "public_profile",
     "googleplusClientId": "862973275076-qadao43h9btc27oui3mfhj846rh4so6o.apps.googleusercontent.com",
-    "googleplusScope": "https://www.googleapis.com/auth/userinfo.profile",
-    "twitterSigninUrl": location.protocol + "//utility.arcgis.com/tproxy/signin",
-    "twitterUserUrl": location.protocol + "//utility.arcgis.com/tproxy/proxy/1.1/account/verify_credentials.json?q=&include_entities=true&skip_status=true&locale=en",
-    "twitterCallbackPage": "/oauth-callback.html",
     "socialMediaDisclaimer": "<b>Disclaimer</b><hr>Proin tristique volutpat velit ut mollis. Nulla tincidunt diam nec orci lobortis cursus et ut metus. Duis vel posuere nulla, sit amet sollicitudin tellus. Vivamus molestie vestibulum velit, nec lobortis felis scelerisque a. Ut ac ex odio. Nam finibus elit auctor turpis varius bibendum. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut augue ipsum, eleifend at ante ut, tincidunt sollicitudin justo. In vitae magna faucibus, mattis arcu sed, dictum justo. Sed porta sem velit, eu egestas odio pretium at. Quisque condimentum efficitur consequat. Suspendisse eu eros volutpat, ultrices nunc quis, pellentesque turpis. In vitae sodales sapien, eget tincidunt lectus. Proin vitae tempus nisi, quis posuere urna. Mauris vestibulum augue vel nisi lobortis sollicitudin. Maecenas elementum, ante vel auctor pharetra, nisl nunc tempor ante, quis blandit dolor enim at ex.<br><br>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce non neque accumsan, elementum sem vel, blandit odio. Etiam scelerisque iaculis aliquet. Ut varius turpis felis, fringilla placerat purus aliquet vitae. Integer orci elit, iaculis et diam eu, ultricies luctus magna. Donec semper felis et rutrum egestas. Phasellus congue scelerisque diam, sit amet fringilla ipsum aliquam sed. Ut scelerisque, ipsum sit amet suscipit elementum, leo massa eleifend dui, nec pretium ligula urna mollis ipsum. Donec porttitor dui eget porta facilisis. Proin ullamcorper sapien sit amet ultricies fringilla. Nunc ex velit, lobortis at urna in, pellentesque feugiat risus.<br><br>Nam pellentesque enim ex, a pulvinar ante placerat ac. Proin at leo sit amet metus aliquam tincidunt eget eu urna. Nulla ullamcorper facilisis facilisis. Pellentesque non erat orci. Suspendisse odio arcu, porta tempus aliquam ac, elementum in nibh. Etiam suscipit orci at turpis tempor rutrum. Fusce mollis orci in diam iaculis elementum. Vivamus ligula elit, vestibulum nec lectus vel, porta vulputate turpis. Nunc ut libero pellentesque, pellentesque est in, ultrices felis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed gravida vitae mi vel placerat. Ut consectetur consectetur diam, at blandit quam posuere vel.",
 
 
+    "ideaFields": "Name,Date,Votes",
+    "commentFields": "Name,Date",
+
     //"webmap": "f4271409b18e46d8836a8f52af72583c",  // Crowdsourcing Locations map nopopups
     //"webmap": "3e738c780fcc43c1b1a5f123dd0d3f6c",  // Crowdsourcing Locations map w/popups
+    //"commentNameField": "commenter",
+    //"itemVotesField": "popularity",
     //"ideaFields": "source,when_,popularity",
     //"commentFields": "commenter,when_",
 
     //"webmap": "e8369b4cfd1d4599a3b07e75109ba589",  // Crowdsourcing Areas map nopopup
     //"webmap": "c17b229474da4cdcac164bfc145497f4",  // Crowdsourcing Areas map w/popup
+    //"commentNameField": "who",
+    //"itemVotesField": "votes",
     //"ideaFields": "postedBy,on_,votes",
     //"commentFields": "who,date",
 
     //"webmap": "79aaf9c6d60b4d5f91fcc56a4f000e99",  // Crowdsourcing Routes map nopopup
     //"webmap": "1b7096212a034006a40765967ecff0b9",  // Crowdsourcing Routes map w/popup
+    //"commentNameField": "by_",
+    //"itemVotesField": "likes",
     //"ideaFields": "by_,posted,likes",
     //"commentFields": "by_,posted",
+
+    //"webmap": "ad7303dd17fd4329af0779d94c0e4e6d",  // Crowdsourcing Aliases map nopopup
+    //"webmap": "06fc9f60f73442bfb873831e658dffc1",  // Crowdsourcing Aliases map w/popup
+    //"commentNameField": "cmtAuthorRaw",
+    //"itemVotesField": "votesRaw",
+    //"ideaFields": "authorRaw,dateRaw,votesRaw",
+    //"commentFields": "cmtAuthorRaw,cmdDateRaw",
 
 
     //Other template-specific properties
@@ -69,6 +79,12 @@ define({
     "backIcon": "[{'shape': {'type': 'polyline', 'points': [{x: 12, y: 18.3}, {x: 3.4, y: 9.9}, {x: 11.8, y: 1.7}, {x: 10.2, y: 0}, {x: 1.7, y: 8.3}, {x: 1.7, y: 8.2}, {x: 0, y: 9.9}, {x: 0, y: 9.9}, {x: 0, y: 9.9}, {x: 1.7, y: 11.6}, {x: 1.7, y: 11.6}, {x: 10.3, y: 20}]}, 'fill':{'r':255,'g':255,'b':255}}]",
     "commentIcon": "[{'shape': {'type': 'polyline', 'points': [{x: 0, y: 0}, {x: 0, y: 7}, {x: 1, y: 7}, {x: 1, y: 10}, {x: 4, y: 7}, {x: 11, y: 7}, {x: 11, y: 0}]}, 'fill':{'r':255,'g':255,'b':255}}]",
     "galleryIcon": "[{'shape': {'type': 'path', 'path': 'M310.7,391.8v8.3h-9.4v-8.3H310.7 M311.5,391h-11v10h11V391L311.5,391z M302.1,398.5h7.9l-1.6-5l-2.4,3.3l-1.6-1.7 L302.1,398.5z M302.9,393.5c-0.4,0-0.8,0.4-0.8,0.8c0,0.5,0.4,0.8,0.8,0.8c0.4,0,0.8-0.4,0.8-0.8 C303.6,393.9,303.3,393.5,302.9,393.5z'},'fill':{'r':0,'g':0,'b':0,'a':.35}}]",
+
+    "facebookAppScope": "public_profile",
+    "googleplusScope": "https://www.googleapis.com/auth/userinfo.profile",
+    "twitterSigninUrl": location.protocol + "//utility.arcgis.com/tproxy/signin",
+    "twitterUserUrl": location.protocol + "//utility.arcgis.com/tproxy/proxy/1.1/account/verify_credentials.json?q=&include_entities=true&skip_status=true&locale=en",
+    "twitterCallbackPage": "/oauth-callback.html",
 
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
     //Defaults to arcgis.com. Set this value to your portal or organization host name.

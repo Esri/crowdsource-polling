@@ -351,6 +351,7 @@ body {
     left: 50%;
     border: 1px solid #CCC;
     background-color: white;
+    min-width: 32px;
 }
 .popupTitle {
     height: 32px;

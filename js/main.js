@@ -207,8 +207,11 @@ define([
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
 
+                    this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
+
                     this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
+
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
 
@@ -250,6 +253,7 @@ define([
                     this._sidebarCnt.showPanel(name);
 
                     if (name === "itemsList") {
+                        this._itemsList.clearList();
                         topic.publish("updateItems");
                     }
                 }));
@@ -369,9 +373,10 @@ define([
         _setupUI: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
+                var luminance = new Color(this.config.color).toHsl().l;
 
                 // Set the theme
-                if (new Color(this.config.color).toHsl().l > 60) {
+                if (luminance > this.config.maxDarkLuminance) {
                     this.config.theme = {
                         "background": this.config.color,  // lighter
                         "foreground": "black",
@@ -455,7 +460,8 @@ define([
                     // Optionally define additional map config here for example you can
                     // turn the slider off, display info windows, disable wraparound 180, slider position and more.
                 },
-                usePopupManager: true,
+                usePopupManager: false,  // disable searching thru all layers for infoTemplates
+                //ignorePopups: true,
                 editable: this.config.editable,
                 bingMapsKey: this.config.bingKey
             }).then(lang.hitch(this, function (response) {
@@ -470,6 +476,11 @@ define([
                     map: this.map
                 }, "LocateButton");
                 geoLocate.startup();
+
+                // Keep info window invisible when one clicks upon a graphic
+                on(this.map, "click", lang.hitch(this, function (evt) {
+                    this.map.infoWindow.hide();
+                }));
 
                 // make sure map is loaded
                 if (this.map.loaded) {

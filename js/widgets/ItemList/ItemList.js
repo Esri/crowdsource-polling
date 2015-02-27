@@ -109,6 +109,14 @@ define([
         },
 
         /**
+         * Sets the OID of the item to be considered the current selection.
+         * @param {OID} itemOID
+         */
+        setSelection: function (itemOID) {
+            this.selectedItemOID = itemOID;
+        },
+
+        /**
          * Clears the items list
          */
         clearList: function () {
@@ -138,6 +146,12 @@ define([
                 'class': 'itemSummary',
                 'click': lang.partial(this.summaryClick, this, item)
             }, this.list);
+
+            // If this item's OID matches the current selection, apply the theme to highlight it
+            if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
+                domStyle.set(itemSummaryDiv, "color", this.appConfig.theme.foreground);
+                domStyle.set(itemSummaryDiv, "background-color", this.appConfig.theme.background);
+            }
 
             domConstruct.create('div', {
                 'class': 'itemTitle',
@@ -186,16 +200,7 @@ define([
          */
         summaryClick: function (self, feat, evt) {
             // 'this' = row click
-            self.clearSelected();
-            domClass.add(this, 'selected');
             topic.publish('itemSelected', feat);
-        },
-
-        /**
-         * Clears the visual indication of any rows being selected
-         */
-        clearSelected: function () {
-            dojoQuery('.itemSummary', this.domNode).removeClass('selected');
         }
 
     });

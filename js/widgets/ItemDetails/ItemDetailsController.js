@@ -56,6 +56,7 @@ define([
         postCreate: function () {
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_details;
+            this.initItemBanner();
             this.initTemplateIcons();
             this.initCommentsDiv();
             this.initContentPane();
@@ -75,6 +76,19 @@ define([
             domStyle.set(this.domNode, 'display', 'none');
         },
 
+        /**
+         * Sets the theme colors for the item header.
+         */
+        initItemBanner: function () {
+            domStyle.set(this.itemSummary, "color", this.appConfig.theme.foreground);
+            domStyle.set(this.itemSummary, "background-color", this.appConfig.theme.background);
+            domStyle.set(this.backIcon, "background-color", this.appConfig.theme.shading);
+        },
+
+        /**
+         * Creates the icons for the Like, Comment, Gallery buttons and gives them their
+         * i18n labels and tooltips.
+         */
         initTemplateIcons: function () {
             var gallerySurface, self = this;
 
@@ -96,6 +110,9 @@ define([
             domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
         },
 
+        /**
+         * Sets up the i18n comments-list heading and the no-comments planceholder.
+         */
         initCommentsDiv: function () {
             this.commentsHeading.innerHTML = this.i18n.commentsListHeading;
             this.noCommentsDiv.innerHTML = this.i18n.noCommentsPlaceholder;

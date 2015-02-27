@@ -207,6 +207,10 @@ body {
   line-height: 30px;
 }
 
+.itemFav {
+    cursor: auto;
+}
+
 .itemSummary > div, .itemFav > div {
   display: inline-block;
 }

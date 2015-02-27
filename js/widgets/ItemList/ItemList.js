@@ -159,7 +159,8 @@ define([
             }, itemSummaryDiv);
 
             favDiv = domConstruct.create('div', {
-                'class': 'itemFav'
+                'class': 'itemFav',
+                'title': this.i18n.likesForThisItemTooltip
             }, itemSummaryDiv);
 
             domConstruct.create('div', {

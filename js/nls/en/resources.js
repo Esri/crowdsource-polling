@@ -58,6 +58,7 @@ define(({
         noCommentsPlaceholder: "No comments"
     },
     item_list: {
-        linkToMapViewOptionLabel: "Link to map view"
+        linkToMapViewOptionLabel: "Link to map view",
+        likesForThisItemTooltip: "Votes for this"
     }
 }));

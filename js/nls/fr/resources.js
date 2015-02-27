@@ -58,6 +58,7 @@ define(({
         noCommentsPlaceholder: "Il n'y a aucun commentaire"
     },
     item_list: {
-        linkToMapViewOptionLabel: "Lier les articles avec la carte"
+        linkToMapViewOptionLabel: "Lier les articles avec la carte",
+        likesForThisItemTooltip: "Votes pour cet article"
     }
 }));

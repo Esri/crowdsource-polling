@@ -1,4 +1,4 @@
-﻿/*global define,console */
+﻿/*global define,Modernizr,console */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -132,16 +132,10 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var itemSpecialFields;
-                itemSpecialFields = {
-                    "name": "",
-                    "date": "",
-                    "votes": this.config.itemVotesField
-                };
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(itemSpecialFields);
-                this._itemDetails.setItemFields(itemSpecialFields);
+                this._itemsList.setFields(this.config.itemVotesField);
+                this._itemDetails.setItemFields(this.config.itemVotesField);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 
@@ -213,6 +207,7 @@ define([
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
 
+                    this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
@@ -378,17 +373,18 @@ define([
                 // Set the theme
                 if (new Color(this.config.color).toHsl().l > 60) {
                     this.config.theme = {
-                        "background": this.config.color,
+                        "background": this.config.color,  // lighter
                         "foreground": "black",
-                        "shading": "white"
+                        "shading": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : "rgb(0, 0, 0)")
                     };
                 } else {
                     this.config.theme = {
-                        "background": this.config.color,
+                        "background": this.config.color,  // darker
                         "foreground": "white",
-                        "shading": "black"
+                        "shading": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : "rgb(0, 0, 0)")
                     };
                 }
+
 
                 //----- Add the widgets -----
 
@@ -466,7 +462,7 @@ define([
                 // Once the map is created we get access to the response which provides important info
                 // such as the map, operational layers, popup info and more. This object will also contain
                 // any custom options you defined for the template. In this example that is the 'theme' property.
-                // Here' we'll use it to update the application to match the specified color theme.
+                // Here we'll use it to update the application to match the specified color theme.
                 this.map = response.map;
 
                 // start up locate widget

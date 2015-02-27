@@ -56,7 +56,9 @@ define([
         postCreate: function () {
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_details;
+            this.initItemBanner();
             this.initTemplateIcons();
+            this.initCommentsDiv();
             this.initContentPane();
             this.hide();
         },
@@ -74,15 +76,46 @@ define([
             domStyle.set(this.domNode, 'display', 'none');
         },
 
+        /**
+         * Sets the theme colors for the item header.
+         */
+        initItemBanner: function () {
+            domStyle.set(this.itemSummary, "color", this.appConfig.theme.foreground);
+            domStyle.set(this.itemSummary, "background-color", this.appConfig.theme.background);
+            domStyle.set(this.backIcon, "background-color", this.appConfig.theme.shading);
+        },
+
+        /**
+         * Creates the icons for the Like, Comment, Gallery buttons and gives them their
+         * i18n labels and tooltips.
+         */
         initTemplateIcons: function () {
             var gallerySurface, self = this;
+
             arrayUtil.forEach(dojoQuery('.favIcon', this.domNode), function (iconDiv) {
                 SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12);
             });
+            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
+            this.likeButton.title = this.i18n.likeButtonTooltip;
+
             SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
+
             SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
+            this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
+            this.commentButton.title = this.i18n.commentButtonTooltip;
+
             gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
+            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
+            this.galleryButton.title = this.i18n.galleryButtonTooltip;
             domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
+        },
+
+        /**
+         * Sets up the i18n comments-list heading and the no-comments planceholder.
+         */
+        initCommentsDiv: function () {
+            this.commentsHeading.innerHTML = this.i18n.commentsListHeading;
+            this.noCommentsDiv.innerHTML = this.i18n.noCommentsPlaceholder;
         },
 
         addListeners: function () {
@@ -100,13 +133,12 @@ define([
 
 
         /**
-         * Sets the fields that are needed to display feature information in this list (name and number of votes).
+         * Sets the fields that are needed to display feature information in this list (number of votes).
          * Needs to be called before first setItems to tell the widget which fields to look for.
-         * @param {object} fields with name and votes properties.
+         * @param {string} votesField Name of votes property
          */
-        setItemFields: function (fields) {
-            this.nameField = fields.name;
-            this.votesField = fields.votes;
+        setItemFields: function (votesField) {
+            this.votesField = votesField;
         },
 
         setCommentFields: function (fields) {
@@ -122,7 +154,6 @@ define([
             this.item = item;
             this.itemTitle = this.getItemTitle(item);
             this.itemVotes = this.getItemVotes(item);
-            this.fixNoUsername(item, this.nameField);
             this.clearItemDisplay();
             this.buildItemDisplay();
         },
@@ -133,21 +164,7 @@ define([
          * @return {string}      The title of the feature
          */
         getItemTitle: function (item) {
-
-            var returnTitle = item.getTitle ? item.getTitle() : null;
-
-            return returnTitle || this.i18n.untitledItem;
-
-            // alternative title calculating
-            /*switch (returnTitle) {
-            case item.getLayer().name + ':':
-                returnTitle += ' ';
-                // there's no break statement here on purpose!
-            case null:
-                returnTitle += item.attributes[this.nameField] || this.i18n.untitledItem;
-                break;
-            }
-            return returnTitle;*/
+            return item.getTitle ? item.getTitle() : "";
         },
 
         /**
@@ -157,12 +174,6 @@ define([
          */
         getItemVotes: function (item) {
             return item.attributes[this.votesField] || 0;
-        },
-
-        fixNoUsername: function (item, field) {
-            if (!item.attributes[field]) {
-                item.attributes[field] = this.i18n.anonymousUser;
-            }
         },
 
         clearItemDisplay: function () {
@@ -184,47 +195,37 @@ define([
 
         },
 
+        /**
+         * Updates the definition and display of the current item.
+         * @param {object} item Updated definition of current item
+         */
         updateItem: function (item) {
             if (item === this.item) {
                 this.setItem(item);
             }
         },
 
+        /**
+         * Creates a ContentPane to hold the contents of a comment.
+         * @param {object} comment Comment to display; its contents come from calling
+         * getContent() on it
+         */
         buildCommentDiv: function (comment) {
-            var commentHeaderDiv, commentDiv;
-
-            this.fixNoUsername(comment, this.commentNameField);
+            var commentDiv;
 
             commentDiv = domConstruct.create('div', {
                 'class': 'comment'
             }, this.commentsList);
 
-            commentHeaderDiv = domConstruct.create('div', {
-                'class': 'header'
-            }, commentDiv);
-
-            domConstruct.create('div', {
-                'class': 'name',
-                'innerHTML': 'Heres a name'
-            }, commentHeaderDiv);
-
-            domConstruct.create('div', {
-                'class': 'date',
-                'innerHTML': 'heres a date'
-            }, commentHeaderDiv);
-
             new ContentPane({
                 'class': 'content small-text',
                 'content': comment.getContent()
             }, commentDiv).startup();
-
-            // domConstruct.create('div', {
-            //     'class': 'content small-text',
-            //     'innerHTML': 'heres the actual content. la la la. lorem ipsum somethingorother'
-            // }, commentDiv);
-
         },
 
+        /**
+         * Empties the list of comments.
+         */
         clearComments: function () {
             domConstruct.empty(this.commentsList);
         }

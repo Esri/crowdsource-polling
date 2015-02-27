@@ -207,6 +207,7 @@ define([
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
 
+                    this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");

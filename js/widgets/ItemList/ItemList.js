@@ -167,21 +167,7 @@ define([
          * @return {string}      The title of the feature
          */
         getItemTitle: function (item) {
-
-            var returnTitle = item.getTitle ? item.getTitle() : null;
-
-            return returnTitle || this.i18n.untitledItem;
-
-            // alternative title calculating
-            /*switch (returnTitle) {
-            case item.getLayer().name + ':':
-                returnTitle += ' ';
-                // there's no break statement here on purpose!
-            case null:
-                returnTitle += item.attributes[this.nameField] || this.i18n.untitledItem;
-                break;
-            }
-            return returnTitle;*/
+            return item.getTitle ? item.getTitle() : "";
         },
 
         /**

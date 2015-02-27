@@ -195,45 +195,37 @@ define([
 
         },
 
+        /**
+         * Updates the definition and display of the current item.
+         * @param {object} item Updated definition of current item
+         */
         updateItem: function (item) {
             if (item === this.item) {
                 this.setItem(item);
             }
         },
 
+        /**
+         * Creates a ContentPane to hold the contents of a comment.
+         * @param {object} comment Comment to display; its contents come from calling
+         * getContent() on it
+         */
         buildCommentDiv: function (comment) {
-            var commentHeaderDiv, commentDiv;
+            var commentDiv;
 
             commentDiv = domConstruct.create('div', {
                 'class': 'comment'
             }, this.commentsList);
 
-            commentHeaderDiv = domConstruct.create('div', {
-                'class': 'header'
-            }, commentDiv);
-
-            domConstruct.create('div', {
-                'class': 'name',
-                'innerHTML': 'Heres a name'
-            }, commentHeaderDiv);
-
-            domConstruct.create('div', {
-                'class': 'date',
-                'innerHTML': 'heres a date'
-            }, commentHeaderDiv);
-
             new ContentPane({
                 'class': 'content small-text',
                 'content': comment.getContent()
             }, commentDiv).startup();
-
-            // domConstruct.create('div', {
-            //     'class': 'content small-text',
-            //     'innerHTML': 'heres the actual content. la la la. lorem ipsum somethingorother'
-            // }, commentDiv);
-
         },
 
+        /**
+         * Empties the list of comments.
+         */
         clearComments: function () {
             domConstruct.empty(this.commentsList);
         }

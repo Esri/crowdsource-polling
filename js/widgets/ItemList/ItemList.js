@@ -90,13 +90,12 @@ define([
         },
 
         /**
-         * Sets the fields that are needed to display feature information in this list (name and number of votes).
+         * Sets the fields that are needed to display feature information in this list (number of votes).
          * Needs to be called before first setItems to tell the widget which fields to look for.
-         * @param {object} fields with name and votes properties.
+         * @param {string} votesField Name of votes property
          */
-        setFields: function (fields) {
-            this.nameField = fields.name;
-            this.votesField = fields.votes;
+        setFields: function (votesField) {
+            this.votesField = votesField;
         },
 
         /**

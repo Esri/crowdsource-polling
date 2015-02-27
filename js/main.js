@@ -132,16 +132,10 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var itemSpecialFields;
-                itemSpecialFields = {
-                    "name": "",
-                    "date": "",
-                    "votes": this.config.itemVotesField
-                };
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(itemSpecialFields);
-                this._itemDetails.setItemFields(itemSpecialFields);
+                this._itemsList.setFields(this.config.itemVotesField);
+                this._itemDetails.setItemFields(this.config.itemVotesField);
                 this._itemAddComment.setFields(this._mapData.getCommentFields());
 
 

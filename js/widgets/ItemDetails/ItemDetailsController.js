@@ -122,7 +122,6 @@ define([
             this.item = item;
             this.itemTitle = this.getItemTitle(item);
             this.itemVotes = this.getItemVotes(item);
-            this.fixNoUsername(item, this.nameField);
             this.clearItemDisplay();
             this.buildItemDisplay();
         },
@@ -133,21 +132,7 @@ define([
          * @return {string}      The title of the feature
          */
         getItemTitle: function (item) {
-
-            var returnTitle = item.getTitle ? item.getTitle() : null;
-
-            return returnTitle || this.i18n.untitledItem;
-
-            // alternative title calculating
-            /*switch (returnTitle) {
-            case item.getLayer().name + ':':
-                returnTitle += ' ';
-                // there's no break statement here on purpose!
-            case null:
-                returnTitle += item.attributes[this.nameField] || this.i18n.untitledItem;
-                break;
-            }
-            return returnTitle;*/
+            return item.getTitle ? item.getTitle() : "";
         },
 
         /**
@@ -157,12 +142,6 @@ define([
          */
         getItemVotes: function (item) {
             return item.attributes[this.votesField] || 0;
-        },
-
-        fixNoUsername: function (item, field) {
-            if (!item.attributes[field]) {
-                item.attributes[field] = this.i18n.anonymousUser;
-            }
         },
 
         clearItemDisplay: function () {
@@ -192,8 +171,6 @@ define([
 
         buildCommentDiv: function (comment) {
             var commentHeaderDiv, commentDiv;
-
-            this.fixNoUsername(comment, this.commentNameField);
 
             commentDiv = domConstruct.create('div', {
                 'class': 'comment'

@@ -18,8 +18,8 @@ define(({
     map: {
         error: "Impossible de créer la carte",
         layerLoad: "Impossible de charger entièrement la carte",
-        missingItems: "La couche de questions est manquant",
-        missingComments: "Le tableau des commentaires est manquant",
+        missingItemsFeatureLayer: "La couche de questions est manquant",
+        missingCommentsTable: "Le tableau des commentaires est manquant",
         unsupportedRelationship: "Seule une relation 1:1 entre la couche d'entités et la table de commentaire est soutenu"
     },
     sidebar_header: {
@@ -33,19 +33,19 @@ define(({
         closeButtonTooltip: "Fermer"
     },
     social_media: {
-        signIntoFacebook: "Connectez-vous à Facebook",
-        signIntoGooglePlus: "Connectez-vous à Google+",
-        signIntoTwitter: "Connectez-vous à Twitter",
-        signOutOfFacebook: "Se déconnecter de Facebook",
-        signOutOfGooglePlus: "Se déconnecter de Google+",
-        signOutOfTwitter: "Se déconnecter de Twitter"
+        signIntoFacebookTooltip: "Connectez-vous à Facebook",
+        signIntoGooglePlusTooltip: "Connectez-vous à Google+",
+        signIntoTwitterTooltip: "Connectez-vous à Twitter",
+        signOutOfFacebookTooltip: "Se déconnecter de Facebook",
+        signOutOfGooglePlusTooltip: "Se déconnecter de Google+",
+        signOutOfTwitterTooltip: "Se déconnecter de Twitter"
     },
     dynamic_form: {
-        optional: " (facultatif)",
+        optionalFormItemFlag: " (facultatif)",
         unsettableRequiredField: "Un champ obligatoire est ni visible ni initialisé",
-        charactersRemaining: "Caractères restants",
-        cancel: "Annuler",
-        submit: "Envoyer le commentaire"
+        countOfRemainingCharactersTooltip: "Caractères restants",
+        cancelButtonLabel: "Annuler",
+        submitButtonLabel: "Envoyer le commentaire"
     },
     item_details: {
         likeButtonLabel: "Voter",
@@ -58,6 +58,6 @@ define(({
         noCommentsPlaceholder: "Il n'y a aucun commentaire"
     },
     item_list: {
-        linkToMapView: "Lier les articles avec la carte"
+        linkToMapViewOptionLabel: "Lier les articles avec la carte"
     }
 }));

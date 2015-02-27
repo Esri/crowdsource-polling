@@ -78,7 +78,7 @@ define([
                 var facebookUser = response;
                 if (facebookUser) {
                     if (facebookUser.name) {
-                        pThis.buttonFB.title = i18n.signOutOfFacebook;
+                        pThis.buttonFB.title = i18n.signOutOfFacebookTooltip;
                         pThis._signedInUser = {
                             "name": facebookUser.name,
                             "canSignOut": true,
@@ -87,7 +87,7 @@ define([
                         pThis._currentProvider = facebook;
                         pThis.hide();
                     } else {
-                        pThis.buttonFB.title = i18n.signIntoFacebook;
+                        pThis.buttonFB.title = i18n.signIntoFacebookTooltip;
                         domStyle.set(pThis.buttonFB, "display", "inline-block");
                     }
                 }
@@ -98,7 +98,7 @@ define([
                 facebook = new SocialFB(this.appConfig);
                 facebook.init(FBCallback);
 
-                this.buttonFB = this.addButton("images/FB-f-Logo__blue_29.png", i18n.signIntoFacebook);
+                this.buttonFB = this.addButton("images/FB-f-Logo__blue_29.png", i18n.signIntoFacebookTooltip);
                 on(this.buttonFB, "click", function () {
                     if (facebook.isSignedIn()) {
                         facebook.signOut();
@@ -115,7 +115,7 @@ define([
                 var googleUser = response;
                 if (googleUser) {
                     if (googleUser.name) {
-                        pThis.buttonGP.title = i18n.signOutOfGooglePlus;
+                        pThis.buttonGP.title = i18n.signOutOfGooglePlusTooltip;
                         pThis._signedInUser = {
                             "name": googleUser.name,
                             "canSignOut": true,
@@ -124,7 +124,7 @@ define([
                         pThis._currentProvider = google;
                         pThis.hide();
                     } else {
-                        pThis.buttonGP.title = i18n.signIntoGooglePlus;
+                        pThis.buttonGP.title = i18n.signIntoGooglePlusTooltip;
                         domStyle.set(pThis.buttonGP, "display", "inline-block");
                     }
                 }
@@ -135,7 +135,7 @@ define([
                 google = new SocialGP(this.appConfig);
                 google.init(GPCallback);
 
-                this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlus);
+                this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlusTooltip);
                 on(this.buttonGP, "click", function () {
                     if (google.isSignedIn()) {
                         google.signOut();
@@ -152,7 +152,7 @@ define([
                 var twitterUser = response;
                 if (twitterUser) {
                     if (twitterUser.name) {
-                        pThis.buttonTW.title = i18n.signOutOfTwitter;
+                        pThis.buttonTW.title = i18n.signOutOfTwitterTooltip;
                         pThis._signedInUser = {
                             "name": twitterUser.name,
                             "canSignOut": false,
@@ -161,7 +161,7 @@ define([
                         pThis._currentProvider = twitter;
                         pThis.hide();
                     } else {
-                        pThis.buttonTW.title = i18n.signIntoTwitter;
+                        pThis.buttonTW.title = i18n.signIntoTwitterTooltip;
                         domStyle.set(pThis.buttonTW, "display", "inline-block");
                     }
                 }
@@ -172,7 +172,7 @@ define([
                 twitter = new SocialTW(this.appConfig);
                 twitter.init(TWCallback);
 
-                this.buttonTW = this.addButton("images/Twitter_logo_blue_29.png", i18n.signIntoTwitter);
+                this.buttonTW = this.addButton("images/Twitter_logo_blue_29.png", i18n.signIntoTwitterTooltip);
                 on(this.buttonTW, "click", function () {
                     if (twitter.isSignedIn()) {
                         twitter.signOut();

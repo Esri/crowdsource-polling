@@ -18,8 +18,8 @@ define(({
     map: {
         error: "Unable to create map",
         layerLoad: "Unable to fully load map",
-        missingItems: "Item feature layer is missing",
-        missingComments: "Comment table is missing",
+        missingItemsFeatureLayer: "Item feature layer is missing",
+        missingCommentsTable: "Comment table is missing",
         unsupportedRelationship: "Only a 1:1 relationship between the feature layer and the comment table is supported"
     },
     sidebar_header: {
@@ -33,19 +33,19 @@ define(({
         closeButtonTooltip: "Close"
     },
     social_media: {
-        signIntoFacebook: "Sign in to Facebook",
-        signIntoGooglePlus: "Sign in to Google+",
-        signIntoTwitter: "Sign in to Twitter",
-        signOutOfFacebook: "Sign in to Facebook",
-        signOutOfGooglePlus: "Sign in to Google+",
-        signOutOfTwitter: "Sign in to Twitter"
+        signIntoFacebookTooltip: "Sign in to Facebook",
+        signIntoGooglePlusTooltip: "Sign in to Google+",
+        signIntoTwitterTooltip: "Sign in to Twitter",
+        signOutOfFacebookTooltip: "Sign out of Facebook",
+        signOutOfGooglePlusTooltip: "Sign out of Google+",
+        signOutOfTwitterTooltip: "Sign out of Twitter"
     },
     dynamic_form: {
-        optional: " (optional)",
+        optionalFormItemFlag: " (optional)",
         unsettableRequiredField: "A required field is neither invisible nor initialized",
-        charactersRemaining: "Characters remaining",
-        cancel: "Cancel",
-        submit: "Submit Comment"
+        countOfRemainingCharactersTooltip: "Characters remaining",
+        cancelButtonLabel: "Cancel",
+        submitButtonLabel: "Submit Comment"
     },
     item_details: {
         likeButtonLabel: "Like",
@@ -58,6 +58,7 @@ define(({
         noCommentsPlaceholder: "No comments"
     },
     item_list: {
-        linkToMapView: "Link to map view"
+        linkToMapViewOptionLabel: "Link to map view",
+        likesForThisItemTooltip: "Votes for this"
     }
 }));

@@ -70,12 +70,12 @@ define([
             this.inherited(arguments);
             this.hide();
 
-            this.dynamicFormCancelText.innerHTML = this.appConfig.i18n.dynamic_form.cancel;
+            this.dynamicFormCancelText.innerHTML = this.appConfig.i18n.dynamic_form.cancelButtonLabel;
             on(this.dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
             }));
 
-            this.dynamicFormSubmitText.innerHTML = this.appConfig.i18n.dynamic_form.submit;
+            this.dynamicFormSubmitText.innerHTML = this.appConfig.i18n.dynamic_form.submitButtonLabel;
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
                 topic.publish("submitForm", this._item, submission);
@@ -184,7 +184,7 @@ define([
                 function createRow() {
                     return domConstruct.create("div", {
                         className: "dynamicFormRow",
-                        innerHTML: field.alias + (field.nullable ? i18n.optional : "")
+                        innerHTML: field.alias + (field.nullable ? i18n.optionalFormItemFlag : "")
                     }, formDivName);
                 }
 
@@ -241,7 +241,7 @@ define([
                         count = domConstruct.create("span", {
                             innerHTML: field.length,
                             className: "dynamicFormCharactersRemaining",
-                            title: i18n.charactersRemaining
+                            title: i18n.countOfRemainingCharactersTooltip
                         }, row);
 
                         domConstruct.create("br", {}, row);

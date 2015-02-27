@@ -63,7 +63,7 @@ define([
             this.own(on(this.linkActionBox, "change", lang.hitch(this, function () {
                 topic.publish("linkToMapViewChanged", this.linkActionBox.checked);
             })));
-            this.linkActionLabel.innerHTML = this.i18n.linkToMapView;
+            this.linkActionLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
         },
 
         /**
@@ -159,7 +159,8 @@ define([
             }, itemSummaryDiv);
 
             favDiv = domConstruct.create('div', {
-                'class': 'itemFav'
+                'class': 'itemFav',
+                'title': this.i18n.likesForThisItemTooltip
             }, itemSummaryDiv);
 
             domConstruct.create('div', {

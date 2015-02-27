@@ -113,14 +113,14 @@ define([
 
                 // Operational layer provides item fields and formats
                 if (this.appConfig.itemInfo.itemData.operationalLayers.length === 0) {
-                    deferred.reject(this.appConfig.i18n.map.missingItems);
+                    deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
                     return;
                 }
 
                 this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
                 if (!this._itemLayerInWebmap) {
-                    deferred.reject(this.appConfig.i18n.map.missingItems);
+                    deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
                     return;
                 }
 
@@ -179,7 +179,7 @@ define([
 
                     deferred.resolve();
                 }), lang.hitch(this, function () {
-                    deferred.reject(this.appConfig.i18n.map.missingComments);
+                    deferred.reject(this.appConfig.i18n.map.missingCommentsTable);
                 }));
             }));
             return deferred;

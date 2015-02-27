@@ -16,39 +16,39 @@
  */
 define({
     root: ({
-        map: {
+        map: {  // Map, feature layer, and comments table loading and checking
             error: "Unable to create map",
             layerLoad: "Unable to fully load map",
-            missingItems: "Item feature layer is missing",
-            missingComments: "Comment table is missing",
+            missingItemsFeatureLayer: "Item feature layer is missing",
+            missingCommentsTable: "Comment table is missing",
             unsupportedRelationship: "Only a 1:1 relationship between the feature layer and the comment table is supported"
         },
-        sidebar_header: {
+        sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
             signInButton: "Sign In",
             signInButtonTooltip: "Sign in to a social medium",
             signOutButton: "Sign Out",
             signOutButtonTooltip: "Disconnect this app from your social medium",
             helpButtonTooltip: "Find out more about this app"
         },
-        popup_Close: {
+        popup_Close: {  // Close button for help and social-media-sign-in popup box
             closeButtonTooltip: "Close"
         },
-        social_media: {
-            signIntoFacebook: "Sign in to Facebook",
-            signIntoGooglePlus: "Sign in to Google+",
-            signIntoTwitter: "Sign in to Twitter",
-            signOutOfFacebook: "Sign in to Facebook",
-            signOutOfGooglePlus: "Sign in to Google+",
-            signOutOfTwitter: "Sign in to Twitter"
+        social_media: {  // Social media sign-in/out
+            signIntoFacebookTooltip: "Sign in to Facebook",
+            signIntoGooglePlusTooltip: "Sign in to Google+",
+            signIntoTwitterTooltip: "Sign in to Twitter",
+            signOutOfFacebookTooltip: "Sign out of Facebook",
+            signOutOfGooglePlusTooltip: "Sign out of Google+",
+            signOutOfTwitterTooltip: "Sign out of Twitter"
         },
-        dynamic_form: {
-            optional: " (optional)",
+        dynamic_form: {  // General-purpose form; used to receive comment entry
+            optionalFormItemFlag: " (optional)",
             unsettableRequiredField: "A required field is neither invisible nor initialized",
-            charactersRemaining: "Characters remaining",
-            cancel: "Cancel",
-            submit: "Submit Comment"
+            countOfRemainingCharactersTooltip: "Characters remaining",
+            cancelButtonLabel: "Cancel",
+            submitButtonLabel: "Submit Comment"
         },
-        item_details: {
+        item_details: {  // Detailed information about an item and a list of its comments
             likeButtonLabel: "Like",
             likeButtonTooltip: "Vote for this",
             commentButtonLabel: "Comment",
@@ -58,8 +58,8 @@ define({
             commentsListHeading: "Comments",
             noCommentsPlaceholder: "No comments"
         },
-        item_list: {
-            linkToMapView: "Link to map view"
+        item_list: {  // List of feature layer items
+            linkToMapViewOptionLabel: "Link to map view"
         }
     }),
     "ar": 1,

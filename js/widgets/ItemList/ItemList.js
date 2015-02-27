@@ -63,7 +63,7 @@ define([
             this.own(on(this.linkActionBox, "change", lang.hitch(this, function () {
                 topic.publish("linkToMapViewChanged", this.linkActionBox.checked);
             })));
-            this.linkActionLabel.innerHTML = this.i18n.linkToMapView;
+            this.linkActionLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
         },
 
         /**

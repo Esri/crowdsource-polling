@@ -222,11 +222,6 @@ body {
   margin-right: 0.5em;
 }
 
-.itemList .itemSummary.selected {
-  background-color: #007ac2;
-  color: white;
-}
-
 /* ---------- itemDetail ---------- */
 
 .itemDetail > .itemSummary > div {

@@ -207,8 +207,11 @@ define([
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
 
+                    this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
+
                     this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
+
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
 
@@ -250,6 +253,7 @@ define([
                     this._sidebarCnt.showPanel(name);
 
                     if (name === "itemsList") {
+                        this._itemsList.clearList();
                         topic.publish("updateItems");
                     }
                 }));

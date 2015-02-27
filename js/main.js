@@ -369,9 +369,10 @@ define([
         _setupUI: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
+                var luminance = new Color(this.config.color).toHsl().l;
 
                 // Set the theme
-                if (new Color(this.config.color).toHsl().l > 60) {
+                if (luminance > this.config.maxDarkLuminance) {
                     this.config.theme = {
                         "background": this.config.color,  // lighter
                         "foreground": "black",

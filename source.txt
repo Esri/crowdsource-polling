@@ -1,5 +1,6 @@
-commit 1a3fc37408ad295674acc2c0d8fdb1a91514c3f4
+commit 98e3a62d9b150010ca8332b8855cfba55c631a84
+Merge: 24819bd 663360e
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Feb 26 13:47:22 2015 -0800
+Date:   Fri Feb 27 11:57:32 2015 -0800
 
-    Added required-item handling for Dojo form items
+    Merge branch 'item-display-updates' into develop

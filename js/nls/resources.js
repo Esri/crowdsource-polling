@@ -49,11 +49,16 @@ define({
             submit: "Submit Comment"
         },
         item_details: {
-            untitledItem: "Untitled Item",
-            anonymousUser: "Anonymous"
+            likeButtonLabel: "Like",
+            likeButtonTooltip: "Vote for this",
+            commentButtonLabel: "Comment",
+            commentButtonTooltip: "Add a comment about this",
+            galleryButtonLabel: "Gallery",
+            galleryButtonTooltip: "See attached photos for this",
+            commentsListHeading: "Comments",
+            noCommentsPlaceholder: "No comments"
         },
         item_list: {
-            untitledItem: "Untitled Item",
             linkToMapView: "Link to map view"
         }
     }),

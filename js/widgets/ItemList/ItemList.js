@@ -90,13 +90,12 @@ define([
         },
 
         /**
-         * Sets the fields that are needed to display feature information in this list (name and number of votes).
+         * Sets the fields that are needed to display feature information in this list (number of votes).
          * Needs to be called before first setItems to tell the widget which fields to look for.
-         * @param {object} fields with name and votes properties.
+         * @param {string} votesField Name of votes property
          */
-        setFields: function (fields) {
-            this.nameField = fields.name;
-            this.votesField = fields.votes;
+        setFields: function (votesField) {
+            this.votesField = votesField;
         },
 
         /**
@@ -167,21 +166,7 @@ define([
          * @return {string}      The title of the feature
          */
         getItemTitle: function (item) {
-
-            var returnTitle = item.getTitle ? item.getTitle() : null;
-
-            return returnTitle || this.i18n.untitledItem;
-
-            // alternative title calculating
-            /*switch (returnTitle) {
-            case item.getLayer().name + ':':
-                returnTitle += ' ';
-                // there's no break statement here on purpose!
-            case null:
-                returnTitle += item.attributes[this.nameField] || this.i18n.untitledItem;
-                break;
-            }
-            return returnTitle;*/
+            return item.getTitle ? item.getTitle() : "";
         },
 
         /**

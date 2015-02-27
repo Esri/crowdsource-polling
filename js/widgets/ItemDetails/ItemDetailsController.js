@@ -57,6 +57,7 @@ define([
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_details;
             this.initTemplateIcons();
+            this.initCommentsDiv();
             this.initContentPane();
             this.hide();
         },
@@ -76,13 +77,28 @@ define([
 
         initTemplateIcons: function () {
             var gallerySurface, self = this;
+
             arrayUtil.forEach(dojoQuery('.favIcon', this.domNode), function (iconDiv) {
                 SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12);
             });
+            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
+            this.likeButton.title = this.i18n.likeButtonTooltip;
+
             SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
+
             SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
+            this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
+            this.commentButton.title = this.i18n.commentButtonTooltip;
+
             gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
+            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
+            this.galleryButton.title = this.i18n.galleryButtonTooltip;
             domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
+        },
+
+        initCommentsDiv: function () {
+            this.commentsHeading.innerHTML = this.i18n.commentsListHeading;
+            this.noCommentsDiv.innerHTML = this.i18n.noCommentsPlaceholder;
         },
 
         addListeners: function () {

@@ -1,33 +1,33 @@
 <div>
-	<div class="itemSummary large-text">
-		<div class="back" data-dojo-attach-point="backIcon"></div>
-		<div class="itemTitle" data-dojo-attach-point="itemTitleDiv"></div>
-		<div class="itemFav">
-			<div class="itemVotes" data-dojo-attach-point="itemVotesDiv"></div>
-			<div class="icon favIcon float-right"></div>
-		</div>
-	</div>
-	<div class="itemDescription">
-		<div class="description space-below medium-text" data-dojo-attach-point="descriptionDiv"></div>
-		<div class="itemDescFooter small-text">
-			<div class="btn" data-dojo-attach-point="likeButton">
-				<div class="icon favIcon"></div>
-				<div>Like</div>
-			</div>
-			<div class="btn" data-dojo-attach-point="commentButton">
-				<div class="icon commentIcon" data-dojo-attach-point="commentIcon"></div>
-				<div>Comment</div>
-			</div>
+    <div class="itemSummary large-text">
+        <div class="back" data-dojo-attach-point="backIcon"></div>
+        <div class="itemTitle" data-dojo-attach-point="itemTitleDiv"></div>
+        <div class="itemFav">
+            <div class="itemVotes" data-dojo-attach-point="itemVotesDiv"></div>
+            <div class="icon favIcon float-right"></div>
+        </div>
+    </div>
+    <div class="itemDescription">
+        <div class="description space-below medium-text" data-dojo-attach-point="descriptionDiv"></div>
+        <div class="itemDescFooter small-text">
+            <div class="btn" data-dojo-attach-point="likeButton">
+                <div class="icon favIcon"></div>
+                <div data-dojo-attach-point="likeLabel"></div>
+            </div>
+            <div class="btn" data-dojo-attach-point="commentButton">
+                <div class="icon commentIcon" data-dojo-attach-point="commentIcon"></div>
+                <div data-dojo-attach-point="commentLabel"></div>
+            </div>
 
-			<div class="btn float-right" data-dojo-attach-point="galleryButton">
-				<div class="icon galleryIcon"data-dojo-attach-point="galleryIcon"></div>
-				<div>Gallery</div>
-			</div>
-		</div>
-	</div>
-	<div class="itemComments">
-		<div class="header large-text">Comments</div>
-		<div class="medium-text center-please" data-dojo-attach-point="noCommentsDiv">No comments</div>
-		<div class="medium-text" data-dojo-attach-point="commentsList"></div>
-	</div>	
+            <div class="btn float-right" data-dojo-attach-point="galleryButton">
+                <div class="icon galleryIcon"data-dojo-attach-point="galleryIcon"></div>
+                <div data-dojo-attach-point="galleryLabel"></div>
+            </div>
+        </div>
+    </div>
+    <div class="itemComments">
+        <div class="header large-text" data-dojo-attach-point="commentsHeading"></div>
+        <div class="medium-text center-please" data-dojo-attach-point="noCommentsDiv"></div>
+        <div class="medium-text" data-dojo-attach-point="commentsList"></div>
+    </div>
 </div>

@@ -48,11 +48,16 @@ define(({
         submit: "Envoyer le commentaire"
     },
     item_details: {
-        untitledItem: "Sans Titre",
-        anonymousUser: "Anonyme"
+        likeButtonLabel: "Voter",
+        likeButtonTooltip: "Voter pour cet article",
+        commentButtonLabel: "Commenter",
+        commentButtonTooltip: "Ajouter un commentaire à propos de cet article",
+        galleryButtonLabel: "Voir la galerie",
+        galleryButtonTooltip: "Voir photos ci-jointes pour cet article",
+        commentsListHeading: "Commentaires",
+        noCommentsPlaceholder: "Il n'y a aucun commentaire"
     },
     item_list: {
-        untitledItem: "Sans Titre",
         linkToMapView: "Lier les articles avec la carte"
     }
 }));

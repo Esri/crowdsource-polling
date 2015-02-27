@@ -456,7 +456,8 @@ define([
                     // Optionally define additional map config here for example you can
                     // turn the slider off, display info windows, disable wraparound 180, slider position and more.
                 },
-                usePopupManager: true,
+                usePopupManager: false,  // disable searching thru all layers for infoTemplates
+                //ignorePopups: true,
                 editable: this.config.editable,
                 bingMapsKey: this.config.bingKey
             }).then(lang.hitch(this, function (response) {
@@ -471,6 +472,11 @@ define([
                     map: this.map
                 }, "LocateButton");
                 geoLocate.startup();
+
+                // Keep info window invisible when one clicks upon a graphic
+                on(this.map, "click", lang.hitch(this, function (evt) {
+                    this.map.infoWindow.hide();
+                }));
 
                 // make sure map is loaded
                 if (this.map.loaded) {

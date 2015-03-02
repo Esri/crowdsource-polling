@@ -26,7 +26,6 @@ define([
     //========================================================================================================================//
 
     return declare([], {
-        _isIE8: null,
         _config: null,
         _loggedIn: null,
         _user: null,
@@ -48,7 +47,7 @@ define([
          * @memberOf social#
          */
         isAvailable: function () {
-            return this.testForIE8();
+            return !this._config.isIE8;
         },
 
         /**
@@ -60,7 +59,7 @@ define([
         init: function (statusCallback) {
             this._statusCallback = statusCallback;
 
-            if (this.testForIE8()) {
+            if (this._config.isIE8) {
                 statusCallback(null);
                 return;
             }
@@ -123,50 +122,6 @@ define([
          */
         getUser: function () {
             return this._user;
-        },
-
-        //====================================================================================================================//
-
-        /**
-         * Tests if the browser is IE 8 or lower.
-         * @return {boolean} True if the browser is IE 8 or lower
-         * @memberOf social#
-         */
-        testForIE8: function () {
-            if (this._isIE8 === null) {
-                this._isIE8 = this.isIE(8, "lte");
-            }
-            return this._isIE8;
-        },
-
-        /**
-         * Detects IE and version number through injected conditional comments (no UA detect, no need for conditional
-         * compilation / jscript check).
-         * @param {string} [version] IE version
-         * @param {string} [comparison] Operator testing multiple versions based on "version"
-         * parameter, e.g., 'lte', 'gte', etc.
-         * @return {boolean} Result of conditional test; note that since IE stopped supporting conditional comments with
-         * IE 10, this routine only works for IE 9 and below; for IE 10 and above, it always returns "false"
-         * @author Scott Jehl
-         * @see The <a href="https://gist.github.com/scottjehl/357727">detect IE and version number through injected
-         * conditional comments.js</a>.
-         */
-        isIE: function (version, comparison) {
-            var cc      = 'IE',
-                b       = document.createElement('B'),
-                docElem = document.documentElement,
-                isIE;
-
-            if (version) {
-                cc += ' ' + version;
-                if (comparison) { cc = comparison + ' ' + cc; }
-            }
-
-            b.innerHTML = '<!--[if ' + cc + ']><b id="iecctest"></b><![endif]-->';
-            docElem.appendChild(b);
-            isIE = !!document.getElementById('iecctest');
-            docElem.removeChild(b);
-            return isIE;
         }
 
     });

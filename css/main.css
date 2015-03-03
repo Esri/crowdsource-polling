@@ -252,6 +252,7 @@ body {
 
 .itemDetail .itemFav .icon {
   font-size: 20px;
+  margin-left: 5px;
 }
 
 .itemDetail .itemDescription {
@@ -281,8 +282,10 @@ body {
 
 .itemDetail .float-right {
   float: right;
+}
+
+.itemDetail .right-edge {
   margin-right: 0;
-  margin-left: 5px;
 }
 
 .itemDetail .space-below {

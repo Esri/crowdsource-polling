@@ -1,4 +1,4 @@
-﻿/*global define,dojo */
+﻿/*global define,dojo,Modernizr */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -82,7 +82,7 @@ define([
          * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
-            var gallerySurface, self = this;
+            var gallerySurface, backIconSurface, self = this;
 
             arrayUtil.forEach(dojoQuery('.favIcon', this.domNode), function (iconDiv) {
                 SvgHelper.changeColor(SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12),
@@ -91,7 +91,10 @@ define([
             this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
             this.likeButton.title = this.i18n.likeButtonTooltip;
 
-            SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
+            backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
+            if (!Modernizr.rgba) {
+                SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
+            }
 
             SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
             this.commentLabel.innerHTML = this.i18n.commentButtonLabel;

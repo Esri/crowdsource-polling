@@ -68,7 +68,7 @@ define([
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var dynamicFormCancel, dynamicFormCancelText, dynamicFormSubmitText;
+            var dynamicFormCancel;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -86,7 +86,7 @@ define([
                 topic.publish("cancelForm");
             }));
 
-            dynamicFormCancelText = domConstruct.create("span", {
+            domConstruct.create("span", {
                 innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
             }, dynamicFormCancel);
 
@@ -100,7 +100,7 @@ define([
                 topic.publish("submitForm", this._item, submission);
             }));
 
-            dynamicFormSubmitText = domConstruct.create("span", {
+            domConstruct.create("span", {
                 innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
             }, this.dynamicFormSubmit);
 

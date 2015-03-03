@@ -95,6 +95,7 @@ define([
                 className: "dynamicFormAction"
             }, this.dynamicFormActions);
             domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
+            domClass.add(this.dynamicFormSubmit, "appTheme");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
                 topic.publish("submitForm", this._item, submission);
@@ -106,10 +107,6 @@ define([
 
             // Only the Submit is themed, and it is initially not visible; visibility is controlled
             // by inner function updateRequiredFieldStatus based upon the status of required fields
-            if (!this.appConfig.isIE8) {
-                domStyle.set(this.dynamicFormSubmit, "color", this.appConfig.theme.foreground);
-                domStyle.set(this.dynamicFormSubmit, "background-color", this.appConfig.theme.background);
-            }
             domStyle.set(this.dynamicFormSubmit, "display", "none");
         },
 

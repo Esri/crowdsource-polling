@@ -56,7 +56,6 @@ define([
         postCreate: function () {
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_details;
-            this.initItemBanner();
             this.initCommentsDiv();
             this.initContentPane();
             this.hide();
@@ -77,15 +76,6 @@ define([
         },
 
         /**
-         * Sets the theme colors for the item header.
-         */
-        initItemBanner: function () {
-            domStyle.set(this.itemSummary, "color", this.appConfig.theme.foreground);
-            domStyle.set(this.itemSummary, "background-color", this.appConfig.theme.background);
-            domStyle.set(this.backIcon, "background-color", this.appConfig.theme.shading);
-        },
-
-        /**
          * Creates the icons for the Like, Comment, Gallery buttons and gives them their
          * i18n labels and tooltips.
          * <br>Needs to be run after postCreate, such as in startup, because of SVG icons; see
@@ -95,7 +85,8 @@ define([
             var gallerySurface, self = this;
 
             arrayUtil.forEach(dojoQuery('.favIcon', this.domNode), function (iconDiv) {
-                SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12);
+                SvgHelper.changeColor(SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12),
+                    self.appConfig.theme.accentText);
             });
             this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
             this.likeButton.title = this.i18n.likeButtonTooltip;

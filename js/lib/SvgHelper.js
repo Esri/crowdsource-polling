@@ -49,7 +49,11 @@ define([
 
             // Create the vectors from the JSON description
             surface = gfx.createSurface(container, width, height);
-            gfxUtils.fromJson(surface, definition);
+            surface.whenLoaded(function () {
+                // Wait until surface is ready before drawing on it
+                // http://dojotoolkit.org/reference-guide/1.10/dojox/gfx.html#core-concepts
+                gfxUtils.fromJson(surface, definition);
+            });
 
             return surface;
         },

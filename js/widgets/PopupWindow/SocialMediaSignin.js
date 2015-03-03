@@ -47,6 +47,7 @@ define([
 ) {
     return declare([PopupWindow, _TemplatedMixin], {
         templateString: template,
+        _isAvailable: false,
 
         // Description of signed-in user: "name" {string}, "canSignOut" {boolean}, "provider" {string};
         // null indicates that no one is signed in
@@ -96,16 +97,18 @@ define([
 
             if (this.appConfig.allowFacebook) {
                 facebook = new SocialFB(this.appConfig);
-                facebook.init(FBCallback);
+                if (facebook.isAvailable()) {
+                    facebook.init(FBCallback);
 
-                this.buttonFB = this.addButton("images/FB-f-Logo__blue_29.png", i18n.signIntoFacebookTooltip);
-                on(this.buttonFB, "click", function () {
-                    if (facebook.isSignedIn()) {
-                        facebook.signOut();
-                    } else {
-                        facebook.signIn();
-                    }
-                });
+                    this.buttonFB = this.addButton("images/FB-f-Logo__blue_29.png", i18n.signIntoFacebookTooltip);
+                    on(this.buttonFB, "click", function () {
+                        if (facebook.isSignedIn()) {
+                            facebook.signOut();
+                        } else {
+                            facebook.signIn();
+                        }
+                    });
+                }
             }
 
             // Google+
@@ -133,16 +136,18 @@ define([
 
             if (this.appConfig.allowGoogle) {
                 google = new SocialGP(this.appConfig);
-                google.init(GPCallback);
+                if (google.isAvailable()) {
+                    google.init(GPCallback);
 
-                this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlusTooltip);
-                on(this.buttonGP, "click", function () {
-                    if (google.isSignedIn()) {
-                        google.signOut();
-                    } else {
-                        google.signIn();
-                    }
-                });
+                    this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlusTooltip);
+                    on(this.buttonGP, "click", function () {
+                        if (google.isSignedIn()) {
+                            google.signOut();
+                        } else {
+                            google.signIn();
+                        }
+                    });
+                }
             }
 
             // Twitter
@@ -170,21 +175,33 @@ define([
 
             if (this.appConfig.allowTwitter) {
                 twitter = new SocialTW(this.appConfig);
-                twitter.init(TWCallback);
+                if (twitter.isAvailable()) {
+                    twitter.init(TWCallback);
 
-                this.buttonTW = this.addButton("images/Twitter_logo_blue_29.png", i18n.signIntoTwitterTooltip);
-                on(this.buttonTW, "click", function () {
-                    if (twitter.isSignedIn()) {
-                        twitter.signOut();
-                    } else {
-                        twitter.signIn();
-                    }
-                });
+                    this.buttonTW = this.addButton("images/Twitter_logo_blue_29.png", i18n.signIntoTwitterTooltip);
+                    on(this.buttonTW, "click", function () {
+                        if (twitter.isSignedIn()) {
+                            twitter.signOut();
+                        } else {
+                            twitter.signIn();
+                        }
+                    });
+                }
             }
 
             // Add the note before the sign-in buttons
             this.disclaimer.innerHTML = this.appConfig.socialMediaDisclaimer;
 
+            // Is there anything that can be logged into?
+            this._isAvailable = facebook || google || twitter;
+        },
+
+        /**
+         * Tests if the social is available.
+         * @return {boolean} The service is available or not
+         */
+        isAvailable: function () {
+            return this._isAvailable;
         },
 
         /**

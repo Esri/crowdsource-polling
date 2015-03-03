@@ -24,6 +24,7 @@ define([
     "dojo/_base/array",
     "dojo/_base/lang",
     "dojo/dom",
+    "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/on",
@@ -38,6 +39,7 @@ define([
     array,
     lang,
     dom,
+    domClass,
     domConstruct,
     domStyle,
     on,
@@ -66,22 +68,48 @@ define([
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
+            var dynamicFormCancel;
+
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
             this.hide();
 
-            this.dynamicFormCancelText.innerHTML = this.appConfig.i18n.dynamic_form.cancelButtonLabel;
-            on(this.dynamicFormCancel, "click", lang.hitch(this, function () {
+            // Create the action buttons; we do it here rather than in the template because
+            // _TemplatedMixin hangs under IE8 with two divs nested in the dynamicFormActions div
+
+            // Cancel
+            dynamicFormCancel = domConstruct.create("div", {
+                className: "dynamicFormAction"
+            }, this.dynamicFormActions);
+            domClass.add(dynamicFormCancel, "dynamicFormActionLeft");
+            on(dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
             }));
 
-            this.dynamicFormSubmitText.innerHTML = this.appConfig.i18n.dynamic_form.submitButtonLabel;
+            domConstruct.create("span", {
+                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
+            }, dynamicFormCancel);
+
+            // Submit
+            this.dynamicFormSubmit = domConstruct.create("div", {
+                className: "dynamicFormAction"
+            }, this.dynamicFormActions);
+            domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
                 topic.publish("submitForm", this._item, submission);
             }));
-            domStyle.set(this.dynamicFormSubmit, "color", this.appConfig.theme.foreground);
-            domStyle.set(this.dynamicFormSubmit, "background-color", this.appConfig.theme.background);
+
+            domConstruct.create("span", {
+                innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
+            }, this.dynamicFormSubmit);
+
+            // Only the Submit is themed, and it is initially not visible; visibility is controlled
+            // by inner function updateRequiredFieldStatus based upon the status of required fields
+            if (!this.appConfig.isIE8) {
+                domStyle.set(this.dynamicFormSubmit, "color", this.appConfig.theme.foreground);
+                domStyle.set(this.dynamicFormSubmit, "background-color", this.appConfig.theme.background);
+            }
             domStyle.set(this.dynamicFormSubmit, "display", "none");
         },
 

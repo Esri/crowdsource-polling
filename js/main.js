@@ -121,6 +121,8 @@ define([
         _launch: function (itemInfo) {
             var setupUI, createMap;
 
+            this.config.isIE8 = this._createIE8Test();
+
             // Perform setups in parallel
             setupUI = this._setupUI();
             createMap = this._createWebMap(itemInfo);
@@ -393,18 +395,18 @@ define([
 
                 //----- Add the widgets -----
 
-                // Sidebar header
-                this._sidebarHdr = new SidebarHeader({
-                    "appConfig": this.config,
-                    "showSignin": this.config.allowFacebook || this.config.allowGoogle || this.config.allowTwitter,
-                    "showHelp": this.config.displayText.length > 0
-                }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
-
                 // Social media
                 this._socialDialog = new SocialMediaSignin({
                     "appConfig": this.config,
                     "showClose": true
                 }).placeAt(document.body); // placeAt triggers a startup call to _socialDialog
+
+                // Sidebar header
+                this._sidebarHdr = new SidebarHeader({
+                    "appConfig": this.config,
+                    "showSignin": this._socialDialog.isAvailable,
+                    "showHelp": this.config.displayText.length > 0
+                }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
 
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
@@ -523,6 +525,46 @@ define([
                     domClass.remove("contentDiv", "transparent");
                 }
             }).play();
+        },
+
+        //====================================================================================================================//
+
+        /**
+         * Tests if the browser is IE 8 or lower.
+         * @return {boolean} True if the browser is IE 8 or lower
+         */
+        _createIE8Test: function () {
+            return this._isIE(8, "lte");
+        },
+
+        /**
+         * Detects IE and version number through injected conditional comments (no UA detect, no need for conditional
+         * compilation / jscript check).
+         * @param {string} [version] IE version
+         * @param {string} [comparison] Operator testing multiple versions based on "version"
+         * parameter, e.g., 'lte', 'gte', etc.
+         * @return {boolean} Result of conditional test; note that since IE stopped supporting conditional comments with
+         * IE 10, this routine only works for IE 9 and below; for IE 10 and above, it always returns "false"
+         * @author Scott Jehl
+         * @see The <a href="https://gist.github.com/scottjehl/357727">detect IE and version number through injected
+         * conditional comments.js</a>.
+         */
+        _isIE: function (version, comparison) {
+            var cc      = 'IE',
+                b       = document.createElement('B'),
+                docElem = document.documentElement,
+                isIE;
+
+            if (version) {
+                cc += ' ' + version;
+                if (comparison) { cc = comparison + ' ' + cc; }
+            }
+
+            b.innerHTML = '<!--[if ' + cc + ']><b id="iecctest"></b><![endif]-->';
+            docElem.appendChild(b);
+            isIE = !!document.getElementById('iecctest');
+            docElem.removeChild(b);
+            return isIE;
         }
     });
 });

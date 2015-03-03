@@ -57,7 +57,6 @@ define([
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_details;
             this.initItemBanner();
-            this.initTemplateIcons();
             this.initCommentsDiv();
             this.initContentPane();
             this.hide();
@@ -65,6 +64,7 @@ define([
 
         startup: function () {
             this.inherited(arguments);
+            this.initTemplateIcons();
             this.addListeners();
         },
 
@@ -88,6 +88,8 @@ define([
         /**
          * Creates the icons for the Like, Comment, Gallery buttons and gives them their
          * i18n labels and tooltips.
+         * <br>Needs to be run after postCreate, such as in startup, because of SVG icons; see
+         * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
             var gallerySurface, self = this;

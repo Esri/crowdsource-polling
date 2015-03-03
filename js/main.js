@@ -373,7 +373,7 @@ define([
          * @return {object} Deferred
          */
         _setupUI: function () {
-            var deferred = new Deferred();
+            var deferred = new Deferred(), styleString = "";
             setTimeout(lang.hitch(this, function () {
                 var luminance = new Color(this.config.color).toHsl().l;
 
@@ -382,15 +382,24 @@ define([
                     this.config.theme = {
                         "background": this.config.color,  // lighter
                         "foreground": "black",
-                        "shading": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : "rgb(0, 0, 0)")
+                        "accentBkgd": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : this.config.color),
+                        "accentText": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : "black")
                     };
                 } else {
                     this.config.theme = {
                         "background": this.config.color,  // darker
                         "foreground": "white",
-                        "shading": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : "rgb(0, 0, 0)")
+                        "accentBkgd": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : this.config.color),
+                        "accentText": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : "white")
                     };
                 }
+
+                // Set the theme
+                styleString += ".appTheme{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "}";
+                styleString += ".appTheme:hover{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "!important}";
+                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accentBkgd + "}";
+                styleString += ".appThemeAccentText{color:" + this.config.theme.accentText + "!important}";
+                this.injectCSS(styleString);
 
 
                 //----- Add the widgets -----
@@ -565,6 +574,45 @@ define([
             isIE = !!document.getElementById('iecctest');
             docElem.removeChild(b);
             return isIE;
+        },
+
+        /**
+         * Injects a string of CSS into the document.
+         * @example
+         * <pre>
+         * // For <div class="titleBox"><div class="title">Title</div></div>
+         * require(["dojo/ready", "js/lgonlineBase"], function (ready) {
+         *     ready(function () {
+         *         var loader = new js.LGObject();
+         *         loader.injectCSS(
+         *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;text-align:center;overflow:hidden;}"+
+         *             ".title{font-size:24px;position:relative;top:25%}"
+         *         );
+         *     });
+         * });
+         * </pre>
+         * @param {string} cssStr A string of CSS text
+         * @return {object} DOM style element
+         */
+        injectCSS: function (cssStr) {
+            var customStyles, cssText;
+
+            // By Fredrik Johansson
+            // http://www.quirksmode.org/bugreports/archives/2006/01/IE_wont_allow_documentcreateElementstyle.html#c4088
+            customStyles = document.createElement("style");
+            customStyles.setAttribute("type", "text/css");
+            if (customStyles.styleSheet) {  // IE 7 & 8
+                customStyles.styleSheet.cssText = cssStr;
+            } else {  // W3C
+                cssText = document.createTextNode(cssStr);
+                customStyles.appendChild(cssText);
+            }
+
+            // Add the style *after* existing styles so that it'll override them
+            document.body.appendChild(customStyles);
+
+            return customStyles;
         }
+
     });
 });

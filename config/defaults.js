@@ -25,7 +25,7 @@ define({
     "group": "",
     //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
     //http://developers.arcgis.com/en/javascript/jshelp/ags_proxy.html
-    "proxyurl": "",
+    "proxyurl": "proxy/proxy.ashx",
 
     //Template-specific properties in AGOL configuration
     "title": "Title",

@@ -247,12 +247,12 @@ define([
                                 pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
                             }
                         }
-
-                        // Update the visibility of the save button based on status all of
-                        // the required fields taken together
-                        domStyle.set(pThis.dynamicFormSubmit, "display",
-                            (pThis._requiredFieldsStatus === 0 ? "table-cell" : "none"));
                     }
+
+                    // Update the visibility of the save button based on status all of
+                    // the required fields taken together
+                    domStyle.set(pThis.dynamicFormSubmit, "display",
+                        (pThis._requiredFieldsStatus === 0 ? "table-cell" : "none"));
                 }
 
                 // Visible fields get added to the form
@@ -352,7 +352,6 @@ define([
                         // If required, set its status in the required-value status flag
                         if (!field.nullable) {
                             row.requiredFieldFlag = nextReqFldStatusFlag;
-                            updateRequiredFieldStatus();
 
                             // Set up handlers to keep flag up-to-date
                             this.setInputWatchers(inputItem, updateRequiredFieldStatus);
@@ -360,6 +359,7 @@ define([
                             // Set up next flag
                             nextReqFldStatusFlag *= 2;
                         }
+                        updateRequiredFieldStatus();
 
                         // Save to the form definition
                         form.push({

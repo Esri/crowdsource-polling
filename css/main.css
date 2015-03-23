@@ -438,7 +438,7 @@ body {
 }
 
 .dynamicFormAction {
-    width: 145px;
+    width: 140px;
     height: 40px;
     display: table;
     text-align: center;
@@ -447,7 +447,7 @@ body {
 }
 
 .dynamicFormAction span {
-    width: 145px;
+    width: 140px;
     height: 40px;
     display: table-cell;
     vertical-align: middle;

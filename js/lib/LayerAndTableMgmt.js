@@ -168,7 +168,8 @@ define([
 
                     // Test that the items layer is related to the comments table and that
                     // the two are not involved in any other relationships
-                    if (this._itemLayer.relationships.length !== 1 ||
+                    if (!this._itemLayer.relationships || !this._commentTable.relationships ||
+                            this._itemLayer.relationships.length !== 1 ||
                             this._commentTable.relationships.length !== 1 ||
                             this._itemLayer.relationships[0].relatedTableId !== this._commentTable.layerId ||
                             this._itemLayer.layerId !== this._commentTable.relationships[0].relatedTableId) {

@@ -43,6 +43,7 @@ define({
         },
         dynamic_form: {  // General-purpose form; used to receive comment entry
             optionalFormItemFlag: " (optional)",
+            requiredFormItemFlag: " (required)",
             unsettableRequiredField: "A required field is neither invisible nor initialized",
             countOfRemainingCharactersTooltip: "Characters remaining",
             cancelButtonLabel: "Cancel",

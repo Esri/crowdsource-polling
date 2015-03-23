@@ -42,6 +42,7 @@ define(({
     },
     dynamic_form: {
         optionalFormItemFlag: " (facultatif)",
+        requiredFormItemFlag: " (obligatoire)",
         unsettableRequiredField: "Un champ obligatoire est ni visible ni initialisé",
         countOfRemainingCharactersTooltip: "Caractères restants",
         cancelButtonLabel: "Annuler",

@@ -209,7 +209,7 @@ define([
                 function createRow() {
                     return domConstruct.create("div", {
                         className: "dynamicFormRow",
-                        innerHTML: field.alias + (field.nullable ? i18n.optionalFormItemFlag : "")
+                        innerHTML: field.alias + (field.nullable ? "" : i18n.requiredFormItemFlag)
                     }, formDivName);
                 }
 

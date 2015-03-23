@@ -148,7 +148,7 @@ define([
 
         setItem: function (item) {
             this.item = item;
-            this.itemTitle = this.getItemTitle(item);
+            this.itemTitle = this.getItemTitle(item) || "&nbsp;";
             this.itemVotes = this.getItemVotes(item);
             this.clearItemDisplay();
             this.buildItemDisplay();

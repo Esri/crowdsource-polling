@@ -138,7 +138,7 @@ define([
 
             var itemTitle, itemVotes, itemSummaryDiv, favDiv, iconDiv, likeIconSurf;
 
-            itemTitle = this.getItemTitle(item);
+            itemTitle = this.getItemTitle(item) || "&nbsp;";
 
             itemVotes = this.getItemVotes(item);
 

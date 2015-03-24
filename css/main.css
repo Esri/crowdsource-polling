@@ -406,7 +406,7 @@ body {
 }
 
 .dynamicFormInputCtl {
-    width: 98%;
+    width: 99%;
     height: 24px;
 }
 
@@ -422,7 +422,8 @@ body {
 }
 
 .dynamicFormActions {
-    height: 40px;
+    font-size: 14px;
+    height: 35px;
 }
 
 .dynamicFormAction {
@@ -431,7 +432,6 @@ body {
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #ccc;
 }
 
 .dynamicFormAction span {
@@ -442,10 +442,14 @@ body {
 
 .dynamicFormActionLeft {
     float: left;
+    height: 33px;
     color: #007ac2;
+    border: 1px solid #ccc;
 }
 
 .dynamicFormActionRight {
     float: right;
+    height: 35px;
     color: #007ac2;  /* IE8 workaround */
+    font-weight: bold;
 }

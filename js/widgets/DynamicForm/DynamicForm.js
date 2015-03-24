@@ -176,7 +176,6 @@ define([
                 className: "dynamicFormAction"
             }, actionsBar);
             domClass.add(dynamicFormCancel, "dynamicFormActionLeft");
-            domClass.add(dynamicFormCancel, "dynamicFormActions");
             on(dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
             }));
@@ -190,7 +189,6 @@ define([
                 className: "dynamicFormAction"
             }, actionsBar);
             domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
-            domClass.add(this.dynamicFormSubmit, "dynamicFormActions");
             domClass.add(this.dynamicFormSubmit, "appTheme");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);

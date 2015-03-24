@@ -68,46 +68,9 @@ define([
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var dynamicFormCancel;
-
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
             this.hide();
-
-            // Create the action buttons; we do it here rather than in the template because
-            // _TemplatedMixin hangs under IE8 with two divs nested in the dynamicFormActions div
-
-            // Cancel
-            dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction"
-            }, this.dynamicFormActions);
-            domClass.add(dynamicFormCancel, "dynamicFormActionLeft");
-            on(dynamicFormCancel, "click", lang.hitch(this, function () {
-                topic.publish("cancelForm");
-            }));
-
-            domConstruct.create("span", {
-                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
-            }, dynamicFormCancel);
-
-            // Submit
-            this.dynamicFormSubmit = domConstruct.create("div", {
-                className: "dynamicFormAction"
-            }, this.dynamicFormActions);
-            domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
-            domClass.add(this.dynamicFormSubmit, "appTheme");
-            on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
-                var submission = this.assembleFormValues(this._entryForm);
-                topic.publish("submitForm", this._item, submission);
-            }));
-
-            domConstruct.create("span", {
-                innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
-            }, this.dynamicFormSubmit);
-
-            // Only the Submit is themed, and it is initially not visible; visibility is controlled
-            // by inner function updateRequiredFieldStatus based upon the status of required fields
-            domStyle.set(this.dynamicFormSubmit, "display", "none");
         },
 
         /**
@@ -189,13 +152,58 @@ define([
          * and uninitialized required field
          */
         generateForm: function (formDivName, fields) {
-            var pThis = this, formDiv, form, nextReqFldStatusFlag = 1, i18n = this.appConfig.i18n.dynamic_form;
+            var pThis = this, formDiv, form, actionsBar, dynamicFormCancel, nextReqFldStatusFlag = 1,
+                i18n = this.appConfig.i18n.dynamic_form;
+
 
             // Clear out the existing form
             formDiv = dom.byId(formDivName);
             while (formDiv.children.length > 0) {
                 formDiv.removeChild(formDiv.childNodes[0]);
             }
+
+            // Add the action buttons
+            actionsBar = domConstruct.create("div", {
+                className: "dynamicFormRow"
+            }, formDivName);
+            domClass.add(actionsBar, "dynamicFormActions");
+
+            // Create the action buttons; we do it here rather than in the template because
+            // _TemplatedMixin hangs under IE8 with two divs nested in the dynamicFormActions div
+
+            // Cancel
+            dynamicFormCancel = domConstruct.create("div", {
+                className: "dynamicFormAction"
+            }, actionsBar);
+            domClass.add(dynamicFormCancel, "dynamicFormActionLeft");
+            domClass.add(dynamicFormCancel, "dynamicFormActions");
+            on(dynamicFormCancel, "click", lang.hitch(this, function () {
+                topic.publish("cancelForm");
+            }));
+
+            domConstruct.create("span", {
+                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
+            }, dynamicFormCancel);
+
+            // Submit
+            this.dynamicFormSubmit = domConstruct.create("div", {
+                className: "dynamicFormAction"
+            }, actionsBar);
+            domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
+            domClass.add(this.dynamicFormSubmit, "dynamicFormActions");
+            domClass.add(this.dynamicFormSubmit, "appTheme");
+            on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
+                var submission = this.assembleFormValues(this._entryForm);
+                topic.publish("submitForm", this._item, submission);
+            }));
+
+            domConstruct.create("span", {
+                innerHTML: "Submit"//this.appConfig.i18n.dynamic_form.submitButtonLabel
+            }, this.dynamicFormSubmit);
+
+            // Only the Submit is themed, and it is initially not visible; visibility is controlled
+            // by inner function updateRequiredFieldStatus based upon the status of required fields
+            domStyle.set(this.dynamicFormSubmit, "display", "none");
 
             // Find the editable attributes and create a form from them
             form = [];
@@ -210,7 +218,7 @@ define([
                     return domConstruct.create("div", {
                         className: "dynamicFormRow",
                         innerHTML: field.alias + (field.nullable ? "" : i18n.requiredFormItemFlag)
-                    }, formDivName);
+                    }, actionsBar, "before");
                 }
 
                 /**
@@ -252,7 +260,7 @@ define([
                     // Update the visibility of the save button based on status all of
                     // the required fields taken together
                     domStyle.set(pThis.dynamicFormSubmit, "display",
-                        (pThis._requiredFieldsStatus === 0 ? "table-cell" : "none"));
+                        (pThis._requiredFieldsStatus === 0 ? "table" : "none"));
                 }
 
                 // Visible fields get added to the form

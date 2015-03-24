@@ -392,63 +392,50 @@ body {
 
 .dynamicFormPanel {
     background-color: white;
-}
-
-.dynamicForm {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 52px;
-    padding: 12px;
     overflow-y: auto;
 }
 
+.dynamicForm {
+    margin: 12px;
+}
+
 .dynamicFormRow {
-    position: relative;
-    margin: 10px 10px 10px 10px;
+    margin: 10px 0px 10px 0px;
     height: auto;
     line-height: 18px;
 }
 
 .dynamicFormInputCtl {
-    width: 95%;
+    width: 98%;
     height: 24px;
 }
 
-
 .dynamicFormTextAreaCtl {
-    width: 95%;
+    width: 98%;
     height: 60px;
     resize: none;
 }
 
 .dynamicFormCharactersRemaining {
     float: right;
-    padding-right: 7px;
+    padding-right: 1px;
 }
 
 .dynamicFormActions {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    height: 42px;
-    padding: 5px 8px;
+    height: 40px;
 }
 
 .dynamicFormAction {
-    width: 140px;
-    height: 40px;
+    width: 48%;
     display: table;
     text-align: center;
+    vertical-align: middle;
     cursor: pointer;
     border: 1px solid #ccc;
 }
 
 .dynamicFormAction span {
-    width: 140px;
-    height: 40px;
+    width: 48%;
     display: table-cell;
     vertical-align: middle;
 }

@@ -196,7 +196,7 @@ define([
             }));
 
             domConstruct.create("span", {
-                innerHTML: "Submit"//this.appConfig.i18n.dynamic_form.submitButtonLabel
+                innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
             }, this.dynamicFormSubmit);
 
             // Only the Submit is themed, and it is initially not visible; visibility is controlled

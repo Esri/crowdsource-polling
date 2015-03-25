@@ -339,6 +339,13 @@ body {
 
 .itemDetail .attachmentsSection {
   display: none;
+  margin-bottom: 12px;
+}
+
+.itemDetail .attachmentsSection .attachment {
+  width: 48%;
+  margin: 0px 5px 5px 0px;
+  cursor: pointer;
 }
 
 .commentsForm {

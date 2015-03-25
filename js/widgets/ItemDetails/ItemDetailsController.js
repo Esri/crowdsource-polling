@@ -198,7 +198,12 @@ define([
 
         updateGallery: function (attachments) {
             // Create gallery
-            this.gallery.innerHTML = "Gallery has " + attachments.length + " items";//???
+            arrayUtil.forEach(attachments, lang.hitch(this, function (attachment) {
+                domConstruct.create('img', {
+                    'class': 'attachment',
+                    'src': attachment.url + "/" + attachment.name
+                }, this.gallery);
+            }));
         },
 
         clearGallery: function () {

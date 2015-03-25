@@ -51,6 +51,11 @@ define([
         baseClass: 'itemDetail',
         itemTitle: 'default title',
         itemVotes: 0,
+        actionVisibilities: {
+            "showVotes": false,
+            "showComments": false,
+            "showGallery": false
+        },
 
         constructor: function () {
             this.inherited(arguments);
@@ -71,6 +76,9 @@ define([
         },
 
         show: function () {
+            domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes ? 'inline-block' : 'none');
+            domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments ? 'inline-block' : 'none');
+            domStyle.set(this.galleryButton, 'display', this.actionVisibilities.showGallery ? 'inline-block' : 'none');
             domStyle.set(this.domNode, 'display', '');
         },
 
@@ -140,6 +148,17 @@ define([
         setItemFields: function (votesField, commentFields) {
             this.votesField = votesField;
             this.commentFields = commentFields;
+        },
+
+        /**
+         * Sets the
+         */
+        setActionsVisibility: function (showVotes, showComments, showGallery) {
+            this.actionVisibilities = {
+                 "showVotes": showVotes,
+                 "showComments": showComments,
+                 "showGallery": showGallery
+             };
         },
 
         setCommentFields: function (fields) {

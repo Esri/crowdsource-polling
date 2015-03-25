@@ -136,7 +136,7 @@ define([
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(this.config.itemVotesField);
                 this._itemDetails.setItemFields(this.config.itemVotesField, this._mapData.getCommentFields());
-
+                this._itemDetails.setActionsVisibility(true, true, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 

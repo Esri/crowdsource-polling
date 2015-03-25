@@ -280,6 +280,10 @@ body {
   cursor: pointer;
 }
 
+.itemDescFooter {
+    height: 25px;
+}
+
 .itemDetail .float-right {
   float: right;
 }

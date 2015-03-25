@@ -78,7 +78,6 @@ define([
         show: function () {
             domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes ? 'inline-block' : 'none');
             domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments ? 'inline-block' : 'none');
-            domStyle.set(this.galleryButton, 'display', this.actionVisibilities.showGallery ? 'inline-block' : 'none');
             domStyle.set(this.domNode, 'display', '');
         },
 
@@ -136,6 +135,14 @@ define([
             dojoOn(this.commentButton, 'click', function () {
                 topic.publish('getComment', self.item);
             });
+            dojoOn(this.galleryButton, 'click', lang.hitch(this, function () {
+                topic.publish('showGallery', self.item);
+                if (domStyle.get(this.gallery, 'display') === 'none') {
+                    this.showGallery();
+                } else {
+                    this.hideGallery();
+                }
+            }));
         },
 
 
@@ -143,7 +150,7 @@ define([
          * Sets the fields that are needed to display feature information in this list (number of votes).
          * Needs to be called before first setItems to tell the widget which fields to look for.
          * @param {string} votesField Name of votes property
-         * @param {array} commentFields Fields used by comment-entry form //???
+         * @param {array} commentFields Fields used by comment-entry form
          */
         setItemFields: function (votesField, commentFields) {
             this.votesField = votesField;
@@ -155,10 +162,10 @@ define([
          */
         setActionsVisibility: function (showVotes, showComments, showGallery) {
             this.actionVisibilities = {
-                 "showVotes": showVotes,
-                 "showComments": showComments,
-                 "showGallery": showGallery
-             };
+                "showVotes": showVotes,
+                "showComments": showComments,
+                "showGallery": showGallery
+            };
         },
 
         setCommentFields: function (fields) {
@@ -172,14 +179,45 @@ define([
 
         setItem: function (item) {
             this.item = item;
+            this.clearGallery();
+
             this.itemTitle = this.getItemTitle(item) || "&nbsp;";
             this.itemVotes = this.getItemVotes(item);
             this.clearItemDisplay();
             this.buildItemDisplay();
         },
 
+        setAttachments: function (attachments) {
+            var showGalleryButton =
+                this.actionVisibilities.showGallery && attachments && attachments.length > 0;
+            if (showGalleryButton) {
+                this.updateGallery(attachments);
+                domStyle.set(this.galleryButton, 'display', 'inline-block');
+            }
+        },
+
+        updateGallery: function (attachments) {
+            // Create gallery
+            this.gallery.innerHTML = "Gallery has " + attachments.length + " items";//???
+        },
+
+        clearGallery: function () {
+            domStyle.set(this.galleryButton, 'display', 'none');
+            this.hideGallery();
+            domConstruct.empty(this.gallery);
+        },
+
+        showGallery: function () {
+            domStyle.set(this.gallery, 'display', 'block');
+        },
+
+        hideGallery: function () {
+            domStyle.set(this.gallery, 'display', 'none');
+            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
+        },
+
         showCommentForm: function (userInfo) {
-            // Add comment form
+            // Create comment form
             this.itemAddComment = new DynamicForm({
                 "appConfig": this.appConfig
             }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment

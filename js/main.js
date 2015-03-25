@@ -202,6 +202,9 @@ define([
                     this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
 
+                    if (this._mapData.getItemLayer().hasAttachments) {
+                        topic.publish("updateAttachments", item);
+                    }
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
 
@@ -277,12 +280,29 @@ define([
                 }));
 
                 /**
+                 * @param {object} item Item whose attachments are to be refreshed
+                 */
+                topic.subscribe("updateAttachments", lang.hitch(this, function (item) {
+                    console.log(">updateAttachments>", item);  //???
+                    this._sidebarCnt.showBusy(true);
+                    this._mapData.queryAttachments(item);
+                }));
+
+                /**
                  * @param {object} item Item whose comments list is to be refreshed
                  */
                 topic.subscribe("updateComments", lang.hitch(this, function (item) {
                     console.log(">updateComments>", item);  //???
                     this._sidebarCnt.showBusy(true);
                     this._mapData.queryComments(item);
+                }));
+
+                /**
+                 * @param {array} attachments List of attachments for the current item
+                 */
+                topic.subscribe("updatedAttachments", lang.hitch(this, function (attachments) {
+                    console.log(">updatedAttachments>", attachments);  //???
+                    this._itemDetails.setAttachments(attachments);
                 }));
 
                 /**

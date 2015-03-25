@@ -276,6 +276,23 @@ define([
         },
 
         /**
+         * Retrieves the attachments associated with an item.
+         * @param {objectID} item Item whose attachments are sought
+         * @return {publish} "updatedAttachments" with results of query
+         */
+        queryAttachments: function (item) {
+            this._itemLayer.queryAttachmentInfos(
+                item.attributes[this._itemLayer.objectIdField],
+                lang.hitch(this, function (attachments) {
+                    topic.publish("updatedAttachments", attachments);
+                }),
+                lang.hitch(this, function (err) {
+                    console.log(JSON.stringify(err));  //???
+                })
+            );
+        },
+
+        /**
          * Retrieves the comments associated with an item.
          * @param {objectID} item Item whose comments are sought
          * @return {publish} "updatedCommentsList" with results of query

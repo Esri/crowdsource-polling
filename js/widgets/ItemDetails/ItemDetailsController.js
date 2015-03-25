@@ -242,20 +242,22 @@ define([
         },
 
         showCommentForm: function (userInfo) {
-            // Create comment form
-            this.itemAddComment = new DynamicForm({
-                "appConfig": this.appConfig
-            }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
+            if (!this.itemAddComment) {
+                // Create comment form
+                this.itemAddComment = new DynamicForm({
+                    "appConfig": this.appConfig
+                }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
 
-            // Set its item and its fields
-            this.itemAddComment.setItem(this.item);
-            this.itemAddComment.setFields(this.commentFields);
+                // Set its item and its fields
+                this.itemAddComment.setItem(this.item);
+                this.itemAddComment.setFields(this.commentFields);
 
-            // See if we can pre-set its user name value
-            if (userInfo && userInfo.name) {
-                this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
-            } else {
-                this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+                // See if we can pre-set its user name value
+                if (userInfo && userInfo.name) {
+                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
+                } else {
+                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+                }
             }
 
             // Show the form

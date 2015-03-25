@@ -216,6 +216,7 @@ define([
                     'src': srcURL
                 }, this.gallery);
                 dojoOn(thumb, 'click', lang.hitch(this, function (attachment) {
+                    domConstruct.empty(this.enlargedViewPopup.popupContent);
                     domConstruct.create('img', {
                         'class': 'attachment',
                         'src': srcURL

@@ -83,6 +83,7 @@ define([
 
         hide: function () {
             domStyle.set(this.domNode, 'display', 'none');
+            this.hideCommentForm();
         },
 
         /**
@@ -244,7 +245,8 @@ define([
 
         hideCommentForm: function () {
             if (this.itemAddComment) {
-                this.itemAddComment.hide();
+                this.itemAddComment.destroy();
+                this.itemAddComment = null;
             }
         },
 

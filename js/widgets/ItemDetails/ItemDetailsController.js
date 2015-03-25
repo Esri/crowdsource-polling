@@ -36,13 +36,14 @@ define([
     'dijit/_TemplatedMixin',
 
     "application/widgets/DynamicForm/DynamicForm",
+    "application/widgets/PopupWindow/PopupWindow",
 
     'dojo/text!./ItemDetailsView.html'
 ], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, domAttr, dojoQuery, topic, dojoOn, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
-    DynamicForm,
+    DynamicForm, PopupWindow,
     template) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -192,6 +193,14 @@ define([
             var showGalleryButton =
                 this.actionVisibilities.showGallery && attachments && attachments.length > 0;
             if (showGalleryButton) {
+                if (!this.enlargedViewPopup) {
+                    // Popup window for enlarged image
+                    this.enlargedViewPopup = new PopupWindow({
+                        "appConfig": this.appConfig,
+                        "showClose": true
+                    }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
+                }
+
                 this.updateGallery(attachments);
                 domStyle.set(this.galleryButton, 'display', 'inline-block');
             }
@@ -200,10 +209,19 @@ define([
         updateGallery: function (attachments) {
             // Create gallery
             arrayUtil.forEach(attachments, lang.hitch(this, function (attachment) {
-                domConstruct.create('img', {
+                var thumb, srcURL;
+                srcURL = attachment.url + "/" + attachment.name;
+                thumb = domConstruct.create('img', {
                     'class': 'attachment',
-                    'src': attachment.url + "/" + attachment.name
+                    'src': srcURL
                 }, this.gallery);
+                dojoOn(thumb, 'click', lang.hitch(this, function (attachment) {
+                    domConstruct.create('img', {
+                        'class': 'attachment',
+                        'src': srcURL
+                    }, this.enlargedViewPopup.popupContent);
+                    this.enlargedViewPopup.show();
+                }));
             }));
         },
 

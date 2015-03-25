@@ -337,6 +337,10 @@ body {
   display: none;
 }
 
+.commentsForm {
+    margin-bottom: 12px;
+}
+
 /* ---------- Popup ---------- */
 
 .popupWidget {

@@ -32,7 +32,6 @@ define([
     "esri/arcgis/utils",
     "esri/dijit/LocateButton",
     "application/lib/LayerAndTableMgmt",
-    "application/widgets/DynamicForm/DynamicForm",
     "application/widgets/ItemDetails/ItemDetailsController",
     "application/widgets/ItemList/ItemList",
     "application/widgets/PopupWindow/PopupWindow",
@@ -60,7 +59,6 @@ define([
     arcgisUtils,
     LocateButton,
     LayerAndTableMgmt,
-    DynamicForm,
     ItemDetails,
     ItemList,
     PopupWindow,
@@ -137,8 +135,7 @@ define([
 
                 //----- Merge map-loading info with UI items -----
                 this._itemsList.setFields(this.config.itemVotesField);
-                this._itemDetails.setItemFields(this.config.itemVotesField);
-                this._itemAddComment.setFields(this._mapData.getCommentFields());
+                this._itemDetails.setItemFields(this.config.itemVotesField, this._mapData.getCommentFields());
 
 
                 //----- Catch published messages and wire them to their actions -----
@@ -153,7 +150,7 @@ define([
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
                     console.log(">cancelForm>");  //???
-                    topic.publish("showPanel", "itemDetails");
+                    this._itemDetails.hideCommentForm();
                 }));
 
                 /**
@@ -184,16 +181,7 @@ define([
                 topic.subscribe("getComment", lang.hitch(this, function (item) {
                     console.log(">getComment>", item);  //???
                     var userInfo = this._socialDialog.getSignedInUser();
-                    this._itemAddComment.setItem(item);
-
-                    // See if we can pre-set its value
-                    if (userInfo && userInfo.name) {
-                        this._itemAddComment.presetFieldValue(this.config.commentNameField, userInfo.name);
-                    } else {
-                        this._itemAddComment.presetFieldValue(this.config.commentNameField, null);
-                    }
-
-                    topic.publish("showPanel", "getComment");
+                    this._itemDetails.showCommentForm(userInfo);
                 }));
 
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
@@ -285,7 +273,7 @@ define([
                     console.log(">submitForm>", item, comment);  //???
                     this._sidebarCnt.showBusy(true);
                     this._mapData.addComment(item, comment);
-                    topic.publish("showPanel", "itemDetails");
+                    this._itemDetails.hideCommentForm();
                 }));
 
                 /**
@@ -441,13 +429,6 @@ define([
                 }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
                 this._itemDetails.hide();
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
-
-                // Add comment
-                this._itemAddComment = new DynamicForm({
-                    "appConfig": this.config
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemAddComment
-                this._sidebarCnt.addPanel("getComment", this._itemAddComment);
-
 
 
                 deferred.resolve("ui");

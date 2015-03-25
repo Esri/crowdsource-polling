@@ -35,11 +35,14 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
 
+    "application/widgets/DynamicForm/DynamicForm",
+
     'dojo/text!./ItemDetailsView.html'
 ], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, domAttr, dojoQuery, topic, dojoOn, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
+    DynamicForm,
     template) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -132,9 +135,11 @@ define([
          * Sets the fields that are needed to display feature information in this list (number of votes).
          * Needs to be called before first setItems to tell the widget which fields to look for.
          * @param {string} votesField Name of votes property
+         * @param {array} commentFields Fields used by comment-entry form //???
          */
-        setItemFields: function (votesField) {
+        setItemFields: function (votesField, commentFields) {
             this.votesField = votesField;
+            this.commentFields = commentFields;
         },
 
         setCommentFields: function (fields) {
@@ -152,6 +157,33 @@ define([
             this.itemVotes = this.getItemVotes(item);
             this.clearItemDisplay();
             this.buildItemDisplay();
+        },
+
+        showCommentForm: function (userInfo) {
+            // Add comment form
+            this.itemAddComment = new DynamicForm({
+                "appConfig": this.appConfig
+            }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
+
+            // Set its item and its fields
+            this.itemAddComment.setItem(this.item);
+            this.itemAddComment.setFields(this.commentFields);
+
+            // See if we can pre-set its user name value
+            if (userInfo && userInfo.name) {
+                this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
+            } else {
+                this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+            }
+
+            // Show the form
+            this.itemAddComment.show();
+        },
+
+        hideCommentForm: function () {
+            if (this.itemAddComment) {
+                this.itemAddComment.hide();
+            }
         },
 
         /**

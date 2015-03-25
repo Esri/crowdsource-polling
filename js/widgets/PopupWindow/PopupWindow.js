@@ -21,13 +21,15 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dojo/text!./PopupWindow.html",
-    "dojo/dom-style"
+    "dojo/dom-style",
+    "dojo/dom-geometry"
 ], function (
     declare,
     _WidgetBase,
     _TemplatedMixin,
     template,
-    domStyle
+    domStyle,
+    domGeom
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
@@ -68,7 +70,7 @@ define([
         },
 
         /**
-         * Causes the widget to become visible and positons it to the center of the page.
+         * Causes the widget to become visible and positions it to the center of the page.
          */
         show: function () {
             var popupPosition, marginLeft, marginTop;
@@ -77,12 +79,12 @@ define([
             this.domNode.style.display = "block";
 
             // position the popup in the center of the page
-            popupPosition = dojo.position(this.domNode, true);
+            popupPosition = domGeom.position(this.domNode, true);
 
             marginLeft = -popupPosition.w / 2;
             marginTop = -popupPosition.h / 2;
 
-            dojo.style(this.domNode, {
+            domStyle.set(this.domNode, {
                 marginLeft: marginLeft + "px",
                 marginTop: marginTop + "px"
             });

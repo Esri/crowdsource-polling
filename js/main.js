@@ -201,6 +201,9 @@ define([
 
                     this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
+                    this._mapData.refreshVoteCount(item).then(function (item) {
+                        topic.publish("voteUpdated", item);
+                    });
 
                     if (this._mapData.getItemLayer().hasAttachments) {
                         topic.publish("updateAttachments", item);

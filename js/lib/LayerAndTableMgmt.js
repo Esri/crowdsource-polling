@@ -29,6 +29,7 @@ define([
     "esri/InfoTemplate",
     "esri/layers/FeatureLayer",
     "esri/tasks/query",
+    "esri/tasks/QueryTask",
     "esri/tasks/RelationshipQuery",
     "dojo/domReady!"
 ], function (
@@ -44,6 +45,7 @@ define([
     InfoTemplate,
     FeatureLayer,
     Query,
+    QueryTask,
     RelationshipQuery
 ) {
 
@@ -337,30 +339,64 @@ define([
         },
 
         /**
+         * Updates the vote count in an item.
+         * @param {object} item Item to be updated
+         * @return {object} Deferred for notification of completed update
+         */
+        refreshVoteCount: function (item) {
+            var updateQuery, updateQueryTask, deferred = new Deferred();
+
+            // Get the latest vote count from the server, not just the feature layer
+            updateQuery = new Query();
+            updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
+            updateQuery.returnGeometry = false;
+            updateQuery.outFields = [this.appConfig.itemVotesField];
+
+            updateQueryTask = new QueryTask(this._itemLayer.url);
+            updateQueryTask.execute(updateQuery, lang.hitch(this, function (results) {
+                var retrievedVotes;
+                if (results && results.features && results.features.length > 0) {
+                    retrievedVotes = results.features[0].attributes[this.appConfig.itemVotesField];
+                    if (retrievedVotes) {
+                        item.attributes[this.appConfig.itemVotesField] = retrievedVotes;
+                        deferred.resolve(item);
+                    }
+                }
+                deferred.reject(item);
+            }), function () {
+                deferred.reject(item);
+            });
+
+            return deferred;
+        },
+
+        /**
          * Increments the designated "votes" field for the specified item.
          * @param {object} item Item to update
+         * @return {publish} "voteUpdated" with updated item
          */
         incrementVote: function (item) {
-            var numVotes;
-
             if (this.appConfig.itemVotesField.length > 0) {
-                numVotes = 1;
-                if (item.attributes[this.appConfig.itemVotesField]) {
-                    numVotes = item.attributes[this.appConfig.itemVotesField] + 1;
-                }
-                item.attributes[this.appConfig.itemVotesField] = numVotes;
+                // Get the latest vote count
+                this.refreshVoteCount(item).then(lang.hitch(this, function (item) {
+                    // Increment the vote
+                    item.attributes[this.appConfig.itemVotesField] = item.attributes[this.appConfig.itemVotesField] + 1;
 
-                this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
-                    if (updates.length === 0) {
-                        topic.publish("voteUpdateFailed", "missing field");
-                    } else if (updates[0].error) {
-                        topic.publish("voteUpdateFailed", updates[0].error);
-                    } else {
-                        topic.publish("voteUpdated", item);
-                    }
-                }), lang.hitch(this, function (err) {
+                    // Update the item in the feature layer
+                    this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
+                        if (updates.length === 0) {
+                            topic.publish("voteUpdateFailed", "missing field");
+                        } else if (updates[0].error) {
+                            topic.publish("voteUpdateFailed", updates[0].error);
+                        } else {
+                            topic.publish("voteUpdated", item);
+                        }
+                    }), lang.hitch(this, function (err) {
+                        topic.publish("voteUpdateFailed", err.message || "voteUpdateFailed");
+                    }));
+                }), function (err) {
                     topic.publish("voteUpdateFailed", err.message || "voteUpdateFailed");
-                }));
+                });
             }
         }
 

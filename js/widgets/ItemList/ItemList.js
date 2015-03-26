@@ -136,21 +136,25 @@ define([
          */
         buildItemSummary: function (item) {
 
-            var itemTitle, itemVotes, itemSummaryDiv, favDiv, iconDiv, likeIconSurf;
+            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv, likeIconSurf;
 
             itemTitle = this.getItemTitle(item) || "&nbsp;";
 
             itemVotes = this.getItemVotes(item);
+
 
             itemSummaryDiv = domConstruct.create('div', {
                 'class': 'itemSummary',
                 'click': lang.partial(this.summaryClick, this, item)
             }, this.list);
 
-            domConstruct.create('div', {
+            itemTitleDiv = domConstruct.create('div', {
                 'class': 'itemTitle',
                 'innerHTML': itemTitle
             }, itemSummaryDiv);
+            if (itemVotes.needSpace) {
+                domClass.add(itemTitleDiv, "itemListTitleOverride");
+            }
 
             favDiv = domConstruct.create('div', {
                 'class': 'itemFav',
@@ -159,7 +163,7 @@ define([
 
             domConstruct.create('div', {
                 'class': 'itemVotes',
-                'innerHTML': itemVotes
+                'innerHTML': itemVotes.label
             }, favDiv);
 
             iconDiv = domConstruct.create('div', {
@@ -188,10 +192,26 @@ define([
         /**
          * Gets the number of votes for an item
          * @param  {feature} item The feature for which to get the vote count
-         * @return {integer}      Vote count for the item
+         * @return {object} Object containing "label" with vote count for the item in a shortened form (num if <1000,
+         * floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace" that's indicates if an
+         * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
          */
         getItemVotes: function (item) {
-            return item.attributes[this.votesField] || 0;
+            var needSpace = false, votes = item.attributes[this.votesField] || 0;
+            if (votes > 999) {
+                if (votes > 99999) {
+                    needSpace = true;
+                }
+                if (votes > 999999) {
+                    votes = Math.floor(votes / 1000000) + "M";
+                } else {
+                    votes = Math.floor(votes / 1000) + "k";
+                }
+            }
+            return {
+                "label": votes,
+                "needSpace": needSpace
+            };
         },
 
         /**

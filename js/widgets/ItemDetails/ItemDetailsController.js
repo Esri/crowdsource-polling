@@ -51,7 +51,10 @@ define([
         id: 'itemDetail',
         baseClass: 'itemDetail',
         itemTitle: 'default title',
-        itemVotes: 0,
+        itemVotes: {
+            "label": 0,
+            "needSpace": false
+        },
         actionVisibilities: {
             "showVotes": false,
             "showComments": false,
@@ -196,7 +199,10 @@ define([
         updateItemVotes: function (item) {
             if (item === this.item) {
                 this.itemVotes = this.getItemVotes(item);
-                this.itemVotesDiv.innerHTML = this.itemVotes;
+                if (this.itemVotes.needSpace) {
+                    domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
+                }
+                this.itemVotesDiv.innerHTML = this.itemVotes.label;
             }
         },
 
@@ -294,10 +300,26 @@ define([
         /**
          * Gets the number of votes for an item
          * @param  {feature} item The feature for which to get the vote count
-         * @return {integer}      Vote count for the item
+         * @return {object} Object containing "label" with vote count for the item in a shortened form (num if <1000,
+         * floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace" that's indicates if an
+         * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
          */
         getItemVotes: function (item) {
-            return item.attributes[this.votesField] || 0;
+            var needSpace = false, votes = item.attributes[this.votesField] || 0;
+            if (votes > 999) {
+                if (votes > 99999) {
+                    needSpace = true;
+                }
+                if (votes > 999999) {
+                    votes = Math.floor(votes / 1000000) + "M";
+                } else {
+                    votes = Math.floor(votes / 1000) + "k";
+                }
+            }
+            return {
+                "label": votes,
+                "needSpace": needSpace
+            };
         },
 
         clearItemDisplay: function () {
@@ -308,7 +330,10 @@ define([
 
         buildItemDisplay: function () {
             this.itemTitleDiv.innerHTML = this.itemTitle;
-            this.itemVotesDiv.innerHTML = this.itemVotes;
+            if (this.itemVotes.needSpace) {
+                domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
+            }
+            this.itemVotesDiv.innerHTML = this.itemVotes.label;
             this.itemCP.set('content', this.item.getContent());
         },
 

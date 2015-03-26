@@ -204,6 +204,10 @@ body {
   overflow-x: hidden;
 }
 
+.itemListTitleOverride {
+    width: 76%!important;
+}
+
 .itemList .itemTitle,
 .itemList .itemFav {
   line-height: 30px;
@@ -243,13 +247,17 @@ body {
 }
 
 .itemDetail .itemSummary .itemTitle {
-  width: 70%;
+  width: 69%;
   padding-right: 5px;
+}
+
+.itemDetailTitleOverride {
+    width: 67%!important;
 }
 
 .itemDetail .itemSummary .itemFav {
   font-size: inherit;
-  padding-left: 5px;
+  padding-left: 0px;
 }
 
 .itemDetail .itemFav .icon {

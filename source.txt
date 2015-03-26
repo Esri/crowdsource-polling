@@ -1,5 +1,5 @@
-commit b6e1abad4f998e06a5877e4176d7e23c65e59236
+commit 54e33aa53c7603f051f7a44fbcd10a937d4e10fb
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Mar 26 09:28:02 2015 -0700
+Date:   Thu Mar 26 13:58:00 2015 -0700
 
-    Removed use of JSON.stringify because of circular references in error objects
+    Tweaked votes count display to handle numbers up to 99,999,999

@@ -127,6 +127,7 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
 .sideHdrSign:hover {
     background-color: #007ac2;
     color: white;
@@ -150,6 +151,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding: 0px 5px 0px 5px;
 }
 
 
@@ -280,6 +282,18 @@ body {
   cursor: pointer;
 }
 
+.itemDetail .btn ::selection {
+    color: #007ac2;
+}
+
+.itemDetail .btn ::-moz-selection {
+    color: #007ac2;
+}
+
+.itemDescFooter {
+    height: 25px;
+}
+
 .itemDetail .float-right {
   float: right;
 }
@@ -335,6 +349,17 @@ body {
 
 .itemDetail .attachmentsSection {
   display: none;
+  margin-bottom: 12px;
+}
+
+.itemDetail .attachmentsSection .attachment {
+  width: 48%;
+  margin: 0px 5px 5px 0px;
+  cursor: pointer;
+}
+
+.commentsForm {
+    margin-bottom: 12px;
 }
 
 /* ---------- Popup ---------- */
@@ -343,22 +368,16 @@ body {
     position: absolute;
     display: none;
     z-index:50;
-    top: 50%;
-    left: 50%;
     border: 1px solid #CCC;
     background-color: white;
-    min-width: 32px;
+    overflow: hidden;
 }
 .popupTitle {
     height: 32px;
     line-height: 32px;
-    background-color:none;
 }
 .popupContent {
-    padding: 10px;
-    padding-top:0px;
-    max-width: 350px;
-    max-height: 300px;
+    margin: 10px;
     overflow:auto;
 }
 .popupClose {
@@ -368,7 +387,6 @@ body {
     height: 20px;
     padding: 4px;
     right: 2px;
-    background-color:none;
 }
 
 .socialMediaDisclaimer {
@@ -392,73 +410,64 @@ body {
 
 .dynamicFormPanel {
     background-color: white;
-}
-
-.dynamicForm {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 52px;
-    padding: 12px;
     overflow-y: auto;
 }
 
+.dynamicForm {
+    margin: 12px;
+}
+
 .dynamicFormRow {
-    position: relative;
-    margin: 10px 10px 10px 10px;
+    margin: 10px 0px 10px 0px;
     height: auto;
     line-height: 18px;
 }
 
 .dynamicFormInputCtl {
-    width: 95%;
+    width: 99%;
     height: 24px;
 }
 
-
 .dynamicFormTextAreaCtl {
-    width: 95%;
+    width: 98%;
     height: 60px;
     resize: none;
 }
 
 .dynamicFormCharactersRemaining {
     float: right;
-    padding-right: 7px;
+    padding-right: 1px;
 }
 
 .dynamicFormActions {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    height: 42px;
-    padding: 5px 8px;
+    font-size: 14px;
+    height: 35px;
 }
 
 .dynamicFormAction {
-    width: 145px;
-    height: 40px;
+    width: 48%;
     display: table;
     text-align: center;
+    vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #ccc;
 }
 
 .dynamicFormAction span {
-    width: 145px;
-    height: 40px;
+    width: 48%;
     display: table-cell;
     vertical-align: middle;
 }
 
 .dynamicFormActionLeft {
     float: left;
+    height: 33px;
     color: #007ac2;
+    border: 1px solid #ccc;
 }
 
 .dynamicFormActionRight {
     float: right;
+    height: 35px;
     color: #007ac2;  /* IE8 workaround */
+    font-weight: bold;
 }

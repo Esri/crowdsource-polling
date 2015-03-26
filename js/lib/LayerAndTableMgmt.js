@@ -168,7 +168,8 @@ define([
 
                     // Test that the items layer is related to the comments table and that
                     // the two are not involved in any other relationships
-                    if (this._itemLayer.relationships.length !== 1 ||
+                    if (!this._itemLayer.relationships || !this._commentTable.relationships ||
+                            this._itemLayer.relationships.length !== 1 ||
                             this._commentTable.relationships.length !== 1 ||
                             this._itemLayer.relationships[0].relatedTableId !== this._commentTable.layerId ||
                             this._itemLayer.layerId !== this._commentTable.relationships[0].relatedTableId) {
@@ -272,6 +273,23 @@ define([
                 lang.hitch(this, function (err) {
                     topic.publish("commentAddFailed", JSON.stringify(err));
                 }));
+        },
+
+        /**
+         * Retrieves the attachments associated with an item.
+         * @param {objectID} item Item whose attachments are sought
+         * @return {publish} "updatedAttachments" with results of query
+         */
+        queryAttachments: function (item) {
+            this._itemLayer.queryAttachmentInfos(
+                item.attributes[this._itemLayer.objectIdField],
+                lang.hitch(this, function (attachments) {
+                    topic.publish("updatedAttachments", attachments);
+                }),
+                lang.hitch(this, function (err) {
+                    console.log(JSON.stringify(err));  //???
+                })
+            );
         },
 
         /**

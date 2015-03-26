@@ -35,11 +35,15 @@ define([
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
 
+    "application/widgets/DynamicForm/DynamicForm",
+    "application/widgets/PopupWindow/PopupWindow",
+
     'dojo/text!./ItemDetailsView.html'
 ], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, domAttr, dojoQuery, topic, dojoOn, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
+    DynamicForm, PopupWindow,
     template) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
@@ -48,6 +52,11 @@ define([
         baseClass: 'itemDetail',
         itemTitle: 'default title',
         itemVotes: 0,
+        actionVisibilities: {
+            "showVotes": false,
+            "showComments": false,
+            "showGallery": false
+        },
 
         constructor: function () {
             this.inherited(arguments);
@@ -68,11 +77,14 @@ define([
         },
 
         show: function () {
+            domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes ? 'inline-block' : 'none');
+            domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments ? 'inline-block' : 'none');
             domStyle.set(this.domNode, 'display', '');
         },
 
         hide: function () {
             domStyle.set(this.domNode, 'display', 'none');
+            this.hideCommentForm();
         },
 
         /**
@@ -125,6 +137,14 @@ define([
             dojoOn(this.commentButton, 'click', function () {
                 topic.publish('getComment', self.item);
             });
+            dojoOn(this.galleryButton, 'click', lang.hitch(this, function () {
+                topic.publish('showGallery', self.item);
+                if (domStyle.get(this.gallery, 'display') === 'none') {
+                    this.showGallery();
+                } else {
+                    this.hideGallery();
+                }
+            }));
         },
 
 
@@ -132,9 +152,22 @@ define([
          * Sets the fields that are needed to display feature information in this list (number of votes).
          * Needs to be called before first setItems to tell the widget which fields to look for.
          * @param {string} votesField Name of votes property
+         * @param {array} commentFields Fields used by comment-entry form
          */
-        setItemFields: function (votesField) {
+        setItemFields: function (votesField, commentFields) {
             this.votesField = votesField;
+            this.commentFields = commentFields;
+        },
+
+        /**
+         * Sets the
+         */
+        setActionsVisibility: function (showVotes, showComments, showGallery) {
+            this.actionVisibilities = {
+                "showVotes": showVotes,
+                "showComments": showComments,
+                "showGallery": showGallery
+            };
         },
 
         setCommentFields: function (fields) {
@@ -148,10 +181,94 @@ define([
 
         setItem: function (item) {
             this.item = item;
-            this.itemTitle = this.getItemTitle(item);
+            this.clearGallery();
+
+            this.itemTitle = this.getItemTitle(item) || "&nbsp;";
             this.itemVotes = this.getItemVotes(item);
             this.clearItemDisplay();
             this.buildItemDisplay();
+        },
+
+        setAttachments: function (attachments) {
+            var showGalleryButton =
+                this.actionVisibilities.showGallery && attachments && attachments.length > 0;
+            if (showGalleryButton) {
+                if (!this.enlargedViewPopup) {
+                    // Popup window for enlarged image
+                    this.enlargedViewPopup = new PopupWindow({
+                        "appConfig": this.appConfig,
+                        "showClose": true
+                    }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
+                }
+
+                this.updateGallery(attachments);
+                domStyle.set(this.galleryButton, 'display', 'inline-block');
+            }
+        },
+
+        updateGallery: function (attachments) {
+            // Create gallery
+            arrayUtil.forEach(attachments, lang.hitch(this, function (attachment) {
+                var thumb, srcURL;
+                srcURL = attachment.url + "/" + attachment.name;
+                thumb = domConstruct.create('img', {
+                    'class': 'attachment',
+                    'src': srcURL
+                }, this.gallery);
+                dojoOn(thumb, 'click', lang.hitch(this, function (attachment) {
+                    domConstruct.empty(this.enlargedViewPopup.popupContent);
+                    domConstruct.create('img', {
+                        'class': 'attachment',
+                        'src': srcURL
+                    }, this.enlargedViewPopup.popupContent);
+                    this.enlargedViewPopup.show();
+                }));
+            }));
+        },
+
+        clearGallery: function () {
+            domStyle.set(this.galleryButton, 'display', 'none');
+            this.hideGallery();
+            domConstruct.empty(this.gallery);
+        },
+
+        showGallery: function () {
+            domStyle.set(this.gallery, 'display', 'block');
+        },
+
+        hideGallery: function () {
+            domStyle.set(this.gallery, 'display', 'none');
+            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
+        },
+
+        showCommentForm: function (userInfo) {
+            if (!this.itemAddComment) {
+                // Create comment form
+                this.itemAddComment = new DynamicForm({
+                    "appConfig": this.appConfig
+                }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
+
+                // Set its item and its fields
+                this.itemAddComment.setItem(this.item);
+                this.itemAddComment.setFields(this.commentFields);
+
+                // See if we can pre-set its user name value
+                if (userInfo && userInfo.name) {
+                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
+                } else {
+                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+                }
+            }
+
+            // Show the form
+            this.itemAddComment.show();
+        },
+
+        hideCommentForm: function () {
+            if (this.itemAddComment) {
+                this.itemAddComment.destroy();
+                this.itemAddComment = null;
+            }
         },
 
         /**

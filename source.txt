@@ -1,6 +1,5 @@
-commit bbde25e0db8e593aa2c97fa01259cf4757f7429f
-Merge: 8892e87 e00c069
+commit 84b85c460f694bf2e065928b7746d54883c9c671
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Tue Mar 3 15:53:09 2015 -0800
+Date:   Thu Mar 26 07:56:59 2015 -0700
 
-    Merge branch 'obsolete-browser-handling' into develop
+    Padded title on left and right to match sign-in and help buttons

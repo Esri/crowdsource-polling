@@ -1,5 +1,7 @@
-commit 56b306e6b6a3cfc2f7c80353c27a3fc8ff28d6bf
+commit c31155fe78683585b5201aedc0af9c5a84f4b0d2
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Mar 26 08:26:29 2015 -0700
+Date:   Thu Mar 26 08:56:31 2015 -0700
 
-    Limited size of social-media-signin popup to be the same as the help popup
+    Updated votes without losing gallery button
+    
+    #27

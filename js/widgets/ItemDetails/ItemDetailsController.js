@@ -189,6 +189,17 @@ define([
             this.buildItemDisplay();
         },
 
+        /**
+         * Updates the definition and display of the current item.
+         * @param {object} item Updated definition of current item
+         */
+        updateItemVotes: function (item) {
+            if (item === this.item) {
+                this.itemVotes = this.getItemVotes(item);
+                this.itemVotesDiv.innerHTML = this.itemVotes;
+            }
+        },
+
         setAttachments: function (attachments) {
             var showGalleryButton =
                 this.actionVisibilities.showGallery && attachments && attachments.length > 0;
@@ -306,16 +317,6 @@ define([
             domClass.toggle(this.noCommentsDiv, 'hide', commentsArr.length);
             arrayUtil.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
 
-        },
-
-        /**
-         * Updates the definition and display of the current item.
-         * @param {object} item Updated definition of current item
-         */
-        updateItem: function (item) {
-            if (item === this.item) {
-                this.setItem(item);
-            }
         },
 
         /**

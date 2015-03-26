@@ -428,7 +428,11 @@ define([
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,
-                    "showClose": true
+                    "showClose": true,
+                    "maxima": {
+                        "width": 350,
+                        "height": 300
+                    }
                 }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
 
                 // Sidebar content controller

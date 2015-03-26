@@ -127,6 +127,7 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
 .sideHdrSign:hover {
     background-color: #007ac2;
     color: white;
@@ -280,6 +281,14 @@ body {
   cursor: pointer;
 }
 
+.itemDetail .btn ::selection {
+    color: #007ac2;
+}
+
+.itemDetail .btn ::-moz-selection {
+    color: #007ac2;
+}
+
 .itemDescFooter {
     height: 25px;
 }
@@ -358,22 +367,16 @@ body {
     position: absolute;
     display: none;
     z-index:50;
-    top: 50%;
-    left: 50%;
     border: 1px solid #CCC;
     background-color: white;
-    min-width: 32px;
+    overflow: hidden;
 }
 .popupTitle {
     height: 32px;
     line-height: 32px;
-    background-color:none;
 }
 .popupContent {
-    padding: 10px;
-    padding-top:0px;
-    max-width: 350px;
-    max-height: 300px;
+    margin: 10px;
     overflow:auto;
 }
 .popupClose {
@@ -383,7 +386,6 @@ body {
     height: 20px;
     padding: 4px;
     right: 2px;
-    background-color:none;
 }
 
 .socialMediaDisclaimer {

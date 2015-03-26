@@ -1,7 +1,5 @@
-commit c31155fe78683585b5201aedc0af9c5a84f4b0d2
+commit b6e1abad4f998e06a5877e4176d7e23c65e59236
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Mar 26 08:56:31 2015 -0700
+Date:   Thu Mar 26 09:28:02 2015 -0700
 
-    Updated votes without losing gallery button
-    
-    #27
+    Removed use of JSON.stringify because of circular references in error objects

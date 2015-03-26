@@ -415,7 +415,11 @@ define([
                 // Social media
                 this._socialDialog = new SocialMediaSignin({
                     "appConfig": this.config,
-                    "showClose": true
+                    "showClose": true,
+                    "maxima": {
+                        "width": 350,
+                        "height": 300
+                    }
                 }).placeAt(document.body); // placeAt triggers a startup call to _socialDialog
 
                 // Sidebar header

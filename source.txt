@@ -1,5 +1,5 @@
-commit 84b85c460f694bf2e065928b7746d54883c9c671
+commit 56b306e6b6a3cfc2f7c80353c27a3fc8ff28d6bf
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Mar 26 07:56:59 2015 -0700
+Date:   Thu Mar 26 08:26:29 2015 -0700
 
-    Padded title on left and right to match sign-in and help buttons
+    Limited size of social-media-signin popup to be the same as the help popup

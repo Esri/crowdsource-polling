@@ -29,7 +29,7 @@ define({
 
     //Template-specific properties in AGOL configuration
     "title": "Title",
-    "displayText": "",
+    "displayText": "We welcome your votes and comments about these projects.<br><br>Thank you for participating.",
     "color": "#206bdb",
     "commentNameField": "commenter",
     "itemVotesField": "popularity",
@@ -38,7 +38,7 @@ define({
     "allowTwitter": true,
     "facebookAppId": "808394189204220",
     "googleplusClientId": "862973275076-qadao43h9btc27oui3mfhj846rh4so6o.apps.googleusercontent.com",
-    "socialMediaDisclaimer": "",
+    "socialMediaDisclaimer": "Click on one of the social media below to use your username in your comment",
 
     //Other template-specific properties
     "maxDarkLuminance": 49,  // if the luminance of 'color' (above) is greater than this threshold, then the foreground color will be black; otherwise, it is white

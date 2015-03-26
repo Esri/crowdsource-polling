@@ -239,7 +239,7 @@ define([
             this._itemLayer.queryFeatures(updateQuery, lang.hitch(this, function (results) {
                 topic.publish("updatedItemsList", results ? results.features : []);
             }), lang.hitch(this, function (err) {
-                console.log(JSON.stringify(err));
+                console.log(err.message || "queryFeatures");
             }));
         },
 
@@ -271,7 +271,7 @@ define([
                     }
                 }),
                 lang.hitch(this, function (err) {
-                    topic.publish("commentAddFailed", JSON.stringify(err));
+                    topic.publish("commentAddFailed", err.message || "commentAddFailed");
                 }));
         },
 
@@ -287,7 +287,7 @@ define([
                     topic.publish("updatedAttachments", attachments);
                 }),
                 lang.hitch(this, function (err) {
-                    console.log(JSON.stringify(err));  //???
+                    console.log(err.message || "queryAttachmentInfos");  //???
                 })
             );
         },
@@ -332,7 +332,7 @@ define([
                 }
                 topic.publish("updatedCommentsList", features);
             }), lang.hitch(this, function (err) {
-                console.log(JSON.stringify(err));  //???
+                console.log(err.message || "queryRelatedFeatures");  //???
             }));
         },
 
@@ -359,7 +359,7 @@ define([
                         topic.publish("voteUpdated", item);
                     }
                 }), lang.hitch(this, function (err) {
-                    topic.publish("voteUpdateFailed", JSON.stringify(err));
+                    topic.publish("voteUpdateFailed", err.message || "voteUpdateFailed");
                 }));
             }
         }

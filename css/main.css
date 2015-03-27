@@ -473,14 +473,14 @@ body {
 
 .dynamicFormActionLeft {
     float: left;
-    height: 33px;
-    color: #007ac2;
-    border: 1px solid #ccc;
+    height: 35px;
+    color: #007ac2;  /* IE8 workaround */
+    font-weight: bold;
 }
 
 .dynamicFormActionRight {
     float: right;
-    height: 35px;
-    color: #007ac2;  /* IE8 workaround */
-    font-weight: bold;
+    height: 33px;
+    color: #007ac2;
+    border: 1px solid #ccc;
 }

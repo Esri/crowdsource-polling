@@ -171,24 +171,11 @@ define([
             // Create the action buttons; we do it here rather than in the template because
             // _TemplatedMixin hangs under IE8 with two divs nested in the dynamicFormActions div
 
-            // Cancel
-            dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction"
-            }, actionsBar);
-            domClass.add(dynamicFormCancel, "dynamicFormActionLeft");
-            on(dynamicFormCancel, "click", lang.hitch(this, function () {
-                topic.publish("cancelForm");
-            }));
-
-            domConstruct.create("span", {
-                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
-            }, dynamicFormCancel);
-
             // Submit
             this.dynamicFormSubmit = domConstruct.create("div", {
                 className: "dynamicFormAction"
             }, actionsBar);
-            domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
+            domClass.add(this.dynamicFormSubmit, "dynamicFormActionLeft");
             domClass.add(this.dynamicFormSubmit, "appTheme");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
@@ -198,6 +185,19 @@ define([
             domConstruct.create("span", {
                 innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
             }, this.dynamicFormSubmit);
+
+            // Cancel
+            dynamicFormCancel = domConstruct.create("div", {
+                className: "dynamicFormAction"
+            }, actionsBar);
+            domClass.add(dynamicFormCancel, "dynamicFormActionRight");
+            on(dynamicFormCancel, "click", lang.hitch(this, function () {
+                topic.publish("cancelForm");
+            }));
+
+            domConstruct.create("span", {
+                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
+            }, dynamicFormCancel);
 
             // Only the Submit is themed, and it is initially not visible; visibility is controlled
             // by inner function updateRequiredFieldStatus based upon the status of required fields

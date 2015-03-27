@@ -171,24 +171,11 @@ define([
             // Create the action buttons; we do it here rather than in the template because
             // _TemplatedMixin hangs under IE8 with two divs nested in the dynamicFormActions div
 
-            // Cancel
-            dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction"
-            }, actionsBar);
-            domClass.add(dynamicFormCancel, "dynamicFormActionLeft");
-            on(dynamicFormCancel, "click", lang.hitch(this, function () {
-                topic.publish("cancelForm");
-            }));
-
-            domConstruct.create("span", {
-                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
-            }, dynamicFormCancel);
-
             // Submit
             this.dynamicFormSubmit = domConstruct.create("div", {
                 className: "dynamicFormAction"
             }, actionsBar);
-            domClass.add(this.dynamicFormSubmit, "dynamicFormActionRight");
+            domClass.add(this.dynamicFormSubmit, "dynamicFormActionLeft");
             domClass.add(this.dynamicFormSubmit, "appTheme");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
@@ -199,6 +186,19 @@ define([
                 innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
             }, this.dynamicFormSubmit);
 
+            // Cancel
+            dynamicFormCancel = domConstruct.create("div", {
+                className: "dynamicFormAction"
+            }, actionsBar);
+            domClass.add(dynamicFormCancel, "dynamicFormActionRight");
+            on(dynamicFormCancel, "click", lang.hitch(this, function () {
+                topic.publish("cancelForm");
+            }));
+
+            domConstruct.create("span", {
+                innerHTML: this.appConfig.i18n.dynamic_form.cancelButtonLabel
+            }, dynamicFormCancel);
+
             // Only the Submit is themed, and it is initially not visible; visibility is controlled
             // by inner function updateRequiredFieldStatus based upon the status of required fields
             domStyle.set(this.dynamicFormSubmit, "display", "none");
@@ -206,7 +206,7 @@ define([
             // Find the editable attributes and create a form from them
             form = [];
             array.forEach(fields, lang.hitch(this, function (field) {
-                var row, disabledFlag, inputItem, count, useTextArea;
+                var row, inputItem, count, useTextArea;
 
                 /**
                  * Creates a div to hold a visual row.
@@ -261,9 +261,8 @@ define([
                         (pThis._requiredFieldsStatus === 0 ? "table" : "none"));
                 }
 
-                // Visible fields get added to the form
-                if (field.dtIsVisible) {
-                    disabledFlag = field.dtIsEditable ? null : "disabled";
+                // Editable fields get added to the form, even if they're not visible in the popup
+                if (field.dtIsEditable) {
 
                     if (field.type === "esriFieldTypeString") {
                         row = createRow();
@@ -321,18 +320,11 @@ define([
                         } else if (field.type === "esriFieldTypeDate") {
                             row = createRow();
                             domConstruct.create("br", {}, row);
-                            inputItem = new DateTextBox({
-                                disabled: disabledFlag  // needs to be done in constructor
-                            }, domConstruct.create("div", {}, row));
+                            inputItem = new DateTextBox({}, domConstruct.create("div", {}, row));
                         }
                     }
 
                     if (esriLang.isDefined(inputItem)) {
-                        // Disabled setting for all but DateTextBox
-                        if (disabledFlag) {
-                            inputItem.disabled = true;
-                        }
-
                         // Set its initial value if supplied
                         if (this._presets[field.name]) {
                             if (inputItem.set) {  // Dojo item
@@ -374,18 +366,18 @@ define([
                         });
                     }
 
-                // Special handling for invisible yet editable form items
-                } else if (field.dtIsEditable) {
-                    // If a form item is invisible but pre-set, add it to the form
+                // Special handling for non-editable pre-set items
+                } else if (!field.nullable) {
+                    // If a form item is pre-set, add it to the form
                     if (this._presets[field.name]) {
                         form.push({
                             "field": field,
                             "value": this._presets[field.name]
                         });
 
-                    // If a form item is invisible and required but not pre-set, then the form
-                    // can't meet the condition for submission that all required fields have values
-                    } else if (!field.nullable) {
+                    // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
+                    // then the form can't meet the condition for submission that all required fields have values
+                    } else if (field.type !== "esriFieldTypeOID" && field.type !== "esriFieldTypeGUID") {
                         topic.publish("showError", "[" + field.alias + "]<br>"
                             + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }

@@ -198,7 +198,9 @@ define([
          * "visible" (we have to use dtIs* to avoid conflicts with the API's use of "editable")
          */
         applyWebmapControlsToFields: function (fields, webmapPopup) {
-            var fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
+            var sortedFields, fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
+
+            // Amend fields
             array.forEach(fields, function (field) {
                 // Cover no-popup and unmatched fieldname cases
                 field.dtIsEditable = field.editable;
@@ -210,6 +212,9 @@ define([
                 if (fieldInfos) {
                     array.some(fieldInfos, function (fieldInfo) {
                         if (field.name === fieldInfo.fieldName) {
+                            if (fieldInfo.label) {
+                                field.alias = fieldInfo.label;
+                            }
                             field.dtIsEditable = fieldInfo.isEditable;
                             field.dtIsVisible = fieldInfo.visible;
                             field.dtStringFieldOption = fieldInfo.stringFieldOption;
@@ -220,6 +225,22 @@ define([
                     });
                 }
             });
+
+            // Reorder fields to match popup
+            if (fieldInfos) {
+                sortedFields = [];
+                array.forEach(fieldInfos, function (fieldInfo) {
+                    array.some(fields, function (field) {
+                        if (field.name === fieldInfo.fieldName) {
+                            sortedFields.push(field);
+                            return true;
+                        }
+                        return false;
+                    });
+                });
+                return sortedFields;
+            }
+
             return fields;
         },
 

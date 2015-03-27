@@ -1,5 +1,7 @@
-commit 54e33aa53c7603f051f7a44fbcd10a937d4e10fb
+commit c0a6c384c8656c1aff3a65135e52557f8175705e
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Mar 26 13:58:00 2015 -0700
+Date:   Fri Mar 27 15:48:10 2015 -0700
 
-    Tweaked votes count display to handle numbers up to 99,999,999
+    Fit attachment image completely in popup
+    
+    #32

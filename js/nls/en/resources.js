@@ -43,10 +43,10 @@ define(({
     dynamic_form: {
         optionalFormItemFlag: " (optional)",
         requiredFormItemFlag: " (required)",
-        unsettableRequiredField: "A required field is neither invisible nor initialized",
+        unsettableRequiredField: "A required field is neither initialized nor in the form",
         countOfRemainingCharactersTooltip: "Characters remaining",
         cancelButtonLabel: "Cancel",
-        submitButtonLabel: "Submit Comment"
+        submitButtonLabel: "Submit"
     },
     item_details: {
         likeButtonLabel: "Like",

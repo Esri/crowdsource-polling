@@ -440,6 +440,7 @@ body {
     width: 98%;
     height: 60px;
     resize: none;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .dynamicFormCharactersRemaining {

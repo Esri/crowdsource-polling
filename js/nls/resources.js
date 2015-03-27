@@ -47,7 +47,7 @@ define({
             unsettableRequiredField: "A required field is neither initialized nor in the form",
             countOfRemainingCharactersTooltip: "Characters remaining",
             cancelButtonLabel: "Cancel",
-            submitButtonLabel: "Submit Comment"
+            submitButtonLabel: "Submit"
         },
         item_details: {  // Detailed information about an item and a list of its comments
             likeButtonLabel: "Like",

@@ -46,7 +46,7 @@ define(({
         unsettableRequiredField: "Un champ obligatoire est ni dans le formulaire ni initialisé",
         countOfRemainingCharactersTooltip: "Caractères restants",
         cancelButtonLabel: "Annuler",
-        submitButtonLabel: "Envoyer le commentaire"
+        submitButtonLabel: "Envoyer"
     },
     item_details: {
         likeButtonLabel: "Voter",

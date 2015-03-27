@@ -416,6 +416,10 @@ body {
 
 /* ---------- DynamicForm ---------- */
 
+.dijitTextBox {
+    width: 100%;
+}
+
 .dynamicFormPanel {
     background-color: white;
     overflow-y: auto;

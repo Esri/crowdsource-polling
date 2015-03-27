@@ -366,18 +366,18 @@ define([
                         });
                     }
 
-                // Special handling for invisible yet editable form items
-                } else if (field.dtIsEditable) {
-                    // If a form item is invisible but pre-set, add it to the form
+                // Special handling for non-editable pre-set items
+                } else if (!field.nullable) {
+                    // If a form item is pre-set, add it to the form
                     if (this._presets[field.name]) {
                         form.push({
                             "field": field,
                             "value": this._presets[field.name]
                         });
 
-                    // If a form item is invisible and required but not pre-set, then the form
-                    // can't meet the condition for submission that all required fields have values
-                    } else if (!field.nullable) {
+                    // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
+                    // then the form can't meet the condition for submission that all required fields have values
+                    } else if (field.type !== "esriFieldTypeOID" && field.type !== "esriFieldTypeGUID") {
                         topic.publish("showError", "[" + field.alias + "]<br>"
                             + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }

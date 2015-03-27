@@ -206,7 +206,7 @@ define([
             // Find the editable attributes and create a form from them
             form = [];
             array.forEach(fields, lang.hitch(this, function (field) {
-                var row, disabledFlag, inputItem, count, useTextArea;
+                var row, inputItem, count, useTextArea;
 
                 /**
                  * Creates a div to hold a visual row.
@@ -261,9 +261,8 @@ define([
                         (pThis._requiredFieldsStatus === 0 ? "table" : "none"));
                 }
 
-                // Visible fields get added to the form
-                if (field.dtIsVisible) {
-                    disabledFlag = field.dtIsEditable ? null : "disabled";
+                // Editable fields get added to the form, even if they're not visible in the popup
+                if (field.dtIsEditable) {
 
                     if (field.type === "esriFieldTypeString") {
                         row = createRow();
@@ -321,18 +320,11 @@ define([
                         } else if (field.type === "esriFieldTypeDate") {
                             row = createRow();
                             domConstruct.create("br", {}, row);
-                            inputItem = new DateTextBox({
-                                disabled: disabledFlag  // needs to be done in constructor
-                            }, domConstruct.create("div", {}, row));
+                            inputItem = new DateTextBox({}, domConstruct.create("div", {}, row));
                         }
                     }
 
                     if (esriLang.isDefined(inputItem)) {
-                        // Disabled setting for all but DateTextBox
-                        if (disabledFlag) {
-                            inputItem.disabled = true;
-                        }
-
                         // Set its initial value if supplied
                         if (this._presets[field.name]) {
                             if (inputItem.set) {  // Dojo item

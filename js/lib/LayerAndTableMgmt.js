@@ -210,6 +210,9 @@ define([
                 if (fieldInfos) {
                     array.some(fieldInfos, function (fieldInfo) {
                         if (field.name === fieldInfo.fieldName) {
+                            if (fieldInfo.label) {
+                                field.alias = fieldInfo.label;
+                            }
                             field.dtIsEditable = fieldInfo.isEditable;
                             field.dtIsVisible = fieldInfo.visible;
                             field.dtStringFieldOption = fieldInfo.stringFieldOption;

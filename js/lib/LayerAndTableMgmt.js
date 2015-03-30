@@ -367,26 +367,30 @@ define([
         refreshVoteCount: function (item) {
             var updateQuery, updateQueryTask, deferred = new Deferred();
 
-            // Get the latest vote count from the server, not just the feature layer
-            updateQuery = new Query();
-            updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
-            updateQuery.returnGeometry = false;
-            updateQuery.outFields = [this.appConfig.itemVotesField];
+            if (this.appConfig.itemVotesField && this.appConfig.itemVotesField.length > 0) {
+                // Get the latest vote count from the server, not just the feature layer
+                updateQuery = new Query();
+                updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
+                updateQuery.returnGeometry = false;
+                updateQuery.outFields = [this.appConfig.itemVotesField];
 
-            updateQueryTask = new QueryTask(this._itemLayer.url);
-            updateQueryTask.execute(updateQuery, lang.hitch(this, function (results) {
-                var retrievedVotes;
-                if (results && results.features && results.features.length > 0) {
-                    retrievedVotes = results.features[0].attributes[this.appConfig.itemVotesField];
-                    if (retrievedVotes) {
-                        item.attributes[this.appConfig.itemVotesField] = retrievedVotes;
-                        deferred.resolve(item);
+                updateQueryTask = new QueryTask(this._itemLayer.url);
+                updateQueryTask.execute(updateQuery, lang.hitch(this, function (results) {
+                    var retrievedVotes;
+                    if (results && results.features && results.features.length > 0) {
+                        retrievedVotes = results.features[0].attributes[this.appConfig.itemVotesField];
+                        if (retrievedVotes) {
+                            item.attributes[this.appConfig.itemVotesField] = retrievedVotes;
+                            deferred.resolve(item);
+                        }
                     }
-                }
-                deferred.reject(item);
-            }), function () {
-                deferred.reject(item);
-            });
+                    deferred.reject(item);
+                }), function () {
+                    deferred.reject(item);
+                });
+            } else {
+                deferred.resolve(item);
+            }
 
             return deferred;
         },
@@ -397,7 +401,7 @@ define([
          * @return {publish} "voteUpdated" with updated item
          */
         incrementVote: function (item) {
-            if (this.appConfig.itemVotesField.length > 0) {
+            if (this.appConfig.itemVotesField && this.appConfig.itemVotesField.length > 0) {
                 // Get the latest vote count
                 this.refreshVoteCount(item).then(lang.hitch(this, function (item) {
                     // Increment the vote

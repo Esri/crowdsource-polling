@@ -40,6 +40,8 @@ define([
 
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
+        votesField: null,
+
 
         /**
          * Widget constructor. Placeholder if future functionality is needed in the
@@ -152,31 +154,36 @@ define([
                 'class': 'itemTitle',
                 'innerHTML': itemTitle
             }, itemSummaryDiv);
-            if (itemVotes.needSpace) {
-                domClass.add(itemTitleDiv, "itemListTitleOverride");
+
+            if (itemVotes) {
+                if (itemVotes.needSpace) {
+                    domClass.add(itemTitleDiv, "itemListTitleOverride");
+                }
+
+                favDiv = domConstruct.create('div', {
+                    'class': 'itemFav',
+                    'title': this.i18n.likesForThisItemTooltip
+                }, itemSummaryDiv);
+
+                domConstruct.create('div', {
+                    'class': 'itemVotes',
+                    'innerHTML': itemVotes.label
+                }, favDiv);
+
+                iconDiv = domConstruct.create('div', {
+                    'class': 'fav'
+                }, favDiv);
+
+                likeIconSurf = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
             }
-
-            favDiv = domConstruct.create('div', {
-                'class': 'itemFav',
-                'title': this.i18n.likesForThisItemTooltip
-            }, itemSummaryDiv);
-
-            domConstruct.create('div', {
-                'class': 'itemVotes',
-                'innerHTML': itemVotes.label
-            }, favDiv);
-
-            iconDiv = domConstruct.create('div', {
-                'class': 'fav'
-            }, favDiv);
-
-            likeIconSurf = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
 
             // If this item's OID matches the current selection, apply the theme to highlight it
             if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
                 domClass.add(itemSummaryDiv, "appTheme");
-                domClass.add(favDiv, "appThemeAccentText");
-                SvgHelper.changeColor(likeIconSurf, this.appConfig.theme.accentText);
+                if (favDiv) {
+                    domClass.add(favDiv, "appThemeAccentText");
+                    SvgHelper.changeColor(likeIconSurf, this.appConfig.theme.accentText);
+                }
             }
         },
 
@@ -197,21 +204,26 @@ define([
          * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes = item.attributes[this.votesField] || 0;
-            if (votes > 999) {
-                if (votes > 99999) {
-                    needSpace = true;
+            var needSpace = false, votes;
+
+            if (this.votesField) {
+                votes = item.attributes[this.votesField] || 0;
+                if (votes > 999) {
+                    if (votes > 99999) {
+                        needSpace = true;
+                    }
+                    if (votes > 999999) {
+                        votes = Math.floor(votes / 1000000) + "M";
+                    } else {
+                        votes = Math.floor(votes / 1000) + "k";
+                    }
                 }
-                if (votes > 999999) {
-                    votes = Math.floor(votes / 1000000) + "M";
-                } else {
-                    votes = Math.floor(votes / 1000) + "k";
-                }
+                return {
+                    "label": votes,
+                    "needSpace": needSpace
+                };
             }
-            return {
-                "label": votes,
-                "needSpace": needSpace
-            };
+            return null;
         },
 
         /**

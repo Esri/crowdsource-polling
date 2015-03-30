@@ -51,15 +51,15 @@ define([
         id: 'itemDetail',
         baseClass: 'itemDetail',
         itemTitle: 'default title',
-        itemVotes: {
-            "label": 0,
-            "needSpace": false
-        },
+        itemVotes: null,
         actionVisibilities: {
             "showVotes": false,
             "showComments": false,
             "showGallery": false
         },
+        votesField: null,
+        commentFields: null,
+
 
         constructor: function () {
             this.inherited(arguments);
@@ -80,8 +80,8 @@ define([
         },
 
         show: function () {
-            domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes ? 'inline-block' : 'none');
-            domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments ? 'inline-block' : 'none');
+            domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes && this.votesField ? 'inline-block' : 'none');
+            domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments && this.commentFields ? 'inline-block' : 'none');
             domStyle.set(this.domNode, 'display', '');
         },
 
@@ -199,10 +199,18 @@ define([
         updateItemVotes: function (item) {
             if (item === this.item) {
                 this.itemVotes = this.getItemVotes(item);
+                this.redrawItemVotes();
+            }
+        },
+
+        redrawItemVotes: function () {
+            if (this.itemVotes) {
                 if (this.itemVotes.needSpace) {
                     domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
                 }
                 this.itemVotesDiv.innerHTML = this.itemVotes.label;
+            } else {
+                domStyle.set(this.itemVotesGroup, 'display', 'none');
             }
         },
 
@@ -259,26 +267,28 @@ define([
         },
 
         showCommentForm: function (userInfo) {
-            if (!this.itemAddComment) {
-                // Create comment form
-                this.itemAddComment = new DynamicForm({
-                    "appConfig": this.appConfig
-                }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
+            if (this.commentFields) {
+                if (!this.itemAddComment) {
+                    // Create comment form
+                    this.itemAddComment = new DynamicForm({
+                        "appConfig": this.appConfig
+                    }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
 
-                // Set its item and its fields
-                this.itemAddComment.setItem(this.item);
-                this.itemAddComment.setFields(this.commentFields);
+                    // Set its item and its fields
+                    this.itemAddComment.setItem(this.item);
+                    this.itemAddComment.setFields(this.commentFields);
 
-                // See if we can pre-set its user name value
-                if (userInfo && userInfo.name) {
-                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
-                } else {
-                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+                    // See if we can pre-set its user name value
+                    if (userInfo && userInfo.name) {
+                        this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
+                    } else {
+                        this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+                    }
                 }
-            }
 
-            // Show the form
-            this.itemAddComment.show();
+                // Show the form
+                this.itemAddComment.show();
+            }
         },
 
         hideCommentForm: function () {
@@ -305,21 +315,26 @@ define([
          * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes = item.attributes[this.votesField] || 0;
-            if (votes > 999) {
-                if (votes > 99999) {
-                    needSpace = true;
+            var needSpace = false, votes;
+
+            if (this.votesField) {
+                votes = item.attributes[this.votesField] || 0;
+                if (votes > 999) {
+                    if (votes > 99999) {
+                        needSpace = true;
+                    }
+                    if (votes > 999999) {
+                        votes = Math.floor(votes / 1000000) + "M";
+                    } else {
+                        votes = Math.floor(votes / 1000) + "k";
+                    }
                 }
-                if (votes > 999999) {
-                    votes = Math.floor(votes / 1000000) + "M";
-                } else {
-                    votes = Math.floor(votes / 1000) + "k";
-                }
+                return {
+                    "label": votes,
+                    "needSpace": needSpace
+                };
             }
-            return {
-                "label": votes,
-                "needSpace": needSpace
-            };
+            return null;
         },
 
         clearItemDisplay: function () {
@@ -330,10 +345,7 @@ define([
 
         buildItemDisplay: function () {
             this.itemTitleDiv.innerHTML = this.itemTitle;
-            if (this.itemVotes.needSpace) {
-                domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
-            }
-            this.itemVotesDiv.innerHTML = this.itemVotes.label;
+            this.redrawItemVotes();
             this.itemCP.set('content', this.item.getContent());
         },
 

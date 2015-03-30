@@ -132,11 +132,15 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+                var votesField, commentFields;
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(this.config.itemVotesField);
-                this._itemDetails.setItemFields(this.config.itemVotesField, this._mapData.getCommentFields());
-                this._itemDetails.setActionsVisibility(true, true, this._mapData.getItemLayer().hasAttachments);
+                votesField = (this.config.itemVotesField && this.config.itemVotesField.length > 0) ?
+                        this.config.itemVotesField : null;
+                commentFields = this._mapData.getCommentFields();
+                this._itemsList.setFields(votesField);
+                this._itemDetails.setItemFields(votesField, commentFields);
+                this._itemDetails.setActionsVisibility(votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 

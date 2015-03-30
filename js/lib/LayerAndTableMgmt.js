@@ -111,7 +111,7 @@ define([
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
-                var commentTableURL;
+                var opLayers, iOpLayer = 0, commentTableURL;
 
                 // Operational layer provides item fields and formats
                 if (this.appConfig.itemInfo.itemData.operationalLayers.length === 0) {
@@ -119,7 +119,15 @@ define([
                     return;
                 }
 
-                this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
+                opLayers = this.appConfig.itemInfo.itemData.operationalLayers;
+                if (this.appConfig.featureLayer && this.appConfig.featureLayer.id) {
+                    for (iOpLayer = 0; iOpLayer < opLayers.length; iOpLayer++) {
+                        if (this.appConfig.featureLayer.id == opLayers[iOpLayer].id) {
+                            break;
+                        }
+                    };
+                }
+                this._itemLayerInWebmap = opLayers[iOpLayer];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
                 if (!this._itemLayerInWebmap) {
                     deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);

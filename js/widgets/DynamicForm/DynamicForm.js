@@ -245,7 +245,7 @@ define([
                                 pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
                             }
                         } else {               // HTML item
-                            if (inputItem.value.toString().length > 0) {
+                            if (inputItem.value.toString().trim().length > 0) {
                                 // Have value, so clear spot in mask
                                 pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
                             } else {

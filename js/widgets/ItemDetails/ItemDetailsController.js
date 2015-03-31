@@ -80,8 +80,15 @@ define([
         },
 
         show: function () {
-            domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes && this.votesField ? 'inline-block' : 'none');
-            domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments && this.commentFields ? 'inline-block' : 'none');
+            if (!this.actionVisibilities.showVotes || !this.votesField) {
+                domStyle.set(this.likeButton, 'display', 'none');
+            }
+            if (!this.actionVisibilities.showComments || !this.commentFields) {
+                domStyle.set(this.commentButton, 'display', 'none');
+                domStyle.set(this.commentsHeading, 'display', 'none');
+                domStyle.set(this.noCommentsDiv, 'display', 'none');
+                domStyle.set(this.commentsList, 'display', 'none');
+            }
             domStyle.set(this.domNode, 'display', '');
         },
 
@@ -171,10 +178,6 @@ define([
                 "showComments": showComments,
                 "showGallery": showGallery
             };
-        },
-
-        setCommentFields: function (fields) {
-            this.commentNameField = fields.name;
         },
 
         initContentPane: function () {
@@ -279,10 +282,8 @@ define([
                     this.itemAddComment.setFields(this.commentFields);
 
                     // See if we can pre-set its user name value
-                    if (userInfo && userInfo.name) {
+                    if (userInfo && userInfo.name && this.appConfig.commentNameField && this.appConfig.commentNameField.length > 0) {
                         this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
-                    } else {
-                        this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
                     }
                 }
 

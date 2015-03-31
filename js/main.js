@@ -154,7 +154,7 @@ define([
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
                     console.log(">cancelForm>");  //???
-                    this._itemDetails.hideCommentForm();
+                    this._itemDetails.destroyCommentForm();
                 }));
 
                 /**
@@ -283,7 +283,7 @@ define([
                     console.log(">submitForm>", item, comment);  //???
                     this._sidebarCnt.showBusy(true);
                     this._mapData.addComment(item, comment);
-                    this._itemDetails.hideCommentForm();
+                    this._itemDetails.destroyCommentForm();
                 }));
 
                 /**

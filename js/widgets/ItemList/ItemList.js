@@ -43,15 +43,6 @@ define([
 
 
         /**
-         * Widget constructor. Placeholder if future functionality is needed in the
-         * widget creation life cycle.
-         * @constructor
-         */
-        constructor: function () {
-            this.inherited(arguments);
-        },
-
-        /**
          * Widget post-create, called automatically in widget creation
          * life cycle, after constructor. Sets class variables.
          */
@@ -65,15 +56,6 @@ define([
                 topic.publish("linkToMapViewChanged", this.linkActionBox.checked);
             })));
             this.linkActionLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
-        },
-
-        /**
-         * Widget startup. Placeholder if functionality is needed in the
-         * widget creation life cycle
-         *
-         */
-        startup: function () {
-            this.inherited(arguments);
         },
 
         /**
@@ -154,6 +136,7 @@ define([
                 'innerHTML': itemTitle
             }, itemSummaryDiv);
 
+            // If we're displaying votes, create the count and icon displays
             if (itemVotes) {
                 if (itemVotes.needSpace) {
                     domClass.add(itemTitleDiv, "itemListTitleOverride");
@@ -189,7 +172,7 @@ define([
         /**
          * Gets title of feature for list display
          * @param  {feature} item The feature for which to get the title
-         * @return {string}      The title of the feature
+         * @return {string} The title of the feature
          */
         getItemTitle: function (item) {
             return item.getTitle ? item.getTitle() : "";
@@ -198,9 +181,10 @@ define([
         /**
          * Gets the number of votes for an item
          * @param  {feature} item The feature for which to get the vote count
-         * @return {object} Object containing "label" with vote count for the item in a shortened form (num if <1000,
-         * floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace" that's indicates if an
-         * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
+         * @return {null|object} Object containing "label" with vote count for the item in a shortened form
+         * (num if <1000, floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace"
+         * that's indicates if an extra digit of room is needed to handle numbers between 99K and 1M, exclusive;
+         * returns null if the feature layer's votes field is unknown
          */
         getItemVotes: function (item) {
             var needSpace = false, votes;

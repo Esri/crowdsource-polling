@@ -377,7 +377,9 @@ define([
 
                     // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
                     // then the form can't meet the condition for submission that all required fields have values
-                    } else if (field.type !== "esriFieldTypeOID" && field.type !== "esriFieldTypeGUID") {
+                    } else if (field.type !== "esriFieldTypeOID" &&
+                               field.type !== "esriFieldTypeGUID" &&
+                               field.type !== "esriFieldTypeGlobalID") {
                         topic.publish("showError", "[" + field.alias + "]<br>"
                             + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }

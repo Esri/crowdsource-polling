@@ -23,7 +23,6 @@ define([
     'dojo/dom-style',
     'dojo/dom-class',
     'dojo/on',
-    'dojo/query',
     'dojo/topic',
     'dojo/NodeList-dom',
 
@@ -33,7 +32,7 @@ define([
     'dijit/_TemplatedMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, on, dojoQuery, topic, nld,
+], function (declare, lang, array, domConstruct, domStyle, domClass, on, topic, nld,
     SvgHelper,
     _WidgetBase, _TemplatedMixin,
     template) {
@@ -129,7 +128,7 @@ define([
          * Builds the items list
          */
         buildList: function () {
-            arrayUtil.forEach(this.items, lang.hitch(this, this.buildItemSummary));
+            array.forEach(this.items, lang.hitch(this, this.buildItemSummary));
         },
 
         /**

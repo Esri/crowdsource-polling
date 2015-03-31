@@ -39,7 +39,7 @@ define([
     "application/widgets/PopupWindow/PopupWindow",
 
     'dojo/text!./ItemDetailsView.html'
-], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, domAttr, dojoQuery, topic, dojoOn, nld,
+], function (declare, lang, array, domConstruct, domStyle, domClass, domAttr, query, topic, on, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
@@ -106,7 +106,7 @@ define([
         initTemplateIcons: function () {
             var gallerySurface, backIconSurface, self = this;
 
-            arrayUtil.forEach(dojoQuery('.favIcon', this.domNode), function (iconDiv) {
+            array.forEach(query('.favIcon', this.domNode), function (iconDiv) {
                 SvgHelper.changeColor(SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12),
                     self.appConfig.theme.accentText);
             });
@@ -138,16 +138,16 @@ define([
 
         addListeners: function () {
             var self = this;
-            dojoOn(this.backIcon, 'click', function () {
+            on(this.backIcon, 'click', function () {
                 topic.publish('detailsCancel');
             });
-            dojoOn(this.likeButton, 'click', function () {
+            on(this.likeButton, 'click', function () {
                 topic.publish('addLike', self.item);
             });
-            dojoOn(this.commentButton, 'click', function () {
+            on(this.commentButton, 'click', function () {
                 topic.publish('getComment', self.item);
             });
-            dojoOn(this.galleryButton, 'click', lang.hitch(this, function () {
+            on(this.galleryButton, 'click', lang.hitch(this, function () {
                 topic.publish('showGallery', self.item);
                 if (domStyle.get(this.gallery, 'display') === 'none') {
                     this.showGallery();
@@ -236,14 +236,14 @@ define([
 
         updateGallery: function (attachments) {
             // Create gallery
-            arrayUtil.forEach(attachments, lang.hitch(this, function (attachment) {
+            array.forEach(attachments, lang.hitch(this, function (attachment) {
                 var thumb, srcURL;
                 srcURL = attachment.url + "/" + attachment.name;
                 thumb = domConstruct.create('img', {
                     'class': 'attachment',
                     'src': srcURL
                 }, this.gallery);
-                dojoOn(thumb, 'click', lang.hitch(this, function (attachment) {
+                on(thumb, 'click', lang.hitch(this, function (attachment) {
                     domConstruct.empty(this.enlargedViewPopup.popupContent);
                     domConstruct.create('img', {
                         'class': 'attachment',
@@ -353,7 +353,7 @@ define([
         setComments: function (commentsArr) {
             this.clearComments();
             domClass.toggle(this.noCommentsDiv, 'hide', commentsArr.length);
-            arrayUtil.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
+            array.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
 
         },
 

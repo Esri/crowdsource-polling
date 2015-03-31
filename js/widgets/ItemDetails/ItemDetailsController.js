@@ -114,31 +114,44 @@ define([
          * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
-            var backIconSurface, likeSurface, commentSurface, gallerySurface, self = this;
+            var backIconSurface;
 
             backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
             if (!Modernizr.rgba) {
                 SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
             }
 
-            //likeSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.likeIcon, 12, 12);
-            //SvgHelper.changeColor(likeSurface, this.appConfig.theme.foreground);
-            domAttr.set(this.likeIcon, "src", "images/heartBlue.png");
+            domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
             this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
             this.likeButton.title = this.i18n.likeButtonTooltip;
 
-            //commentSurface = SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
-            //SvgHelper.changeColor(commentSurface, this.appConfig.theme.foreground);
             domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
             this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
-            //gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
-            //SvgHelper.changeColor(gallerySurface, this.appConfig.theme.foreground);
             domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
             this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
-            //domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
+        },
+
+        /**
+         * Sets the invert state of a button.
+         * @param {string} pngTag The unique part of the button PNG image file corresponding to
+         * the button, e.g., "like", "comment", "gallery"
+         * @param {boolean} toInvert Whether button should be shown in inverted state (true) or not
+         * @param {object} button The button to modify
+         * @param {object} icon The icon img in the button
+         */
+        invertButton: function (pngTag, toInvert, button, icon) {
+            if (toInvert) {
+                domClass.remove(button, "btnNormal");
+                domClass.add(button, "btnInverse");
+                domAttr.set(icon, "src", "images/" + pngTag + "White.png");
+            } else {
+                domClass.remove(button, "btnInverse");
+                domClass.add(button, "btnNormal");
+                domAttr.set(icon, "src", "images/" + pngTag + "Blue.png");
+            }
         },
 
         /**
@@ -157,9 +170,10 @@ define([
             on(this.backIcon, 'click', function () {
                 topic.publish('detailsCancel');
             });
-            on(this.likeButton, 'click', function () {
+            on(this.likeButton, 'click', lang.hitch(this, function () {
                 topic.publish('addLike', self.item);
-            });
+                this.invertButton("like", true, this.likeButton, this.likeIcon);
+            }));
             on(this.commentButton, 'click', function () {
                 topic.publish('getComment', self.item);
             });
@@ -218,6 +232,7 @@ define([
             this.itemVotes = this.getItemVotes(item);
             this.clearItemDisplay();
             this.buildItemDisplay();
+            this.invertButton("like", false, this.likeButton, this.likeIcon);
         },
 
         /**
@@ -307,6 +322,7 @@ define([
          */
         showGallery: function () {
             domStyle.set(this.gallery, 'display', 'block');
+            this.invertButton("gallery", true, this.galleryButton, this.galleryIcon);
         },
 
         /**
@@ -314,7 +330,7 @@ define([
          */
         hideGallery: function () {
             domStyle.set(this.gallery, 'display', 'none');
-            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
+            this.invertButton("gallery", false, this.galleryButton, this.galleryIcon);
         },
 
         /**
@@ -342,6 +358,7 @@ define([
 
                 // Show the form
                 this.itemAddComment.show();
+                this.invertButton("comment", true, this.commentButton, this.commentIcon);
             }
         },
 
@@ -352,6 +369,7 @@ define([
             if (this.itemAddComment) {
                 this.itemAddComment.destroy();
                 this.itemAddComment = null;
+                this.invertButton("comment", false, this.commentButton, this.commentIcon);
             }
         },
 

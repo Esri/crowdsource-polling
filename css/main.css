@@ -281,7 +281,6 @@ body {
 }
 
 .itemDetail .btn {
-  color: #007ac2;
   border: 1px solid #ccc;
   display: inline-block;
   margin-right: 5px;
@@ -290,12 +289,29 @@ body {
   cursor: pointer;
 }
 
-.itemDetail .btn ::selection {
+.itemDetail .btnNormal {
     color: #007ac2;
 }
 
-.itemDetail .btn ::-moz-selection {
+.itemDetail .btnNormal ::selection {
     color: #007ac2;
+}
+
+.itemDetail .btnNormal ::-moz-selection {
+    color: #007ac2;
+}
+
+.itemDetail .btnInverse {
+    color: white;
+    background-color: #007ac2;
+}
+
+.itemDetail .btnInverse ::selection {
+    color: white;
+}
+
+.itemDetail .btnInverse ::-moz-selection {
+    color: white;
 }
 
 .itemDescFooter {

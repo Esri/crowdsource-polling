@@ -79,6 +79,9 @@ define([
         show: function () {
             this._entryForm = this.generateForm(this.dynamicForm, this._formFields);
             domStyle.set(this.domNode, "display", "block");
+            if (this.domNode.scrollIntoView) {
+                this.domNode.scrollIntoView();
+            }
         },
 
         /**

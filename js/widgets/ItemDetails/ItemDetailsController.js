@@ -114,25 +114,25 @@ define([
          * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
-            var gallerySurface, backIconSurface, self = this;
-
-            array.forEach(query('.favIcon', this.domNode), function (iconDiv) {
-                SvgHelper.changeColor(SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12),
-                    self.appConfig.theme.accentText);
-            });
-            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
-            this.likeButton.title = this.i18n.likeButtonTooltip;
+            var backIconSurface, likeSurface, commentSurface, gallerySurface, self = this;
 
             backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
             if (!Modernizr.rgba) {
                 SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
             }
 
-            SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
+            likeSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.likeIcon, 12, 12);
+            SvgHelper.changeColor(likeSurface, this.appConfig.theme.background);
+            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
+            this.likeButton.title = this.i18n.likeButtonTooltip;
+
+            commentSurface = SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
+            SvgHelper.changeColor(commentSurface, this.appConfig.theme.background);
             this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
             gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
+            SvgHelper.changeColor(gallerySurface, this.appConfig.theme.background);
             this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
             domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');

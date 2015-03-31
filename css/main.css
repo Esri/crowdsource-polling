@@ -341,12 +341,6 @@ body {
   top: 2px;
 }
 
-.btn .icon svg path,
-.btn .icon svg polyline {
-  fill: #007ac2;
-  fill-opacity: 1;
-}
-
 .hide {
   display: none !important;
 }

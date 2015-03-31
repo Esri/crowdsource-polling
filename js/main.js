@@ -71,6 +71,7 @@ define([
         map: null,
         mapData: null,
         _linkToMapView: false,
+        _currentlyCommenting: false,
 
         startup: function (config) {
             var itemInfo, error;
@@ -155,6 +156,7 @@ define([
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
                     console.log(">cancelForm>");  //???
                     this._itemDetails.destroyCommentForm();
+                    this._currentlyCommenting = false;
                 }));
 
                 /**
@@ -183,9 +185,16 @@ define([
                  * @param {object} item Item for which a comment might be submitted
                  */
                 topic.subscribe("getComment", lang.hitch(this, function (item) {
+                    var userInfo;
                     console.log(">getComment>", item);  //???
-                    var userInfo = this._socialDialog.getSignedInUser();
-                    this._itemDetails.showCommentForm(userInfo);
+
+                    if (this._currentlyCommenting) {
+                        topic.publish("cancelForm");
+                    } else {
+                        userInfo = this._socialDialog.getSignedInUser();
+                        this._itemDetails.showCommentForm(userInfo);
+                        this._currentlyCommenting = true;
+                    }
                 }));
 
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
@@ -284,6 +293,7 @@ define([
                     this._sidebarCnt.showBusy(true);
                     this._mapData.addComment(item, comment);
                     this._itemDetails.destroyCommentForm();
+                    this._currentlyCommenting = false;
                 }));
 
                 /**

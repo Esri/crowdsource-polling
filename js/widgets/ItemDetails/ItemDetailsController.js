@@ -121,21 +121,24 @@ define([
                 SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
             }
 
-            likeSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.likeIcon, 12, 12);
-            SvgHelper.changeColor(likeSurface, this.appConfig.theme.background);
+            //likeSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.likeIcon, 12, 12);
+            //SvgHelper.changeColor(likeSurface, this.appConfig.theme.foreground);
+            domAttr.set(this.likeIcon, "src", "images/heartBlue.png");
             this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
             this.likeButton.title = this.i18n.likeButtonTooltip;
 
-            commentSurface = SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
-            SvgHelper.changeColor(commentSurface, this.appConfig.theme.background);
+            //commentSurface = SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
+            //SvgHelper.changeColor(commentSurface, this.appConfig.theme.foreground);
+            domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
             this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
-            gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
-            SvgHelper.changeColor(gallerySurface, this.appConfig.theme.background);
+            //gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
+            //SvgHelper.changeColor(gallerySurface, this.appConfig.theme.foreground);
+            domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
             this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
-            domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
+            //domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
         },
 
         /**

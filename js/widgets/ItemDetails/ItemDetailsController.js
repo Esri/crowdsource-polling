@@ -167,24 +167,26 @@ define([
          */
         addListeners: function () {
             var self = this;
-            on(this.backIcon, 'click', function () {
-                topic.publish('detailsCancel');
-            });
-            on(this.likeButton, 'click', lang.hitch(this, function () {
-                topic.publish('addLike', self.item);
-                this.invertButton("like", true, this.likeButton, this.likeIcon);
-            }));
-            on(this.commentButton, 'click', function () {
-                topic.publish('getComment', self.item);
-            });
-            on(this.galleryButton, 'click', lang.hitch(this, function () {
-                topic.publish('showGallery', self.item);
-                if (domStyle.get(this.gallery, 'display') === 'none') {
-                    this.showGallery();
-                } else {
-                    this.hideGallery();
-                }
-            }));
+            this.own(
+                on(this.backIcon, 'click', function () {
+                    topic.publish('detailsCancel');
+                }),
+                on(this.likeButton, 'click', lang.hitch(this, function () {
+                    topic.publish('addLike', self.item);
+                    this.invertButton("like", true, this.likeButton, this.likeIcon);
+                })),
+                on(this.commentButton, 'click', function () {
+                    topic.publish('getComment', self.item);
+                }),
+                on(this.galleryButton, 'click', lang.hitch(this, function () {
+                    topic.publish('showGallery', self.item);
+                    if (domStyle.get(this.gallery, 'display') === 'none') {
+                        this.showGallery();
+                    } else {
+                        this.hideGallery();
+                    }
+                }))
+            );
         },
 
         /**
@@ -297,14 +299,14 @@ define([
                     'class': 'attachment',
                     'src': srcURL
                 }, this.gallery);
-                on(thumb, 'click', lang.hitch(this, function (attachment) {
+                this.own(on(thumb, 'click', lang.hitch(this, function (attachment) {
                     domConstruct.empty(this.enlargedViewPopup.popupContent);
                     domConstruct.create('img', {
                         'class': 'attachment',
                         'src': srcURL
                     }, this.enlargedViewPopup.popupContent);
                     this.enlargedViewPopup.show();
-                }));
+                })));
             }));
         },
 

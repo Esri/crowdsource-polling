@@ -342,13 +342,13 @@ define([
         /**
          * Retrieves the attachments associated with an item.
          * @param {objectID} item Item whose attachments are sought
-         * @return {publish} "updatedAttachments" with results of query
+         * @return {publish} "updatedAttachments" with the item and the results of the query
          */
         queryAttachments: function (item) {
             this._itemLayer.queryAttachmentInfos(
                 item.attributes[this._itemLayer.objectIdField],
                 lang.hitch(this, function (attachments) {
-                    topic.publish("updatedAttachments", attachments);
+                    topic.publish("updatedAttachments", item, attachments);
                 }),
                 lang.hitch(this, function (err) {
                     console.log(err.message || "queryAttachmentInfos");  //???
@@ -359,7 +359,7 @@ define([
         /**
          * Retrieves the comments associated with an item.
          * @param {objectID} item Item whose comments are sought
-         * @return {publish} "updatedCommentsList" with results of query
+         * @return {publish} "updatedCommentsList" with the item and the results of the query
          */
         queryComments: function (item) {
             var updateQuery = new RelationshipQuery();
@@ -394,7 +394,7 @@ define([
                         features[i].setInfoTemplate(this._commentPopupTemplate);
                     }
                 }
-                topic.publish("updatedCommentsList", features);
+                topic.publish("updatedCommentsList", item, features);
             }), lang.hitch(this, function (err) {
                 console.log(err.message || "queryRelatedFeatures");  //???
             }));

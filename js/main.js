@@ -210,6 +210,7 @@ define([
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
 
+                    this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
                     this._itemDetails.clearComments();
@@ -315,19 +316,30 @@ define([
                 }));
 
                 /**
+                 * @param {object} item Item owning attachments
                  * @param {array} attachments List of attachments for the current item
                  */
-                topic.subscribe("updatedAttachments", lang.hitch(this, function (attachments) {
+                topic.subscribe("updatedAttachments", lang.hitch(this, function (item, attachments) {
                     console.log(">updatedAttachments>", attachments);  //???
-                    this._itemDetails.setAttachments(attachments);
+                    if (this._currentItem &&
+                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                            item.attributes[item._layer.objectIdField]) {
+                        this._itemDetails.setAttachments(attachments);
+                    }
+                    this._sidebarCnt.showBusy(false);
                 }));
 
                 /**
+                 * @param {object} item Item owning comments
                  * @param {array} comments List of comments for the current item
                  */
-                topic.subscribe("updatedCommentsList", lang.hitch(this, function (comments) {
+                topic.subscribe("updatedCommentsList", lang.hitch(this, function (item, comments) {
                     console.log(">updatedCommentsList>", comments);  //???
-                    this._itemDetails.setComments(comments);
+                    if (this._currentItem &&
+                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                            item.attributes[item._layer.objectIdField]) {
+                        this._itemDetails.setComments(comments);
+                    }
                     this._sidebarCnt.showBusy(false);
                 }));
 

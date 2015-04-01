@@ -458,6 +458,11 @@ label.css-label
   cursor: pointer;
 }
 
+.itemDetail .attachmentsSection > img {
+    max-width: 48%!important;
+    max-height: 120px!important;
+}
+
 .commentsForm {
     margin-bottom: 12px;
 }

@@ -454,7 +454,7 @@ define([
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
-                    "showSignin": this._socialDialog.isAvailable,
+                    "showSignin": this._socialDialog.isAvailable && (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText.length > 0
                 }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
 

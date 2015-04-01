@@ -84,9 +84,9 @@
         "color": "#206bdb",
         "commentNameField": "",
         "itemVotesField": "",
-        "allowFacebook": true,
-        "allowGoogle": true,
-        "allowTwitter": true,
+        "allowFacebook": false,
+        "allowGoogle": false,
+        "allowTwitter": false,
         "facebookAppId": "",
         "googleplusClientId": "",
         "socialMediaDisclaimer": ""

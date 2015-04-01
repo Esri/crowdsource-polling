@@ -19,6 +19,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    "dojo/dom-attr",
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/dom-class',
@@ -32,7 +33,7 @@ define([
     'dijit/_TemplatedMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, array, domConstruct, domStyle, domClass, on, topic, nld,
+], function (declare, lang, array, domAttr, domConstruct, domStyle, domClass, on, topic, nld,
     SvgHelper,
     _WidgetBase, _TemplatedMixin,
     template) {
@@ -47,15 +48,19 @@ define([
          * life cycle, after constructor. Sets class variables.
          */
         postCreate: function () {
+            var linkActionBox;
+
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
             this.hide();
 
-            this.linkActionBox.checked = this.linkToMapView;
-            this.own(on(this.linkActionBox, "change", lang.hitch(this, function () {
-                topic.publish("linkToMapViewChanged", this.linkActionBox.checked);
+            // Create the checkbox for linking the item list to the map extents
+            linkActionBox = domConstruct.create("input", { "type": "checkbox", "class": "esriCTChkBox", id: "linkToMap", "value": "linkToMap" }, this.itemListActionBar);
+            domConstruct.create("label", { "class": "css-label", "for": "linkToMap", innerHTML: this.i18n.linkToMapViewOptionLabel }, this.itemListActionBar);
+            this.own(on(linkActionBox, "change", lang.hitch(this, function () {
+                topic.publish("linkToMapViewChanged", linkActionBox.checked);
             })));
-            this.linkActionLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
+            linkActionBox.checked = this.linkToMapView;
         },
 
         /**

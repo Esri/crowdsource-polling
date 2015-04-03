@@ -1,5 +1,5 @@
-commit b5480f1dbb26a10535a3fb5fa25520f26bdaccfe
+commit 6a40ca7237d8d303ab68ed3aad5c6390ca3faece
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Apr 1 15:21:53 2015 -0700
+Date:   Fri Apr 3 14:01:20 2015 -0700
 
-    Don't show sign-in button if the comment table name field has not been configured
+    Added animated scrolling to show and hide comment form

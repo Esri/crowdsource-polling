@@ -85,9 +85,9 @@ define([
                 this.closeBtn.style.display = "block";
             }
 
-            on(window, 'resize', lang.hitch(this, function () {
+            this.own(on(window, 'resize', lang.hitch(this, function () {
                 this.fitToWindow();
-            }));
+            })));
         },
 
         /**

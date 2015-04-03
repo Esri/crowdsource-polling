@@ -19,8 +19,7 @@ define(({
         error: "Unable to create map",
         layerLoad: "Unable to fully load map",
         missingItemsFeatureLayer: "Item feature layer is missing",
-        missingCommentsTable: "Comment table is missing",
-        unsupportedRelationship: "Only a 1:1 relationship between the feature layer and the comment table is supported"
+        missingCommentsTable: "Comment table is missing"
     },
     sidebar_header: {
         signInButton: "Sign In",

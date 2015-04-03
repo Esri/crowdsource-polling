@@ -232,6 +232,88 @@ body {
   margin-right: 0.5em;
 }
 
+
+
+
+.esriCTClear
+{
+    clear: both;
+    float: left;
+    padding: 0 0 0px 18px;
+    width: 100%;
+}
+
+.esriCTOptionRow
+{
+    display: table;
+    width: 100%;
+}
+
+.esriCTCheckBox
+{
+    display: table-cell;
+}
+input[type="radio"]
+{
+    border-radius: 10px;
+}
+
+.esriCTChkLabel
+{
+    display: table-cell;
+    padding-left: 5px;
+    vertical-align: middle;
+    vertical-align: /*\**/ middle\9;
+}
+
+.esriCTLeftFromTO div.esriCTChkLabel
+{
+    padding-top: 7px;
+}
+
+.esriCTLeftFromTO div.esriCTCheckBox
+{
+    padding-top: 7px;
+}
+
+.esriCTChkBox
+{
+    position: absolute;
+    z-index: -1000;
+    top: -1000px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+.esriCTChkBox + label.css-label
+{
+    padding-left: 24px;
+    height: 20px;
+    display: inline-block;
+    line-height: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 12px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+label.css-label
+{
+    background-image: url(../images/checkbox.png);
+}
+
+.esriCTChkBox:checked + label.css-label
+{
+    background-position: 0 -20px;
+}
+
+
 /* ---------- itemDetail ---------- */
 
 .itemDetail > .itemSummary > div {
@@ -281,7 +363,6 @@ body {
 }
 
 .itemDetail .btn {
-  color: #007ac2;
   border: 1px solid #ccc;
   display: inline-block;
   margin-right: 5px;
@@ -290,12 +371,29 @@ body {
   cursor: pointer;
 }
 
-.itemDetail .btn ::selection {
+.itemDetail .btnNormal {
     color: #007ac2;
 }
 
-.itemDetail .btn ::-moz-selection {
+.itemDetail .btnNormal ::selection {
     color: #007ac2;
+}
+
+.itemDetail .btnNormal ::-moz-selection {
+    color: #007ac2;
+}
+
+.itemDetail .btnInverse {
+    color: white;
+    background-color: #007ac2;
+}
+
+.itemDetail .btnInverse ::selection {
+    color: white;
+}
+
+.itemDetail .btnInverse ::-moz-selection {
+    color: white;
 }
 
 .itemDescFooter {
@@ -341,12 +439,6 @@ body {
   top: 2px;
 }
 
-.btn .icon svg path,
-.btn .icon svg polyline {
-  fill: #007ac2;
-  fill-opacity: 1;
-}
-
 .hide {
   display: none !important;
 }
@@ -364,6 +456,11 @@ body {
   width: 48%;
   margin: 0px 5px 5px 0px;
   cursor: pointer;
+}
+
+.itemDetail .attachmentsSection > img {
+    max-width: 48%!important;
+    max-height: 120px!important;
 }
 
 .commentsForm {

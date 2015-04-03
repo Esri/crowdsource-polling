@@ -39,7 +39,7 @@ define([
     "application/widgets/PopupWindow/PopupWindow",
 
     'dojo/text!./ItemDetailsView.html'
-], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, domAttr, dojoQuery, topic, dojoOn, nld,
+], function (declare, lang, array, domConstruct, domStyle, domClass, domAttr, query, topic, on, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
@@ -51,20 +51,20 @@ define([
         id: 'itemDetail',
         baseClass: 'itemDetail',
         itemTitle: 'default title',
-        itemVotes: {
-            "label": 0,
-            "needSpace": false
-        },
+        itemVotes: null,
         actionVisibilities: {
             "showVotes": false,
             "showComments": false,
             "showGallery": false
         },
+        votesField: null,
+        commentFields: null,
 
-        constructor: function () {
-            this.inherited(arguments);
-        },
 
+        /**
+         * Widget post-create, called automatically in widget creation
+         * life cycle, after constructor. Sets class variables.
+         */
         postCreate: function () {
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_details;
@@ -73,21 +73,38 @@ define([
             this.hide();
         },
 
+        /**
+         * Adds icons and listener setup to custom post-DOM-creation steps.
+         */
         startup: function () {
             this.inherited(arguments);
             this.initTemplateIcons();
             this.addListeners();
         },
 
+        /**
+         * Shows the widget and, if permitted and possible, the votes and comments
+         * buttons and areas.
+         */
         show: function () {
-            domStyle.set(this.likeButton, 'display', this.actionVisibilities.showVotes ? 'inline-block' : 'none');
-            domStyle.set(this.commentButton, 'display', this.actionVisibilities.showComments ? 'inline-block' : 'none');
+            if (!this.actionVisibilities.showVotes || !this.votesField) {
+                domStyle.set(this.likeButton, 'display', 'none');
+            }
+            if (!this.actionVisibilities.showComments || !this.commentFields) {
+                domStyle.set(this.commentButton, 'display', 'none');
+                domStyle.set(this.commentsHeading, 'display', 'none');
+                domStyle.set(this.noCommentsDiv, 'display', 'none');
+                domStyle.set(this.commentsList, 'display', 'none');
+            }
             domStyle.set(this.domNode, 'display', '');
         },
 
+        /**
+         * Hides the widget with a simple display: 'none'
+         */
         hide: function () {
             domStyle.set(this.domNode, 'display', 'none');
-            this.hideCommentForm();
+            this.destroyCommentForm();
         },
 
         /**
@@ -97,28 +114,44 @@ define([
          * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
-            var gallerySurface, backIconSurface, self = this;
-
-            arrayUtil.forEach(dojoQuery('.favIcon', this.domNode), function (iconDiv) {
-                SvgHelper.changeColor(SvgHelper.createSVGItem(self.appConfig.likeIcon, iconDiv, 12, 12),
-                    self.appConfig.theme.accentText);
-            });
-            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
-            this.likeButton.title = this.i18n.likeButtonTooltip;
+            var backIconSurface;
 
             backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
             if (!Modernizr.rgba) {
                 SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
             }
 
-            SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 11, 10);
+            domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
+            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
+            this.likeButton.title = this.i18n.likeButtonTooltip;
+
+            domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
             this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
-            gallerySurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 14, 13);
+            domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
             this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
-            domAttr.set(gallerySurface.rawNode, 'viewBox', '300.5, 391, 11, 10');
+        },
+
+        /**
+         * Sets the invert state of a button.
+         * @param {string} pngTag The unique part of the button PNG image file corresponding to
+         * the button, e.g., "like", "comment", "gallery"
+         * @param {boolean} toInvert Whether button should be shown in inverted state (true) or not
+         * @param {object} button The button to modify
+         * @param {object} icon The icon img in the button
+         */
+        invertButton: function (pngTag, toInvert, button, icon) {
+            if (toInvert) {
+                domClass.remove(button, "btnNormal");
+                domClass.add(button, "btnInverse");
+                domAttr.set(icon, "src", "images/" + pngTag + "White.png");
+            } else {
+                domClass.remove(button, "btnInverse");
+                domClass.add(button, "btnNormal");
+                domAttr.set(icon, "src", "images/" + pngTag + "Blue.png");
+            }
         },
 
         /**
@@ -129,27 +162,32 @@ define([
             this.noCommentsDiv.innerHTML = this.i18n.noCommentsPlaceholder;
         },
 
+        /**
+         * Sets up the click listeners for widget's buttons.
+         */
         addListeners: function () {
             var self = this;
-            dojoOn(this.backIcon, 'click', function () {
-                topic.publish('detailsCancel');
-            });
-            dojoOn(this.likeButton, 'click', function () {
-                topic.publish('addLike', self.item);
-            });
-            dojoOn(this.commentButton, 'click', function () {
-                topic.publish('getComment', self.item);
-            });
-            dojoOn(this.galleryButton, 'click', lang.hitch(this, function () {
-                topic.publish('showGallery', self.item);
-                if (domStyle.get(this.gallery, 'display') === 'none') {
-                    this.showGallery();
-                } else {
-                    this.hideGallery();
-                }
-            }));
+            this.own(
+                on(this.backIcon, 'click', function () {
+                    topic.publish('detailsCancel');
+                }),
+                on(this.likeButton, 'click', lang.hitch(this, function () {
+                    topic.publish('addLike', self.item);
+                    this.invertButton("like", true, this.likeButton, this.likeIcon);
+                })),
+                on(this.commentButton, 'click', function () {
+                    topic.publish('getComment', self.item);
+                }),
+                on(this.galleryButton, 'click', lang.hitch(this, function () {
+                    topic.publish('showGallery', self.item);
+                    if (domStyle.get(this.gallery, 'display') === 'none') {
+                        this.showGallery();
+                    } else {
+                        this.hideGallery();
+                    }
+                }))
+            );
         },
-
 
         /**
          * Sets the fields that are needed to display feature information in this list (number of votes).
@@ -163,7 +201,10 @@ define([
         },
 
         /**
-         * Sets the
+         * Sets the permitted visibility of the votes, comments, and gallery buttons.
+         * @param {boolean} showVotes Display button if the votes field is known
+         * @param {boolean} showComments Display button if the comments fields are known
+         * @param {boolean} showGallery Display button if current item has attachments
          */
         setActionsVisibility: function (showVotes, showComments, showGallery) {
             this.actionVisibilities = {
@@ -173,15 +214,18 @@ define([
             };
         },
 
-        setCommentFields: function (fields) {
-            this.commentNameField = fields.name;
-        },
-
+        /**
+         * Creates the div to hold the current item's popup.
+         */
         initContentPane: function () {
             this.itemCP = new ContentPane({id: 'itemCP'}, this.descriptionDiv);
             this.itemCP.startup();
         },
 
+        /**
+         * Clears the display, sets the current item, and creates its display.
+         * @param {object} item Item to become the current display item
+         */
         setItem: function (item) {
             this.item = item;
             this.clearGallery();
@@ -190,22 +234,41 @@ define([
             this.itemVotes = this.getItemVotes(item);
             this.clearItemDisplay();
             this.buildItemDisplay();
+            this.invertButton("like", false, this.likeButton, this.likeIcon);
         },
 
         /**
-         * Updates the definition and display of the current item.
-         * @param {object} item Updated definition of current item
+         * Updates the votes display of the current item.
+         * @param {object} item Updated definition of current item; if it does not have
+         * the same object id as the current item, nothing happens
          */
         updateItemVotes: function (item) {
-            if (item === this.item) {
+            if (item.attributes[item._layer.objectIdField] === this.item.attributes[this.item._layer.objectIdField]) {
                 this.itemVotes = this.getItemVotes(item);
+                this.redrawItemVotes();
+            }
+        },
+
+        /**
+         * Updates the contents of the votes display div, including applying a class to get a bit
+         * more space if needed; hides votes display if votes field is not known.
+         */
+        redrawItemVotes: function () {
+            if (this.itemVotes) {
                 if (this.itemVotes.needSpace) {
                     domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
                 }
                 this.itemVotesDiv.innerHTML = this.itemVotes.label;
+            } else {
+                domStyle.set(this.itemVotesGroup, 'display', 'none');
             }
         },
 
+        /**
+         * Shows the attachments for the current item if there are any and it is permitted;
+         * hides the gallery button otherwise.
+         * @param {array} attachments List of attachments for item
+         */
         setAttachments: function (attachments) {
             var showGalleryButton =
                 this.actionVisibilities.showGallery && attachments && attachments.length > 0;
@@ -223,68 +286,92 @@ define([
             }
         },
 
+        /**
+         * Adds the specified attachments to the item's gallery.
+         * @param {array} attachments List of attachments for item
+         */
         updateGallery: function (attachments) {
             // Create gallery
-            arrayUtil.forEach(attachments, lang.hitch(this, function (attachment) {
+            array.forEach(attachments, lang.hitch(this, function (attachment) {
                 var thumb, srcURL;
                 srcURL = attachment.url + "/" + attachment.name;
                 thumb = domConstruct.create('img', {
                     'class': 'attachment',
                     'src': srcURL
                 }, this.gallery);
-                dojoOn(thumb, 'click', lang.hitch(this, function (attachment) {
+                this.own(on(thumb, 'click', lang.hitch(this, function (attachment) {
                     domConstruct.empty(this.enlargedViewPopup.popupContent);
                     domConstruct.create('img', {
                         'class': 'attachment',
                         'src': srcURL
                     }, this.enlargedViewPopup.popupContent);
                     this.enlargedViewPopup.show();
-                }));
+                })));
             }));
         },
 
+        /**
+         * Clears the gallery.
+         */
         clearGallery: function () {
             domStyle.set(this.galleryButton, 'display', 'none');
             this.hideGallery();
             domConstruct.empty(this.gallery);
         },
 
+        /**
+         * Makes the gallery visible.
+         */
         showGallery: function () {
             domStyle.set(this.gallery, 'display', 'block');
+            this.invertButton("gallery", true, this.galleryButton, this.galleryIcon);
         },
 
+        /**
+         * Hides the gallery.
+         */
         hideGallery: function () {
             domStyle.set(this.gallery, 'display', 'none');
-            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
+            this.invertButton("gallery", false, this.galleryButton, this.galleryIcon);
         },
 
+        /**
+         * Creates the comment form anew and makes it visible.
+         * @param {object} [userInfo] User social-media sign-in info, of which function uses the "name" attribute
+         * to pre-populate the comment name field if one is configured in the app's commentNameField attribute
+         */
         showCommentForm: function (userInfo) {
-            if (!this.itemAddComment) {
-                // Create comment form
-                this.itemAddComment = new DynamicForm({
-                    "appConfig": this.appConfig
-                }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
+            if (this.commentFields) {
+                if (!this.itemAddComment) {
+                    // Create comment form
+                    this.itemAddComment = new DynamicForm({
+                        "appConfig": this.appConfig
+                    }).placeAt(this.commentsForm); // placeAt triggers a startup call to itemAddComment
 
-                // Set its item and its fields
-                this.itemAddComment.setItem(this.item);
-                this.itemAddComment.setFields(this.commentFields);
+                    // Set its item and its fields
+                    this.itemAddComment.setItem(this.item);
+                    this.itemAddComment.setFields(this.commentFields);
 
-                // See if we can pre-set its user name value
-                if (userInfo && userInfo.name) {
-                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
-                } else {
-                    this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, null);
+                    // See if we can pre-set its user name value
+                    if (userInfo && userInfo.name && this.appConfig.commentNameField && this.appConfig.commentNameField.length > 0) {
+                        this.itemAddComment.presetFieldValue(this.appConfig.commentNameField, userInfo.name);
+                    }
                 }
-            }
 
-            // Show the form
-            this.itemAddComment.show();
+                // Show the form
+                this.itemAddComment.show();
+                this.invertButton("comment", true, this.commentButton, this.commentIcon);
+            }
         },
 
-        hideCommentForm: function () {
+        /**
+         * Destroys the comment form.
+         */
+        destroyCommentForm: function () {
             if (this.itemAddComment) {
                 this.itemAddComment.destroy();
                 this.itemAddComment = null;
+                this.invertButton("comment", false, this.commentButton, this.commentIcon);
             }
         },
 
@@ -300,47 +387,60 @@ define([
         /**
          * Gets the number of votes for an item
          * @param  {feature} item The feature for which to get the vote count
-         * @return {object} Object containing "label" with vote count for the item in a shortened form (num if <1000,
-         * floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace" that's indicates if an
-         * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
+         * @return {null|object} Object containing "label" with vote count for the item in a shortened form
+         * (num if <1000, floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace"
+         * that's indicates if an extra digit of room is needed to handle numbers between 99K and 1M, exclusive;
+         * returns null if the feature layer's votes field is unknown
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes = item.attributes[this.votesField] || 0;
-            if (votes > 999) {
-                if (votes > 99999) {
-                    needSpace = true;
+            var needSpace = false, votes;
+
+            if (this.votesField) {
+                votes = item.attributes[this.votesField] || 0;
+                if (votes > 999) {
+                    if (votes > 99999) {
+                        needSpace = true;
+                    }
+                    if (votes > 999999) {
+                        votes = Math.floor(votes / 1000000) + "M";
+                    } else {
+                        votes = Math.floor(votes / 1000) + "k";
+                    }
                 }
-                if (votes > 999999) {
-                    votes = Math.floor(votes / 1000000) + "M";
-                } else {
-                    votes = Math.floor(votes / 1000) + "k";
-                }
+                return {
+                    "label": votes,
+                    "needSpace": needSpace
+                };
             }
-            return {
-                "label": votes,
-                "needSpace": needSpace
-            };
+            return null;
         },
 
+        /**
+         * Completely clears the display for the current item.
+         */
         clearItemDisplay: function () {
             this.itemTitleDiv.innerHTML = '';
             this.itemVotesDiv.innerHTML = '';
             this.itemCP.set('content', '');
         },
 
+        /**
+         * Builds the display for the current item.
+         */
         buildItemDisplay: function () {
             this.itemTitleDiv.innerHTML = this.itemTitle;
-            if (this.itemVotes.needSpace) {
-                domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
-            }
-            this.itemVotesDiv.innerHTML = this.itemVotes.label;
+            this.redrawItemVotes();
             this.itemCP.set('content', this.item.getContent());
         },
 
+        /**
+         * Clears the comments display and builds a new one based upon the supplied list.
+         * @param {array} commentsArr List of comment objects
+         */
         setComments: function (commentsArr) {
             this.clearComments();
             domClass.toggle(this.noCommentsDiv, 'hide', commentsArr.length);
-            arrayUtil.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
+            array.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
 
         },
 

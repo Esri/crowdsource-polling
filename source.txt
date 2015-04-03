@@ -1,7 +1,5 @@
-commit c0a6c384c8656c1aff3a65135e52557f8175705e
+commit b5480f1dbb26a10535a3fb5fa25520f26bdaccfe
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Mar 27 15:48:10 2015 -0700
+Date:   Wed Apr 1 15:21:53 2015 -0700
 
-    Fit attachment image completely in popup
-    
-    #32
+    Don't show sign-in button if the comment table name field has not been configured

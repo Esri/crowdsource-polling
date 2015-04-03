@@ -23,6 +23,7 @@ define([
     "dojo/Deferred",
     "dojo/json",
     "dojo/on",
+    "dojo/promise/all",
     "dojo/topic",
     "esri/dijit/PopupTemplate",
     "esri/graphic",
@@ -39,6 +40,7 @@ define([
     Deferred,
     JSON,
     on,
+    all,
     topic,
     PopupTemplate,
     Graphic,
@@ -111,7 +113,7 @@ define([
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
-                var commentTableURL;
+                var opLayers, iOpLayer = 0, promises = [];
 
                 // Operational layer provides item fields and formats
                 if (this.appConfig.itemInfo.itemData.operationalLayers.length === 0) {
@@ -119,7 +121,15 @@ define([
                     return;
                 }
 
-                this._itemLayerInWebmap = this.appConfig.itemInfo.itemData.operationalLayers[0];
+                opLayers = this.appConfig.itemInfo.itemData.operationalLayers;
+                if (this.appConfig.featureLayer && this.appConfig.featureLayer.id) {
+                    for (iOpLayer = 0; iOpLayer < opLayers.length; iOpLayer++) {
+                        if (this.appConfig.featureLayer.id === opLayers[iOpLayer].id) {
+                            break;
+                        }
+                    }
+                }
+                this._itemLayerInWebmap = opLayers[iOpLayer];
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
                 if (!this._itemLayerInWebmap) {
                     deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
@@ -133,57 +143,88 @@ define([
                     this._itemLayerInWebmap.popupInfo
                 );
 
-                // Related table provides comment fields and formats
-                this._commentTableInWebmap = this.appConfig.itemInfo.itemData.tables[0];
+                // Related table provides comment fields and formats; use the first relationship
+                if (this._itemLayer.relationships &&
+                        this._itemLayer.relationships.length > 0) {
 
-                // Remove the protocol from the comment table's URL so that it can be loaded in
-                // http or https environments
-                commentTableURL = this.deprotocolUrl(this._commentTableInWebmap.url);
+                    // Try to find the table that's in this relationship. We'll do parallel searches in
+                    // the hope that it'll be on averge faster than serially stepping through the tables.
+                    array.forEach(this.appConfig.itemInfo.itemData.tables, lang.hitch(this, function (table) {
+                        var commentTableURL, commentTableInWebmap = table, commentTable, loadDeferred = new Deferred();
 
-                // Fetch the related table for the comments
-                this._commentTable = new FeatureLayer(commentTableURL);
-                on.once(this._commentTable, "load", lang.hitch(this, function (evt) {
+                        // Remove the protocol from the comment table's URL so that it can be loaded in
+                        // http or https environments
+                        commentTableURL = this.deprotocolUrl(commentTableInWebmap.url);
 
-                    // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
-                    // to the presence of editing and visibility controls in the optional popup
-                    this._commentFields = this.applyWebmapControlsToFields(
-                        this._commentTable.fields,
-                        this._commentTableInWebmap.popupInfo
-                    );
+                        // Fetch the related table for the comments
+                        promises.push(loadDeferred.promise);
+                        commentTable = new FeatureLayer(commentTableURL);
+                        on.once(commentTable, "load", lang.hitch(this, function (evt) {
+                            // Note that we only consider the first relationship in the items layer
+                            if (this._itemLayer.relationships[0].relatedTableId === commentTable.layerId) {
+                                loadDeferred.resolve({
+                                    "commentTableInWebmap": commentTableInWebmap,
+                                    "commentTableURL": commentTableURL,
+                                    "commentTable": commentTable
+                                });
+                            } else {
+                                loadDeferred.resolve();
+                            }
+                        }), lang.hitch(this, function () {
+                            loadDeferred.resolve();
+                        }));
+                    }));
 
-                    // Formatting of comment display
-                    if (this._commentTableInWebmap.popupInfo) {
-                        this._commentPopupTemplate = new PopupTemplate(this._commentTableInWebmap.popupInfo);
-                    } else {
-                        this._commentPopupTemplate = new InfoTemplate();
-                    }
+                    all(promises).then(lang.hitch(this, function (results) {
+                        // Find the matching relationship, if any; array.some will short-circuit if found
+                        array.some(results, lang.hitch(this, function (result) {
+                            if (result) {
+                                // Save the links to the matching table
+                                this._commentTableInWebmap = result.commentTableInWebmap;
+                                this._commentTableURL = result.commentTableURL;
+                                this._commentTable = result.commentTable;
 
-                    // Override related record check from the point of view of the comments
-                    // table--it's not needed
-                    if (this._commentPopupTemplate._getRelatedRecords) {
-                        this._commentPopupTemplate._getRelatedRecords = function () {
-                            var def = new Deferred();
-                            def.resolve();
-                            return def.promise;
-                        };
-                    }
+                                // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
+                                // to the presence of editing and visibility controls in the optional popup
+                                this._commentFields = this.applyWebmapControlsToFields(
+                                    this._commentTable.fields,
+                                    this._commentTableInWebmap.popupInfo
+                                );
 
-                    // Test that the items layer is related to the comments table and that
-                    // the two are not involved in any other relationships
-                    if (!this._itemLayer.relationships || !this._commentTable.relationships ||
-                            this._itemLayer.relationships.length !== 1 ||
-                            this._commentTable.relationships.length !== 1 ||
-                            this._itemLayer.relationships[0].relatedTableId !== this._commentTable.layerId ||
-                            this._itemLayer.layerId !== this._commentTable.relationships[0].relatedTableId) {
-                        deferred.reject(this.appConfig.i18n.map.unsupportedRelationship);
-                    }
-                    this._primaryKeyField = this._itemLayer.relationships[0].keyField;
-                    this._foreignKeyField = this._commentTable.relationships[0].keyField;
+                                // Formatting of comment display
+                                if (this._commentTableInWebmap.popupInfo) {
+                                    this._commentPopupTemplate = new PopupTemplate(this._commentTableInWebmap.popupInfo);
+                                } else {
+                                    this._commentPopupTemplate = new InfoTemplate();
+                                }
 
+                                // Override related record check from the point of view of the comments
+                                // table--it's not needed
+                                if (this._commentPopupTemplate._getRelatedRecords) {
+                                    this._commentPopupTemplate._getRelatedRecords = function () {
+                                        var def = new Deferred();
+                                        def.resolve();
+                                        return def.promise;
+                                    };
+                                }
+
+                                // Save the field names for the linkage between the item layer and its table
+                                // Note that we only consider the first relationship in the items layer
+                                this._primaryKeyField = this._itemLayer.relationships[0].keyField;
+                                this._foreignKeyField = this._commentTable.relationships[0].keyField;
+
+                                return true;
+                            }
+                            return false;
+                        }));
+
+                        // We're done whether or not a table matched
+                        deferred.resolve();
+                    }));
+                } else {
+                    // No comments for this webmap
                     deferred.resolve();
-                }), lang.hitch(this, function () {
-                    deferred.reject(this.appConfig.i18n.map.missingCommentsTable);
-                }));
+                }
             }));
             return deferred;
         },
@@ -301,13 +342,13 @@ define([
         /**
          * Retrieves the attachments associated with an item.
          * @param {objectID} item Item whose attachments are sought
-         * @return {publish} "updatedAttachments" with results of query
+         * @return {publish} "updatedAttachments" with the item and the results of the query
          */
         queryAttachments: function (item) {
             this._itemLayer.queryAttachmentInfos(
                 item.attributes[this._itemLayer.objectIdField],
                 lang.hitch(this, function (attachments) {
-                    topic.publish("updatedAttachments", attachments);
+                    topic.publish("updatedAttachments", item, attachments);
                 }),
                 lang.hitch(this, function (err) {
                     console.log(err.message || "queryAttachmentInfos");  //???
@@ -318,14 +359,14 @@ define([
         /**
          * Retrieves the comments associated with an item.
          * @param {objectID} item Item whose comments are sought
-         * @return {publish} "updatedCommentsList" with results of query
+         * @return {publish} "updatedCommentsList" with the item and the results of the query
          */
         queryComments: function (item) {
             var updateQuery = new RelationshipQuery();
             updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
             updateQuery.returnGeometry = true;
             updateQuery.outFields = ["*"];
-            updateQuery.relationshipId = 0;
+            updateQuery.relationshipId = this._itemLayer.relationships[0].id;  // Note that we only consider the first relationship in the items layer
 
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
                 var pThis = this, fset, i, features;
@@ -353,7 +394,7 @@ define([
                         features[i].setInfoTemplate(this._commentPopupTemplate);
                     }
                 }
-                topic.publish("updatedCommentsList", features);
+                topic.publish("updatedCommentsList", item, features);
             }), lang.hitch(this, function (err) {
                 console.log(err.message || "queryRelatedFeatures");  //???
             }));
@@ -367,26 +408,30 @@ define([
         refreshVoteCount: function (item) {
             var updateQuery, updateQueryTask, deferred = new Deferred();
 
-            // Get the latest vote count from the server, not just the feature layer
-            updateQuery = new Query();
-            updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
-            updateQuery.returnGeometry = false;
-            updateQuery.outFields = [this.appConfig.itemVotesField];
+            if (this.appConfig.itemVotesField && this.appConfig.itemVotesField.length > 0) {
+                // Get the latest vote count from the server, not just the feature layer
+                updateQuery = new Query();
+                updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
+                updateQuery.returnGeometry = false;
+                updateQuery.outFields = [this.appConfig.itemVotesField];
 
-            updateQueryTask = new QueryTask(this._itemLayer.url);
-            updateQueryTask.execute(updateQuery, lang.hitch(this, function (results) {
-                var retrievedVotes;
-                if (results && results.features && results.features.length > 0) {
-                    retrievedVotes = results.features[0].attributes[this.appConfig.itemVotesField];
-                    if (retrievedVotes) {
-                        item.attributes[this.appConfig.itemVotesField] = retrievedVotes;
-                        deferred.resolve(item);
+                updateQueryTask = new QueryTask(this._itemLayer.url);
+                updateQueryTask.execute(updateQuery, lang.hitch(this, function (results) {
+                    var retrievedVotes;
+                    if (results && results.features && results.features.length > 0) {
+                        retrievedVotes = results.features[0].attributes[this.appConfig.itemVotesField];
+                        if (retrievedVotes !== undefined) {
+                            item.attributes[this.appConfig.itemVotesField] = retrievedVotes;
+                            deferred.resolve(item);
+                        }
                     }
-                }
-                deferred.reject(item);
-            }), function () {
-                deferred.reject(item);
-            });
+                    deferred.reject(item);
+                }), function () {
+                    deferred.reject(item);
+                });
+            } else {
+                deferred.resolve(item);
+            }
 
             return deferred;
         },
@@ -397,7 +442,7 @@ define([
          * @return {publish} "voteUpdated" with updated item
          */
         incrementVote: function (item) {
-            if (this.appConfig.itemVotesField.length > 0) {
+            if (this.appConfig.itemVotesField && this.appConfig.itemVotesField.length > 0) {
                 // Get the latest vote count
                 this.refreshVoteCount(item).then(lang.hitch(this, function (item) {
                     // Increment the vote

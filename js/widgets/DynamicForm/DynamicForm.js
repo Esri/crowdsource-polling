@@ -79,6 +79,9 @@ define([
         show: function () {
             this._entryForm = this.generateForm(this.dynamicForm, this._formFields);
             domStyle.set(this.domNode, "display", "block");
+            if (this.domNode.scrollIntoView) {
+                this.domNode.scrollIntoView();
+            }
         },
 
         /**
@@ -245,7 +248,7 @@ define([
                                 pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
                             }
                         } else {               // HTML item
-                            if (inputItem.value.toString().length > 0) {
+                            if (inputItem.value.toString().trim().length > 0) {
                                 // Have value, so clear spot in mask
                                 pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
                             } else {
@@ -377,7 +380,9 @@ define([
 
                     // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
                     // then the form can't meet the condition for submission that all required fields have values
-                    } else if (field.type !== "esriFieldTypeOID" && field.type !== "esriFieldTypeGUID") {
+                    } else if (field.type !== "esriFieldTypeOID" &&
+                               field.type !== "esriFieldTypeGUID" &&
+                               field.type !== "esriFieldTypeGlobalID") {
                         topic.publish("showError", "[" + field.alias + "]<br>"
                             + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }

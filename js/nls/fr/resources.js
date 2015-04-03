@@ -19,8 +19,7 @@ define(({
         error: "Impossible de créer la carte",
         layerLoad: "Impossible de charger entièrement la carte",
         missingItemsFeatureLayer: "La couche de questions est manquant",
-        missingCommentsTable: "Le tableau des commentaires est manquant",
-        unsupportedRelationship: "Seule une relation 1:1 entre la couche d'entités et la table de commentaire est soutenu"
+        missingCommentsTable: "Le tableau des commentaires est manquant"
     },
     sidebar_header: {
         signInButton: "Se Connecter",

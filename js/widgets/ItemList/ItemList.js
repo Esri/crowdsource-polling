@@ -19,11 +19,11 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    "dojo/dom-attr",
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/dom-class',
     'dojo/on',
-    'dojo/query',
     'dojo/topic',
     'dojo/NodeList-dom',
 
@@ -33,46 +33,34 @@ define([
     'dijit/_TemplatedMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, arrayUtil, domConstruct, domStyle, domClass, on, dojoQuery, topic, nld,
+], function (declare, lang, array, domAttr, domConstruct, domStyle, domClass, on, topic, nld,
     SvgHelper,
     _WidgetBase, _TemplatedMixin,
     template) {
 
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
+        votesField: null,
 
-        /**
-         * Widget constructor. Placeholder if future functionality is needed in the
-         * widget creation life cycle.
-         * @constructor
-         */
-        constructor: function () {
-            this.inherited(arguments);
-        },
 
         /**
          * Widget post-create, called automatically in widget creation
          * life cycle, after constructor. Sets class variables.
          */
         postCreate: function () {
+            var linkActionBox;
+
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
             this.hide();
 
-            this.linkActionBox.checked = this.linkToMapView;
-            this.own(on(this.linkActionBox, "change", lang.hitch(this, function () {
-                topic.publish("linkToMapViewChanged", this.linkActionBox.checked);
+            // Create the checkbox for linking the item list to the map extents
+            linkActionBox = domConstruct.create("input", { "type": "checkbox", "class": "esriCTChkBox", id: "linkToMap", "value": "linkToMap" }, this.itemListActionBar);
+            domConstruct.create("label", { "class": "css-label", "for": "linkToMap", innerHTML: this.i18n.linkToMapViewOptionLabel }, this.itemListActionBar);
+            this.own(on(linkActionBox, "change", lang.hitch(this, function () {
+                topic.publish("linkToMapViewChanged", linkActionBox.checked);
             })));
-            this.linkActionLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
-        },
-
-        /**
-         * Widget startup. Placeholder if functionality is needed in the
-         * widget creation life cycle
-         *
-         */
-        startup: function () {
-            this.inherited(arguments);
+            linkActionBox.checked = this.linkToMapView;
         },
 
         /**
@@ -127,7 +115,7 @@ define([
          * Builds the items list
          */
         buildList: function () {
-            arrayUtil.forEach(this.items, lang.hitch(this, this.buildItemSummary));
+            array.forEach(this.items, lang.hitch(this, this.buildItemSummary));
         },
 
         /**
@@ -152,38 +140,44 @@ define([
                 'class': 'itemTitle',
                 'innerHTML': itemTitle
             }, itemSummaryDiv);
-            if (itemVotes.needSpace) {
-                domClass.add(itemTitleDiv, "itemListTitleOverride");
+
+            // If we're displaying votes, create the count and icon displays
+            if (itemVotes) {
+                if (itemVotes.needSpace) {
+                    domClass.add(itemTitleDiv, "itemListTitleOverride");
+                }
+
+                favDiv = domConstruct.create('div', {
+                    'class': 'itemFav',
+                    'title': this.i18n.likesForThisItemTooltip
+                }, itemSummaryDiv);
+
+                domConstruct.create('div', {
+                    'class': 'itemVotes',
+                    'innerHTML': itemVotes.label
+                }, favDiv);
+
+                iconDiv = domConstruct.create('div', {
+                    'class': 'fav'
+                }, favDiv);
+
+                likeIconSurf = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
             }
-
-            favDiv = domConstruct.create('div', {
-                'class': 'itemFav',
-                'title': this.i18n.likesForThisItemTooltip
-            }, itemSummaryDiv);
-
-            domConstruct.create('div', {
-                'class': 'itemVotes',
-                'innerHTML': itemVotes.label
-            }, favDiv);
-
-            iconDiv = domConstruct.create('div', {
-                'class': 'fav'
-            }, favDiv);
-
-            likeIconSurf = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
 
             // If this item's OID matches the current selection, apply the theme to highlight it
             if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
                 domClass.add(itemSummaryDiv, "appTheme");
-                domClass.add(favDiv, "appThemeAccentText");
-                SvgHelper.changeColor(likeIconSurf, this.appConfig.theme.accentText);
+                if (favDiv) {
+                    domClass.add(favDiv, "appThemeAccentText");
+                    SvgHelper.changeColor(likeIconSurf, this.appConfig.theme.accentText);
+                }
             }
         },
 
         /**
          * Gets title of feature for list display
          * @param  {feature} item The feature for which to get the title
-         * @return {string}      The title of the feature
+         * @return {string} The title of the feature
          */
         getItemTitle: function (item) {
             return item.getTitle ? item.getTitle() : "";
@@ -192,26 +186,32 @@ define([
         /**
          * Gets the number of votes for an item
          * @param  {feature} item The feature for which to get the vote count
-         * @return {object} Object containing "label" with vote count for the item in a shortened form (num if <1000,
-         * floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace" that's indicates if an
-         * extra digit of room is needed to handle numbers between 99K and 1M, exclusive
+         * @return {null|object} Object containing "label" with vote count for the item in a shortened form
+         * (num if <1000, floor(count/1000)+"k" if <1M, floor(count/1000000)+"M" otherwise) and "needSpace"
+         * that's indicates if an extra digit of room is needed to handle numbers between 99K and 1M, exclusive;
+         * returns null if the feature layer's votes field is unknown
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes = item.attributes[this.votesField] || 0;
-            if (votes > 999) {
-                if (votes > 99999) {
-                    needSpace = true;
+            var needSpace = false, votes;
+
+            if (this.votesField) {
+                votes = item.attributes[this.votesField] || 0;
+                if (votes > 999) {
+                    if (votes > 99999) {
+                        needSpace = true;
+                    }
+                    if (votes > 999999) {
+                        votes = Math.floor(votes / 1000000) + "M";
+                    } else {
+                        votes = Math.floor(votes / 1000) + "k";
+                    }
                 }
-                if (votes > 999999) {
-                    votes = Math.floor(votes / 1000000) + "M";
-                } else {
-                    votes = Math.floor(votes / 1000) + "k";
-                }
+                return {
+                    "label": votes,
+                    "needSpace": needSpace
+                };
             }
-            return {
-                "label": votes,
-                "needSpace": needSpace
-            };
+            return null;
         },
 
         /**

@@ -93,18 +93,20 @@ define([
         updateSignin: function (signedInUser) {
             var i18n = this.appConfig.i18n.sidebar_header;
 
-            if (!signedInUser) {
-                this.signInBtn.innerHTML = i18n.signInButton;
-                this.signInBtn.title = i18n.signInButtonTooltip;
-                domStyle.set(this.signInBtn, "display", "block");
+            if (this.showSignin) {
+                if (!signedInUser) {
+                    this.signInBtn.innerHTML = i18n.signInButton;
+                    this.signInBtn.title = i18n.signInButtonTooltip;
+                    domStyle.set(this.signInBtn, "display", "block");
 
-            } else if (signedInUser.canSignOut) {
-                this.signInBtn.innerHTML = i18n.signOutButton;
-                this.signInBtn.title = i18n.signOutButtonTooltip;
-                domStyle.set(this.signInBtn, "display", "block");
+                } else if (signedInUser.canSignOut) {
+                    this.signInBtn.innerHTML = i18n.signOutButton;
+                    this.signInBtn.title = i18n.signOutButtonTooltip;
+                    domStyle.set(this.signInBtn, "display", "block");
 
-            } else {
-                domStyle.set(this.signInBtn, "display", "none");
+                } else {
+                    domStyle.set(this.signInBtn, "display", "none");
+                }
             }
         }
 

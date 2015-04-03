@@ -71,6 +71,7 @@ define([
         map: null,
         mapData: null,
         _linkToMapView: false,
+        _currentlyCommenting: false,
 
         startup: function (config) {
             var itemInfo, error;
@@ -132,11 +133,15 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+                var votesField, commentFields;
 
                 //----- Merge map-loading info with UI items -----
-                this._itemsList.setFields(this.config.itemVotesField);
-                this._itemDetails.setItemFields(this.config.itemVotesField, this._mapData.getCommentFields());
-                this._itemDetails.setActionsVisibility(true, true, this._mapData.getItemLayer().hasAttachments);
+                votesField = (this.config.itemVotesField && this.config.itemVotesField.length > 0) ?
+                        this.config.itemVotesField : null;
+                commentFields = this._mapData.getCommentFields();
+                this._itemsList.setFields(votesField);
+                this._itemDetails.setItemFields(votesField, commentFields);
+                this._itemDetails.setActionsVisibility(votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 
@@ -150,7 +155,8 @@ define([
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
                     console.log(">cancelForm>");  //???
-                    this._itemDetails.hideCommentForm();
+                    this._itemDetails.destroyCommentForm();
+                    this._currentlyCommenting = false;
                 }));
 
                 /**
@@ -179,9 +185,16 @@ define([
                  * @param {object} item Item for which a comment might be submitted
                  */
                 topic.subscribe("getComment", lang.hitch(this, function (item) {
+                    var userInfo;
                     console.log(">getComment>", item);  //???
-                    var userInfo = this._socialDialog.getSignedInUser();
-                    this._itemDetails.showCommentForm(userInfo);
+
+                    if (this._currentlyCommenting) {
+                        topic.publish("cancelForm");
+                    } else {
+                        userInfo = this._socialDialog.getSignedInUser();
+                        this._itemDetails.showCommentForm(userInfo);
+                        this._currentlyCommenting = true;
+                    }
                 }));
 
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
@@ -197,6 +210,7 @@ define([
                     console.log(">itemSelected>", item);  //???
                     var itemExtent;
 
+                    this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
                     this._itemDetails.clearComments();
@@ -279,7 +293,8 @@ define([
                     console.log(">submitForm>", item, comment);  //???
                     this._sidebarCnt.showBusy(true);
                     this._mapData.addComment(item, comment);
-                    this._itemDetails.hideCommentForm();
+                    this._itemDetails.destroyCommentForm();
+                    this._currentlyCommenting = false;
                 }));
 
                 /**
@@ -301,19 +316,30 @@ define([
                 }));
 
                 /**
+                 * @param {object} item Item owning attachments
                  * @param {array} attachments List of attachments for the current item
                  */
-                topic.subscribe("updatedAttachments", lang.hitch(this, function (attachments) {
+                topic.subscribe("updatedAttachments", lang.hitch(this, function (item, attachments) {
                     console.log(">updatedAttachments>", attachments);  //???
-                    this._itemDetails.setAttachments(attachments);
+                    if (this._currentItem &&
+                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                            item.attributes[item._layer.objectIdField]) {
+                        this._itemDetails.setAttachments(attachments);
+                    }
+                    this._sidebarCnt.showBusy(false);
                 }));
 
                 /**
+                 * @param {object} item Item owning comments
                  * @param {array} comments List of comments for the current item
                  */
-                topic.subscribe("updatedCommentsList", lang.hitch(this, function (comments) {
+                topic.subscribe("updatedCommentsList", lang.hitch(this, function (item, comments) {
                     console.log(">updatedCommentsList>", comments);  //???
-                    this._itemDetails.setComments(comments);
+                    if (this._currentItem &&
+                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                            item.attributes[item._layer.objectIdField]) {
+                        this._itemDetails.setComments(comments);
+                    }
                     this._sidebarCnt.showBusy(false);
                 }));
 
@@ -428,7 +454,7 @@ define([
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
-                    "showSignin": this._socialDialog.isAvailable,
+                    "showSignin": this._socialDialog.isAvailable && (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText.length > 0
                 }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
 

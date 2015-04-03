@@ -22,6 +22,15 @@
             "placeHolder": "#206bdb",
             "tooltip": "Color theme for app"
         }, {
+            "label": "Feature layer",
+            "fieldName": "featureLayer",
+            "type": "layerandfieldselector",
+            "tooltip": "Choose the layer that contains the features for this app",
+            "layerOptions": {
+                "supportedTypes": ["FeatureLayer"],
+                "geometryTypes": ["esriGeometryPoint", "esriGeometryLine", "esriGeometryPolyline", "esriGeometryPolygon"]
+            }
+        }, {
             "label": "Comment Table Name Field",
             "fieldName": "commentNameField",
             "type": "string",
@@ -75,9 +84,9 @@
         "color": "#206bdb",
         "commentNameField": "",
         "itemVotesField": "",
-        "allowFacebook": true,
-        "allowGoogle": true,
-        "allowTwitter": true,
+        "allowFacebook": false,
+        "allowGoogle": false,
+        "allowTwitter": false,
         "facebookAppId": "",
         "googleplusClientId": "",
         "socialMediaDisclaimer": ""

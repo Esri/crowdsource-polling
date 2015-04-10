@@ -108,7 +108,8 @@ define([
 
         /**
          * Extracts the layer and loads its table from the configuration information.
-         * @return {object} Deferred for notification of completed load
+         * @return {object} Deferred for notification of completed load; deferred's result
+         * indicates if there is a comment table or not
          */
         load: function () {
             var deferred = new Deferred();
@@ -219,11 +220,11 @@ define([
                         }));
 
                         // We're done whether or not a table matched
-                        deferred.resolve();
+                        deferred.resolve(!(this._commentTable === undefined));
                     }));
                 } else {
                     // No comments for this webmap
-                    deferred.resolve();
+                    deferred.resolve(false);
                 }
             }));
             return deferred;

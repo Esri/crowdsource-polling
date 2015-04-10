@@ -72,6 +72,7 @@ define([
         mapData: null,
         _linkToMapView: false,
         _currentlyCommenting: false,
+        _hasCommentTable: false,
 
         startup: function (config) {
             var itemInfo, error;
@@ -311,8 +312,10 @@ define([
                  */
                 topic.subscribe("updateComments", lang.hitch(this, function (item) {
                     console.log(">updateComments>", item);  //???
-                    this._sidebarCnt.showBusy(true);
-                    this._mapData.queryComments(item);
+                    if (this._hasCommentTable) {
+                        this._sidebarCnt.showBusy(true);
+                        this._mapData.queryComments(item);
+                    }
                 }));
 
                 /**
@@ -548,7 +551,8 @@ define([
                 // At this point, this.config has been supplemented with
                 // the first operational layer's layerObject
                 this._mapData = new LayerAndTableMgmt(this.config);
-                this._mapData.load().then(function () {
+                this._mapData.load().then(function (hasCommentTable) {
+                    this._hasCommentTable = hasCommentTable;
                     mapDataReadyDeferred.resolve("map data");
                 }, lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));

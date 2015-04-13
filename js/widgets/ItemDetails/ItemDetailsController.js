@@ -304,10 +304,13 @@ define([
                 }, this.gallery);
                 this.own(on(thumb, 'click', lang.hitch(this, function (attachment) {
                     domConstruct.empty(this.enlargedViewPopup.popupContent);
+                    var imgContainer = domConstruct.create('div', {
+                        'class': 'popupImgContent'
+                    }, this.enlargedViewPopup.popupContent);
                     domConstruct.create('img', {
                         'class': 'attachment',
                         'src': srcURL
-                    }, this.enlargedViewPopup.popupContent);
+                    }, imgContainer);
                     this.enlargedViewPopup.show();
                 })));
             }));

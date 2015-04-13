@@ -1,7 +1,7 @@
-commit cdce9644c4b2e1ca362666c98cc5f6a4b0f27e4f
+commit abf3068dfe392ca31c8df1ace651598e7e2f7b3e
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Mon Apr 13 06:13:48 2015 -0700
+Date:   Mon Apr 13 13:26:02 2015 -0700
 
-    Restricted use of flex display mode to images; flex incompatible with help display
+    Updated to handle PNG & PDF in addition to JPEG
     
-    #41
+    #42

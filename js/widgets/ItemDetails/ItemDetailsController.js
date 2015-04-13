@@ -296,23 +296,39 @@ define([
         updateGallery: function (attachments) {
             // Create gallery
             array.forEach(attachments, lang.hitch(this, function (attachment) {
-                var thumb, srcURL;
-                srcURL = attachment.url + "/" + attachment.name;
-                thumb = domConstruct.create('img', {
-                    'class': 'attachment',
-                    'src': srcURL
-                }, this.gallery);
-                this.own(on(thumb, 'click', lang.hitch(this, function (attachment) {
-                    domConstruct.empty(this.enlargedViewPopup.popupContent);
-                    var imgContainer = domConstruct.create('div', {
-                        'class': 'popupImgContent'
-                    }, this.enlargedViewPopup.popupContent);
-                    domConstruct.create('img', {
+                var thumb, srcURL, attachmentUrl;
+
+                if (attachment.contentType === "image/jpeg" || attachment.contentType === "image/png") {
+                    srcURL = attachment.url + "/" + attachment.name;
+                    thumb = domConstruct.create('img', {
                         'class': 'attachment',
+                        'title': attachment.name,
                         'src': srcURL
-                    }, imgContainer);
-                    this.enlargedViewPopup.show();
-                })));
+                    }, this.gallery);
+                    this.own(on(thumb, 'click', lang.hitch(this, function (attachment) {
+                        domConstruct.empty(this.enlargedViewPopup.popupContent);
+                        var imgContainer = domConstruct.create('div', {
+                            'class': 'popupImgContent'
+                        }, this.enlargedViewPopup.popupContent);
+                        domConstruct.create('img', {
+                            'class': 'attachment',
+                            'src': srcURL
+                        }, imgContainer);
+                        this.enlargedViewPopup.show();
+                    })));
+
+                } else if (attachment.contentType === "application/pdf") {
+                    thumb = domConstruct.create('img', {
+                        'class': 'attachment',
+                        'title': attachment.name,
+                        'src': 'images/pdficon_large.png'
+                    }, this.gallery);
+                    attachmentUrl = attachment.url;
+                    this.own(on(thumb, 'click', lang.hitch(this, function () {
+                        window.open(attachmentUrl, "_blank");
+                    })));
+                }
+
             }));
         },
 

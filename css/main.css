@@ -453,14 +453,10 @@ label.css-label
 }
 
 .itemDetail .attachmentsSection .attachment {
-  width: 48%;
+  max-width: 96%!important;
+  max-height: 120px!important;
   margin: 0px 5px 5px 0px;
   cursor: pointer;
-}
-
-.itemDetail .attachmentsSection > img {
-    max-width: 48%!important;
-    max-height: 120px!important;
 }
 
 .commentsForm {

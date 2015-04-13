@@ -1,8 +1,7 @@
-commit 556cdcf9095407c170e99c4cc75e10df4ccd45cb
+commit cdce9644c4b2e1ca362666c98cc5f6a4b0f27e4f
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Apr 10 11:07:22 2015 -0700
+Date:   Mon Apr 13 06:13:48 2015 -0700
 
-    Handled case where feature layer doesn't have a comment table
-
-
-Re-pushing to trigger page build following repo account switch
+    Restricted use of flex display mode to images; flex incompatible with help display
+    
+    #41

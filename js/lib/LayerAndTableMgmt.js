@@ -131,8 +131,16 @@ define([
                     }
                 }
                 this._itemLayerInWebmap = opLayers[iOpLayer];
+                if (this._itemLayerInWebmap.errors) {//Add by Mike M, itemLayer is null on secure data if signed in with wrong user
+
+                    if (this._itemLayerInWebmap.errors.length > 0)
+                    {
+                        deferred.reject(this._itemLayerInWebmap.errors[0]);
+                        return;
+                    }
+                }
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
-                if (!this._itemLayerInWebmap) {
+                if (!this._itemLayerInWebmap || !this._itemLayer) {
                     deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
                     return;
                 }

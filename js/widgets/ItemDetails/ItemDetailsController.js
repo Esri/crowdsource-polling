@@ -327,6 +327,17 @@ define([
                     this.own(on(thumb, 'click', lang.hitch(this, function () {
                         window.open(attachmentUrl, "_blank");
                     })));
+
+                } else if (attachment.url && attachment.url.length > 0) {
+                    thumb = domConstruct.create('img', {
+                        'class': 'attachment',
+                        'title': attachment.name,
+                        'src': 'images/file_wht.png'
+                    }, this.gallery);
+                    attachmentUrl = attachment.url;
+                    this.own(on(thumb, 'click', lang.hitch(this, function () {
+                        window.open(attachmentUrl, "_blank");
+                    })));
                 }
 
             }));

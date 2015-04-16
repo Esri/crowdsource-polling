@@ -161,14 +161,32 @@ define([
                         promises.push(loadDeferred.promise);
                         commentTable = new FeatureLayer(commentTableURL);
                         on.once(commentTable, "load", lang.hitch(this, function (evt) {
-                            // Note that we only consider the first relationship in the items layer
-                            if (this._itemLayer.relationships[0].relatedTableId === commentTable.layerId) {
-                                loadDeferred.resolve({
-                                    "commentTableInWebmap": commentTableInWebmap,
-                                    "commentTableURL": commentTableURL,
-                                    "commentTable": commentTable
-                                });
-                            } else {
+                            var relateFound = array.some(this._itemLayer.relationships, lang.hitch(this, function (relate,i) {
+                                if (relate.relatedTableId === commentTable.layerId) {
+                                    var tableKeyField = "";
+                                    array.some(commentTable.relationships, lang.hitch(this, function (tablerelate, i) {
+                                        if (tablerelate.id == this._itemLayer.layerId)
+                                        {
+                                            tableKeyField = tablerelate.keyField;
+                                            return true;
+                                        }
+                                        return false;
+                                    }));
+                                    loadDeferred.resolve({
+                                        "commentTableInWebmap": commentTableInWebmap,
+                                        "commentTableURL": commentTableURL,
+                                        "commentTable": commentTable,
+                                        "commentTableRelateID": i,
+                                        "pollingKeyField": relate.keyField,
+                                        "tableKeyField": tableKeyField,
+
+                                    });
+                                    return true;
+                                }
+                                return false;
+                            }));
+                           
+                            if (relateFound === false) {
                                 loadDeferred.resolve();
                             }
                         }), lang.hitch(this, function () {
@@ -184,7 +202,7 @@ define([
                                 this._commentTableInWebmap = result.commentTableInWebmap;
                                 this._commentTableURL = result.commentTableURL;
                                 this._commentTable = result.commentTable;
-
+                                this._commentTableRelateID = result.commentTableRelateID;
                                 // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
                                 // to the presence of editing and visibility controls in the optional popup
                                 this._commentFields = this.applyWebmapControlsToFields(
@@ -211,8 +229,8 @@ define([
 
                                 // Save the field names for the linkage between the item layer and its table
                                 // Note that we only consider the first relationship in the items layer
-                                this._primaryKeyField = this._itemLayer.relationships[0].keyField;
-                                this._foreignKeyField = this._commentTable.relationships[0].keyField;
+                                this._primaryKeyField = result.pollingKeyField;
+                                this._foreignKeyField = result.tableKeyField;
 
                                 return true;
                             }
@@ -367,7 +385,8 @@ define([
             updateQuery.objectIds = [item.attributes[this._itemLayer.objectIdField]];
             updateQuery.returnGeometry = true;
             updateQuery.outFields = ["*"];
-            updateQuery.relationshipId = this._itemLayer.relationships[0].id;  // Note that we only consider the first relationship in the items layer
+
+            updateQuery.relationshipId = this._itemLayer.relationships[this._commentTableRelateID].id;  // Note that we only consider the first relationship in the items layer
 
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
                 var pThis = this, fset, i, features;

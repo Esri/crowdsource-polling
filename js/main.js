@@ -551,10 +551,10 @@ define([
                 // At this point, this.config has been supplemented with
                 // the first operational layer's layerObject
                 this._mapData = new LayerAndTableMgmt(this.config);
-                this._mapData.load().then(function (hasCommentTable) {
+                this._mapData.load().then(lang.hitch(this,function (hasCommentTable) {
                     this._hasCommentTable = hasCommentTable;
                     mapDataReadyDeferred.resolve("map data");
-                }, lang.hitch(this, function (err) {
+                }), lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
                 }));
             }), lang.hitch(this, function (err) {

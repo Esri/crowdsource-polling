@@ -1,8 +1,10 @@
-commit 78b7c92942f99ca13a491c884a49c45fe1fcdc82
-Merge: 3b1e346 fcb26cb
-Author: Mike Tschudi <mtschudi@esri.com>
-Date:   Fri Apr 24 12:14:16 2015 -0700
+commit bdb9a60d2a133567706eba109e4a66f1175ff604
+Author: MikeTschudi <mtschudi@esri.com>
+Date:   Mon Apr 27 15:28:30 2015 -0700
 
-    Merge pull request #52 from MikeMillerGIS/develop
-    
-    Issue 49 and Removed requirement for first relationship
+    Added search dijit
+commit bdb9a60d2a133567706eba109e4a66f1175ff604
+Author: MikeTschudi <mtschudi@esri.com>
+Date:   Mon Apr 27 15:28:30 2015 -0700
+
+    Added search dijit

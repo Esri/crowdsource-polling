@@ -531,6 +531,8 @@ define([
                 editable: this.config.editable,
                 bingMapsKey: this.config.bingKey
             }).then(lang.hitch(this, function (response) {
+                var geoLocate;
+
                 // Once the map is created we get access to the response which provides important info
                 // such as the map, operational layers, popup info and more. This object will also contain
                 // any custom options you defined for the template. In this example that is the 'theme' property.
@@ -538,8 +540,9 @@ define([
                 this.map = response.map;
 
                 // start up locate widget
-                var geoLocate = new LocateButton({
-                    map: this.map
+                geoLocate = new LocateButton({
+                    map: this.map,
+                    theme: "LocateButtonLight"
                 }, "LocateButton");
                 geoLocate.startup();
 

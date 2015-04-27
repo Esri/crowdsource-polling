@@ -173,6 +173,15 @@ body {
     background-repeat: no-repeat;
 }
 
+/* search */
+
+#SearchButton {
+    position: absolute;
+    left: 20px;
+    top: 151px;
+    z-index: 20;
+}
+
 /*============================================================================================================================*/
 
 /* ---------- SidebarHeader ---------- */
@@ -301,9 +310,6 @@ body {
 .itemList .itemVotes {
   margin-right: 0.5em;
 }
-
-
-
 
 .esriCTClear
 {

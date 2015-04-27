@@ -31,7 +31,9 @@ define([
     "dojo/promise/first",
     "dojo/topic",
     "esri/arcgis/utils",
+    "esri/config",
     "esri/dijit/LocateButton",
+    "esri/dijit/Search",
     "application/lib/LayerAndTableMgmt",
     "application/widgets/ItemDetails/ItemDetailsController",
     "application/widgets/ItemList/ItemList",
@@ -59,7 +61,9 @@ define([
     first,
     topic,
     arcgisUtils,
+    esriConfig,
     LocateButton,
+    Search,
     LayerAndTableMgmt,
     ItemDetails,
     ItemList,
@@ -570,6 +574,16 @@ define([
                 this._mapData = new LayerAndTableMgmt(this.config);
                 this._mapData.load().then(lang.hitch(this, function (hasCommentTable) {
                     this._hasCommentTable = hasCommentTable;
+
+                    // Add search control to search world places as well as GIS Day feature service
+                    var searchControl = new Search({
+                        addLayersFromMap: true,
+                        enableButtonMode: true,
+                        enableInfoWindow: false,
+                        map: this.map
+                    }, "SearchButton");
+                    searchControl.startup();
+
                     mapDataReadyDeferred.resolve("map data");
                 }), lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));

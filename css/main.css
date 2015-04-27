@@ -316,6 +316,10 @@ label.css-label
 
 /* ---------- itemDetail ---------- */
 
+.itemDetail {
+    color: #555;
+}
+
 .itemDetail > .itemSummary > div {
   padding: 10px;
   line-height: 20px;
@@ -356,6 +360,7 @@ label.css-label
 .itemDetail .header {
   width: 100%;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .itemDetail .userName {
@@ -537,11 +542,15 @@ img {
     margin: 10px 0px 10px 0px;
     height: auto;
     line-height: 18px;
+    color: #555;
+    font-size: 14px;
 }
 
 .dynamicFormInputCtl {
     width: 99%;
     height: 24px;
+    font-size: 14px;
+    color: #555;
 }
 
 .dynamicFormTextAreaCtl {
@@ -549,6 +558,8 @@ img {
     height: 60px;
     resize: none;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #555;
 }
 
 .dynamicFormCharactersRemaining {

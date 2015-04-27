@@ -300,16 +300,13 @@ define([
             // Create gallery
 
             array.forEach(attachments, lang.hitch(this, function (attachment) {
-                var thumb, srcURL, attachmentUrl;
+                var urlsplit, thumb, srcURL, attachmentUrl;
 
                 if (attachment.contentType === "image/jpeg" || attachment.contentType === "image/png") {
-                    //var urlObject = urlUtils.urlToObject(attachment.url);
-                    // urlObject.query = urlObject.query || {};
-                    var urlsplit = attachment.url.split("?")
+                    urlsplit = attachment.url.split("?");
                     if (urlsplit.length > 1) {
                         srcURL = urlsplit[0] + "/" + attachment.name + "?" + urlsplit[1];
-                    }
-                    else {
+                    } else {
                         srcURL = urlsplit[0] + "/" + attachment.name;
                     }
                     thumb = domConstruct.create('img', {

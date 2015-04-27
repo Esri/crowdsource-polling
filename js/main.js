@@ -17,6 +17,7 @@
  */
 define([
     "dojo/_base/declare",
+    "dojo/_base/array",
     "dojo/_base/Color",
     "dojo/_base/fx",
     "dojo/_base/lang",
@@ -44,6 +45,7 @@ define([
     "dojo/domReady!"
 ], function (
     declare,
+    array,
     Color,
     fx,
     lang,
@@ -73,6 +75,7 @@ define([
         _linkToMapView: false,
         _currentlyCommenting: false,
         _hasCommentTable: false,
+        _votesField: null,
 
         startup: function (config) {
             var itemInfo, error;
@@ -134,15 +137,22 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var votesField, commentFields;
+                var commentFields;
 
                 //----- Merge map-loading info with UI items -----
-                votesField = (this.config.itemVotesField && this.config.itemVotesField.length > 0) ?
-                        this.config.itemVotesField : null;
+                if (this.config.itemVotesField && this.config.itemVotesField.length > 0) {
+                    // Make sure that the configured votes field exists
+                    if (array.some(this._mapData.getItemFields(), lang.hitch(this, function (field) {
+                            return this.config.itemVotesField === field.name &&
+                                (field.type === "esriFieldTypeInteger" || field.type === "esriFieldTypeSmallInteger");
+                        }))) {
+                        this._votesField = this.config.itemVotesField;
+                    }
+                }
                 commentFields = this._mapData.getCommentFields();
-                this._itemsList.setFields(votesField);
-                this._itemDetails.setItemFields(votesField, commentFields);
-                this._itemDetails.setActionsVisibility(votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
+                this._itemsList.setFields(this._votesField);
+                this._itemDetails.setItemFields(this._votesField, commentFields);
+                this._itemDetails.setActionsVisibility(this._votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 
@@ -151,7 +161,9 @@ define([
                  */
                 topic.subscribe("addLike", lang.hitch(this, function (item) {
                     console.log(">addLike>", item);  //???
-                    this._mapData.incrementVote(item);
+                    if (this._votesField) {
+                        this._mapData.incrementVote(item, this._votesField);
+                    }
                 }));
 
                 topic.subscribe("cancelForm", lang.hitch(this, function () {
@@ -216,9 +228,11 @@ define([
 
                     this._itemDetails.clearComments();
                     this._itemDetails.setItem(item);
-                    this._mapData.refreshVoteCount(item).then(function (item) {
-                        topic.publish("voteUpdated", item);
-                    });
+                    if (this._votesField) {
+                        this._mapData.refreshVoteCount(item, this._votesField).then(function (item) {
+                            topic.publish("voteUpdated", item);
+                        });
+                    }
 
                     if (this._mapData.getItemLayer().hasAttachments) {
                         topic.publish("updateAttachments", item);
@@ -551,7 +565,7 @@ define([
                 // At this point, this.config has been supplemented with
                 // the first operational layer's layerObject
                 this._mapData = new LayerAndTableMgmt(this.config);
-                this._mapData.load().then(lang.hitch(this,function (hasCommentTable) {
+                this._mapData.load().then(lang.hitch(this, function (hasCommentTable) {
                     this._hasCommentTable = hasCommentTable;
                     mapDataReadyDeferred.resolve("map data");
                 }), lang.hitch(this, function (err) {

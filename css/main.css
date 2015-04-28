@@ -441,6 +441,7 @@ label.css-label
   width: 100%;
   margin-bottom: 5px;
   font-weight: bold;
+  font-size: 16px;
 }
 
 .itemDetail .userName {
@@ -623,13 +624,13 @@ img {
     height: auto;
     line-height: 18px;
     color: #555;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .dynamicFormInputCtl {
     width: 99%;
     height: 24px;
-    font-size: 14px;
+    font-size: 12px;
     color: #555;
 }
 
@@ -638,13 +639,14 @@ img {
     height: 60px;
     resize: none;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 12px;
     color: #555;
 }
 
 .dynamicFormCharactersRemaining {
     float: right;
     padding-right: 1px;
+    font-size: 12px;
 }
 
 .dynamicFormActions {

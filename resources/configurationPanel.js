@@ -45,7 +45,7 @@
                 "multipleSelection": false,
                 "fieldName": "itemVotesField",
                 "label": "Votes Field",
-                "tooltip": "Numeric field in the selected layer for tracking the votes recieved for each feature."
+                "tooltip": "Numeric field in the selected layer for tracking the votes received for each feature."
             }]
         }
         ]

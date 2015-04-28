@@ -316,7 +316,7 @@ define([
                                 placeholder: field.dtTooltip || "",
                                 pattern: "[\\+\\-]?[0-9]*"
                             }, row);
-                        } else if (field.type === "esriFieldTypeDouble") {
+                        } else if (field.type === "esriFieldTypeSingle" || field.type === "esriFieldTypeDouble") {
                             row = createRow();
                             domConstruct.create("br", {}, row);
                             inputItem = domConstruct.create("input", {

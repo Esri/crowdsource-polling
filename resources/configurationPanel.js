@@ -29,19 +29,20 @@
             "layerOptions": {
                 "supportedTypes": ["FeatureLayer"],
                 "geometryTypes": ["esriGeometryPoint", "esriGeometryLine", "esriGeometryPolyline", "esriGeometryPolygon"]
-            }
+            },
+            "fields": [{
+                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
+                "multipleSelection": false,
+                "fieldName": "itemVotesField",
+                "label": "Voting field",
+                "tooltip": "Name of field in the feature layer that stores votes for the item"
+            }]
         }, {
             "label": "Comment Table Name Field",
             "fieldName": "commentNameField",
             "type": "string",
             "placeHolder": "",
             "tooltip": "Name of field in the table that stores the commenter's name"
-        }, {
-            "label": "Votes Field",
-            "fieldName": "itemVotesField",
-            "type": "string",
-            "placeHolder": "",
-            "tooltip": "Name of field in the feature layer that stores votes for the item"
         }, {
             "label": "Allow Facebook sign-ins",
             "fieldName": "allowFacebook",
@@ -92,4 +93,3 @@
         "socialMediaDisclaimer": ""
     }
 }
-

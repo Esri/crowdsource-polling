@@ -20,7 +20,7 @@ define([
     "dojo/_base/declare",
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
-    "dojo/text!./templates/SidebarHeader.html",
+    "dojo/text!./SidebarHeader.html",
     "dojo/dom",
     "dojo/_base/lang",
     "dojo/dom-style",

@@ -57,7 +57,7 @@ define([
 
                 // Modernizr/yepnope for load to get onload event cross-browser
                 Modernizr.load([{
-                    load: "https://apis.google.com/js/client:plusone.js",
+                    load: "//apis.google.com/js/client:plusone.js",
                     complete: function () {
                         pThis.updateUser();
                     }

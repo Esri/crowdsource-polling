@@ -1,5 +1,5 @@
-commit 872f36aed504e452012b4cd8c0fc329a521092e6
+commit 2cdb23a055a7fa27b14c8427684221f964f7a31a
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Tue Apr 28 16:10:16 2015 -0700
+Date:   Wed Apr 29 12:53:51 2015 -0700
 
-    Fixed typo
+    Adjusted feature voting field access to match new configuration panel UI

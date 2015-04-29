@@ -72,8 +72,7 @@ define([
         signIn: function () {
             gapi.auth.signIn({
                 "clientid": this._config.googleplusClientId,
-                "scope": this._config.googleplusScope,
-                "cookiepolicy": "single_host_origin",
+                "cookiepolicy": "none",
                 "callback": lang.hitch(this, this.updateUser)
             });
         },

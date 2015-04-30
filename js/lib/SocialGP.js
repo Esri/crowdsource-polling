@@ -59,8 +59,8 @@ define([
                 Modernizr.load([{
                     load: "https://apis.google.com/js/client:platform.js",
                     complete: function () {
-                        gapi.load('auth2', function() {
-                            gapi.client.load('plus','v1').then(function() {
+                        gapi.load('auth2', function () {
+                            gapi.client.load('plus', 'v1').then(function () {
                                 pThis.updateUser();
                             });
                         });
@@ -86,7 +86,10 @@ define([
          * @memberOf socialGP#
          */
         signOut: function () {
-            gapi.auth.signOut();
+            try {
+                gapi.auth.signOut();
+            } catch (ignore) {
+            }
             this.updateUser();
         },
 

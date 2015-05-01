@@ -1,5 +1,7 @@
-commit 2cdb23a055a7fa27b14c8427684221f964f7a31a
+commit 55446b430b1fc4fbac7bc1ad6a1aa0e8d789da39
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Apr 29 12:53:51 2015 -0700
+Date:   Fri May 1 12:43:23 2015 -0700
 
-    Adjusted feature voting field access to match new configuration panel UI
+    Moved object variables from prototype into instance
+    
+    (cherry picked from commit 077165a882d2aa09cfbf5e2d4870d4d1333e206a)

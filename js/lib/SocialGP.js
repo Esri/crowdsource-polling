@@ -57,9 +57,13 @@ define([
 
                 // Modernizr/yepnope for load to get onload event cross-browser
                 Modernizr.load([{
-                    load: "https://apis.google.com/js/client:plusone.js",
+                    load: "https://apis.google.com/js/client:platform.js",
                     complete: function () {
-                        pThis.updateUser();
+                        gapi.load('auth2', function () {
+                            gapi.client.load('plus', 'v1').then(function () {
+                                pThis.updateUser();
+                            });
+                        });
                     }
                 }]);
             }());
@@ -72,8 +76,7 @@ define([
         signIn: function () {
             gapi.auth.signIn({
                 "clientid": this._config.googleplusClientId,
-                "scope": this._config.googleplusScope,
-                "cookiepolicy": "single_host_origin",
+                "cookiepolicy": "none",
                 "callback": lang.hitch(this, this.updateUser)
             });
         },
@@ -83,7 +86,10 @@ define([
          * @memberOf socialGP#
          */
         signOut: function () {
-            gapi.auth.signOut();
+            try {
+                gapi.auth.signOut();
+            } catch (ignore) {
+            }
             this.updateUser();
         },
 

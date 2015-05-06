@@ -83,7 +83,7 @@ define([
                 domStyle.set(this.helpBtn, "display", "none");
             }
 
-            this.appTitle.innerHTML = this.appConfig.title || "";
+            this.appTitle.innerHTML = this.appTitle.title = this.appConfig.title || "";
         },
 
         /**

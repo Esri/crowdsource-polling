@@ -1,7 +1,5 @@
-commit 55446b430b1fc4fbac7bc1ad6a1aa0e8d789da39
+commit 690fefedc90f370ef714433e78440f9a6ec89cf1
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri May 1 12:43:23 2015 -0700
+Date:   Wed May 6 12:25:26 2015 -0700
 
-    Moved object variables from prototype into instance
-    
-    (cherry picked from commit 077165a882d2aa09cfbf5e2d4870d4d1333e206a)
+    Added app title tooltip for when one hovers over the app title

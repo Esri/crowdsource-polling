@@ -54,7 +54,6 @@ define([
     //========================================================================================================================//
 
     return declare([], {
-        appConfig: null,
 
         /**
          * Encapsulates the management of a layer and its related table.

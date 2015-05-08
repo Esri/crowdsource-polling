@@ -31,7 +31,6 @@ define([
     //========================================================================================================================//
 
     return declare([social], {
-        _timeout: null,
 
         /**
          * Constructor for class.
@@ -40,8 +39,8 @@ define([
          * @memberOf socialTW#
          * @constructor
          */
-        constructor: function () {
-            return null;
+        constructor: function (config) {
+            this._timeout = null;
         },
 
         /**

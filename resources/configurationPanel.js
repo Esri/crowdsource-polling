@@ -6,7 +6,7 @@
         "commentNameField": "COMMENTS",
         "allowFacebook": false,
         "allowGoogle": false,
-        "allowTwitter": false,
+        "allowTwitter": true,
         "facebookAppId": "",
         "googleplusClientId": "",
         "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post."

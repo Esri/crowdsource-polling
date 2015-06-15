@@ -1,7 +1,9 @@
-commit 3e6b8f8054aa8e58fceabadc01246e9778236a21
+From git branch 
+develop
+commit cd70e8fb062d145df4912d22d0927de613f54ff3
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Tue May 12 10:41:08 2015 -0700
+Date:   Mon Jun 15 14:30:38 2015 -0700
 
-    Reset comment form parameter labels to 14px
+    Changed method for Twitter sign-in callback
     
-    #55
+    #76

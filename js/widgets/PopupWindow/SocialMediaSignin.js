@@ -195,7 +195,7 @@ define([
             this.disclaimer.innerHTML = this.appConfig.socialMediaDisclaimer;
 
             // Is there anything that can be logged into?
-            this._isAvailable = facebook || google || twitter;
+            this._isAvailable = (facebook !== undefined) || (google !== undefined) || (twitter !== undefined);
         },
 
         /**

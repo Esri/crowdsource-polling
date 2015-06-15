@@ -38,13 +38,13 @@ define({
             "fields": ["VOTES"]
         }]
     },
-    "commentNameField": "",
+    "commentNameField": "COMMENTS",
     "itemVotesField": "VOTES",
-    "allowFacebook": false,
-    "allowGoogle": false,
+    "allowFacebook": true,
+    "allowGoogle": true,
     "allowTwitter": true,
-    "facebookAppId": "",
-    "googleplusClientId": "",
+    "facebookAppId": "1421835051455187",
+    "googleplusClientId": "615590751130-17e21qpbb31anibvusmnuo4h87rpjlg2.apps.googleusercontent.com",
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
 
     //Other template-specific properties

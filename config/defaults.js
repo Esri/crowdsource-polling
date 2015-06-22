@@ -39,7 +39,6 @@ define({
         }]
     },
     "commentNameField": "",
-    "itemVotesField": "VOTES",
     "allowFacebook": false,
     "allowGoogle": false,
     "allowTwitter": true,

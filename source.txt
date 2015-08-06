@@ -1,9 +1,8 @@
 From git branch 
 develop
-commit cd70e8fb062d145df4912d22d0927de613f54ff3
+commit ff107c56f4993022b31975a7bf646da1544fbb8a
+Merge: a66091a 2cfbeb4
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Mon Jun 15 14:30:38 2015 -0700
+Date:   Wed Jul 8 14:59:51 2015 -0700
 
-    Changed method for Twitter sign-in callback
-    
-    #76
+    Merge branch 'master' into develop

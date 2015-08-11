@@ -38,7 +38,7 @@ define({
             "fields": ["VOTES"]
         }]
     },
-    "commentNameField": "",
+    "commentNameField": "COMMENTS",
     "allowFacebook": false,
     "allowGoogle": false,
     "allowTwitter": true,

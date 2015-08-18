@@ -581,12 +581,14 @@ define([
                 this._mapData.load().then(lang.hitch(this, function (hasCommentTable) {
                     this._hasCommentTable = hasCommentTable;
 
+                    mapDataReadyDeferred.resolve("map data");
+
                     // Add search control
                     SearchDijitHelper.createSearchDijit(
-                        this.map, this.config.helperServices.geocode,
-                        this.config.itemInfo.itemData.applicationProperties, "SearchButton");
+                        this.map, this.config.itemInfo.itemData.operationalLayers,
+                        this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
+                        "SearchButton");
 
-                    mapDataReadyDeferred.resolve("map data");
                 }), lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
                 }));

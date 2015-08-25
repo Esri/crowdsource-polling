@@ -40,10 +40,10 @@ define({
     },
     "commentNameField": "NAME",
     "allowFacebook": false,
-    "allowGoogle": false,
-    "allowTwitter": true,
     "facebookAppId": "",
+    "allowGoogle": false,
     "googleplusClientId": "",
+    "allowTwitter": true,
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
 
     //Other template-specific properties

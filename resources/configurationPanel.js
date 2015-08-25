@@ -14,7 +14,10 @@
     "configurationSettings": [{
         "category": "<b>General Settings</b>",
         "fields": [{
-            "type": "webmap"
+            "label": "Select a map",
+            "fieldName": "webmap",
+            "type": "webmap",
+            "tooltip": "Web map displayed in the application"
         }, {
             "label": "Title",
             "fieldName": "title",

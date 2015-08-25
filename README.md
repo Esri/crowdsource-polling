@@ -1,5 +1,5 @@
 [Preview]: http://arcgis.com/apps/CrowdsourcePolling/index.html
-[Thumbnail]: crowdsource-polling.png "Crowdsource Polling"
+[Thumbnail]: images/crowdsource-polling.png "Crowdsource Polling"
 
 [supported browsers]: http://doc.arcgis.com/en/arcgis-online/reference/browsers.htm
 [New to Github? Get started here.]: http://htmlpreview.github.com/?https://github.com/Esri/esri.github.com/blob/master/help/esri-getting-to-know-github.html

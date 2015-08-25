@@ -150,8 +150,8 @@ define([
 
                 // Provides _itemFields[n].{alias, editable, length, name, nullable, type} after adjusting
                 // to the presence of editing and visibility controls in the optional popup
-                this._itemFields = this.applyWebmapControlsToFields(
-                    this._itemLayer.fields,
+                this._itemFields = this.amendFieldInformation(
+                    this._itemLayer,
                     this._itemLayerInWebmap.popupInfo
                 );
 
@@ -214,8 +214,8 @@ define([
                                 this._commentTableRelateID = result.commentTableRelateID;
                                 // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
                                 // to the presence of editing and visibility controls in the optional popup
-                                this._commentFields = this.applyWebmapControlsToFields(
-                                    this._commentTable.fields,
+                                this._commentFields = this.amendFieldInformation(
+                                    this._commentTable,
                                     this._commentTableInWebmap.popupInfo
                                 );
 
@@ -258,16 +258,28 @@ define([
         },
 
         /**
-         * Amends fields in fields list with popup editing and visibility settings.
-         * @param {array} fields Fields associated with layer or table
+         * Amends fields in fields list with popup editing and visibility settings, domains, defaults.
+         * @param {object} featureSvc Feature service containing fields
          * @param {object} [webmapPopup] Popup associated with layer or table
          * @return {array} Amends list with "dtIsEditable" and "dtIsVisible"; if webmapPopup or its fieldInfos
          * property are undefined, dtIsEditable is a copy of "editable" and dtIsVisible is true; otherwise,
          * dtIsEditable is a copy of the popup's fieldInfo's "isEditable" and dtIsVisible is a copy of its
          * "visible" (we have to use dtIs* to avoid conflicts with the API's use of "editable")
+         * Amendments:
+         *   dtIsEditable: {boolean}
+         *   dtIsVisible: {boolean}
+         *   dtStringFieldOption: {string} copied from popup
+         *   dtTooltip: {null|string} copied from popup
+         *   dtDomain: {null|string|array} for none, coded value, or range, respectively
+         *   dtDefault: {null|value}
          */
-        applyWebmapControlsToFields: function (fields, webmapPopup) {
-            var sortedFields, fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
+        amendFieldInformation: function (featureSvc, webmapPopup) {
+            var fields = featureSvc.fields, defaults = null, sortedFields, fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
+
+            // Do we have defaults in this feature service?
+            if (featureSvc.templates && featureSvc.templates.length > 0 && featureSvc.templates[0].prototype.attributes) {
+                defaults = featureSvc.templates[0].prototype.attributes;
+            }
 
             // Amend fields
             array.forEach(fields, function (field) {
@@ -276,6 +288,25 @@ define([
                 field.dtIsVisible = true;
                 field.dtStringFieldOption = null;
                 field.dtTooltip = null;
+
+                // Add in domain
+                field.dtDomain = null;
+                if (field.domain) {
+                    if (field.domain.type === "codedValue") {
+                        field.dtDomain = array.map(field.domain.codedValues, function (item) {
+                            return item.name;
+                        }).join("|");
+                    } else if (field.domain.type === "range") {
+                        field.dtDomain = field.domain.range;
+                    }
+                }
+
+                // Add in default either from template or from field itself, falling back to null
+                if (defaults && defaults[field.name]) {
+                    field.dtDefault = field.defaultValue || defaults[field.name];
+                } else {
+                    field.dtDefault = field.defaultValue || null;
+                }
 
                 // If we have a popup, seek to update settings
                 if (fieldInfos) {

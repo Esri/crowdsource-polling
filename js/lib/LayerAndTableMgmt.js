@@ -160,7 +160,7 @@ define([
                         this._itemLayer.relationships.length > 0) {
 
                     // Try to find the table that's in this relationship. We'll do parallel searches in
-                    // the hope that it'll be on averge faster than serially stepping through the tables.
+                    // the hope that it'll be on average faster than serially stepping through the tables.
                     array.forEach(this.appConfig.itemInfo.itemData.tables, lang.hitch(this, function (table) {
                         var commentTableURL, commentTableInWebmap = table, commentTable, loadDeferred = new Deferred();
 
@@ -270,7 +270,6 @@ define([
          *   dtIsVisible: {boolean}
          *   dtStringFieldOption: {string} copied from popup
          *   dtTooltip: {null|string} copied from popup
-         *   dtDomain: {null|string|array} for none, coded value, or range, respectively
          *   dtDefault: {null|value}
          */
         amendFieldInformation: function (featureSvc, webmapPopup) {
@@ -282,30 +281,23 @@ define([
             }
 
             // Amend fields
-            array.forEach(fields, function (field) {
+            array.forEach(fields, lang.hitch(this, function (field) {
                 // Cover no-popup and unmatched fieldname cases
                 field.dtIsEditable = field.editable;
                 field.dtIsVisible = true;
                 field.dtStringFieldOption = null;
                 field.dtTooltip = null;
 
-                // Add in domain
-                field.dtDomain = null;
-                if (field.domain) {
-                    if (field.domain.type === "codedValue") {
-                        field.dtDomain = array.map(field.domain.codedValues, function (item) {
-                            return item.name;
-                        }).join("|");
-                    } else if (field.domain.type === "range") {
-                        field.dtDomain = field.domain.range;
-                    }
-                }
-
                 // Add in default either from template or from field itself, falling back to null
                 if (defaults && defaults[field.name]) {
                     field.dtDefault = field.defaultValue || defaults[field.name];
                 } else {
                     field.dtDefault = field.defaultValue || null;
+                }
+
+                // Convert dates from ArcGIS format of days since 12/31/1899 to JavaScript format of days since 1/1/1970
+                if (field.type === "esriFieldTypeDate") {
+                    field.dtDefault = this.convertArcGISDaysToLocalDays(field.dtDefault);
                 }
 
                 // If we have a popup, seek to update settings
@@ -324,7 +316,7 @@ define([
                         return false;
                     });
                 }
-            });
+            }));
 
             // Reorder fields to match popup
             if (fieldInfos) {
@@ -342,6 +334,24 @@ define([
             }
 
             return fields;
+        },
+
+        /**
+         * Converts from ArcGIS format of days since 12/31/1899 to JavaScript format of days since 1/1/1970
+         * @param {number} arcGISDays Days in the ArcGIS format
+         * @return {number} Days in the JavaScript format
+         **/
+        convertArcGISDaysToLocalDays: function (arcGISDays) {
+            if (!arcGISDays) {
+                return arcGISDays;
+            }
+            return new Date(
+                ((arcGISDays
+                    - 25569)  // days from 12/31/1899 to 1/1/1970
+                    * 86400000)  // milliseconds in a day
+                    + ((new Date()).getTimezoneOffset()  // minutes to add to time so that it is interpreted as local
+                    * 60000)  // milliseconds in a minute
+            );
         },
 
         /**

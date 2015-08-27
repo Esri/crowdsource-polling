@@ -23,8 +23,8 @@ define([
     "dijit/_TemplatedMixin",
     "dijit/form/NumberTextBox",
     "dijit/form/Select",
-    "dijit/form/Textarea",
-    "dijit/form/TextBox",
+    "application/lib/ValidationTextarea",
+    "dijit/form/ValidationTextBox",
     "dojo/text!./DynamicForm.html",
     "dojo/_base/array",
     "dojo/_base/lang",
@@ -44,8 +44,8 @@ define([
     _TemplatedMixin,
     NumberTextBox,
     Select,
-    TextArea,
-    TextBox,
+    ValidationTextArea,
+    ValidationTextBox,
     template,
     array,
     lang,
@@ -194,9 +194,7 @@ define([
             domClass.add(this.dynamicFormSubmit, "appTheme");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
-                if (submission) {
-                    topic.publish("submitForm", this._item, submission);
-                }
+                topic.publish("submitForm", this._item, submission);
             }));
 
             domConstruct.create("span", {
@@ -255,22 +253,30 @@ define([
                  */
                 function updateRequiredFieldStatus() {
                     if (row.requiredFieldFlag) {
-                        // Update the field for this item
-                        if (inputItem.attr) {  // Dojo item
-                            if (inputItem.attr("value") !== null) {
-                                // Have value, so clear spot in mask
-                                pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
-                            } else {
-                                // No value, so set spot in mask
-                                pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                        var value = null;
+
+                        // The input item has an empty state value when it passes the dijit's validation checks.
+                        // Other possible states are "Error" and "Incomplete"
+                        if (inputItem.state.length === 0) {
+                            // If the dijit reports that the value is valid
+                            value = inputItem.get("value");
+                            if (value !== null && (value !== value || (typeof value === "undefined"))) {
+                                value = null;
                             }
-                        } else {               // HTML item
-                            if (inputItem.value.toString().trim().length > 0) {
-                                // Have value, so clear spot in mask
-                                pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
-                            } else {
-                                // No value, so set spot in mask
-                                pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                        }
+
+                        // Update the field for this item
+                        if (value !== null) {
+                            // Have value, so clear spot in mask
+                            pThis._requiredFieldsStatus &= ~(row.requiredFieldFlag);
+                            if (inputItem.dtManualValidationFlag) {
+                                domClass.remove(inputItem.domNode, "dijitTextBoxError");
+                            }
+                        } else {
+                            // No value, so set spot in mask
+                            pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
+                            if (inputItem.dtManualValidationFlag) {
+                                domClass.add(inputItem.domNode, "dijitTextBoxError");
                             }
                         }
                     }
@@ -337,7 +343,8 @@ define([
                         }
 
                         options = {
-                            required: !field.nullable
+                            required: !field.nullable,
+                            maxlength: field.length
                         };
                         if (field.dtDefault) {
                             options.value = field.dtDefault;
@@ -347,11 +354,10 @@ define([
                         }
                         if (useTextArea) {
                             options.rows = 4;
-                            inputItem = new TextArea(options, domConstruct.create("div", {}, row));
+                            inputItem = new ValidationTextArea(options, domConstruct.create("div", {}, row));
                             inputItem.startup();
-
                         } else {
-                            inputItem = new TextBox(options, domConstruct.create("div", {}, row));
+                            inputItem = new ValidationTextBox(options, domConstruct.create("div", {}, row));
                             inputItem.startup();
                         }
 
@@ -408,6 +414,7 @@ define([
                             }
                             inputItem = new DateTextBox(options, domConstruct.create("div", {}, row));
                             inputItem.startup();
+                            inputItem.dtManualValidationFlag = true;
                         }
                     }
 

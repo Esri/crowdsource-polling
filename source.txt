@@ -1,8 +1,8 @@
 From git branch 
 develop
-commit ff107c56f4993022b31975a7bf646da1544fbb8a
-Merge: a66091a 2cfbeb4
+commit a2b2170682e64ace452b83673685cc2f425eeb5b
+Merge: 9006f47 e8977eb
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Jul 8 14:59:51 2015 -0700
+Date:   Thu Aug 27 12:35:45 2015 -0700
 
-    Merge branch 'master' into develop
+    Merge branch 'Sep_2015_release' into develop

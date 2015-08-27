@@ -39,10 +39,10 @@ define({
         }]
     },
     "commentNameField": "NAME",
-    "allowFacebook": false,
-    "facebookAppId": "",
-    "allowGoogle": false,
-    "googleplusClientId": "",
+    "allowFacebook": true,
+    "facebookAppId": "1421835051455187",
+    "allowGoogle": true,
+    "googleplusClientId": "615590751130-17e21qpbb31anibvusmnuo4h87rpjlg2.apps.googleusercontent.com",
     "allowTwitter": true,
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
 

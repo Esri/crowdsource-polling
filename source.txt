@@ -1,9 +1,9 @@
 From git branch 
 develop
-commit 948d6c3da979b2385a6206bf489b344ad6aa34e9
+commit 6710aae98f8903914fe4d26b934cc71fec6405ef
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Aug 27 14:54:25 2015 -0700
+Date:   Thu Aug 27 15:31:09 2015 -0700
 
-    Removed HTML tags from titles
+    Collapsed popup title if empty
     
-    #68
+    #58

@@ -189,7 +189,17 @@ define([
          * @return {string} The title of the feature
          */
         getItemTitle: function (item) {
-            return item.getTitle ? item.getTitle() : "";
+            return item.getTitle ? this.stripTags(item.getTitle()) : "";
+        },
+
+        /**
+         * Removes HTML tags from a string
+         * @param {string} str String possibly containing HTML tags
+         * @return {string} Cleaned string
+         * @see http://dojo-toolkit.33424.n3.nabble.com/Stripping-HTML-tags-from-a-string-tp3999505p3999576.html
+         */
+        stripTags: function (str) {
+            return domConstruct.create("div", { innerHTML: str }).textContent;
         },
 
         /**

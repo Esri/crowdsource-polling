@@ -1,8 +1,9 @@
 From git branch 
 develop
-commit a2b2170682e64ace452b83673685cc2f425eeb5b
-Merge: 9006f47 e8977eb
+commit c0fddb0215adbc195f8c5a4383a07ec2fcf7b503
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Aug 27 12:35:45 2015 -0700
+Date:   Thu Aug 27 14:24:41 2015 -0700
 
-    Merge branch 'Sep_2015_release' into develop
+    Added more space to issues list titles for RTL and vote counts with a multiple of 3 digits
+    
+    #80, #59

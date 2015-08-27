@@ -205,11 +205,19 @@ define([
 
             if (this.votesField) {
                 votes = item.attributes[this.votesField] || 0;
+
                 if (votes > 999) {
                     if (votes > 99999) {
                         needSpace = true;
                     }
-                    if (votes > 999999) {
+                    // Using SI prefixes from http://physics.nist.gov/cuu/pdf/sp811.pdf
+                    if (votes > 999999999999999) {
+                        votes = Math.floor(votes / 1000000000000000) + "P";
+                    } else if (votes > 999999999999) {
+                        votes = Math.floor(votes / 1000000000000) + "T";
+                    } else if (votes > 999999999) {
+                        votes = Math.floor(votes / 1000000000) + "G";
+                    } else if (votes > 999999) {
                         votes = Math.floor(votes / 1000000) + "M";
                     } else {
                         votes = Math.floor(votes / 1000) + "k";

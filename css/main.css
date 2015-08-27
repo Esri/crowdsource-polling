@@ -288,14 +288,14 @@ textarea {
 }
 
 .itemSummary .itemTitle {
-  width: 80%;
+  width: 75%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow-x: hidden;
 }
 
 .itemListTitleOverride {
-    width: 76%!important;
+    width: 70%!important;
 }
 
 .itemList .itemTitle,
@@ -316,6 +316,7 @@ textarea {
   font-size: 20px;
   color: rgb(150, 150, 150);
   color: rgba(0, 0, 0, 0.35);
+  padding-left: 8px;
 }
 
 .itemList .itemVotes {

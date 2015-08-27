@@ -571,6 +571,10 @@ label.css-label
     height: 32px;
     line-height: 32px;
 }
+.popupTitleEmpty {
+    height: 0px;
+    line-height: 0px;
+}
 .popupContent {
     margin: 10px;
     overflow:auto;

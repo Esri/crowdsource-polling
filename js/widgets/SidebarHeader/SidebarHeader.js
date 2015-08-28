@@ -79,8 +79,6 @@ define([
                     topic.publish("helpSelected");
                 });
                 this.own(this._helpBtnOnClick);
-            } else {
-                domStyle.set(this.helpBtn, "display", "none");
             }
 
             this.appTitle.innerHTML = this.appTitle.title = this.appConfig.title || "";
@@ -92,6 +90,18 @@ define([
         startup: function () {
             this.inherited(arguments);
             domStyle.set(this.domNode.parentNode, "border-bottom-color", this.appConfig.theme.background);
+        },
+
+        /**
+         * Sets display of help trigger.
+         * @param {boolean} showIfEnabled Show help trigger if help is enabled
+         */
+        updateHelp: function (showIfEnabled) {
+            if (showIfEnabled && this.showHelp) {
+                domStyle.set(this.helpBtn, "display", "inline-block");
+            } else {
+                domStyle.set(this.helpBtn, "display", "none");
+            }
         },
 
         /**

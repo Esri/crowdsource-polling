@@ -19,8 +19,7 @@ define({
         map: {  // Map, feature layer, and comments table loading and checking
             error: "Unable to create map",
             layerLoad: "Unable to fully load map",
-            missingItemsFeatureLayer: "Item feature layer is missing",
-            missingCommentsTable: "Comment table is missing"
+            missingItemsFeatureLayer: "Please configure the application to use a feature layer"
         },
         sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
             signInButton: "Sign In",

@@ -24,6 +24,7 @@ define([
     "dojo/Deferred",
     "dojo/dom",
     "dojo/dom-class",
+    "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/json",
     "dojo/on",
@@ -55,6 +56,7 @@ define([
     Deferred,
     dom,
     domClass,
+    domConstruct,
     domStyle,
     JSON,
     on,
@@ -103,21 +105,33 @@ define([
         },
 
         reportError: function (error) {
-            // remove loading class from body
+            // remove loading class from body and the busy cursor from the sidebar controller
             domClass.remove(document.body, "app-loading");
-            domClass.add(document.body, "app-error");
-            // an error occurred - notify the user. In this example we pull the string from the
-            // resource.js file located in the nls folder because we've set the application up
-            // for localization. If you don't need to support multiple languages you can hardcode the
-            // strings here and comment out the call in index.html to get the localization strings.
-            // set message
-            var node = dom.byId("loading_message");
-            if (node) {
-                if (this.config && this.config.i18n) {
-                    node.innerHTML = this.config.i18n.map.error + ": " + ((error && error.message) || error || "");
-                } else {
-                    node.innerHTML = "Unable to create map: " + ((error && error.message) || error || "");
+
+            // Get the text of the message
+            if (error) {
+                if (error.message) {
+                    error = error.message;
                 }
+            } else {
+                error = this.config.i18n.map.error;
+            }
+
+            // Do we have a UI yet?
+            if (this._sidebarCnt) {
+                this._sidebarCnt.showBusy(false);
+
+                // Display the error to the side of the map
+                var messageNode = domConstruct.create("div", {
+                    className: "absoluteCover",
+                    innerHTML: error
+                }, "sidebarContent", "first");
+
+            // Otherwise, we need to use the backup middle-of-screen error display
+            } else {
+                domStyle.set("contentDiv", "display", "none");
+                domClass.add(document.body, "app-error");
+                dom.byId("loading_message").innerHTML = error;
             }
         },
 
@@ -223,6 +237,7 @@ define([
                     this._helpDialogContainer.set("displayText", this.config.displayText);
                     this._helpDialogContainer.show();
                 }));
+                this._sidebarHdr.updateHelp(true);
 
                 /**
                  * @param {object} item Item to find out more about
@@ -571,7 +586,7 @@ define([
                     }));
                 }
             }), function (err) {
-                mapCreateDeferred.reject((err ? ": " + err : ""));
+                mapCreateDeferred.reject(err || this.config.i18n.map.error);
             });
 
             // Once the map and its first layer are loaded, get the layer's data
@@ -591,10 +606,10 @@ define([
                         "SearchButton");
 
                 }), lang.hitch(this, function (err) {
-                    mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
+                    mapDataReadyDeferred.reject(err || this.config.i18n.map.layerLoad);
                 }));
             }), lang.hitch(this, function (err) {
-                mapDataReadyDeferred.reject(this.config.i18n.map.layerLoad + (err ? ": " + err : ""));
+                mapDataReadyDeferred.reject(err || this.config.i18n.map.layerLoad);
             }));
 
             return mapDataReadyDeferred.promise;

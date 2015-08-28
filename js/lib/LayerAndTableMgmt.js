@@ -121,6 +121,7 @@ define([
                     return;
                 }
 
+                // Find the configured layer; if not yet configured, use the first
                 opLayers = this.appConfig.itemInfo.itemData.operationalLayers;
                 if (this.appConfig.featureLayer && this.appConfig.featureLayer.id) {
                     for (iOpLayer = 0; iOpLayer < opLayers.length; iOpLayer++) {
@@ -129,11 +130,13 @@ define([
                         }
                     }
                 }
+
+                // Or if configured to an unmatching feature layer, use the first
                 if (iOpLayer === opLayers.length) {
-                    deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
-                    return;
+                    iOpLayer = 0;
                 }
 
+                // Get the layer definition
                 this._itemLayerInWebmap = opLayers[iOpLayer];
                 if (this._itemLayerInWebmap.errors) {//Add by Mike M, itemLayer is null on secure data if signed in with wrong user
 
@@ -396,7 +399,7 @@ define([
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
                     if (results.length === 0) {
-                        topic.publish("commentAddFailed", "missing field");  //???
+                        topic.publish("commentAddFailed", "missing field");
                     } else if (results[0].error) {
                         topic.publish("commentAddFailed", results[0].error);
                     } else {
@@ -420,7 +423,7 @@ define([
                     topic.publish("updatedAttachments", item, attachments);
                 }),
                 lang.hitch(this, function (err) {
-                    console.log(err.message || "queryAttachmentInfos");  //???
+                    console.log(err.message || "queryAttachmentInfos");
                 })
             );
         },
@@ -466,7 +469,7 @@ define([
                 }
                 topic.publish("updatedCommentsList", item, features);
             }), lang.hitch(this, function (err) {
-                console.log(err.message || "queryRelatedFeatures");  //???
+                console.log(err.message || "queryRelatedFeatures");
             }));
         },
 

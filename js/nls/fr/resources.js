@@ -18,8 +18,7 @@ define(({
     map: {
         error: "Impossible de créer la carte",
         layerLoad: "Impossible de charger entièrement la carte",
-        missingItemsFeatureLayer: "La couche de questions est manquant",
-        missingCommentsTable: "Le tableau des commentaires est manquant"
+        missingItemsFeatureLayer: "S'il vous plaît configurer l'application pour utiliser une couche d'entités"
     },
     sidebar_header: {
         signInButton: "Se Connecter",

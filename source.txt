@@ -1,9 +1,7 @@
 From git branch 
 develop
-commit 6710aae98f8903914fe4d26b934cc71fec6405ef
+commit 0897bd1f4bd624d5fadbd9cc0ddb9b61605fff05
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Aug 27 15:31:09 2015 -0700
+Date:   Fri Aug 28 12:23:16 2015 -0700
 
-    Collapsed popup title if empty
-    
-    #58
+    Removed diagnostic logging

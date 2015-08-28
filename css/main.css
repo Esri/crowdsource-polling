@@ -321,6 +321,14 @@ textarea {
 .itemListTitleOverride {
     width: 70%!important;
 }
+@media only screen and (max-width: 400px) {
+    .itemSummary .itemTitle {
+        width: 65%;
+    }
+    .itemListTitleOverride {
+        width: 60%!important;
+    }
+}
 
 .itemList .itemTitle,
 .itemList .itemFav {

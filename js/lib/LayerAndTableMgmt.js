@@ -399,7 +399,7 @@ define([
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
                     if (results.length === 0) {
-                        topic.publish("commentAddFailed", "missing field");  //???
+                        topic.publish("commentAddFailed", "missing field");
                     } else if (results[0].error) {
                         topic.publish("commentAddFailed", results[0].error);
                     } else {
@@ -423,7 +423,7 @@ define([
                     topic.publish("updatedAttachments", item, attachments);
                 }),
                 lang.hitch(this, function (err) {
-                    console.log(err.message || "queryAttachmentInfos");  //???
+                    console.log(err.message || "queryAttachmentInfos");
                 })
             );
         },
@@ -469,7 +469,7 @@ define([
                 }
                 topic.publish("updatedCommentsList", item, features);
             }), lang.hitch(this, function (err) {
-                console.log(err.message || "queryRelatedFeatures");  //???
+                console.log(err.message || "queryRelatedFeatures");
             }));
         },
 

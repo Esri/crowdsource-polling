@@ -103,9 +103,26 @@ textarea {
 }
 
 #sidebar {
-    width: 320px;
+    width: 50%;
     border-left: 1px solid #ccc;
     z-index: 40;
+}
+@media only screen and (max-width: 640px) {
+    #mapDiv {
+        display: none;
+    }
+    #sidebar {
+        width: 100%;
+        border-left: 1px solid #ccc;
+        z-index: 40;
+    }
+}
+@media only screen and (min-width: 769px) {
+    #sidebar {
+        width: 30%;
+        border-left: 1px solid #ccc;
+        z-index: 40;
+    }
 }
 
 .busy {

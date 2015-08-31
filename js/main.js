@@ -436,22 +436,22 @@ define([
                 contentContainer = registry.byId("contentDiv");
                 refreshSizePostToggle = true;
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
-                    domStyle.set("sidebar", 'width', '1%');
+                    domStyle.set("sidebarContent", 'width', '1%');
                     domStyle.set("mapDiv", 'display', 'block');
                     contentContainer.resize();
                     refreshSizePostToggle = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
                     domStyle.set("mapDiv", 'display', '');
-                    domStyle.set("sidebar", 'display', '');
-                    domStyle.set("sidebar", 'width', '');
+                    domStyle.set("sidebarContent", 'display', '');
+                    domStyle.set("sidebarContent", 'width', '');
                     contentContainer.resize();
                     refreshSizePostToggle = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
                     if (refreshSizePostToggle && event.currentTarget.innerWidth > 640) {
                         domStyle.set("mapDiv", 'display', '');
-                        domStyle.set("sidebar", 'width', '');
+                        domStyle.set("sidebarContent", 'width', '');
                         contentContainer.resize();
                         refreshSizePostToggle = false;
                     }
@@ -498,7 +498,7 @@ define([
                 this.injectCSS(styleString);
 
                 // Apply the theme to the sidebar
-                domStyle.set("sidebar", "border-left-color", this.config.theme.background);
+                domStyle.set("sidebarContent", "border-left-color", this.config.theme.background);
 
 
                 //----- Add the widgets -----

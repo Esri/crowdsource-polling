@@ -102,7 +102,7 @@ textarea {
     opacity: 0.0;filter:Alpha(opacity=0);
 }
 
-#sidebar {
+#sidebarContent {
     width: 50%;
     border-left: 1px solid #ccc;
     z-index: 40;
@@ -111,12 +111,12 @@ textarea {
     #mapDiv {
         display: none;
     }
-    #sidebar {
+    #sidebarContent {
         width: 100%;
     }
 }
 @media only screen and (min-width: 1025px) {
-    #sidebar {
+    #sidebarContent {
         width: 30%;
     }
 }

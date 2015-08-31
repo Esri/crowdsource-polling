@@ -45,15 +45,14 @@
       <span>This site requires JavaScript.</span>
     </div>
   </noscript>
-  <div id="contentDiv" class="fill transparent" data-dojo-type="dijit/layout/LayoutContainer" data-dojo-props="design: 'sidebar'">
-    <!-- The ArcGIS API for JavaScript provides bidirectional support.  When viewing the application in an right to left (rtl) language like Hebrew and Arabic the map needs to remain in left-to-right (ltr) mode. Specify this by setting the dir attribute on the div to ltr. -->
-    <div id="mapDiv" dir="ltr" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
-        <div id="LocateButton"></div>
-        <div id="SearchButton"></div>
-    </div>
-    <div id="sidebar" class="fill" data-dojo-type="dijit/layout/LayoutContainer" data-dojo-props="region:'right', design: 'headline'">
-      <div id="sidebarHeading" class="fill" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'"></div>
-      <div id="sidebarContent" class="fill" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'"></div>
+  <div id="contentDiv" class="fill transparent" data-dojo-type="dijit/layout/LayoutContainer" data-dojo-props="design: 'headline'">
+    <div id="sidebarHeading" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'"></div>
+    <div id="mainContent" class="fill" data-dojo-type="dijit/layout/LayoutContainer" data-dojo-props="region:'center'">
+        <div id="mapDiv" dir="ltr" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+            <div id="LocateButton"></div>
+            <div id="SearchButton"></div>
+        </div>
+        <div id="sidebarContent" class="fill" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'right'"></div>
     </div>
   </div>
   <script type="text/javascript">

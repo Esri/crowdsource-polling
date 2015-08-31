@@ -113,15 +113,11 @@ textarea {
     }
     #sidebar {
         width: 100%;
-        border-left: 1px solid #ccc;
-        z-index: 40;
     }
 }
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 1025px) {
     #sidebar {
         width: 30%;
-        border-left: 1px solid #ccc;
-        z-index: 40;
     }
 }
 
@@ -433,6 +429,26 @@ label.css-label
     background-position: 0 -16px;
 }
 
+.viewToggleButton {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    cursor: pointer;
+    display: none;
+}
+@media only screen and (max-width: 640px) {
+    .viewToggleButton {
+        display: block
+    }
+}
+.viewListToggleButton {
+    width: 32px;
+    height: 32px;
+}
+.viewMapToggleButton {
+    width: 20px;
+    height: 20px;
+}
 
 /* ---------- itemDetail ---------- */
 

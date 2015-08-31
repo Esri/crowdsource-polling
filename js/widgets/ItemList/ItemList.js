@@ -56,7 +56,7 @@ define([
          * life cycle, after constructor. Sets class variables.
          */
         postCreate: function () {
-            var linkActionBox;
+            var linkActionBox, viewToggle;
 
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
@@ -69,13 +69,23 @@ define([
                 topic.publish("linkToMapViewChanged", linkActionBox.checked);
             })));
             linkActionBox.checked = this.linkToMapView;
+
+            // Create the button to go to the map view for when the app is narrow
+            viewToggle = domConstruct.create("img", {
+                "src": "images/map-view.png",
+                "className": "viewToggleButton viewMapToggleButton",
+                "title": this.i18n.gotoMapViewTooltip
+            }, this.itemListActionBar);
+            this.own(on(viewToggle, "click", lang.hitch(this, function () {
+                topic.publish("showMapViewClicked");
+            })));
         },
 
         /**
          * Shows the widget with a simple display: ''
          */
         show: function () {
-            domStyle.set(this.domNode, 'display', '');
+            domStyle.set(this.domNode, 'display', 'block');
         },
 
         /**

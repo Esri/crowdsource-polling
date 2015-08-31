@@ -35,6 +35,7 @@ define([
     "esri/arcgis/utils",
     "esri/config",
     "esri/dijit/LocateButton",
+    "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
     "application/widgets/ItemDetails/ItemDetailsController",
@@ -67,6 +68,7 @@ define([
     arcgisUtils,
     esriConfig,
     LocateButton,
+    registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
     ItemDetails,
@@ -158,7 +160,7 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var configuredVotesField, commentFields;
+                var configuredVotesField, commentFields, viewToggle, contentContainer, refreshSizePostToggle;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
@@ -411,10 +413,49 @@ define([
                     }
                 }));
 
+                // Create the button to go to the list view for when the app is narrow
+                /*viewToggle = domConstruct.create("img", {
+                    "src": "images/list-view.png",
+                    "className": "viewToggleButton",
+                    "title": this.config.i18n.map.gotoListViewTooltip
+                }, "mapDiv");*/ //???
+                viewToggle = domConstruct.create("img", {
+                    "src": "images/list-view.png",
+                    "className": "viewToggleButton viewListToggleButton",
+                    "title": this.config.i18n.map.gotoListViewTooltip
+                }, "mapDiv");
+                on(viewToggle, "click", lang.hitch(this, function () {
+                    topic.publish("showListViewClicked");
+                }));
+
                 // Start with items list
                 topic.publish("showPanel", "itemsList");
                 topic.publish("signinUpdate");
 
+                // Handle the switch between list and map views for narrow screens
+                contentContainer = registry.byId("contentDiv");
+                refreshSizePostToggle = true;
+                topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
+                    domStyle.set("sidebar", 'width', '1%');
+                    domStyle.set("mapDiv", 'display', 'block');
+                    contentContainer.resize();
+                    refreshSizePostToggle = true;
+                }));
+                topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
+                    domStyle.set("mapDiv", 'display', '');
+                    domStyle.set("sidebar", 'display', '');
+                    domStyle.set("sidebar", 'width', '');
+                    contentContainer.resize();
+                    refreshSizePostToggle = true;
+                }));
+                on(window, "resize", lang.hitch(this, function (event) {
+                    if (refreshSizePostToggle && event.currentTarget.innerWidth > 640) {
+                        domStyle.set("mapDiv", 'display', '');
+                        domStyle.set("sidebar", 'width', '');
+                        contentContainer.resize();
+                        refreshSizePostToggle = false;
+                    }
+                }));
 
                 //----- Done -----
                 console.log("app is ready");
@@ -470,14 +511,14 @@ define([
                         "width": 350,
                         "height": 300
                     }
-                }).placeAt(document.body); // placeAt triggers a startup call to _socialDialog
+                }).placeAt(document.body);
 
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
                     "showSignin": this._socialDialog.isAvailable() && (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText.length > 0
-                }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
+                }).placeAt("sidebarHeading");
 
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
@@ -487,24 +528,24 @@ define([
                         "width": 350,
                         "height": 300
                     }
-                }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
+                }).placeAt(document.body);
 
                 // Sidebar content controller
                 this._sidebarCnt = new SidebarContentController({
                     "appConfig": this.config
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _sidebarCnt
+                }).placeAt("sidebarContent");
 
                 // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config,
                     "linkToMapView": this._linkToMapView
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
+                }).placeAt("sidebarContent");
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
                 // Item details
                 this._itemDetails = new ItemDetails({
                     "appConfig": this.config
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
+                }).placeAt("sidebarContent");
                 this._itemDetails.hide();
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 

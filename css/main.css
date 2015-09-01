@@ -218,7 +218,7 @@ textarea {
 /* ---------- SidebarHeader ---------- */
 
 #sidebarHeading {
-    height: 100px;
+    height: 32px;
     border-bottom: 1px solid #ccc;
     overflow: hidden;
 }
@@ -226,12 +226,14 @@ textarea {
 .sideHdrBtns {
     height: 27px;
     padding: 5px;
+    float: right;
 }
 
 .sideHdrSign {
     color: #007ac2;
     display: inline-block;
-    padding: 4px;
+    margin: 0px 12px;
+    padding: 4px 8px;
     float: left;
     font-size: 15px;
     font-weight: bold;
@@ -247,17 +249,14 @@ textarea {
     display: none;
     float: right;
     cursor: pointer;
-    padding-top: 4px;
+    padding-top: 1px;
     padding-right: 4px;
 }
 
 .sideHdrTitle {
-    height: 60px;
-    line-height: 60px;
-    font-size: 22px;
-    font-weight: bold;
-    text-align: center;
-    color: #333;
+    font-size: 24px;
+    line-height: 32px;
+    color: #007ac2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

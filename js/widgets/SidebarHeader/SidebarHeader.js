@@ -57,8 +57,7 @@ define([
          * Initializes the widget once the DOM structure is ready.
          */
         postCreate: function () {
-            var i18n = this.appConfig.i18n.sidebar_header, signInBtnOnClick, helpBtnOnClick, viewToggleBtnOnClick,
-                toggleOnResize, needToggleCleanup;
+            var i18n = this.appConfig.i18n.sidebar_header, signInBtnOnClick, helpBtnOnClick, viewToggleBtnOnClick;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -80,34 +79,16 @@ define([
                 this.own(helpBtnOnClick);
             }
 
-            this.viewToggleBtn.title = i18n.gotoMapViewTooltip;
+            this.setViewToggle(true);
             this.viewToggleIsGoToMapView = true;
             viewToggleBtnOnClick = on(this.viewToggleBtn, "click", lang.hitch(this, function () {
                 if (this.viewToggleIsGoToMapView) {
                     topic.publish("showMapViewClicked");
-                    domClass.replace(this.viewToggleBtn, "toListView", "toMapView");
-                    this.viewToggleBtn.title = i18n.gotoListViewTooltip;
-                    needToggleCleanup = true;
                 } else {
                     topic.publish("showListViewClicked");
-                    domClass.replace(this.viewToggleBtn, "toMapView", "toListView");
-                    this.viewToggleBtn.title = i18n.gotoMapViewTooltip;
-                    needToggleCleanup = true;
-                }
-                this.viewToggleIsGoToMapView = !this.viewToggleIsGoToMapView;
-            }));
-
-            needToggleCleanup = true;
-            toggleOnResize = on(window, "resize", lang.hitch(this, function (event) {
-                if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
-                    this.viewToggleIsGoToMapView = true;
-                    domClass.replace(this.viewToggleBtn, "toMapView", "toListView");
-                    this.viewToggleBtn.title = i18n.gotoMapViewTooltip;
-                    needToggleCleanup = false;
                 }
             }));
-
-            this.own(viewToggleBtnOnClick, toggleOnResize);
+            this.own(viewToggleBtnOnClick);
 
 
             this.appTitle.innerHTML = this.appTitle.title = this.appConfig.title || "";
@@ -131,6 +112,22 @@ define([
             } else {
                 domStyle.set(this.helpBtn, "display", "none");
             }
+        },
+
+        /**
+         * Sets the map/list view toggle display.
+         * @param {boolean} setGoToMapView Set the toggle for the "go to map" state (true)
+         * or the "go to list" state (false)
+         */
+        setViewToggle: function (setGoToMapView) {
+            if (setGoToMapView) {
+                domClass.replace(this.viewToggleBtn, "toMapView", "toListView");
+                this.viewToggleBtn.title = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
+            } else {
+                domClass.replace(this.viewToggleBtn, "toListView", "toMapView");
+                this.viewToggleBtn.title = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
+            }
+            this.viewToggleIsGoToMapView = setGoToMapView;
         },
 
         /**

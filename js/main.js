@@ -267,6 +267,10 @@ define([
                         this.map.centerAndZoom(item.geometry,
                             Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
                     }
+
+                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
+                    // a no-op because that's the normal state for wider windows
+                    topic.publish("showListViewClicked");
                 }));
 
                 /**
@@ -421,23 +425,33 @@ define([
                 contentContainer = registry.byId("contentDiv");
                 needToggleCleanup = true;
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
+                    // Reduce the sidebar as much as possible wihout breaking the Layout Container
+                    // and show the map
                     domStyle.set("sidebarContent", 'width', '1%');
                     domStyle.set("mapDiv", 'display', 'block');
                     contentContainer.resize();
+                    this._sidebarHdr.setViewToggle(false);
                     needToggleCleanup = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
+                    // Hide the map and restore the sidebar to the display that it has for this
+                    // browser width
                     domStyle.set("mapDiv", 'display', '');
                     domStyle.set("sidebarContent", 'display', '');
                     domStyle.set("sidebarContent", 'width', '');
                     contentContainer.resize();
+                    this._sidebarHdr.setViewToggle(true);
                     needToggleCleanup = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
+                    // If we've tinkered with the Layout Container for the narrow screen
+                    // and now the screen is wider than the single-panel threshold, reset
+                    // the Layout Container
                     if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
                         domStyle.set("mapDiv", 'display', '');
                         domStyle.set("sidebarContent", 'width', '');
                         contentContainer.resize();
+                        this._sidebarHdr.setViewToggle(true);
                         needToggleCleanup = false;
                     }
                 }));

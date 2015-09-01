@@ -160,7 +160,7 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var configuredVotesField, commentFields, viewToggle, contentContainer, refreshSizePostToggle;
+                var configuredVotesField, commentFields, contentContainer, needToggleCleanup;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
@@ -413,47 +413,32 @@ define([
                     }
                 }));
 
-                // Create the button to go to the list view for when the app is narrow
-                /*viewToggle = domConstruct.create("img", {
-                    "src": "images/list-view.png",
-                    "className": "viewToggleButton",
-                    "title": this.config.i18n.map.gotoListViewTooltip
-                }, "mapDiv");*/ //???
-                viewToggle = domConstruct.create("img", {
-                    "src": "images/list-view.png",
-                    "className": "viewToggleButton viewListToggleButton",
-                    "title": this.config.i18n.map.gotoListViewTooltip
-                }, "mapDiv");
-                on(viewToggle, "click", lang.hitch(this, function () {
-                    topic.publish("showListViewClicked");
-                }));
-
                 // Start with items list
                 topic.publish("showPanel", "itemsList");
                 topic.publish("signinUpdate");
 
                 // Handle the switch between list and map views for narrow screens
                 contentContainer = registry.byId("contentDiv");
-                refreshSizePostToggle = true;
+                needToggleCleanup = true;
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     domStyle.set("sidebarContent", 'width', '1%');
                     domStyle.set("mapDiv", 'display', 'block');
                     contentContainer.resize();
-                    refreshSizePostToggle = true;
+                    needToggleCleanup = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
                     domStyle.set("mapDiv", 'display', '');
                     domStyle.set("sidebarContent", 'display', '');
                     domStyle.set("sidebarContent", 'width', '');
                     contentContainer.resize();
-                    refreshSizePostToggle = true;
+                    needToggleCleanup = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
-                    if (refreshSizePostToggle && event.currentTarget.innerWidth > 640) {
+                    if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
                         domStyle.set("mapDiv", 'display', '');
                         domStyle.set("sidebarContent", 'width', '');
                         contentContainer.resize();
-                        refreshSizePostToggle = false;
+                        needToggleCleanup = false;
                     }
                 }));
 

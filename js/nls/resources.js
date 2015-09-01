@@ -19,15 +19,16 @@ define({
         map: {  // Map, feature layer, and comments table loading and checking
             error: "Unable to create map",
             layerLoad: "Unable to fully load map",
-            missingItemsFeatureLayer: "Please configure the application to use a feature layer",
-            gotoListViewTooltip: "List view" // Go to List view tooltip text
+            missingItemsFeatureLayer: "Please configure the application to use a feature layer"
         },
         sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
             signInButton: "Sign In",
             signInButtonTooltip: "Sign in to a social medium",
             signOutButton: "Sign Out",
             signOutButtonTooltip: "Disconnect this app from your social medium",
-            helpButtonTooltip: "Find out more about this app"
+            helpButtonTooltip: "Find out more about this app",
+            gotoListViewTooltip: "List view", // Go to List view tooltip text
+            gotoMapViewTooltip: "Map view" // Tooltip for map-it icon in list header
         },
         popup_Close: {  // Close button for help and social-media-sign-in popup box
             closeButtonTooltip: "Close"
@@ -60,8 +61,7 @@ define({
         },
         item_list: {  // List of feature layer items
             linkToMapViewOptionLabel: "Link to map view",
-            likesForThisItemTooltip: "Votes for this",
-            gotoMapViewTooltip: "Map view" // Tooltip for map-it icon in list header
+            likesForThisItemTooltip: "Votes for this"
         }
     }),
     "ar": 0,

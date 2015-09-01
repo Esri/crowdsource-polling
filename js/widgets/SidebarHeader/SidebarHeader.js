@@ -23,6 +23,7 @@ define([
     "dojo/text!./SidebarHeader.html",
     "dojo/dom",
     "dojo/_base/lang",
+    "dojo/dom-class",
     "dojo/dom-style",
     "dojo/on",
     "dojo/topic",
@@ -34,6 +35,7 @@ define([
     template,
     dom,
     lang,
+    domClass,
     domStyle,
     on,
     topic,
@@ -50,16 +52,13 @@ define([
          *     showHelp: {boolean} Indicates if help button is to be available
          * @constructor
          */
-        constructor: function () {
-            this._signInBtnOnClick = null;
-            this._helpBtnOnClick = null;
-        },
 
         /**
          * Initializes the widget once the DOM structure is ready.
          */
         postCreate: function () {
-            var i18n = this.appConfig.i18n.sidebar_header;
+            var i18n = this.appConfig.i18n.sidebar_header, signInBtnOnClick, helpBtnOnClick, viewToggleBtnOnClick,
+                toggleOnResize, needToggleCleanup;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -67,19 +66,49 @@ define([
             // Set up the UI
             domStyle.set(this.signInBtn, "display", "none");
             if (this.showSignin) {
-                this._signInBtnOnClick = on(this.signInBtn, "click", function () {
+                signInBtnOnClick = on(this.signInBtn, "click", function () {
                     topic.publish("socialSelected");
                 });
-                this.own(this._signInBtnOnClick);
+                this.own(signInBtnOnClick);
             }
 
             if (this.showHelp) {
                 this.helpBtn.title = i18n.helpButtonTooltip;
-                this._helpBtnOnClick = on(this.helpBtn, "click", function () {
+                helpBtnOnClick = on(this.helpBtn, "click", function () {
                     topic.publish("helpSelected");
                 });
-                this.own(this._helpBtnOnClick);
+                this.own(helpBtnOnClick);
             }
+
+            this.viewToggleBtn.title = i18n.gotoMapViewTooltip;
+            this.viewToggleIsGoToMapView = true;
+            viewToggleBtnOnClick = on(this.viewToggleBtn, "click", lang.hitch(this, function () {
+                if (this.viewToggleIsGoToMapView) {
+                    topic.publish("showMapViewClicked");
+                    domClass.replace(this.viewToggleBtn, "toListView", "toMapView");
+                    this.viewToggleBtn.title = i18n.gotoListViewTooltip;
+                    needToggleCleanup = true;
+                } else {
+                    topic.publish("showListViewClicked");
+                    domClass.replace(this.viewToggleBtn, "toMapView", "toListView");
+                    this.viewToggleBtn.title = i18n.gotoMapViewTooltip;
+                    needToggleCleanup = true;
+                }
+                this.viewToggleIsGoToMapView = !this.viewToggleIsGoToMapView;
+            }));
+
+            needToggleCleanup = true;
+            toggleOnResize = on(window, "resize", lang.hitch(this, function (event) {
+                if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
+                    this.viewToggleIsGoToMapView = true;
+                    domClass.replace(this.viewToggleBtn, "toMapView", "toListView");
+                    this.viewToggleBtn.title = i18n.gotoMapViewTooltip;
+                    needToggleCleanup = false;
+                }
+            }));
+
+            this.own(viewToggleBtnOnClick, toggleOnResize);
+
 
             this.appTitle.innerHTML = this.appTitle.title = this.appConfig.title || "";
         },

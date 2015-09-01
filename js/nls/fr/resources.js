@@ -18,15 +18,16 @@ define(({
     map: {
         error: "Impossible de créer la carte",
         layerLoad: "Impossible de charger entièrement la carte",
-        missingItemsFeatureLayer: "S'il vous plaît configurer l'application pour utiliser une couche d'entités",
-        gotoListViewTooltip: "Vue Liste" // Go to List view tooltip text
+        missingItemsFeatureLayer: "S'il vous plaît configurer l'application pour utiliser une couche d'entités"
     },
     sidebar_header: {
         signInButton: "Se Connecter",
         signInButtonTooltip: "Se connecter à un média social",
         signOutButton: "Se déconnecter",
         signOutButtonTooltip: "Se déconnecter cette application de votre média social",
-        helpButtonTooltip: "Pour en savoir plus sur cette application"
+        helpButtonTooltip: "Pour en savoir plus sur cette application",
+        gotoListViewTooltip: "Vue Liste", // Go to List view tooltip text
+        gotoMapViewTooltip: "Vue cartographique" // Tooltip for map-it icon in list header
     },
     popup_Close: {
         closeButtonTooltip: "Fermer"
@@ -59,7 +60,6 @@ define(({
     },
     item_list: {
         linkToMapViewOptionLabel: "Lier les articles avec la carte",
-        likesForThisItemTooltip: "Votes pour cet article",
-        gotoMapViewTooltip: "Vue cartographique" // Tooltip for map-it icon in list header
+        likesForThisItemTooltip: "Votes pour cet article"
     }
 }));

@@ -224,19 +224,18 @@ textarea {
 }
 
 .sideHdrBtns {
-    height: 27px;
-    padding: 5px;
+    height: 32px;
     float: right;
 }
 
 .sideHdrSign {
     color: #007ac2;
     display: inline-block;
-    margin: 0px 12px;
-    padding: 4px 8px;
+    margin-left: 12px;
+    padding: 0 4px;
     float: left;
     font-size: 15px;
-    font-weight: bold;
+    line-height: 32px;
     cursor: pointer;
 }
 
@@ -247,10 +246,13 @@ textarea {
 
 .sideHdrHelp {
     display: none;
+    width: 32px;
+    height: 32px;
     float: right;
     cursor: pointer;
-    padding-top: 1px;
-    padding-right: 4px;
+    margin-left: 12px;
+    background: url(../images/help.png) no-repeat;
+    background-size: contain;
 }
 
 .sideHdrTitle {
@@ -263,6 +265,46 @@ textarea {
     padding: 0px 5px 0px 5px;
 }
 
+.viewToggle {
+    display: none;
+    width: 32px;
+    height: 32px;
+    margin-left: 12px;
+    float: right;
+    cursor: pointer;
+    background: url(../images/views.png) no-repeat;
+}
+@media only screen and (max-width: 640px) {
+    .viewToggle {
+        display: block;
+    }
+}
+.toListView { background-position: 0 0; }
+.toMapView  { background-position: -32px 0; }
+
+
+/*
+.viewToggleButton {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    cursor: pointer;
+    display: none;
+}
+@media only screen and (max-width: 640px) {
+    .viewToggleButton {
+        display: block;
+    }
+}
+.viewListToggleButton {
+    width: 32px;
+    height: 32px;
+}
+.viewMapToggleButton {
+    width: 20px;
+    height: 20px;
+}
+*/
 
 /* ---------- SidebarContentController ---------- */
 
@@ -287,7 +329,11 @@ textarea {
     background-color: white;
     border-bottom: 1px solid #ccc;
 }
-
+@media only screen and (max-width: 640px) {
+    .itemListActions {
+        display: none;
+    }
+}
 .itemListAction {
     vertical-align: middle;
 }
@@ -426,27 +472,6 @@ label.css-label
 .esriCTChkBox:checked + label.css-label
 {
     background-position: 0 -16px;
-}
-
-.viewToggleButton {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    cursor: pointer;
-    display: none;
-}
-@media only screen and (max-width: 640px) {
-    .viewToggleButton {
-        display: block
-    }
-}
-.viewListToggleButton {
-    width: 32px;
-    height: 32px;
-}
-.viewMapToggleButton {
-    width: 20px;
-    height: 20px;
 }
 
 /* ---------- itemDetail ---------- */

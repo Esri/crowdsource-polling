@@ -26,7 +26,9 @@ define({
             signInButtonTooltip: "Sign in to a social medium",
             signOutButton: "Sign Out",
             signOutButtonTooltip: "Disconnect this app from your social medium",
-            helpButtonTooltip: "Find out more about this app"
+            helpButtonTooltip: "Find out more about this app",
+            gotoListViewTooltip: "List view", // Go to List view tooltip text
+            gotoMapViewTooltip: "Map view" // Tooltip for map-it icon in list header
         },
         popup_Close: {  // Close button for help and social-media-sign-in popup box
             closeButtonTooltip: "Close"

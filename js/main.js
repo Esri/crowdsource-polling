@@ -35,6 +35,7 @@ define([
     "esri/arcgis/utils",
     "esri/config",
     "esri/dijit/LocateButton",
+    "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
     "application/widgets/ItemDetails/ItemDetailsController",
@@ -67,6 +68,7 @@ define([
     arcgisUtils,
     esriConfig,
     LocateButton,
+    registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
     ItemDetails,
@@ -158,7 +160,7 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
-                var configuredVotesField, commentFields;
+                var configuredVotesField, commentFields, contentContainer, needToggleCleanup;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
@@ -265,6 +267,10 @@ define([
                         this.map.centerAndZoom(item.geometry,
                             Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
                     }
+
+                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
+                    // a no-op because that's the normal state for wider windows
+                    topic.publish("showListViewClicked");
                 }));
 
                 /**
@@ -415,6 +421,40 @@ define([
                 topic.publish("showPanel", "itemsList");
                 topic.publish("signinUpdate");
 
+                // Handle the switch between list and map views for narrow screens
+                contentContainer = registry.byId("contentDiv");
+                needToggleCleanup = true;
+                topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
+                    // Reduce the sidebar as much as possible wihout breaking the Layout Container
+                    // and show the map
+                    domStyle.set("sidebarContent", 'width', '1%');
+                    domStyle.set("mapDiv", 'display', 'block');
+                    contentContainer.resize();
+                    this._sidebarHdr.setViewToggle(false);
+                    needToggleCleanup = true;
+                }));
+                topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
+                    // Hide the map and restore the sidebar to the display that it has for this
+                    // browser width
+                    domStyle.set("mapDiv", 'display', '');
+                    domStyle.set("sidebarContent", 'display', '');
+                    domStyle.set("sidebarContent", 'width', '');
+                    contentContainer.resize();
+                    this._sidebarHdr.setViewToggle(true);
+                    needToggleCleanup = true;
+                }));
+                on(window, "resize", lang.hitch(this, function (event) {
+                    // If we've tinkered with the Layout Container for the narrow screen
+                    // and now the screen is wider than the single-panel threshold, reset
+                    // the Layout Container
+                    if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
+                        domStyle.set("mapDiv", 'display', '');
+                        domStyle.set("sidebarContent", 'width', '');
+                        contentContainer.resize();
+                        this._sidebarHdr.setViewToggle(true);
+                        needToggleCleanup = false;
+                    }
+                }));
 
                 //----- Done -----
                 console.log("app is ready");
@@ -457,7 +497,7 @@ define([
                 this.injectCSS(styleString);
 
                 // Apply the theme to the sidebar
-                domStyle.set("sidebar", "border-left-color", this.config.theme.background);
+                domStyle.set("sidebarContent", "border-left-color", this.config.theme.background);
 
 
                 //----- Add the widgets -----
@@ -470,14 +510,14 @@ define([
                         "width": 350,
                         "height": 300
                     }
-                }).placeAt(document.body); // placeAt triggers a startup call to _socialDialog
+                }).placeAt(document.body);
 
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
                     "showSignin": this._socialDialog.isAvailable() && (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText.length > 0
-                }).placeAt("sidebarHeading"); // placeAt triggers a startup call to _sidebarHdr
+                }).placeAt("sidebarHeading");
 
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
@@ -487,24 +527,24 @@ define([
                         "width": 350,
                         "height": 300
                     }
-                }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
+                }).placeAt(document.body);
 
                 // Sidebar content controller
                 this._sidebarCnt = new SidebarContentController({
                     "appConfig": this.config
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _sidebarCnt
+                }).placeAt("sidebarContent");
 
                 // Items list
                 this._itemsList = new ItemList({
                     "appConfig": this.config,
                     "linkToMapView": this._linkToMapView
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemsList
+                }).placeAt("sidebarContent");
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
                 // Item details
                 this._itemDetails = new ItemDetails({
                     "appConfig": this.config
-                }).placeAt("sidebarContent"); // placeAt triggers a startup call to _itemDetails
+                }).placeAt("sidebarContent");
                 this._itemDetails.hide();
                 this._sidebarCnt.addPanel("itemDetails", this._itemDetails);
 

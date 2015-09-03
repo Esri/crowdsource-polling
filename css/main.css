@@ -102,10 +102,23 @@ textarea {
     opacity: 0.0;filter:Alpha(opacity=0);
 }
 
-#sidebar {
-    width: 320px;
+#sidebarContent {
+    width: 50%;
     border-left: 1px solid #ccc;
     z-index: 40;
+}
+@media only screen and (max-width: 640px) {
+    #mapDiv {
+        display: none;
+    }
+    #sidebarContent {
+        width: 100%;
+    }
+}
+@media only screen and (min-width: 1025px) {
+    #sidebarContent {
+        width: 30%;
+    }
 }
 
 .busy {
@@ -205,23 +218,24 @@ textarea {
 /* ---------- SidebarHeader ---------- */
 
 #sidebarHeading {
-    height: 100px;
+    height: 32px;
     border-bottom: 1px solid #ccc;
     overflow: hidden;
 }
 
 .sideHdrBtns {
-    height: 27px;
-    padding: 5px;
+    height: 32px;
+    float: right;
 }
 
 .sideHdrSign {
     color: #007ac2;
     display: inline-block;
-    padding: 4px;
+    margin-left: 12px;
+    padding: 0 4px;
     float: left;
     font-size: 15px;
-    font-weight: bold;
+    line-height: 32px;
     cursor: pointer;
 }
 
@@ -232,25 +246,65 @@ textarea {
 
 .sideHdrHelp {
     display: none;
+    width: 32px;
+    height: 32px;
     float: right;
     cursor: pointer;
-    padding-top: 4px;
-    padding-right: 4px;
+    margin-left: 12px;
+    background: url(../images/help.png) no-repeat;
+    background-size: contain;
 }
 
 .sideHdrTitle {
-    height: 60px;
-    line-height: 60px;
-    font-size: 22px;
-    font-weight: bold;
-    text-align: center;
-    color: #333;
+    font-size: 24px;
+    line-height: 32px;
+    color: #007ac2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     padding: 0px 5px 0px 5px;
 }
 
+.viewToggle {
+    display: none;
+    width: 32px;
+    height: 32px;
+    margin-left: 12px;
+    float: right;
+    cursor: pointer;
+    background: url(../images/views.png) no-repeat;
+}
+@media only screen and (max-width: 640px) {
+    .viewToggle {
+        display: block;
+    }
+}
+.toListView { background-position: 0 0; }
+.toMapView  { background-position: -32px 0; }
+
+
+/*
+.viewToggleButton {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    cursor: pointer;
+    display: none;
+}
+@media only screen and (max-width: 640px) {
+    .viewToggleButton {
+        display: block;
+    }
+}
+.viewListToggleButton {
+    width: 32px;
+    height: 32px;
+}
+.viewMapToggleButton {
+    width: 20px;
+    height: 20px;
+}
+*/
 
 /* ---------- SidebarContentController ---------- */
 
@@ -275,7 +329,11 @@ textarea {
     background-color: white;
     border-bottom: 1px solid #ccc;
 }
-
+@media only screen and (max-width: 640px) {
+    .itemListActions {
+        display: none;
+    }
+}
 .itemListAction {
     vertical-align: middle;
 }
@@ -303,6 +361,14 @@ textarea {
 
 .itemListTitleOverride {
     width: 70%!important;
+}
+@media only screen and (max-width: 400px) {
+    .itemSummary .itemTitle {
+        width: 65%;
+    }
+    .itemListTitleOverride {
+        width: 60%!important;
+    }
 }
 
 .itemList .itemTitle,
@@ -407,7 +473,6 @@ label.css-label
 {
     background-position: 0 -16px;
 }
-
 
 /* ---------- itemDetail ---------- */
 

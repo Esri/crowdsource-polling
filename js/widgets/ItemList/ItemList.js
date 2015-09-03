@@ -75,7 +75,7 @@ define([
          * Shows the widget with a simple display: ''
          */
         show: function () {
-            domStyle.set(this.domNode, 'display', '');
+            domStyle.set(this.domNode, 'display', 'block');
         },
 
         /**

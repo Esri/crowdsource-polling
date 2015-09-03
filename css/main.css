@@ -246,11 +246,11 @@ textarea {
 
 .sideHdrHelp {
     display: none;
-    width: 32px;
-    height: 32px;
+    width: 20px;
+    height: 20px;
     float: right;
     cursor: pointer;
-    margin-left: 12px;
+    margin: 5px 0 0 12px;
     background: url(../images/help.png) no-repeat;
     background-size: contain;
 }

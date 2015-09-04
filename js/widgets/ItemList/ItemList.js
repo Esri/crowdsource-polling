@@ -64,7 +64,7 @@ define([
 
             // Create the toggle for linking the item list to the map extents
             this.linkToggleBtn = domConstruct.create("div", {
-                className: "textButton"
+                className: "linkToggleBtn textButton"
             }, this.itemListActionBar);
             this.updateLinkToggleBtn(this.linkToMapView);
 

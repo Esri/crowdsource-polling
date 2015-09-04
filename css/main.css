@@ -264,7 +264,7 @@ textarea {
 }
 
 .textButton {
-    display: inline-block;
+    display: block;
     color: #007ac2;
     cursor: pointer;
     font-size: 15px;

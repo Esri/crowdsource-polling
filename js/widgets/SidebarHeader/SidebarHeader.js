@@ -24,6 +24,7 @@ define([
     "dojo/dom",
     "dojo/_base/lang",
     "dojo/dom-class",
+    "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/on",
     "dojo/topic",
@@ -36,6 +37,7 @@ define([
     dom,
     lang,
     domClass,
+    domConstruct,
     domStyle,
     on,
     topic,
@@ -43,6 +45,7 @@ define([
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
+        widgetsInTemplate: true,
 
         /**
          * Widget constructor
@@ -57,7 +60,8 @@ define([
          * Initializes the widget once the DOM structure is ready.
          */
         postCreate: function () {
-            var i18n = this.appConfig.i18n.sidebar_header, signInBtnOnClick, helpBtnOnClick, viewToggleBtnOnClick;
+            var i18n = this.appConfig.i18n.sidebar_header, signInBtnOnClick, signInMenuBtnOnClick,
+                helpMenuItem, helpBtnOnClick, helpMenuBtnOnClick, viewToggleMenuBtnOnClick, optionsOnClick;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -65,30 +69,78 @@ define([
             // Set up the UI
             domStyle.set(this.signInBtn, "display", "none");
             if (this.showSignin) {
+                this.signInMenuItem = domConstruct.create("div", {
+                    className: "sideHdrOptionsMenuItem textButton"
+                }, this.optionsDropdown);
+                domStyle.set(this.signInMenuItem, "display", "none");
+
                 signInBtnOnClick = on(this.signInBtn, "click", function () {
                     topic.publish("socialSelected");
                 });
-                this.own(signInBtnOnClick);
-            }
-
-            if (this.showHelp) {
-                this.helpBtn.title = i18n.helpButtonTooltip;
-                helpBtnOnClick = on(this.helpBtn, "click", function () {
-                    topic.publish("helpSelected");
+                signInMenuBtnOnClick = on(this.signInMenuItem, "click", function () {
+                    topic.publish("socialSelected");
+                    topic.publish("hideOptionsMenu");
                 });
-                this.own(helpBtnOnClick);
+                this.own(signInBtnOnClick, signInMenuBtnOnClick);
             }
 
-            this.setViewToggle(true);
-            this.viewToggleIsGoToMapView = true;
-            viewToggleBtnOnClick = on(this.viewToggleBtn, "click", lang.hitch(this, function () {
+
+            this.viewToggleMenuItem = domConstruct.create("div", {
+                className: "sideHdrOptionsMenuItem textButton"
+            }, this.optionsDropdown);
+            viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, function () {
                 if (this.viewToggleIsGoToMapView) {
                     topic.publish("showMapViewClicked");
                 } else {
                     topic.publish("showListViewClicked");
                 }
+                topic.publish("hideOptionsMenu");
             }));
-            this.own(viewToggleBtnOnClick);
+            this.own(viewToggleMenuBtnOnClick);
+            this.setViewToggle(true);
+
+
+            if (this.showHelp) {
+                this.helpBtn.title = i18n.helpButtonTooltip;
+                helpMenuItem = domConstruct.create("div", {
+                    className: "sideHdrOptionsMenuItem textButton",
+                    title: i18n.helpButtonTooltip,
+                    innerHTML: i18n.helpButtonLabel
+                }, this.optionsDropdown);
+
+                helpBtnOnClick = on(this.helpBtn, "click", function () {
+                    topic.publish("helpSelected");
+                });
+                helpMenuBtnOnClick = on(helpMenuItem, "click", function () {
+                    topic.publish("helpSelected");
+                    topic.publish("hideOptionsMenu");
+                });
+                this.own(helpBtnOnClick, helpMenuBtnOnClick);
+            }
+
+            optionsOnClick = on(this.options, "click", lang.hitch(this, function () {
+                if (this.optionsDropdownIsOpen) {
+                    topic.publish("hideOptionsMenu");
+                } else {
+                    topic.publish("showOptionsMenu");
+                }
+            }));
+            this.own(optionsOnClick);
+
+            this.optionsDropdownIsOpen = false;
+            topic.subscribe("showOptionsMenu", lang.hitch(this, function (item) {
+                domStyle.set(this.optionsDropdown, "display", "block");
+                this.optionsDropdownIsOpen = true;
+            }));
+            topic.subscribe("hideOptionsMenu", lang.hitch(this, function (item) {
+                domStyle.set(this.optionsDropdown, "display", "none");
+                this.optionsDropdownIsOpen = false;
+            }));
+            on(window, "resize", lang.hitch(this, function (event) {
+                if (this.optionsDropdownIsOpen) {
+                    topic.publish("hideOptionsMenu");
+                }
+            }));
 
 
             this.appTitle.innerHTML = this.appTitle.title = this.appConfig.title || "";
@@ -121,11 +173,9 @@ define([
          */
         setViewToggle: function (setGoToMapView) {
             if (setGoToMapView) {
-                domClass.replace(this.viewToggleBtn, "toMapView", "toListView");
-                this.viewToggleBtn.title = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
+                this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
             } else {
-                domClass.replace(this.viewToggleBtn, "toListView", "toMapView");
-                this.viewToggleBtn.title = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
+                this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
             }
             this.viewToggleIsGoToMapView = setGoToMapView;
         },
@@ -140,17 +190,20 @@ define([
 
             if (this.showSignin) {
                 if (!signedInUser) {
-                    this.signInBtn.innerHTML = i18n.signInButton;
-                    this.signInBtn.title = i18n.signInButtonTooltip;
+                    this.signInBtn.innerHTML = this.signInMenuItem.innerHTML = i18n.signInButton;
+                    this.signInBtn.title = this.signInMenuItem.title = i18n.signInButtonTooltip;
                     domStyle.set(this.signInBtn, "display", "block");
+                    domStyle.set(this.signInMenuItem, "display", "block");
 
                 } else if (signedInUser.canSignOut) {
-                    this.signInBtn.innerHTML = i18n.signOutButton;
-                    this.signInBtn.title = i18n.signOutButtonTooltip;
+                    this.signInBtn.innerHTML = this.signInMenuItem.innerHTML = i18n.signOutButton;
+                    this.signInBtn.title = this.signInMenuItem.title = i18n.signOutButtonTooltip;
                     domStyle.set(this.signInBtn, "display", "block");
+                    domStyle.set(this.signInMenuItem, "display", "block");
 
                 } else {
                     domStyle.set(this.signInBtn, "display", "none");
+                    domStyle.set(this.signInMenuItem, "display", "none");
                 }
             }
         }

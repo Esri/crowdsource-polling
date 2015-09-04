@@ -25,8 +25,9 @@ define(({
         signInButtonTooltip: "Se connecter à un média social",
         signOutButton: "Se déconnecter",
         signOutButtonTooltip: "Se déconnecter cette application de votre média social",
+        helpButtonLabel: "Aide",
         helpButtonTooltip: "Pour en savoir plus sur cette application",
-        gotoListViewTooltip: "Vue Liste", // Go to List view tooltip text
+        gotoListViewTooltip: "Vue liste", // Go to List view tooltip text
         gotoMapViewTooltip: "Vue cartographique" // Tooltip for map-it icon in list header
     },
     popup_Close: {

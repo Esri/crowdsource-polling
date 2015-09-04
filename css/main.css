@@ -227,19 +227,51 @@ textarea {
     height: 32px;
     float: right;
 }
+.sideHdrOptions {
+    display: none;
+    width: 32px;
+    height: 32px;
+    float: right;
+    cursor: pointer;
+    background: url(../images/options.png) no-repeat;
+    background-size: contain;
+}
+.sideHdrOptionsDropdown {
+    display: none;
+    position: fixed;
+    top: 49px;
+    right: 0px;
+    border: 1px solid #007ac2;
+    color: #007ac2;
+    background-color: white;
+    z-index: 100;
+}
+.sideHdrOptionsMenuItem {
+    padding: 5px;
+}
+@media only screen and (max-width: 640px) {
+    .sideHdrBtns {
+        display: none;
+    }
+    .sideHdrOptions {
+        display: block;
+    }
+}
 
 .sideHdrSign {
-    color: #007ac2;
     display: inline-block;
     margin-left: 12px;
     padding: 0 4px;
-    float: left;
+    float: right;
     font-size: 15px;
     line-height: 32px;
-    cursor: pointer;
 }
 
-.sideHdrSign:hover {
+.textButton {
+    color: #007ac2;
+    cursor: pointer;
+}
+.textButton:hover {
     background-color: #007ac2;
     color: white;
 }
@@ -264,47 +296,6 @@ textarea {
     white-space: nowrap;
     padding: 0px 5px 0px 5px;
 }
-
-.viewToggle {
-    display: none;
-    width: 32px;
-    height: 32px;
-    margin-left: 12px;
-    float: right;
-    cursor: pointer;
-    background: url(../images/views.png) no-repeat;
-}
-@media only screen and (max-width: 640px) {
-    .viewToggle {
-        display: block;
-    }
-}
-.toListView { background-position: 0 0; }
-.toMapView  { background-position: -32px 0; }
-
-
-/*
-.viewToggleButton {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    cursor: pointer;
-    display: none;
-}
-@media only screen and (max-width: 640px) {
-    .viewToggleButton {
-        display: block;
-    }
-}
-.viewListToggleButton {
-    width: 32px;
-    height: 32px;
-}
-.viewMapToggleButton {
-    width: 20px;
-    height: 20px;
-}
-*/
 
 /* ---------- SidebarContentController ---------- */
 

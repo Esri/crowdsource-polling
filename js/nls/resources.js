@@ -27,6 +27,7 @@ define({
             signOutButton: "Sign Out",
             signOutButtonTooltip: "Disconnect this app from your social medium",
             helpButtonTooltip: "Find out more about this app",
+            helpButtonLabel: "Help",
             gotoListViewTooltip: "List view", // Go to List view tooltip text
             gotoMapViewTooltip: "Map view" // Tooltip for map-it icon in list header
         },

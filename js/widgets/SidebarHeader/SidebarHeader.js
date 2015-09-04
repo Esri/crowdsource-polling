@@ -174,9 +174,11 @@ define([
          */
         setViewToggle: function (setGoToMapView) {
             if (setGoToMapView) {
-                this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
+                this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoMapViewLabel;
+                this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
             } else {
-                this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
+                this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoListViewLabel;
+                this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
             }
             this.viewToggleIsGoToMapView = setGoToMapView;
         },

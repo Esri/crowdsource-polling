@@ -28,8 +28,10 @@ define(({
         signOutButtonTooltip: "Se déconnecter cette application de votre média social",
         helpButtonLabel: "Aide",
         helpButtonTooltip: "Pour en savoir plus sur cette application",
-        gotoListViewTooltip: "Vue liste", // Go to List view tooltip text
-        gotoMapViewTooltip: "Vue cartographique" // Tooltip for map-it icon in list header
+        gotoListViewLabel: "Vue liste",
+        gotoListViewTooltip: "Aller à la liste de vue", // Go to List view tooltip text
+        gotoMapViewLabel: "Vue cartographique",
+        gotoMapViewTooltip: "Aller à la carte vue" // Tooltip for map-it icon in list header
     },
     popup_Close: {
         closeButtonTooltip: "Fermer"

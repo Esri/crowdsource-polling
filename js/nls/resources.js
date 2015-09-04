@@ -22,11 +22,17 @@ define({
             missingItemsFeatureLayer: "Please configure the application to use a feature layer"
         },
         sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
+            menuButtonTooltip: "Open the menu",
             signInButton: "Sign In",
             signInButtonTooltip: "Sign in to a social medium",
             signOutButton: "Sign Out",
             signOutButtonTooltip: "Disconnect this app from your social medium",
-            helpButtonTooltip: "Find out more about this app"
+            helpButtonLabel: "Help",
+            helpButtonTooltip: "Find out more about this app",
+            gotoListViewLabel: "List view",
+            gotoListViewTooltip: "Go to list view", // Go to List view tooltip text
+            gotoMapViewLabel: "Map view",
+            gotoMapViewTooltip: "Go to map view" // Tooltip for map-it icon in list header
         },
         popup_Close: {  // Close button for help and social-media-sign-in popup box
             closeButtonTooltip: "Close"
@@ -59,6 +65,7 @@ define({
         },
         item_list: {  // List of feature layer items
             linkToMapViewOptionLabel: "Link to map view",
+            unlinkFromMapViewOptionLabel: "Unlink from  map view",
             likesForThisItemTooltip: "Votes for this"
         }
     }),

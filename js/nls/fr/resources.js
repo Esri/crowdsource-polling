@@ -21,11 +21,17 @@ define(({
         missingItemsFeatureLayer: "S'il vous plaît configurer l'application pour utiliser une couche d'entités"
     },
     sidebar_header: {
+        menuButtonTooltip: "Ouvrir le menu",
         signInButton: "Se Connecter",
         signInButtonTooltip: "Se connecter à un média social",
         signOutButton: "Se déconnecter",
         signOutButtonTooltip: "Se déconnecter cette application de votre média social",
-        helpButtonTooltip: "Pour en savoir plus sur cette application"
+        helpButtonLabel: "Aide",
+        helpButtonTooltip: "Pour en savoir plus sur cette application",
+        gotoListViewLabel: "Vue liste",
+        gotoListViewTooltip: "Aller à la liste de vue", // Go to List view tooltip text
+        gotoMapViewLabel: "Vue cartographique",
+        gotoMapViewTooltip: "Aller à la carte vue" // Tooltip for map-it icon in list header
     },
     popup_Close: {
         closeButtonTooltip: "Fermer"
@@ -58,6 +64,7 @@ define(({
     },
     item_list: {
         linkToMapViewOptionLabel: "Lier les articles avec la carte",
+        unlinkFromMapViewOptionLabel: "Dissocier des articles de la carte",
         likesForThisItemTooltip: "Votes pour cet article"
     }
 }));

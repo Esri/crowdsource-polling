@@ -102,10 +102,23 @@ textarea {
     opacity: 0.0;filter:Alpha(opacity=0);
 }
 
-#sidebar {
-    width: 320px;
+#sidebarContent {
+    width: 50%;
     border-left: 1px solid #ccc;
     z-index: 40;
+}
+@media only screen and (max-width: 640px) {
+    #mapDiv {
+        display: none;
+    }
+    #sidebarContent {
+        width: 100%;
+    }
+}
+@media only screen and (min-width: 1025px) {
+    #sidebarContent {
+        width: 30%;
+    }
 }
 
 .busy {
@@ -205,52 +218,98 @@ textarea {
 /* ---------- SidebarHeader ---------- */
 
 #sidebarHeading {
-    height: 100px;
+    height: 32px;
     border-bottom: 1px solid #ccc;
     overflow: hidden;
 }
 
 .sideHdrBtns {
-    height: 27px;
+    height: 32px;
+    float: right;
+}
+.sideHdrOptions {
+    display: none;
+    width: 32px;
+    height: 32px;
+    float: right;
+    cursor: pointer;
+    background: url(../images/options.png) no-repeat;
+    background-size: contain;
+}
+.sideHdrOptionsDropdown {
+    display: none;
+    position: fixed;
+    top: 49px;
+    right: 0px;
+    border: 1px solid #007ac2;
+    color: #007ac2;
+    background-color: white;
+    z-index: 100;
+}
+.sideHdrOptionsMenuItem {
     padding: 5px;
+}
+@media only screen and (max-width: 640px) {
+    .sideHdrBtns {
+        display: none;
+    }
+    .sideHdrOptions {
+        display: block;
+    }
 }
 
 .sideHdrSign {
-    color: #007ac2;
-    display: inline-block;
-    padding: 4px;
-    float: left;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
+    margin-left: 12px;
+    float: right;
 }
 
-.sideHdrSign:hover {
+.textButton {
+    display: block;
+    color: #007ac2;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 32px;
+    padding: 0 4px;
+}
+.textButton:hover {
     background-color: #007ac2;
     color: white;
 }
 
 .sideHdrHelp {
     display: none;
+    width: 20px;
+    height: 20px;
     float: right;
     cursor: pointer;
-    padding-top: 4px;
-    padding-right: 4px;
+    margin: 5px 0 0 12px;
+    background: url(../images/help.png) no-repeat;
+    background-size: contain;
 }
 
 .sideHdrTitle {
-    height: 60px;
-    line-height: 60px;
-    font-size: 22px;
-    font-weight: bold;
-    text-align: center;
-    color: #333;
+    font-size: 24px;
+    line-height: 32px;
+    color: #007ac2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     padding: 0px 5px 0px 5px;
 }
 
+.bannerImgDiv {
+    height: 32px;
+    display: inline-block;
+    float: left;
+}
+.bannerImg {
+    height: 32px;
+}
+@media only screen and (max-width: 640px) {
+    .bannerImgDiv {
+        display: none;
+    }
+}
 
 /* ---------- SidebarContentController ---------- */
 
@@ -269,13 +328,15 @@ textarea {
 }
 
 .itemListActions {
-    height: 20px;
-    font-size: 12px;
     padding: 6px;
     background-color: white;
     border-bottom: 1px solid #ccc;
 }
-
+@media only screen and (max-width: 640px) {
+    .itemListActions {
+        display: none;
+    }
+}
 .itemListAction {
     vertical-align: middle;
 }
@@ -303,6 +364,14 @@ textarea {
 
 .itemListTitleOverride {
     width: 70%!important;
+}
+@media only screen and (max-width: 400px) {
+    .itemSummary .itemTitle {
+        width: 65%;
+    }
+    .itemListTitleOverride {
+        width: 60%!important;
+    }
 }
 
 .itemList .itemTitle,
@@ -407,7 +476,6 @@ label.css-label
 {
     background-position: 0 -16px;
 }
-
 
 /* ---------- itemDetail ---------- */
 

@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit 0897bd1f4bd624d5fadbd9cc0ddb9b61605fff05
+commit 4925c1695e4ac53e4eb52919a9da7c88761f5ac1
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Aug 28 12:23:16 2015 -0700
+Date:   Fri Sep 4 11:09:50 2015 -0700
 
-    Removed diagnostic logging
+    Refined shared use of text button class

@@ -297,6 +297,20 @@ textarea {
     padding: 0px 5px 0px 5px;
 }
 
+.bannerImgDiv {
+    height: 32px;
+    display: inline-block;
+    float: left;
+}
+.bannerImg {
+    height: 32px;
+}
+@media only screen and (max-width: 640px) {
+    .bannerImgDiv {
+        display: none;
+    }
+}
+
 /* ---------- SidebarContentController ---------- */
 
 #sidebarContent {

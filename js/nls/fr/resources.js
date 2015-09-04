@@ -22,7 +22,7 @@ define(({
     },
     sidebar_header: {
         menuButtonTooltip: "Ouvrir le menu",
-        signInButton: "Se Connecter",
+        signInButton: "Se connecter",
         signInButtonTooltip: "Se connecter à un média social",
         signOutButton: "Se déconnecter",
         signOutButtonTooltip: "Se déconnecter cette application de votre média social",

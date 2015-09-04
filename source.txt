@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit fa1a4693c863615b2cea497886ffd843f63d7130
+commit 02eae1e6864b65cc4b7fc4b1c8bfe8f47ef77b23
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Sep 4 13:30:58 2015 -0700
+Date:   Fri Sep 4 13:46:58 2015 -0700
 
-    Changed width of link toggle button
+    Made text button casing consistent

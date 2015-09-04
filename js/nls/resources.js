@@ -23,9 +23,9 @@ define({
         },
         sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
             menuButtonTooltip: "Open the menu",
-            signInButton: "Sign In",
+            signInButton: "Sign in",
             signInButtonTooltip: "Sign in to a social medium",
-            signOutButton: "Sign Out",
+            signOutButton: "Sign out",
             signOutButtonTooltip: "Disconnect this app from your social medium",
             helpButtonLabel: "Help",
             helpButtonTooltip: "Find out more about this app",

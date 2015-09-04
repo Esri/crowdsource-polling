@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit 02eae1e6864b65cc4b7fc4b1c8bfe8f47ef77b23
+commit f70a7ab48052a966725cd3a1eab97c6da550763b
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Sep 4 13:46:58 2015 -0700
+Date:   Fri Sep 4 14:35:00 2015 -0700
 
-    Made text button casing consistent
+    Generalized app home-screen icons for iOS and Android

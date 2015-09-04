@@ -56,19 +56,32 @@ define([
          * life cycle, after constructor. Sets class variables.
          */
         postCreate: function () {
-            var linkActionBox;
+            var linkToggleBtnOnClick;
 
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
             this.hide();
 
-            // Create the checkbox for linking the item list to the map extents
-            linkActionBox = domConstruct.create("input", { "type": "checkbox", "class": "esriCTChkBox", id: "linkToMap", "value": "linkToMap" }, this.itemListActionBar);
-            domConstruct.create("label", { "class": "css-label", "for": "linkToMap", innerHTML: this.i18n.linkToMapViewOptionLabel }, this.itemListActionBar);
-            this.own(on(linkActionBox, "change", lang.hitch(this, function () {
-                topic.publish("linkToMapViewChanged", linkActionBox.checked);
-            })));
-            linkActionBox.checked = this.linkToMapView;
+            // Create the toggle for linking the item list to the map extents
+            this.linkToggleBtn = domConstruct.create("div", {
+                className: "textButton"
+            }, this.itemListActionBar);
+            this.updateLinkToggleBtn(this.linkToMapView);
+
+            linkToggleBtnOnClick = on(this.linkToggleBtn, "click", lang.hitch(this, function () {
+                this.linkToMapView = !this.linkToMapView;
+                topic.publish("linkToMapViewChanged", this.linkToMapView);
+                this.updateLinkToggleBtn(this.linkToMapView);
+            }));
+            this.own(linkToggleBtnOnClick);
+        },
+
+        /**
+         * Updates the label of the link-to-map toggle button.
+         * @param {boolean} isSelected Indicates if button is in selected--linked--state
+         */
+        updateLinkToggleBtn: function (isSelected) {
+            this.linkToggleBtn.innerHTML = isSelected ? this.i18n.unlinkFromMapViewOptionLabel : this.i18n.linkToMapViewOptionLabel;
         },
 
         /**

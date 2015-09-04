@@ -65,6 +65,7 @@ define({
         },
         item_list: {  // List of feature layer items
             linkToMapViewOptionLabel: "Link to map view",
+            unlinkFromMapViewOptionLabel: "Unlink from  map view",
             likesForThisItemTooltip: "Votes for this"
         }
     }),

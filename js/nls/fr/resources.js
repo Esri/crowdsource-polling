@@ -64,6 +64,7 @@ define(({
     },
     item_list: {
         linkToMapViewOptionLabel: "Lier les articles avec la carte",
+        unlinkFromMapViewOptionLabel: "Dissocier des articles de la carte",
         likesForThisItemTooltip: "Votes pour cet article"
     }
 }));

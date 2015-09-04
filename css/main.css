@@ -259,17 +259,17 @@ textarea {
 }
 
 .sideHdrSign {
-    display: inline-block;
     margin-left: 12px;
-    padding: 0 4px;
     float: right;
-    font-size: 15px;
-    line-height: 32px;
 }
 
 .textButton {
+    display: inline-block;
     color: #007ac2;
     cursor: pointer;
+    font-size: 15px;
+    line-height: 32px;
+    padding: 0 4px;
 }
 .textButton:hover {
     background-color: #007ac2;
@@ -314,8 +314,6 @@ textarea {
 }
 
 .itemListActions {
-    height: 20px;
-    font-size: 12px;
     padding: 6px;
     background-color: white;
     border-bottom: 1px solid #ccc;

@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit 4925c1695e4ac53e4eb52919a9da7c88761f5ac1
+commit fa1a4693c863615b2cea497886ffd843f63d7130
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Sep 4 11:09:50 2015 -0700
+Date:   Fri Sep 4 13:30:58 2015 -0700
 
-    Refined shared use of text button class
+    Changed width of link toggle button

@@ -328,6 +328,7 @@ textarea {
 }
 
 .itemListActions {
+    height: 33px;
     padding: 6px;
     background-color: white;
     border-bottom: 1px solid #ccc;
@@ -339,6 +340,9 @@ textarea {
 }
 .itemListAction {
     vertical-align: middle;
+}
+.linkToggleBtn {
+    float: left;
 }
 
 .itemList .itemSummary {

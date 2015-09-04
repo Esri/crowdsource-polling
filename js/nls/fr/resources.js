@@ -21,6 +21,7 @@ define(({
         missingItemsFeatureLayer: "S'il vous plaît configurer l'application pour utiliser une couche d'entités"
     },
     sidebar_header: {
+        menuButtonTooltip: "Ouvrir le menu",
         signInButton: "Se Connecter",
         signInButtonTooltip: "Se connecter à un média social",
         signOutButton: "Se déconnecter",

@@ -22,6 +22,7 @@ define({
             missingItemsFeatureLayer: "Please configure the application to use a feature layer"
         },
         sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
+            menuButtonTooltip: "Open the menu",
             signInButton: "Sign In",
             signInButtonTooltip: "Sign in to a social medium",
             signOutButton: "Sign Out",

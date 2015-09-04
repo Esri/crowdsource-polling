@@ -118,6 +118,7 @@ define([
                 this.own(helpBtnOnClick, helpMenuBtnOnClick);
             }
 
+            this.options.title = i18n.menuButtonTooltip;
             optionsOnClick = on(this.options, "click", lang.hitch(this, function () {
                 if (this.optionsDropdownIsOpen) {
                     topic.publish("hideOptionsMenu");

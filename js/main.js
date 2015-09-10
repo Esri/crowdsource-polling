@@ -431,7 +431,7 @@ define([
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
-                    domStyle.set("sidebarContent", 'width', '1%');
+                    domStyle.set("sidebarContent", 'display', 'none');
                     domStyle.set("mapDiv", 'display', 'block');
                     contentContainer.resize();
                     this._sidebarHdr.setViewToggle(false);
@@ -453,6 +453,7 @@ define([
                     // the Layout Container
                     if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
                         domStyle.set("mapDiv", 'display', '');
+                        domStyle.set("sidebarContent", 'display', '');
                         domStyle.set("sidebarContent", 'width', '');
                         contentContainer.resize();
                         this._sidebarHdr.setViewToggle(true);
@@ -588,12 +589,11 @@ define([
                 this.map = response.map;
 
                 // Start up home widget
-var fred = query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0];
                 homeButton = new HomeButton({
                     map: this.map,
                     theme: "HomeButtonLight"
                 }, "HomeButton");
-                domConstruct.place(homeButton.domNode, fred, "after");
+                domConstruct.place(homeButton.domNode, query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0], "after");
                 homeButton.startup();
 
                 // Start up locate widget

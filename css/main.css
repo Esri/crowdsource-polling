@@ -270,6 +270,8 @@ textarea {
     font-size: 15px;
     line-height: 32px;
     padding: 0 4px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
 }
 .textButton:hover {
     background-color: #007ac2;

@@ -55,6 +55,7 @@ define(({
     item_details: {
         likeButtonTooltip: "Voter pour cet article",
         commentButtonTooltip: "Ajouter un commentaire à propos de cet article",
+        gotoMapViewTooltip: "Aller à la carte vue",
         galleryButtonTooltip: "Voir fichiers joints",
         commentsListHeading: "Commentaires",
         noCommentsPlaceholder: "Il n'y a aucun commentaire"

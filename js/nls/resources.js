@@ -56,6 +56,7 @@ define({
         item_details: {  // Detailed information about an item and a list of its comments
             likeButtonTooltip: "Vote for this",
             commentButtonTooltip: "Add a comment about this",
+            gotoMapViewTooltip: "Go to map view",
             galleryButtonTooltip: "See attached files",
             commentsListHeading: "Comments",
             noCommentsPlaceholder: "No comments"

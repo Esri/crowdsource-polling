@@ -582,12 +582,16 @@ label.css-label
 }
 
 .itemDetail .btn {
+  width: 15%;
+  max-width: 80px;
+  height: 18px;
   border: 1px solid #ccc;
   display: inline-block;
   margin-right: 5px;
   padding: 4px 6px;
   border-radius: 2px;
   cursor: pointer;
+  text-align: center;
 }
 
 .itemDetail .btnNormal {
@@ -613,6 +617,15 @@ label.css-label
 
 .itemDetail .btnInverse ::-moz-selection {
     color: white;
+}
+
+.itemDetail .smallScreenOnly {
+    display: none;
+}
+@media only screen and (max-width: 640px) {
+    .itemDetail .smallScreenOnly {
+        display: inline-block;
+    }
 }
 
 .itemDescFooter {

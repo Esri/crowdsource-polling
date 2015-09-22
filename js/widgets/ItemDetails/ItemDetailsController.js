@@ -141,6 +141,9 @@ define([
             domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
+            domAttr.set(this.mapIcon, "src", "images/mapmarkerBlue.png");
+            this.mapButton.title = this.i18n.gotoMapViewTooltip;
+
             domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
         },
@@ -188,6 +191,9 @@ define([
                 })),
                 on(this.commentButton, 'click', function () {
                     topic.publish('getComment', self.item);
+                }),
+                on(this.mapButton, 'click', function () {
+                    topic.publish('showMapViewClicked');
                 }),
                 on(this.galleryButton, 'click', lang.hitch(this, function () {
                     topic.publish('showGallery', self.item);

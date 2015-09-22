@@ -346,12 +346,12 @@ textarea {
 }
 
 .bannerImgDiv {
-    height: 32px;
     display: inline-block;
     float: left;
+    margin: -8px 0 -8px -8px;
 }
 .bannerImg {
-    height: 32px;
+    height: 48px;
 }
 @media only screen and (max-width: 640px) {
     .bannerImgDiv {

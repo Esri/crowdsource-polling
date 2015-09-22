@@ -54,11 +54,8 @@ define({
             submitButtonLabel: "Submit"
         },
         item_details: {  // Detailed information about an item and a list of its comments
-            likeButtonLabel: "Like",
             likeButtonTooltip: "Vote for this",
-            commentButtonLabel: "Comment",
             commentButtonTooltip: "Add a comment about this",
-            galleryButtonLabel: "Gallery",
             galleryButtonTooltip: "See attached files",
             commentsListHeading: "Comments",
             noCommentsPlaceholder: "No comments"

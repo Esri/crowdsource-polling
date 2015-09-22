@@ -53,11 +53,8 @@ define(({
         submitButtonLabel: "Envoyer"
     },
     item_details: {
-        likeButtonLabel: "Voter",
         likeButtonTooltip: "Voter pour cet article",
-        commentButtonLabel: "Commenter",
         commentButtonTooltip: "Ajouter un commentaire à propos de cet article",
-        galleryButtonLabel: "Voir la galerie",
         galleryButtonTooltip: "Voir fichiers joints",
         commentsListHeading: "Commentaires",
         noCommentsPlaceholder: "Il n'y a aucun commentaire"

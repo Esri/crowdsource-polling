@@ -23,6 +23,7 @@ define([
     "dojo/text!./SidebarHeader.html",
     "dojo/dom",
     "dojo/_base/lang",
+    "dojo/_base/window",
     "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/dom-style",
@@ -36,6 +37,7 @@ define([
     template,
     dom,
     lang,
+    win,
     domClass,
     domConstruct,
     domStyle,
@@ -79,7 +81,6 @@ define([
                 });
                 signInMenuBtnOnClick = on(this.signInMenuItem, "click", function () {
                     topic.publish("socialSelected");
-                    topic.publish("hideOptionsMenu");
                 });
                 this.own(signInBtnOnClick, signInMenuBtnOnClick);
             }
@@ -94,7 +95,6 @@ define([
                 } else {
                     topic.publish("showListViewClicked");
                 }
-                topic.publish("hideOptionsMenu");
             }));
             this.own(viewToggleMenuBtnOnClick);
             this.setViewToggle(true);
@@ -113,18 +113,18 @@ define([
                 });
                 helpMenuBtnOnClick = on(helpMenuItem, "click", function () {
                     topic.publish("helpSelected");
-                    topic.publish("hideOptionsMenu");
                 });
                 this.own(helpBtnOnClick, helpMenuBtnOnClick);
             }
 
             this.options.title = i18n.menuButtonTooltip;
-            optionsOnClick = on(this.options, "click", lang.hitch(this, function () {
+            optionsOnClick = on(this.options, "click", lang.hitch(this, function (evt) {
                 if (this.optionsDropdownIsOpen) {
                     topic.publish("hideOptionsMenu");
                 } else {
                     topic.publish("showOptionsMenu");
                 }
+                evt.cancelBubble = true;
             }));
             this.own(optionsOnClick);
 
@@ -142,6 +142,10 @@ define([
                     topic.publish("hideOptionsMenu");
                 }
             }));
+
+            on(win.body(), "click", function () {
+                topic.publish("hideOptionsMenu");
+            });
 
 
             this.appTitle.innerHTML = this.appTitle.title = this.appConfig.title || "";

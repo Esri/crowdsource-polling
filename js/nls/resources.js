@@ -62,8 +62,10 @@ define({
             noCommentsPlaceholder: "No comments"
         },
         item_list: {  // List of feature layer items
-            linkToMapViewOptionLabel: "Link to map view",
-            unlinkFromMapViewOptionLabel: "Unlink from  map view",
+            linkToMapViewOptionLabel: "Filter list by map",
+            linkToMapViewOptionTooltip: "Apply filter to list only features that are visible in the current map",
+            linkToMapViewOn: "Yes",
+            linkToMapViewOff: "No",
             likesForThisItemTooltip: "Votes for this"
         }
     }),

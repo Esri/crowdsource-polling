@@ -31,9 +31,11 @@ define([
     "dojo/parser",
     "dojo/promise/all",
     "dojo/promise/first",
+    "dojo/query",
     "dojo/topic",
     "esri/arcgis/utils",
     "esri/config",
+    "esri/dijit/HomeButton",
     "esri/dijit/LocateButton",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
@@ -64,9 +66,11 @@ define([
     parser,
     all,
     first,
+    query,
     topic,
     arcgisUtils,
     esriConfig,
+    HomeButton,
     LocateButton,
     registry,
     LayerAndTableMgmt,
@@ -427,7 +431,7 @@ define([
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
-                    domStyle.set("sidebarContent", 'width', '1%');
+                    domStyle.set("sidebarContent", 'display', 'none');
                     domStyle.set("mapDiv", 'display', 'block');
                     contentContainer.resize();
                     this._sidebarHdr.setViewToggle(false);
@@ -449,6 +453,7 @@ define([
                     // the Layout Container
                     if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
                         domStyle.set("mapDiv", 'display', '');
+                        domStyle.set("sidebarContent", 'display', '');
                         domStyle.set("sidebarContent", 'width', '');
                         contentContainer.resize();
                         this._sidebarHdr.setViewToggle(true);
@@ -575,7 +580,7 @@ define([
                 editable: this.config.editable,
                 bingMapsKey: this.config.bingKey
             }).then(lang.hitch(this, function (response) {
-                var geoLocate;
+                var homeButton, geoLocate;
 
                 // Once the map is created we get access to the response which provides important info
                 // such as the map, operational layers, popup info and more. This object will also contain
@@ -583,7 +588,15 @@ define([
                 // Here we'll use it to update the application to match the specified color theme.
                 this.map = response.map;
 
-                // start up locate widget
+                // Start up home widget
+                homeButton = new HomeButton({
+                    map: this.map,
+                    theme: "HomeButtonLight"
+                }, "HomeButton");
+                domConstruct.place(homeButton.domNode, query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0], "after");
+                homeButton.startup();
+
+                // Start up locate widget
                 geoLocate = new LocateButton({
                     map: this.map,
                     theme: "LocateButtonLight"

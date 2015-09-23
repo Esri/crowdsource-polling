@@ -53,18 +53,18 @@ define(({
         submitButtonLabel: "Envoyer"
     },
     item_details: {
-        likeButtonLabel: "Voter",
         likeButtonTooltip: "Voter pour cet article",
-        commentButtonLabel: "Commenter",
         commentButtonTooltip: "Ajouter un commentaire à propos de cet article",
-        galleryButtonLabel: "Voir la galerie",
+        gotoMapViewTooltip: "Aller à la carte vue",
         galleryButtonTooltip: "Voir fichiers joints",
         commentsListHeading: "Commentaires",
         noCommentsPlaceholder: "Il n'y a aucun commentaire"
     },
     item_list: {
-        linkToMapViewOptionLabel: "Lier les articles avec la carte",
-        unlinkFromMapViewOptionLabel: "Dissocier des articles de la carte",
+        linkToMapViewOptionLabel: "Filtrez la liste par carte",
+        linkToMapViewOptionTooltip: "Appliquer un filtre à la liste seules caractéristiques qui sont visibles dans la carte actuelle",
+        linkToMapViewOn: "Oui",
+        linkToMapViewOff: "Non",
         likesForThisItemTooltip: "Votes pour cet article"
     }
 }));

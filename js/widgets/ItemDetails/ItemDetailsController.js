@@ -136,15 +136,15 @@ define([
             }
 
             domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
-            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
             this.likeButton.title = this.i18n.likeButtonTooltip;
 
             domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
-            this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
+            domAttr.set(this.mapIcon, "src", "images/mapmarkerBlue.png");
+            this.mapButton.title = this.i18n.gotoMapViewTooltip;
+
             domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
-            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
         },
 
@@ -191,6 +191,9 @@ define([
                 })),
                 on(this.commentButton, 'click', function () {
                     topic.publish('getComment', self.item);
+                }),
+                on(this.mapButton, 'click', function () {
+                    topic.publish('showMapViewClicked');
                 }),
                 on(this.galleryButton, 'click', lang.hitch(this, function () {
                     topic.publish('showGallery', self.item);

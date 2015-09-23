@@ -54,18 +54,18 @@ define({
             submitButtonLabel: "Submit"
         },
         item_details: {  // Detailed information about an item and a list of its comments
-            likeButtonLabel: "Like",
             likeButtonTooltip: "Vote for this",
-            commentButtonLabel: "Comment",
             commentButtonTooltip: "Add a comment about this",
-            galleryButtonLabel: "Gallery",
+            gotoMapViewTooltip: "Go to map view",
             galleryButtonTooltip: "See attached files",
             commentsListHeading: "Comments",
             noCommentsPlaceholder: "No comments"
         },
         item_list: {  // List of feature layer items
-            linkToMapViewOptionLabel: "Link to map view",
-            unlinkFromMapViewOptionLabel: "Unlink from  map view",
+            linkToMapViewOptionLabel: "Filter list by map",
+            linkToMapViewOptionTooltip: "Apply filter to list only features that are visible in the current map",
+            linkToMapViewOn: "Yes",
+            linkToMapViewOff: "No",
             likesForThisItemTooltip: "Votes for this"
         }
     }),

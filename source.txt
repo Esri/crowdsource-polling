@@ -1,7 +1,9 @@
 From git branch 
 develop
-commit f70a7ab48052a966725cd3a1eab97c6da550763b
+commit 1b62aa00e76db18858dc87b4df33182b6dd06b2c
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Sep 4 14:35:00 2015 -0700
+Date:   Wed Sep 23 15:25:43 2015 -0700
 
-    Generalized app home-screen icons for iOS and Android
+    Changed link-to-map button to mobile-style toggle switch
+    
+    #87

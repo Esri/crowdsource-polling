@@ -19,26 +19,28 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
-    "dojo/dom-attr",
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/dom-class',
+    "dojo/dom-geometry",
     'dojo/on',
     'dojo/topic',
     'dojo/NodeList-dom',
+    'dojox/mobile/Switch',  // pre-loaded as required by Dojo
 
     'application/lib/SvgHelper',
 
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, array, domAttr, domConstruct, domStyle, domClass, on, topic, nld,
+], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, topic, nld, Switch,
     SvgHelper,
-    _WidgetBase, _TemplatedMixin,
+    _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
     template) {
 
-    return declare([_WidgetBase, _TemplatedMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         templateString: template,
 
         /**
@@ -49,50 +51,89 @@ define([
          */
         constructor: function () {
             this.votesField = null;
+            this.linkToMapViewIsTemporarilyOff = false;
         },
 
         /**
-         * Widget post-create, called automatically in widget creation
+         * Widget postCreate, called automatically in widget creation
          * life cycle, after constructor. Sets class variables.
          */
         postCreate: function () {
-            var linkToggleBtnOnClick;
-
             this.inherited(arguments);
             this.i18n = this.appConfig.i18n.item_list;
             this.hide();
 
-            // Create the toggle for linking the item list to the map extents
-            this.linkToggleBtn = domConstruct.create("div", {
-                className: "linkToggleBtn textButton"
-            }, this.itemListActionBar);
-            this.updateLinkToggleBtn(this.linkToMapView);
+            // Adjust the toggle for linking the item list to the map extents
+            this.linkToggleLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
 
-            linkToggleBtnOnClick = on(this.linkToggleBtn, "click", lang.hitch(this, function () {
-                this.linkToMapView = !this.linkToMapView;
-                topic.publish("linkToMapViewChanged", this.linkToMapView);
-                this.updateLinkToggleBtn(this.linkToMapView);
-            }));
-            this.own(linkToggleBtnOnClick);
+            this.linkToggleBtn.set("leftLabel", this.i18n.linkToMapViewOn);
+            this.linkToggleBtn.set("rightLabel", this.i18n.linkToMapViewOff);
+            this.linkToggleBtn.set("value", this.linkToMapView
+                ? "on"
+                : "off");
+            this.linkToggleBtn.set("title", this.i18n.linkToMapViewOptionTooltip);
+
+            this.inherited(arguments);
         },
 
         /**
-         * Updates the label of the link-to-map toggle button.
-         * @param {boolean} isSelected Indicates if button is in selected--linked--state
+         * Widget startup, called automatically in widget creation
+         * life cycle, after postCreate. Prepares for resizing now
+         * that widget has been added to DOM.
          */
-        updateLinkToggleBtn: function (isSelected) {
-            this.linkToggleBtn.innerHTML = isSelected ? this.i18n.unlinkFromMapViewOptionLabel : this.i18n.linkToMapViewOptionLabel;
+        startup: function () {
+            this.inherited(arguments);
+            this.linkToggleBtn.resize();
+
+            this.own(on(window, 'resize', lang.hitch(this, function () {
+                this.fitFilterLabelToContainer();
+            })));
+
+            this.linkToggleBtn.on("stateChanged", lang.hitch(this, function (newState) {
+                this.linkToMapView = newState === "on";
+                topic.publish("linkToMapViewChanged", this.linkToMapView);
+            }));
         },
 
         /**
-         * Shows the widget with a simple display: ''
+         * Adjusts the width of the filter-to-map label based on the size of its container.
+         */
+        fitFilterLabelToContainer: function () {
+            var actionBarBounds, switchBounds, newWidth;
+
+            actionBarBounds = domGeom.getMarginBox(this.itemListActionBar);
+            switchBounds = domGeom.getMarginBox(this.linkToggleBtn.domNode);
+
+            newWidth = actionBarBounds.w - switchBounds.w - 12/*margins*/ - 8;/*padding*/
+            if (newWidth > 0) {
+                domStyle.set(this.linkToggleLabel, "width", newWidth + "px");
+
+                // If the screen is wide enough to show map and list, restore the linkage of
+                // map to list if it was on the last time that we could see the action bar
+                if (this.linkToMapViewIsTemporarilyOff) {
+                    this.linkToMapViewIsTemporarilyOff = false;
+                    if (this.linkToMapView) {
+                        topic.publish("linkToMapViewChanged", true);
+                    }
+                }
+            // If the screen is narrow enough that we're not showing the action bar,
+            // turn off linking the list to the map
+            } else if (!this.linkToMapViewIsTemporarilyOff) {
+                this.linkToMapViewIsTemporarilyOff = true;
+                topic.publish("linkToMapViewChanged", false);
+            }
+        },
+
+        /**
+         * Shows the widget.
          */
         show: function () {
             domStyle.set(this.domNode, 'display', 'block');
+            this.fitFilterLabelToContainer();
         },
 
         /**
-         * Hides the widget with a simple display: 'none'
+         * Hides the widget.
          */
         hide: function () {
             domStyle.set(this.domNode, 'display', 'none');

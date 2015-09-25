@@ -63,8 +63,6 @@ define(({
     item_list: {
         linkToMapViewOptionLabel: "Filtrez la liste par carte",
         linkToMapViewOptionTooltip: "Appliquer un filtre à la liste seules caractéristiques qui sont visibles dans la carte actuelle",
-        linkToMapViewOn: "Oui",
-        linkToMapViewOff: "Non",
         likesForThisItemTooltip: "Votes pour cet article"
     }
 }));

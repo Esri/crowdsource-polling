@@ -66,8 +66,8 @@ define([
             // Adjust the toggle for linking the item list to the map extents
             this.linkToggleLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
 
-            this.linkToggleBtn.set("leftLabel", this.i18n.linkToMapViewOn);
-            this.linkToggleBtn.set("rightLabel", this.i18n.linkToMapViewOff);
+            this.linkToggleBtn.set("leftLabel", "");
+            this.linkToggleBtn.set("rightLabel", "");
             this.linkToggleBtn.set("value", this.linkToMapView
                 ? "on"
                 : "off");

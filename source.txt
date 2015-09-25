@@ -1,9 +1,7 @@
 From git branch 
 develop
-commit 1b62aa00e76db18858dc87b4df33182b6dd06b2c
+commit 0564c3fe5b581f9e447684300947c1c5963096fd
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Sep 23 15:25:43 2015 -0700
+Date:   Fri Sep 25 14:10:40 2015 -0700
 
-    Changed link-to-map button to mobile-style toggle switch
-    
-    #87
+    Changed link-to-map button to text-free circular style

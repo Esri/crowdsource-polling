@@ -64,8 +64,6 @@ define({
         item_list: {  // List of feature layer items
             linkToMapViewOptionLabel: "Filter list by map",
             linkToMapViewOptionTooltip: "Apply filter to list only features that are visible in the current map",
-            linkToMapViewOn: "Yes",
-            linkToMapViewOff: "No",
             likesForThisItemTooltip: "Votes for this"
         }
     }),

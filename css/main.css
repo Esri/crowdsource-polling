@@ -75,6 +75,32 @@ textarea {
     font-weight: normal;
 }
 
+.mblSwitch, .mblSwitchInner, .mblSwitchBg, .mblSwitchKnob, .mblSwitchText {
+    height: 24px;
+}
+.mblSwRoundShape1 .mblSwitchKnob {
+    width: 24px;
+    border-radius: 12px;
+}
+.mblSwRoundShape1 .mblSwitchBg {
+    border-radius: 12px;
+}
+.mblSwRoundShape1 {
+    width: 40px;
+}
+.mblSwitchBgLeft {
+    background-color: #007ac2;
+    background-image: none;
+}
+.mblSwitchKnob {
+    background-color: #eee;
+    background-image: none;
+}
+.mblSwitchBgRight {
+    background-color: #eee;
+    background-image: none;
+}
+
 /* application-boilerplate mods */
 
 .app-error .loading-message {
@@ -399,7 +425,7 @@ textarea {
 }
 .linkToggleBtn {
     float: right;
-    margin: 3px;
+    margin: 4px;
     cursor: pointer;
 }
 

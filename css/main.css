@@ -679,6 +679,14 @@ label.css-label
     color: white;
 }
 
+.itemDetailsBox {
+    position: absolute;
+    top: 40px;
+    bottom: 0px;
+    width: 100%;
+    overflow-y: auto;
+}
+
 .itemDetail .smallScreenOnly {
     display: none;
 }

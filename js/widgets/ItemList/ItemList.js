@@ -24,6 +24,7 @@ define([
     'dojo/dom-class',
     "dojo/dom-geometry",
     'dojo/on',
+    'dojo/query',
     'dojo/topic',
     'dojo/NodeList-dom',
     'dojox/mobile/Switch',  // pre-loaded as required by Dojo
@@ -35,7 +36,7 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, topic, nld, Switch,
+], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, topic, nld, Switch,
     SvgHelper,
     _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
     template) {
@@ -93,6 +94,10 @@ define([
                 this.linkToMapView = newState === "on";
                 topic.publish("linkToMapViewChanged", this.linkToMapView);
             }));
+
+            array.forEach(query(".mblSwitchBgLeft", this.itemListActionBar), function (item) {
+                domClass.add(item, "appTheme");
+            });
         },
 
         /**

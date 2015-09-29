@@ -31,8 +31,7 @@ define([
     "esri/layers/FeatureLayer",
     "esri/tasks/query",
     "esri/tasks/QueryTask",
-    "esri/tasks/RelationshipQuery",
-    "dojo/domReady!"
+    "esri/tasks/RelationshipQuery"
 ], function (
     declare,
     array,

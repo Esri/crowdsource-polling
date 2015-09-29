@@ -496,7 +496,9 @@ define([
 
                 // Set the theme
                 styleString += ".appTheme{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "}";
-                styleString += ".appTheme:hover{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "!important}";
+                styleString += ".appThemeHover:hover{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "!important}";
+                styleString += ".appThemeInverted{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "}";
+                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "!important}";
                 styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accentBkgd + "}";
                 styleString += ".appThemeAccentText{color:" + this.config.theme.accentText + "!important}";
                 this.injectCSS(styleString);

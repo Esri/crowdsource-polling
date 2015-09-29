@@ -320,9 +320,7 @@ textarea {
     position: fixed;
     top: 49px;
     right: 0px;
-    border: 1px solid #007ac2;
-    color: #007ac2;
-    background-color: white;
+    border: 1px solid #ccc;
     z-index: 100;
 }
 .sideHdrOptionsMenuItem {
@@ -344,19 +342,13 @@ textarea {
 
 .textButton {
     display: block;
-    color: #007ac2;
     cursor: pointer;
     font-size: 15px;
     line-height: 32px;
     padding: 0 4px;
 }
-.textButton:hover {
-    background-color: #007ac2;
-    color: white;
-}
 .textButtonLabel {
     display: inline-block;
-    color: #007ac2;
     font-size: 15px;
     line-height: 28px;
     padding: 0 0 0 4px;
@@ -500,8 +492,8 @@ textarea {
 .itemSummary .itemFav {
   float: right;
   font-size: 20px;
-  color: rgb(150, 150, 150);
-  color: rgba(0, 0, 0, 0.35);
+  color: rgb(150, 150, 150)!important;
+  color: rgba(0, 0, 0, 0.35)!important;
   padding-left: 8px;
 }
 
@@ -889,20 +881,17 @@ img {
 
 .dynamicFormAction span {
     width: 48%;
+    height: 33px;
     display: table-cell;
     vertical-align: middle;
+    border: 1px solid #ccc;
 }
 
 .dynamicFormActionLeft {
     float: left;
-    height: 35px;
-    color: #007ac2;  /* IE8 workaround */
     font-weight: bold;
 }
 
 .dynamicFormActionRight {
     float: right;
-    height: 33px;
-    color: #007ac2;
-    border: 1px solid #ccc;
 }

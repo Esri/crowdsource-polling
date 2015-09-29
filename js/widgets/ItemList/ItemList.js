@@ -186,7 +186,7 @@ define([
          */
         buildItemSummary: function (item) {
 
-            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv, likeIconSurf;
+            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv;
 
             itemTitle = this.getItemTitle(item) || "&nbsp;";
 
@@ -224,16 +224,12 @@ define([
                     'class': 'fav'
                 }, favDiv);
 
-                likeIconSurf = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
+                SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
             }
 
             // If this item's OID matches the current selection, apply the theme to highlight it
             if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
-                domClass.add(itemSummaryDiv, "appTheme");
-                if (favDiv) {
-                    domClass.add(favDiv, "appThemeAccentText");
-                    SvgHelper.changeColor(likeIconSurf, this.appConfig.theme.accentText);
-                }
+                domClass.add(itemSummaryDiv, "appTheme appThemeHover");
             }
         },
 

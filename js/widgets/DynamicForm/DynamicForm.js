@@ -188,14 +188,13 @@ define([
 
             // Submit
             this.dynamicFormSubmit = domConstruct.create("div", {
-                className: "dynamicFormAction"
+                className: "dynamicFormAction dynamicFormActionLeft appTheme appThemeHover"
             }, actionsBar);
-            domClass.add(this.dynamicFormSubmit, "dynamicFormActionLeft");
-            domClass.add(this.dynamicFormSubmit, "appTheme");
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
                 topic.publish("submitForm", this._item, submission);
             }));
+            domStyle.set(this.dynamicFormSubmit, "border-color", this.appConfig.theme.background);
 
             domConstruct.create("span", {
                 innerHTML: this.appConfig.i18n.dynamic_form.submitButtonLabel
@@ -203,9 +202,8 @@ define([
 
             // Cancel
             dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction"
+                className: "dynamicFormAction dynamicFormActionRight appThemeInverted appThemeInvertedHover"
             }, actionsBar);
-            domClass.add(dynamicFormCancel, "dynamicFormActionRight");
             on(dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
             }));

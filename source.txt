@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit 64a575a0adb88c8b86015646837f6ab3e4a00396
+commit b3263db18304b6715a540c38f42541c51b68a819
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Fri Sep 25 14:33:50 2015 -0700
+Date:   Tue Sep 29 11:10:34 2015 -0700
 
-    Fixed item details scrolling
+    Removed domReady dependency from library routines

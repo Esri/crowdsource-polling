@@ -103,6 +103,7 @@ define([
         show: function () {
             if (!this.actionVisibilities.showVotes || !this.votesField) {
                 domStyle.set(this.likeButton, 'display', 'none');
+                domStyle.set(this.itemVotesGroup, 'display', 'none');
             }
             if (!this.actionVisibilities.showComments || !this.commentFields) {
                 domStyle.set(this.commentButton, 'display', 'none');
@@ -134,6 +135,8 @@ define([
             if (!Modernizr.rgba) {
                 SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
             }
+
+            SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
 
             domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
             this.likeButton.title = this.i18n.likeButtonTooltip;

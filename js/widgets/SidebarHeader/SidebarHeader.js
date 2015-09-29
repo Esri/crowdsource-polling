@@ -69,10 +69,12 @@ define([
             this.inherited(arguments);
 
             // Set up the UI
+            domStyle.set(this.optionsDropdown, "border-color", this.appConfig.theme.background);
+
             domStyle.set(this.signInBtn, "display", "none");
             if (this.showSignin) {
                 this.signInMenuItem = domConstruct.create("div", {
-                    className: "sideHdrOptionsMenuItem textButton"
+                    className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover"
                 }, this.optionsDropdown);
                 domStyle.set(this.signInMenuItem, "display", "none");
 
@@ -87,7 +89,7 @@ define([
 
 
             this.viewToggleMenuItem = domConstruct.create("div", {
-                className: "sideHdrOptionsMenuItem textButton"
+                className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover"
             }, this.optionsDropdown);
             viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, function () {
                 if (this.viewToggleIsGoToMapView) {
@@ -103,7 +105,7 @@ define([
             if (this.showHelp) {
                 this.helpBtn.title = i18n.helpButtonTooltip;
                 helpMenuItem = domConstruct.create("div", {
-                    className: "sideHdrOptionsMenuItem textButton",
+                    className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover",
                     title: i18n.helpButtonTooltip,
                     innerHTML: i18n.helpButtonLabel
                 }, this.optionsDropdown);

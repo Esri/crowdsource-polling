@@ -24,6 +24,7 @@ define([
     'dojo/dom-class',
     "dojo/dom-geometry",
     'dojo/on',
+    'dojo/query',
     'dojo/topic',
     'dojo/NodeList-dom',
     'dojox/mobile/Switch',  // pre-loaded as required by Dojo
@@ -35,7 +36,7 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, topic, nld, Switch,
+], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, topic, nld, Switch,
     SvgHelper,
     _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
     template) {
@@ -93,6 +94,10 @@ define([
                 this.linkToMapView = newState === "on";
                 topic.publish("linkToMapViewChanged", this.linkToMapView);
             }));
+
+            array.forEach(query(".mblSwitchBgLeft", this.itemListActionBar), function (item) {
+                domClass.add(item, "appTheme");
+            });
         },
 
         /**
@@ -186,7 +191,7 @@ define([
          */
         buildItemSummary: function (item) {
 
-            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv, likeIconSurf;
+            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv;
 
             itemTitle = this.getItemTitle(item) || "&nbsp;";
 
@@ -224,16 +229,12 @@ define([
                     'class': 'fav'
                 }, favDiv);
 
-                likeIconSurf = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
+                SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
             }
 
             // If this item's OID matches the current selection, apply the theme to highlight it
             if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
-                domClass.add(itemSummaryDiv, "appTheme");
-                if (favDiv) {
-                    domClass.add(favDiv, "appThemeAccentText");
-                    SvgHelper.changeColor(likeIconSurf, this.appConfig.theme.accentText);
-                }
+                domClass.add(itemSummaryDiv, "appTheme appThemeHover");
             }
         },
 

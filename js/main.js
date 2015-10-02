@@ -636,7 +636,7 @@ define([
                     SearchDijitHelper.createSearchDijit(
                         this.map, this.config.itemInfo.itemData.operationalLayers,
                         this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
-                        "SearchButton");
+                        "SearchButton", this.config.searchAlwaysExpanded);
 
                 }), lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(err || this.config.i18n.map.layerLoad);

@@ -59,6 +59,7 @@ define({
     "twitterUserUrl": location.protocol + "//utility.arcgis.com/tproxy/proxy/1.1/account/verify_credentials.json?q=&include_entities=true&skip_status=true&locale=en",
     "twitterCallbackUrl": "/oauth-callback-twitter.html",
 
+    "searchAlwaysExpanded": false,  // Whether or not search button is always expanded (always shows its type-in box; true) or is dynamically expanded (false)
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
     //Defaults to arcgis.com. Set this value to your portal or organization host name.
     "sharinghost": location.protocol + "//" + "www.arcgis.com",

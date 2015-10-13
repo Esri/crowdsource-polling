@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit b3263db18304b6715a540c38f42541c51b68a819
+commit 0bd048f020d05c6aeef0f95586a674d79bcc88f4
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Tue Sep 29 11:10:34 2015 -0700
+Date:   Tue Oct 13 13:56:14 2015 -0700
 
-    Removed domReady dependency from library routines
+    Changed Dojo Mobile's dojoClick setting

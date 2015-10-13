@@ -96,6 +96,10 @@ define([
 
             parser.parse();
 
+            //  Dojo Mobile's click setting of 'true' breaks feature layer click generation
+            // See https://bugs.dojotoolkit.org/ticket/15878
+            window.document.dojoClick = false;
+
             // config will contain application and user defined info for the template such as i18n strings, the web map id
             // and application id
             // any url parameters and any application specific configuration information.
@@ -475,26 +479,16 @@ define([
         _setupUI: function () {
             var deferred = new Deferred(), styleString = "";
             setTimeout(lang.hitch(this, function () {
-                var luminance = new Color(this.config.color).toHsl().l;
 
-                // Set the theme
-                if (luminance > this.config.maxDarkLuminance) {
-                    this.config.theme = {
-                        "background": this.config.color,  // lighter
-                        "foreground": "black",
-                        "accentBkgd": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : this.config.color),
-                        "accentText": (Modernizr.rgba ? "rgba(0, 0, 0, 0.35)" : "black")
-                    };
-                } else {
-                    this.config.theme = {
-                        "background": this.config.color,  // darker
-                        "foreground": "white",
-                        "accentBkgd": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : this.config.color),
-                        "accentText": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : "white")
-                    };
-                }
+                // Set the theme colors
+                this.config.theme = {
+                    "background": this.config.color,
+                    "foreground": "white",
+                    "accentBkgd": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : this.config.color),
+                    "accentText": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : "white")
+                };
 
-                // Set the theme
+                // Set the theme CSS
                 styleString += ".appTheme{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "}";
                 styleString += ".appThemeHover:hover{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "!important}";
                 styleString += ".appThemeInverted{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "}";
@@ -636,7 +630,7 @@ define([
                     SearchDijitHelper.createSearchDijit(
                         this.map, this.config.itemInfo.itemData.operationalLayers,
                         this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
-                        "SearchButton");
+                        "SearchButton", this.config.searchAlwaysExpanded);
 
                 }), lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(err || this.config.i18n.map.layerLoad);

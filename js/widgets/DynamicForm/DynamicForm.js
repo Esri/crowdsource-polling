@@ -463,7 +463,7 @@ define([
                     } else if (field.type !== "esriFieldTypeOID" &&
                                field.type !== "esriFieldTypeGUID" &&
                                field.type !== "esriFieldTypeGlobalID") {
-                        topic.publish("showError", "[" + field.alias + "]<br>"
+                        topic.publish("showError", "[" + (field.alias || field.name) + "]<br>"
                             + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }
                 }

@@ -1,7 +1,7 @@
 From git branch 
 develop
-commit a64d7cd48e1c47d93ab1c6765fc793c3d8bacd46
+commit 033db2fc011ec06266e4b45809c2b0c6f49147e9
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Wed Oct 14 11:53:35 2015 -0700
+Date:   Thu Oct 15 09:09:00 2015 -0700
 
-    Fixed Search dijit display for single-source searching
+    Added configuration app parameters for app logo

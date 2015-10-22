@@ -791,6 +791,10 @@ label.css-label
     border: 1px solid #CCC;
     background-color: white;
     overflow: hidden;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
 }
 .popupTitle {
     height: 32px;

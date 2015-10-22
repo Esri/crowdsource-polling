@@ -111,9 +111,9 @@ define([
         show: function () {
             // Collapse title if empty
             if (this.displayTitle.length === 0) {
-                domClass.add("popupTitleDiv", "popupTitleContainerEmpty");
+                domClass.add(this.popupTitleContainer, "popupTitleContainerEmpty");
             } else {
-                domClass.remove("popupTitleDiv", "popupTitleContainerEmpty");
+                domClass.remove(this.popupTitleContainer, "popupTitleContainerEmpty");
             }
 
             // Change display from none to block

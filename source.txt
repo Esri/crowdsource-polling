@@ -1,7 +1,9 @@
 From git branch 
 develop
-commit 033db2fc011ec06266e4b45809c2b0c6f49147e9
+commit 835d2499da6044171bbba5b294df2be6c56d6ede
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Oct 15 09:09:00 2015 -0700
+Date:   Thu Oct 22 14:12:46 2015 -0700
 
-    Added configuration app parameters for app logo
+    Changed initial paragraph in help message to not use paragraph formatting;
+    
+    creates too much white space around it

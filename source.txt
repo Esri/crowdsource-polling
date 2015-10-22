@@ -1,9 +1,7 @@
 From git branch 
 develop
-commit 835d2499da6044171bbba5b294df2be6c56d6ede
+commit 541aaaa0a4e05188c052898a61507c74cc89167b
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Oct 22 14:12:46 2015 -0700
+Date:   Thu Oct 22 14:42:29 2015 -0700
 
-    Changed initial paragraph in help message to not use paragraph formatting;
-    
-    creates too much white space around it
+    Shielded title display from undefined or null item title

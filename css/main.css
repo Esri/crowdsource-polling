@@ -791,25 +791,14 @@ label.css-label
     border: 1px solid #CCC;
     background-color: white;
     overflow: hidden;
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
-    right: 0px;
 }
-.popupTitleContainer {
+.popupTitle {
     height: 32px;
     line-height: 32px;
 }
-.popupTitleContainerEmpty {
-    height: 20px;
-    line-height: 20px;
-}
-.popupTitle {
-    padding-left: 12px;
-    margin-right: 28px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+.popupTitleEmpty {
+    height: 0px;
+    line-height: 0px;
 }
 .popupContent {
     margin: 10px;
@@ -829,13 +818,10 @@ img {
 .popupClose {
     display: none;
     position: absolute;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-    width: 20px;
-    height: 24px;
-    padding: 4px;
     cursor: pointer;
+    height: 20px;
+    padding: 4px;
+    right: 2px;
 }
 
 .socialMediaDisclaimer {

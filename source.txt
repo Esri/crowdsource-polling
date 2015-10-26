@@ -1,7 +1,9 @@
 From git branch 
-develop
-commit 541aaaa0a4e05188c052898a61507c74cc89167b
+release
+commit a5a0ca0b2fc06acd3652b46fba6832af37adb8ef
 Author: MikeTschudi <mtschudi@esri.com>
-Date:   Thu Oct 22 14:42:29 2015 -0700
+Date:   Mon Oct 26 09:12:18 2015 -0700
 
-    Shielded title display from undefined or null item title
+    Added workaround for Firefox' scrollIntoView weakness
+    
+    #112

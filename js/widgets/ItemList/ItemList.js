@@ -25,6 +25,7 @@ define([
     "dojo/dom-geometry",
     'dojo/on',
     'dojo/query',
+    'dojo/sniff',
     'dojo/topic',
     'dojo/NodeList-dom',
     'dojox/mobile/Switch',  // pre-loaded as required by Dojo
@@ -36,7 +37,7 @@ define([
     'dijit/_WidgetsInTemplateMixin',
 
     'dojo/text!./ItemListView.html'
-], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, topic, nld, Switch,
+], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, has, topic, nld, Switch,
     SvgHelper,
     _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
     template) {
@@ -135,6 +136,11 @@ define([
         show: function () {
             domStyle.set(this.domNode, 'display', 'block');
             this.fitFilterLabelToContainer();
+
+            if (has("ff")) {
+                // Scroll to the top of the list; needed for Firefox
+                this.scrollIntoView(this.list);
+            }
         },
 
         /**
@@ -239,6 +245,19 @@ define([
         },
 
         /**
+         * Scrolls a container node to make a specified node visible.
+         * @param {object} nodeToMakeVisible Node that's to be brought into view
+         */
+        scrollIntoView: function (nodeToMakeVisible) {
+            // Firefox defaults to former scroll position if we're returning to a previously-scrolled node (which could
+            // be a different item's details--they go into the same scrollable div). The scrollIntoView can't change this
+            // unless it occurs a little later than the default behavior, hence the setTimeout.
+            setTimeout(function (){
+                nodeToMakeVisible.scrollIntoView();
+            }, 500);
+        },
+
+        /**
          * Gets title of feature for list display
          * @param  {feature} item The feature for which to get the title
          * @return {string} The title of the feature
@@ -250,14 +269,11 @@ define([
         /**
          * Removes HTML tags from a string
          * @param {string} str String possibly containing HTML tags
-         * @return {string} Cleaned string; if str is undefined or null, an empty string is returned
+         * @return {string} Cleaned string
          * @see http://dojo-toolkit.33424.n3.nabble.com/Stripping-HTML-tags-from-a-string-tp3999505p3999576.html
          */
         stripTags: function (str) {
-            if (str) {
-                return domConstruct.create("div", { innerHTML: str }).textContent;
-            }
-            return "";
+            return domConstruct.create("div", { innerHTML: str }).textContent;
         },
 
         /**

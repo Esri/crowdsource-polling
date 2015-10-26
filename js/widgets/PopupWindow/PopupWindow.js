@@ -65,16 +65,8 @@ define([
             };
 
             /**
-             * Create an attribute 'displayTitle' and use _setDisplayTitleAttr to map to DOM Node:popupTitle to display text
-             */
-            this.displayTitle = "";
-            this._setDisplayTitleAttr = {
-                node: "popupTitle",
-                type: "innerHTML"
-            };
-
-            /**
-             * Create an attribute 'displayText' and use _setDisplayTextAttr to map to DOM Node:popupContent to display text
+             * Create an attribute 'displayText' and use _setDisplayTextAttr to map to DOM Node:PopupContent to display text
+             * Text to be displayed is added in the default.js.
              */
             this.displayText = "";
             this._setDisplayTextAttr = {
@@ -110,21 +102,15 @@ define([
          */
         show: function () {
             // Collapse title if empty
-            if (this.displayTitle.length === 0) {
-                domClass.add(this.popupTitleContainer, "popupTitleContainerEmpty");
-            } else {
-                domClass.remove(this.popupTitleContainer, "popupTitleContainerEmpty");
-            }
+            domClass.add("popupTitleDiv", "popupTitleEmpty");
 
             // Change display from none to block
-            this.domNode.style.visibility = "hidden";
             this.domNode.style.display = "block";
             this.fitToWindow();
-            this.domNode.style.visibility = "visible";
         },
 
         fitToWindow: function () {
-            var bodyBounds, widgetWidth, widgetHeight, horizOffset, vertOffset, styleAttrs, contentHeight;
+            var bodyBounds, widgetWidth, widgetHeight, horizOffset, vertOffset, styleAttrs;
 
             // Constrain the popup to the document body reduced by the minimum margin
             // then to the maxima
@@ -151,13 +137,10 @@ define([
             };
             domStyle.set(this.domNode, styleAttrs);
 
-
             // Set the popup widget's content's dimensions so that its scrollbars work properly
-            contentHeight = (widgetHeight - (this.displayTitle.length === 0
-                ? 20
-                : 32) - 22) + "px";  // title + top & bottom margins
             styleAttrs = {
-                "height": contentHeight
+                "width": (widgetWidth - 22) + "px",
+                "height": (widgetHeight - 32 - 22) + "px"
             };
             domStyle.set(this.popupContent, styleAttrs);
         },

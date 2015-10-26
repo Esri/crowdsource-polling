@@ -1,9 +1,6 @@
 ﻿/*global define,dojo */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,bitwise:true */
-/* Known JSLint complaints about
- *   "Weird relation" and "Unexpected 'typeof'" on line 261
- *   "Expected a string and instead saw 'typeof'." on line 296
- */
+/* Known JSLint complaint about "Expected a string and instead saw 'typeof'." on line 292; not an error, but can't be ignored. */
 /*
  | Copyright 2015 Esri
  |
@@ -345,8 +342,7 @@ define([
 
                         options = {
                             required: !field.nullable,
-                            maxlength: field.length,
-                            pattern: "\\S([\\S\\s]*\\S)?"
+                            maxlength: field.length
                         };
                         if (field.dtDefault) {
                             options.value = field.dtDefault;
@@ -467,7 +463,7 @@ define([
                     } else if (field.type !== "esriFieldTypeOID" &&
                                field.type !== "esriFieldTypeGUID" &&
                                field.type !== "esriFieldTypeGlobalID") {
-                        topic.publish("showError", "[" + (field.alias || field.name) + "]<br>"
+                        topic.publish("showError", "[" + field.alias + "]<br>"
                             + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }
                 }

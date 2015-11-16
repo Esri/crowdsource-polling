@@ -19,23 +19,28 @@ define({
         map: {  // Map, feature layer, and comments table loading and checking
             error: "Unable to create map",
             layerLoad: "Unable to fully load map",
-            missingItemsFeatureLayer: "Item feature layer is missing",
-            missingCommentsTable: "Comment table is missing"
+            missingItemsFeatureLayer: "Please configure the application to use a feature layer"
         },
         sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
+            menuButtonTooltip: "Show menu",
             signInButton: "Sign In",
-            signInButtonTooltip: "Sign in to a social medium",
+            signInButtonTooltip: "Sign in",
             signOutButton: "Sign Out",
-            signOutButtonTooltip: "Disconnect this app from your social medium",
-            helpButtonTooltip: "Find out more about this app"
+            signOutButtonTooltip: "Sign out",
+            helpButtonLabel: "Help",
+            helpButtonTooltip: "Learn more",
+            gotoListViewLabel: "List View",
+            gotoListViewTooltip: "Go to list view", // Go to List view tooltip text
+            gotoMapViewLabel: "Map View",
+            gotoMapViewTooltip: "Go to map view" // Tooltip for map-it icon in list header
         },
         popup_Close: {  // Close button for help and social-media-sign-in popup box
             closeButtonTooltip: "Close"
         },
         social_media: {  // Social media sign-in/out
-            signIntoFacebookTooltip: "Sign in to Facebook",
-            signIntoGooglePlusTooltip: "Sign in to Google+",
-            signIntoTwitterTooltip: "Sign in to Twitter",
+            signIntoFacebookTooltip: "Sign in with Facebook",
+            signIntoGooglePlusTooltip: "Sign in with Google+",
+            signIntoTwitterTooltip: "Sign in with Twitter",
             signOutOfFacebookTooltip: "Sign out of Facebook",
             signOutOfGooglePlusTooltip: "Sign out of Google+",
             signOutOfTwitterTooltip: "Sign out of Twitter"
@@ -49,47 +54,46 @@ define({
             submitButtonLabel: "Submit"
         },
         item_details: {  // Detailed information about an item and a list of its comments
-            likeButtonLabel: "Like",
-            likeButtonTooltip: "Vote for this",
-            commentButtonLabel: "Comment",
-            commentButtonTooltip: "Add a comment about this",
-            galleryButtonLabel: "Gallery",
+            likeButtonTooltip: "Vote for this item",
+            commentButtonTooltip: "Add a comment",
+            gotoMapViewTooltip: "Go to map view",
             galleryButtonTooltip: "See attached files",
             commentsListHeading: "Comments",
             noCommentsPlaceholder: "No comments"
         },
         item_list: {  // List of feature layer items
-            linkToMapViewOptionLabel: "Link to map view",
-            likesForThisItemTooltip: "Votes for this"
+            linkToMapViewOptionLabel: "Filter list by map",
+            linkToMapViewOptionTooltip: "List features that are visible in the current map",
+            likesForThisItemTooltip: "Votes for this item"
         }
     }),
-    "ar": 0,
-    "cs": 0,
-    "da": 0,
-    "de": 0,
-    "el": 0,
-    "es": 0,
-    "et": 0,
-    "fi": 0,
+    "ar": 1,
+    "cs": 1,
+    "da": 1,
+    "de": 1,
+    "el": 1,
+    "es": 1,
+    "et": 1,
+    "fi": 1,
     "fr": 1,
-    "he": 0,
-    "it": 0,
-    "ja": 0,
-    "ko": 0,
-    "lt": 0,
-    "lv": 0,
-    "nb": 0,
-    "nl": 0,
-    "pl": 0,
-    "pt-br": 0,
-    "pt-pt": 0,
-    "ro": 0,
-    "ru": 0,
-    "sv": 0,
-    "th": 0,
-    "tr": 0,
-    "vi": 0,
-    "zh-cn": 0,
-    "zh-hk": 0,
-    "zh-tw": 0
+    "he": 1,
+    "it": 1,
+    "ja": 1,
+    "ko": 1,
+    "lt": 1,
+    "lv": 1,
+    "nb": 1,
+    "nl": 1,
+    "pl": 1,
+    "pt-br": 1,
+    "pt-pt": 1,
+    "ro": 1,
+    "ru": 1,
+    "sv": 1,
+    "th": 1,
+    "tr": 1,
+    "vi": 1,
+    "zh-cn": 1,
+    "zh-hk": 1,
+    "zh-tw": 1
 });

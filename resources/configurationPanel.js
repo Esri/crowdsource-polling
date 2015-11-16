@@ -2,7 +2,8 @@
     "values": {
         "webmap": "56197689ee7e4a8aa9f0d8da09ffe721",
         "title": "Crowdsource Polling",
-        "displayText": "<p><b>Welcome to the crowdsource polling application</b></p><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p><hr/>",
+        "titleIcon": "images/banner.png",
+        "displayText": "<p><b>Welcome to the crowdsource polling application</b></p><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
         "color": "#206bdb",
         "featureLayer": {
             "id": "LandUseCasesVotesComments_8488",
@@ -32,6 +33,11 @@
             "type": "string",
             "tooltip": "Application name (max 23 chars)"
         }, {
+            "label": "Icon URL",
+            "fieldName": "titleIcon",
+            "type": "string",
+            "tooltip": "Icon in top left corner of application. Icon should be 48px high."
+        }, {
             "label": "Help Text",
             "fieldName": "displayText",
             "type": "string",
@@ -58,8 +64,7 @@
                 "label": "Votes Field",
                 "tooltip": "Numeric field in the selected layer for tracking the votes received for each feature."
             }]
-        }
-        ]
+        }]
     }, {
         "category": "<b>Social Media Settings</b>",
         "fields": [{
@@ -105,9 +110,7 @@
             "placeholder": "",
             "tooltip": "Text to display in the Sign In window",
             "stringFieldOption": "richtext"
-        }
-        ]
-    }
-    ]
+        }]
+    }]
 }
 

@@ -27,7 +27,6 @@ define([
     'dojo/query',
     "dojo/sniff",
     "dojo/topic",
-    "dojox/fx/scroll",
     'dojo/on',
     'dojo/NodeList-dom',
 
@@ -44,7 +43,7 @@ define([
     "application/widgets/PopupWindow/PopupWindow",
 
     'dojo/text!./ItemDetailsView.html'
-], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, topic, scroller, on, nld,
+], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, topic, on, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
@@ -103,6 +102,7 @@ define([
         show: function () {
             if (!this.actionVisibilities.showVotes || !this.votesField) {
                 domStyle.set(this.likeButton, 'display', 'none');
+                domStyle.set(this.itemVotesGroup, 'display', 'none');
             }
             if (!this.actionVisibilities.showComments || !this.commentFields) {
                 domStyle.set(this.commentButton, 'display', 'none');
@@ -111,6 +111,9 @@ define([
                 domStyle.set(this.commentsList, 'display', 'none');
             }
             domStyle.set(this.domNode, 'display', '');
+
+            // Scroll to the top of the details; needed for Firefox
+            this.scrollIntoView(this.descriptionDiv);
         },
 
         /**
@@ -135,16 +138,18 @@ define([
                 SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
             }
 
+            SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
+
             domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
-            this.likeLabel.innerHTML = this.i18n.likeButtonLabel;
             this.likeButton.title = this.i18n.likeButtonTooltip;
 
             domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
-            this.commentLabel.innerHTML = this.i18n.commentButtonLabel;
             this.commentButton.title = this.i18n.commentButtonTooltip;
 
+            domAttr.set(this.mapIcon, "src", "images/mapmarkerBlue.png");
+            this.mapButton.title = this.i18n.gotoMapViewTooltip;
+
             domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
-            this.galleryLabel.innerHTML = this.i18n.galleryButtonLabel;
             this.galleryButton.title = this.i18n.galleryButtonTooltip;
         },
 
@@ -191,6 +196,9 @@ define([
                 })),
                 on(this.commentButton, 'click', function () {
                     topic.publish('getComment', self.item);
+                }),
+                on(this.mapButton, 'click', function () {
+                    topic.publish('showMapViewClicked');
                 }),
                 on(this.galleryButton, 'click', lang.hitch(this, function () {
                     topic.publish('showGallery', self.item);
@@ -413,7 +421,7 @@ define([
                 this.invertButton("comment", true, this.commentButton, this.commentIcon);
 
                 // Scroll the comment form into view if needed
-                this.scrollIntoView(this.domNode.parentNode, this.itemAddComment.domNode);
+                this.scrollIntoView(this.itemAddComment.domNode);
             }
         },
 
@@ -427,30 +435,24 @@ define([
                 this.invertButton("comment", false, this.commentButton, this.commentIcon);
 
                 // Scroll to the top of the details to restore context
-                this.scrollIntoView(this.domNode.parentNode, this.itemSummary);
+                this.scrollIntoView(this.descriptionDiv);
             }
         },
 
         /**
          * Scrolls a container node to make a specified node visible.
-         * @param {object} nodeToScroll Container node that's to be scrolled
          * @param {object} nodeToMakeVisible Node that's to be brought into view
          */
-        scrollIntoView: function (nodeToScroll, nodeToMakeVisible) {
+        scrollIntoView: function (nodeToMakeVisible) {
+            // Firefox defaults to former scroll position if we're returning to a previously-scrolled node (which could
+            // be a different item's details--they go into the same scrollable div). The scrollIntoView can't change this
+            // unless it occurs a little later than the default behavior, hence the setTimeout.
             if (!has("ff")) {
-                // Dojo dojox/fx/scroll scroller doesn't appear to work in Firefox--often scrolls to end
-                // of node to make visible
-                scroller({
-                    win: nodeToScroll,
-                    node: nodeToMakeVisible
-                }).play();
+                nodeToMakeVisible.scrollIntoView();
             } else {
-                // Fortunately, there's a fallback: scrollIntoView with options, which is only
-                // supported in Firefox >= 36
-                nodeToMakeVisible.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
+                setTimeout(function (){
+                    nodeToMakeVisible.scrollIntoView();
+                }, 500);
             }
         },
 
@@ -460,7 +462,17 @@ define([
          * @return {string}      The title of the feature
          */
         getItemTitle: function (item) {
-            return item.getTitle ? item.getTitle() : "";
+            return item.getTitle ? this.stripTags(item.getTitle()) : "";
+        },
+
+        /**
+         * Removes HTML tags from a string
+         * @param {string} str String possibly containing HTML tags
+         * @return {string} Cleaned string
+         * @see http://dojo-toolkit.33424.n3.nabble.com/Stripping-HTML-tags-from-a-string-tp3999505p3999576.html
+         */
+        stripTags: function (str) {
+            return domConstruct.create("div", { innerHTML: str }).textContent;
         },
 
         /**

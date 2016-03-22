@@ -667,6 +667,11 @@ define([
                         if (searchControl.loaded) {
                             searchControl.emit("load");
                         }
+
+                    // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
+                    } else {
+                        domStyle.set("mapDiv_zoom_slider", "top", "16px");
+                        domStyle.set("LocateButton", "top", "131px");
                     }
 
                 }), lang.hitch(this, function (err) {

@@ -447,6 +447,11 @@ define([
                 topic.publish("showPanel", "itemsList");
                 topic.publish("signinUpdate");
 
+                // Show help as a splash screen if desired
+                if (this.config.showDisplayTextAsSplashScreen) {
+                    topic.publish("helpSelected");
+                }
+
                 // Handle the switch between list and map views for narrow screens
                 contentContainer = registry.byId("contentDiv");
                 needToggleCleanup = true;

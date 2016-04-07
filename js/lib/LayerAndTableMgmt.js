@@ -178,7 +178,7 @@ define([
                                 if (relate.relatedTableId === commentTable.layerId) {
                                     var tableKeyField = "";
                                     array.some(commentTable.relationships, lang.hitch(this, function (tablerelate, i) {
-                                        if (tablerelate.id === this._itemLayer.layerId) {
+                                        if (tablerelate.relatedTableId === this._itemLayer.layerId) {
                                             tableKeyField = tablerelate.keyField;
                                             return true;
                                         }
@@ -297,6 +297,12 @@ define([
                     field.dtDefault = field.defaultValue || null;
                 }
 
+                // If the default is a string, trim it because Server is delivering cannot-be-null string fields as a
+                // string with a blank
+                if (typeof field.dtDefault === "string") {
+                    field.dtDefault = field.dtDefault.trim();
+                }
+
                 // Convert dates from ArcGIS format of days since 12/31/1899 to JavaScript format of days since 1/1/1970
                 if (field.type === "esriFieldTypeDate") {
                     field.dtDefault = this.convertArcGISDaysToLocalDays(field.dtDefault);
@@ -313,6 +319,7 @@ define([
                             field.dtIsVisible = fieldInfo.visible;
                             field.dtStringFieldOption = fieldInfo.stringFieldOption;
                             field.dtTooltip = fieldInfo.tooltip;
+                            field.dtFormat = fieldInfo.format;
                             return true;
                         }
                         return false;

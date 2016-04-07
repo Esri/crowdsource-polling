@@ -92,7 +92,7 @@ define([
         _votesField: null,
 
         startup: function (config) {
-            var itemInfo, error;
+            var promise, itemInfo, error;
 
             parser.parse();
 
@@ -107,13 +107,21 @@ define([
                 this.config = config;
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
-                this._launch(itemInfo);
+
+                promise = this._launch(itemInfo);
             } else {
                 error = new Error("Main:: Config is not defined");
-                this.reportError(error);
+                promise = this.reportError(error);
             }
+
+            return promise;
         },
 
+        /**
+         * Reports an error to the screen
+         * @param {Error} error Object reporting error condition
+         * @return {promise} Promise from a rejected Deferred
+         */
         reportError: function (error) {
             // remove loading class from body and the busy cursor from the sidebar controller
             domClass.remove(document.body, "app-loading");
@@ -143,6 +151,10 @@ define([
                 domClass.add(document.body, "app-error");
                 dom.byId("loading_message").innerHTML = error;
             }
+
+            var def = new Deferred();
+            def.reject(error);
+            return def.promise;
         },
 
         //========================================================================================================================//
@@ -150,24 +162,25 @@ define([
         /**
          * Launches app.
          * @param {object|string} itemInfo Configuration object created by template.js or webmap id
+         * @return {promise} Promise from a the _createWebMap Deferred
          */
         _launch: function (itemInfo) {
-            var setupUI, createMap;
+            var setupUI, createMapPromise;
 
             document.title = this.config.title || "";
             this.config.isIE8 = this._createIE8Test();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
-            createMap = this._createWebMap(itemInfo);
+            createMapPromise = this._createWebMap(itemInfo);
 
             // Show the app when the first of the setups completes
-            first([setupUI, createMap]).then(lang.hitch(this, function () {
+            first([setupUI, createMapPromise]).then(lang.hitch(this, function () {
                 this._revealApp();
             }));
 
             // Complete wiring-up when all of the setups complete
-            all([setupUI, createMap]).then(lang.hitch(this, function (statusList) {
+            all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
                 var configuredVotesField, commentFields, contentContainer, needToggleCleanup;
 
                 //----- Merge map-loading info with UI items -----
@@ -240,6 +253,7 @@ define([
                 }));
 
                 topic.subscribe("helpSelected", lang.hitch(this, function () {
+                    this._helpDialogContainer.set("displayTitle", "");
                     this._helpDialogContainer.set("displayText", this.config.displayText);
                     this._helpDialogContainer.show();
                 }));
@@ -296,6 +310,7 @@ define([
                  * @param {string} err Error message to display
                  */
                 topic.subscribe("showError", lang.hitch(this, function (err) {
+                    this._helpDialogContainer.set("displayTitle", "");
                     this._helpDialogContainer.set("displayText", err);
                     this._helpDialogContainer.show();
                 }));
@@ -432,6 +447,11 @@ define([
                 topic.publish("showPanel", "itemsList");
                 topic.publish("signinUpdate");
 
+                // Show help as a splash screen if desired
+                if (this.config.showDisplayTextAsSplashScreen) {
+                    topic.publish("helpSelected");
+                }
+
                 // Handle the switch between list and map views for narrow screens
                 contentContainer = registry.byId("contentDiv");
                 needToggleCleanup = true;
@@ -473,6 +493,8 @@ define([
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
             }));
+
+            return createMapPromise;
         },
 
         /**
@@ -576,6 +598,7 @@ define([
                 },
                 usePopupManager: false,  // disable searching thru all layers for infoTemplates
                 //ignorePopups: true,
+                layerMixins: this.config.layerMixins || [],
                 editable: this.config.editable,
                 bingMapsKey: this.config.bingKey
             }).then(lang.hitch(this, function (response) {
@@ -625,15 +648,31 @@ define([
                 // the first operational layer's layerObject
                 this._mapData = new LayerAndTableMgmt(this.config);
                 this._mapData.load().then(lang.hitch(this, function (hasCommentTable) {
+                    var searchControl;
+
                     this._hasCommentTable = hasCommentTable;
 
                     mapDataReadyDeferred.resolve("map data");
 
                     // Add search control
-                    SearchDijitHelper.createSearchDijit(
+                    searchControl = SearchDijitHelper.createSearchDijit(
                         this.map, this.config.itemInfo.itemData.operationalLayers,
                         this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
                         "SearchButton", this.config.searchAlwaysExpanded);
+
+                    // If the search dijit is enabled, connect the results of selecting a search result with
+                    // displaying the details about the item
+                    if (searchControl) {
+                        on.once(searchControl, "load", this._connectSearchResult);
+                        if (searchControl.loaded) {
+                            searchControl.emit("load");
+                        }
+
+                    // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
+                    } else {
+                        domStyle.set("mapDiv_zoom_slider", "top", "16px");
+                        domStyle.set("LocateButton", "top", "131px");
+                    }
 
                 }), lang.hitch(this, function (err) {
                     mapDataReadyDeferred.reject(err || this.config.i18n.map.layerLoad);
@@ -643,6 +682,26 @@ define([
             }));
 
             return mapDataReadyDeferred.promise;
+        },
+
+        /**
+         * Converts the search dijit result-selection event to the app's publish-subscribe system.
+         * <p>Expects search dijit to be provided via "this".</p>
+         */
+        _connectSearchResult: function () {
+            var searchControl = this;
+            on(searchControl, "select-result", function (selectResult) {
+                var feature;
+                // Make sure that we have a feature from a feature layer,
+                // then supplement the selection with the layer if it doesn't have one
+                if (selectResult && selectResult.source.featureLayer && selectResult.result && selectResult.result.feature) {
+                    feature = selectResult.result.feature;
+                    if (!feature._layer) {
+                        feature._layer = selectResult.source.featureLayer;
+                    }
+                    topic.publish("itemSelected", feature);
+                }
+            });
         },
 
         /**

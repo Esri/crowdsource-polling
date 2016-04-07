@@ -1,7 +1,0 @@
-From git branch 
-release
-commit b3d909fa90d22c36be63ced555121c0b721564b5
-Author: MikeTschudi <mtschudi@esri.com>
-Date:   Mon Nov 9 08:16:48 2015 -0800
-
-    Added translations

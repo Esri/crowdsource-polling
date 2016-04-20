@@ -526,6 +526,9 @@ define([
                     if (entry.field.domain && entry.field.domain.type === "codedValue") {
                         // Convert list selection into the coded value
                         attr[entry.field.name] = entry.field.domain.codedValues[parseInt(value, 10)].code;
+                    } else if (value.getTime) {
+                        // Convert Date objects into milliseconds as required by the feature service REST endpoint
+                        attr[entry.field.name] = value.getTime();
                     } else {
                         // Get the value
                         attr[entry.field.name] = value;

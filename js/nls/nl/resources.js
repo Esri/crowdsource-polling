@@ -14,57 +14,55 @@
  | See the License for the specific language governing permissions and
  | limitations under the License.
  */
-define(
-     ({
-        map: {  // Map, feature layer, and comments table loading and checking
-            error: "Kaart kan niet gemaakt worden",
-            layerLoad: "De kaart kan niet volledig worden geladen",
-            missingItemsFeatureLayer: "Configureer de applicatie om een objectlaag te gebruiken"
-        },
-        sidebar_header: {  // Top panel of right-side display; contains social media sign-in, help button, title
-            menuButtonTooltip: "Menu tonen",
-            signInButton: "Aanmelden",
-            signInButtonTooltip: "Aanmelden",
-            signOutButton: "Afmelden",
-            signOutButtonTooltip: "Meld u af",
-            helpButtonLabel: "Help",
-            helpButtonTooltip: "Meer weten",
-            gotoListViewLabel: "Lijstweergave",
-            gotoListViewTooltip: "Ga naar lijstweergave", // Go to List view tooltip text
-            gotoMapViewLabel: "Kaartweergave",
-            gotoMapViewTooltip: "Ga naar kaartweergave" // Tooltip for map-it icon in list header
-        },
-        popup_Close: {  // Close button for help and social-media-sign-in popup box
-            closeButtonTooltip: "Sluiten"
-        },
-        social_media: {  // Social media sign-in/out
-            signIntoFacebookTooltip: "Aanmelden met Facebook",
-            signIntoGooglePlusTooltip: "Aanmelden met Google+",
-            signIntoTwitterTooltip: "Aanmelden met Twitter",
-            signOutOfFacebookTooltip: "Afmelden bij Facebook",
-            signOutOfGooglePlusTooltip: "Afmelden bij Google+",
-            signOutOfTwitterTooltip: "Afmelden bij Twitter"
-        },
-        dynamic_form: {  // General-purpose form; used to receive comment entry
-            optionalFormItemFlag: " (optioneel)",
-            requiredFormItemFlag: " (vereist)",
-            unsettableRequiredField: "Een verplicht veld is noch geïnitialiseerd noch in het formulier",
-            countOfRemainingCharactersTooltip: "Resterende tekens",
-            cancelButtonLabel: "Annuleren",
-            submitButtonLabel: "Verzenden"
-        },
-        item_details: {  // Detailed information about an item and a list of its comments
-            likeButtonTooltip: "Op dit item stemmen",
-            commentButtonTooltip: "Een opmerking toevoegen",
-            gotoMapViewTooltip: "Ga naar kaartweergave",
-            galleryButtonTooltip: "Zie bijgesloten bestanden",
-            commentsListHeading: "Opmerkingen",
-            noCommentsPlaceholder: "Geen opmerkingen"
-        },
-        item_list: {  // List of feature layer items
-            linkToMapViewOptionLabel: "Lijst filteren op kaart",
-            linkToMapViewOptionTooltip: "Lijstobjecten die zichtbaar zijn in de huidige kaart",
-            likesForThisItemTooltip: "Stemmen op dit item"
-        }
-    })
-);
+define({
+  "map": {
+    "error": "Kaart kan niet gemaakt worden",
+    "layerLoad": "De kaart kan niet volledig worden geladen",
+    "missingItemsFeatureLayer": "Configureer de applicatie om een objectlaag te gebruiken"
+  },
+  "sidebar_header": {
+    "menuButtonTooltip": "Menu tonen",
+    "signInButton": "Aanmelden",
+    "signInButtonTooltip": "Aanmelden",
+    "signOutButton": "Afmelden",
+    "signOutButtonTooltip": "Meld u af",
+    "helpButtonLabel": "Help",
+    "helpButtonTooltip": "Meer weten",
+    "gotoListViewLabel": "Lijstweergave",
+    "gotoListViewTooltip": "Ga naar lijstweergave",
+    "gotoMapViewLabel": "Kaartweergave",
+    "gotoMapViewTooltip": "Ga naar kaartweergave"
+  },
+  "popup_Close": {
+    "closeButtonTooltip": "Sluiten"
+  },
+  "social_media": {
+    "signIntoFacebookTooltip": "Aanmelden met Facebook",
+    "signIntoGooglePlusTooltip": "Aanmelden met Google+",
+    "signIntoTwitterTooltip": "Aanmelden met Twitter",
+    "signOutOfFacebookTooltip": "Afmelden bij Facebook",
+    "signOutOfGooglePlusTooltip": "Afmelden bij Google+",
+    "signOutOfTwitterTooltip": "Afmelden bij Twitter"
+  },
+  "dynamic_form": {
+    "optionalFormItemFlag": " (optioneel)",
+    "requiredFormItemFlag": " (vereist)",
+    "unsettableRequiredField": "Een verplicht veld is noch geïnitialiseerd noch in het formulier",
+    "countOfRemainingCharactersTooltip": "Resterende tekens",
+    "cancelButtonLabel": "Annuleren",
+    "submitButtonLabel": "Verzenden"
+  },
+  "item_details": {
+    "likeButtonTooltip": "Op dit item stemmen",
+    "commentButtonTooltip": "Een opmerking toevoegen",
+    "gotoMapViewTooltip": "Ga naar kaartweergave",
+    "galleryButtonTooltip": "Zie bijgesloten bestanden",
+    "commentsListHeading": "Opmerkingen",
+    "noCommentsPlaceholder": "Geen opmerkingen"
+  },
+  "item_list": {
+    "linkToMapViewOptionLabel": "Lijst filteren op kaart",
+    "linkToMapViewOptionTooltip": "Lijstobjecten die zichtbaar zijn in de huidige kaart",
+    "likesForThisItemTooltip": "Stemmen op dit item"
+  }
+});

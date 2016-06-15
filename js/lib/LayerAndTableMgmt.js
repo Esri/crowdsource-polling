@@ -178,7 +178,7 @@ define([
                                 if (relate.relatedTableId === commentTable.layerId) {
                                     var tableKeyField = "";
                                     array.some(commentTable.relationships, lang.hitch(this, function (tablerelate, i) {
-                                        if (tablerelate.id === this._itemLayer.layerId) {
+                                        if (tablerelate.relatedTableId === this._itemLayer.layerId) {
                                             tableKeyField = tablerelate.keyField;
                                             return true;
                                         }
@@ -319,6 +319,7 @@ define([
                             field.dtIsVisible = fieldInfo.visible;
                             field.dtStringFieldOption = fieldInfo.stringFieldOption;
                             field.dtTooltip = fieldInfo.tooltip;
+                            field.dtFormat = fieldInfo.format;
                             return true;
                         }
                         return false;

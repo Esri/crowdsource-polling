@@ -160,15 +160,15 @@ define([
          * @param {string} pngTag The unique part of the button PNG image file corresponding to
          * the button, e.g., "like", "comment", "gallery"
          * @param {boolean} toInvert Whether button should be shown in inverted state (true) or not
-         * @param {object} tooltip Whether like button's tooltip should be changed or not
          * @param {object} button The button to modify
          * @param {object} icon The icon img in the button
+         * @param {object} tooltip Whether like button's tooltip should be changed or not
          */
         invertButton: function (pngTag, toInvert, button, icon, tooltip) {
             if (toInvert) {
                 domClass.remove(button, "btnNormal");
                 domClass.add(button, "btnInverse");
-                domAttr.set(icon, "src", "images/" + pngTag + "White.png");                
+                domAttr.set(icon, "src", "images/" + pngTag + "White.png");
             } else {
                 domClass.remove(button, "btnInverse");
                 domClass.add(button, "btnNormal");
@@ -265,6 +265,7 @@ define([
 
             if (this._likeButtonClickHandler) {
                 this._likeButtonClickHandler.remove();
+                this._likeButtonClickHandler = null;
             }
 
             if (array.indexOf(this.votedItemList, objectId) > -1) {
@@ -279,9 +280,10 @@ define([
                         this.votedItemList.push(objectId);
                         this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
                         this._likeButtonClickHandler.remove();
+                        this._likeButtonClickHandler = null;
                     }
                 }));
-                
+
                 this.invertButton("like", false, this.likeButton, this.likeIcon, this.i18n.likeButtonTooltip);
             }
 

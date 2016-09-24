@@ -502,7 +502,7 @@ define([
 
                 // Attempt to go to an item specified as a URL parameter
                 if (this.config.id) {
-                    var id = Number.parseInt(this.config.id), _this = this;
+                    var id = parseInt(this.config.id), _this = this;
                     if (!isNaN(id)) {
                         require(["esri/tasks/query", "esri/tasks/QueryTask"], function(Query, QueryTask) {
                             var query, queryTask, featureLayer = _this.map._layers[_this.map.graphicsLayerIds[0]];

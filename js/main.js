@@ -499,6 +499,33 @@ define([
 
                 //----- Done -----
                 console.log("app is ready");
+
+                // Attempt to go to an item specified as a URL parameter
+                if (this.config.id) {
+                    var id = parseInt(this.config.id), _this = this;
+                    if (!isNaN(id)) {
+                        require(["esri/tasks/query", "esri/tasks/QueryTask"], function(Query, QueryTask) {
+                            var query, queryTask, featureLayer = _this.map._layers[_this.map.graphicsLayerIds[0]];
+                            queryTask = new QueryTask(featureLayer.url);
+                            query = new Query();
+                            query.objectIds = [id];
+                            query.returnGeometry = true;
+                            query.outFields = ["*"];
+
+                            queryTask.execute(query, function (results) {
+                                if (results && results.features && results.features.length > 0) {
+                                    var item = results.features[0];
+                                    item._layer = featureLayer;
+                                    item._graphicsLayer = featureLayer;
+                                    topic.publish("itemSelected", item);
+                                }
+                            }, function (error) {
+                                console.log(error);
+                            });
+                        });
+                    }
+                }
+
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
             }));

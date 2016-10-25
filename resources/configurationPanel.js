@@ -73,14 +73,14 @@
                 "geometryTypes": ["esriGeometryPoint", "esriGeometryLine", "esriGeometryPolyline", "esriGeometryPolygon"]
             },
             "fields": [{
-                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
+                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger", "esriFieldTypeSingle",
+                    "esriFieldTypeDouble", "esriFieldTypeString", "esriFieldTypeDate"],
                 "multipleSelection": false,
                 "fieldName": "sortField",
                 "label": "Field to use to sort items in app (optional)",
                 "tooltip": "Field in the selected layer for sorting items listed in app. If omitted, items are not sorted."
             }, {
-                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger", "esriFieldTypeSingle",
-                    "esriFieldTypeDouble", "esriFieldTypeString", "esriFieldTypeDate"],
+                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
                 "multipleSelection": false,
                 "fieldName": "itemVotesField",
                 "label": "Field to store the vote tally for each report (optional)",

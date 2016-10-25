@@ -97,6 +97,7 @@ define([
         _linkToMapView: false,
         _currentlyCommenting: false,
         _hasCommentTable: false,
+        _sortField: null,
         _votesField: null,
         _concentricCircleFillColor: new Color([0,255,255,0]),
         _fillHiliteColor: new Color([0,255,255,0.1]),
@@ -216,12 +217,14 @@ define([
                     });
 
                     // Make sure that the configured votes field exists
-                    if (array.some(this._mapData.getItemFields(), lang.hitch(this, function (field) {
-                            return configuredVotesField === field.name &&
-                                (field.type === "esriFieldTypeInteger" || field.type === "esriFieldTypeSmallInteger");
-                        }))) {
-                        this._votesField = configuredVotesField;
-                    }
+                    array.forEach(this._mapData.getItemFields(), lang.hitch(this, function (field) {
+                        if (configuredSortField === field.name) {
+                            this._sortField = configuredSortField;
+                        } else if (configuredVotesField === field.name &&
+                            (field.type === "esriFieldTypeInteger" || field.type === "esriFieldTypeSmallInteger")) {
+                            this._votesField = configuredVotesField;
+                        }
+                    }));
                 }
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
@@ -439,7 +442,7 @@ define([
                  */
                 if (this.config.featureLayer.fields[0].fields[0]) {
                     compareFunction = createCompareFunction(
-                        configuredSortField, this.config.ascendingSortOrder);
+                        this._sortField, this.config.ascendingSortOrder);
                 }
                 function createCompareFunction(compareAttributeName, ascendingOrder) {
                     /**

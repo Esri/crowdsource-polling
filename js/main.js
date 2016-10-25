@@ -37,6 +37,10 @@ define([
     "esri/config",
     "esri/dijit/HomeButton",
     "esri/dijit/LocateButton",
+    "esri/graphic",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/symbols/SimpleMarkerSymbol",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
@@ -72,6 +76,10 @@ define([
     esriConfig,
     HomeButton,
     LocateButton,
+    Graphic,
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    SimpleMarkerSymbol,
     registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
@@ -90,6 +98,9 @@ define([
         _currentlyCommenting: false,
         _hasCommentTable: false,
         _votesField: null,
+        _concentricCircleFillColor: new Color([0,255,255,0]),
+        _fillHiliteColor: new Color([0,255,255,0.1]),
+        _lineHiliteColor: new Color("aqua"),
 
         startup: function (config) {
             var promise, itemInfo, error;
@@ -272,7 +283,7 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    var itemExtent;
+                    var itemExtent, highlightGraphics, mapGraphicsLayer;
 
                     this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
@@ -296,11 +307,19 @@ define([
                         itemExtent = item.geometry.getExtent();
                     }
                     if (itemExtent) {
-                        this.map.setExtent(itemExtent.expand(1.5));
+                        this.map.setExtent(itemExtent.expand(1.75));
                     } else {
                         this.map.centerAndZoom(item.geometry,
                             Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
                     }
+
+                    // Highlight the item
+                    highlightGraphics = this._createHighlightGraphics(item.geometry);
+                    mapGraphicsLayer = this.map.graphics;
+                    mapGraphicsLayer.clear();
+                    array.forEach(highlightGraphics, function (graphic) {
+                        mapGraphicsLayer.add(graphic);
+                    });
 
                     // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                     // a no-op because that's the normal state for wider windows
@@ -577,7 +596,8 @@ define([
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
-                    "showSignin": this._socialDialog.isAvailable() && (this.config.commentNameField.trim().length > 0),
+                    "showSignin": this._socialDialog.isAvailable() && this.config.commentNameField
+                        && (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText
                 }).placeAt("sidebarHeading");
 
@@ -752,6 +772,58 @@ define([
                     domClass.remove("contentDiv", "transparent");
                 }
             }).play();
+        },
+
+        /**
+         * Creates an array of graphics that can be used for highlighting.
+         * @param {object} geometry Geometry to be used to create graphics
+         * @param {object} attributes Attributes to be used to create graphics
+         * @param {object} infoTemplate Info template to be used to create graphics
+         * @return {array} An array of graphics for highlighting the content;
+         *        consists of a single graphic for a line or polygon and of
+         *        a set of concentric circles for a point
+         */
+        _createHighlightGraphics: function (geometry, attributes, infoTemplate) {
+            var i, highlightGraphics = [];
+
+            if (geometry.type === "polyline") {
+                // Create a line symbol using the configured line highlight color
+                highlightGraphics.push(new Graphic(geometry,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                        this._lineHiliteColor, 3),
+                    attributes, infoTemplate));
+
+            } else {
+                if (geometry.type === "point") {
+                    // JSAPI does not want NaN coordinates
+                    if (!geometry.x || !geometry.y || isNaN(geometry.x) || isNaN(geometry.y)) {
+                        return highlightGraphics;
+                    }
+
+                    // Create a series of concentric circle symbols using the configured line highlight color
+                    for (i = 1; i <= 2; ++i) {
+                        highlightGraphics.push(new Graphic(geometry,
+                            new SimpleMarkerSymbol(
+                                SimpleMarkerSymbol.STYLE_CIRCLE,
+                                i * 25 + 25,
+                                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                    this._lineHiliteColor, 2),
+                                this._concentricCircleFillColor
+                            ),
+                            attributes, infoTemplate));
+                    }
+
+                } else if (geometry.type) {
+                    // Create a polygon symbol using the configured line & fill highlight colors
+                    highlightGraphics.push(new esri.Graphic(geometry,
+                        new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                this._lineHiliteColor, 3), this._fillHiliteColor),
+                        attributes, infoTemplate));
+                }
+            }
+
+            return highlightGraphics;
         },
 
         //====================================================================================================================//

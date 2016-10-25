@@ -162,11 +162,13 @@ define([
         /**
          * Sets the items to be displayed in the items list, and then builds the list.
          * @param {array} items feature collection or array
+         * @param {function} [compareFunction] Function to compare two items (a, b) for the desired sort order; returns
+         * <0 value if a < b, 0 if a = b, >0 if a > b
          */
-        setItems: function (items) {
+        setItems: function (items, compareFunction) {
             this.items = items;
             this.clearList();
-            this.buildList();
+            this.buildList(compareFunction);
         },
 
         /**
@@ -186,8 +188,13 @@ define([
 
         /**
          * Builds the items list
+         * @param {function} [compareFunction] Function to compare two items (a, b) for the desired sort order; returns
+         * <0 value if a < b, 0 if a = b, >0 if a > b
          */
-        buildList: function () {
+        buildList: function (compareFunction) {
+            if (compareFunction) {
+                this.items.sort(compareFunction);
+            }
             array.forEach(this.items, lang.hitch(this, this.buildItemSummary));
         },
 

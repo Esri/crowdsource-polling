@@ -102,6 +102,7 @@ define([
         _fillHiliteColor: new Color([0,255,255,0.1]),
         _lineHiliteColor: new Color("aqua"),
 
+
         startup: function (config) {
             var promise, itemInfo, error;
 
@@ -201,11 +202,19 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
-                var configuredVotesField, commentFields, contentContainer, needToggleCleanup;
+                var configuredSortField, configuredVotesField, commentFields, contentContainer,
+                    needToggleCleanup, compareFunction;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
-                    configuredVotesField = this.config.featureLayer.fields[0].fields[0];
+                    array.forEach(this.config.featureLayer.fields, function (fieldSpec) {
+                        if (fieldSpec.id === "sortField") {
+                            configuredSortField = fieldSpec.fields[0];
+                        } else if (fieldSpec.id === "itemVotesField") {
+                            configuredVotesField = fieldSpec.fields[0];
+                        }
+                    });
+
                     // Make sure that the configured votes field exists
                     if (array.some(this._mapData.getItemFields(), lang.hitch(this, function (field) {
                             return configuredVotesField === field.name &&
@@ -428,8 +437,34 @@ define([
                 /**
                  * @param {array} items List of items matching update request
                  */
+                if (this.config.featureLayer.fields[0].fields[0]) {
+                    compareFunction = createCompareFunction(
+                        configuredSortField, this.config.ascendingSortOrder);
+                }
+                function createCompareFunction(compareAttributeName, ascendingOrder) {
+                    /**
+                     * Compares attribute compareAttributeName for two items (a, b) for the desired sort order.
+                     * @param {object} itemA First item whose attributes property compareAttributeName
+                     * is to be compared
+                     * @param {object} itemB Second item whose attributes property compareAttributeName
+                     * is to be compared
+                     * @return {number} -1 if itemA.attributes[compareAttributeName] <
+                     * itemB.attributes[compareAttributeName], 0 if they're equal, +1 if the first is > the
+                     * second; inquality values are inverted if ascendingOrder is false
+                     */
+                    return function (itemA, itemB) {
+                        if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
+                            return 0;
+                        } else if (itemA.attributes[compareAttributeName] < itemB.attributes[compareAttributeName]) {
+                            return ascendingOrder ? -1 : 1;
+                        } else {
+                            return ascendingOrder ? 1 : -1;
+                        }
+                    }
+                }
+
                 topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
-                    this._itemsList.setItems(items);
+                    this._itemsList.setItems(items, compareFunction);
                     this._sidebarCnt.showBusy(false);
                 }));
 

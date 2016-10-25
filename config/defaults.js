@@ -36,10 +36,14 @@ define({
     "featureLayer": {
         "id": "LandUseCasesVotesComments_8488",
         "fields": [{
+            "id": "sortField",
+            "fields": ["CASENAME"]
+        }, {
             "id": "itemVotesField",
             "fields": ["VOTES"]
         }]
     },
+    "ascendingSortOrder": true,
     "commentNameField": "NAME",
     "allowFacebook": false,
     "facebookAppId": "",

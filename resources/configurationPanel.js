@@ -8,10 +8,14 @@
         "featureLayer": {
             "id": "LandUseCasesVotesComments_8488",
             "fields": [{
+                "id": "sortField",
+                "fields": ["CASENAME"]
+            }, {
                 "id": "itemVotesField",
                 "fields": ["VOTES"]
             }]
         },
+        "ascendingSortOrder": true,
         "commentNameField": "NAME",
         "allowFacebook": false,
         "facebookAppId": "",
@@ -71,10 +75,21 @@
             "fields": [{
                 "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
                 "multipleSelection": false,
+                "fieldName": "sortField",
+                "label": "Field to use to sort items in app (optional)",
+                "tooltip": "Field in the selected layer for sorting items listed in app. If omitted, items are not sorted."
+            }, {
+                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
+                "multipleSelection": false,
                 "fieldName": "itemVotesField",
                 "label": "Field to store the vote tally for each report (optional)",
                 "tooltip": "Numeric field in the selected layer for tracking the votes received for each feature. Field name is case-sensitive."
             }]
+        }, {
+            "label": "If sort field specified, sort in ascending order?",
+            "fieldName": "ascendingSortOrder",
+            "type": "boolean",
+            "tooltip": "Item sorting uses the values in the sort field (if specified above)"
         }]
     }, {
         "category": "<b>Access Settings</b>",

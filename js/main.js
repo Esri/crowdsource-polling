@@ -440,7 +440,7 @@ define([
                 /**
                  * @param {array} items List of items matching update request
                  */
-                if (this.config.featureLayer.fields[0].fields[0]) {
+                if (this._sortField) {
                     compareFunction = createCompareFunction(
                         this._sortField, this.config.ascendingSortOrder);
                 }
@@ -455,13 +455,25 @@ define([
                      * itemB.attributes[compareAttributeName], 0 if they're equal, +1 if the first is > the
                      * second; inquality values are inverted if ascendingOrder is false
                      */
-                    return function (itemA, itemB) {
-                        if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
-                            return 0;
-                        } else if (itemA.attributes[compareAttributeName] < itemB.attributes[compareAttributeName]) {
-                            return ascendingOrder ? -1 : 1;
-                        } else {
-                            return ascendingOrder ? 1 : -1;
+                    if (ascendingOrder) {
+                        return function (itemA, itemB) {
+                            if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
+                                return 0;
+                            } else if (itemA.attributes[compareAttributeName] < itemB.attributes[compareAttributeName]) {
+                                return -1;
+                            } else {
+                                return 1;
+                            }
+                        }
+                    } else {
+                        return function (itemA, itemB) {
+                            if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
+                                return 0;
+                            } else if (itemA.attributes[compareAttributeName] < itemB.attributes[compareAttributeName]) {
+                                return 1;
+                            } else {
+                                return -1;
+                            }
                         }
                     }
                 }

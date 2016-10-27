@@ -99,7 +99,7 @@ define([
         _hasCommentTable: false,
         _sortField: null,
         _votesField: null,
-        _concentricCircleFillColor: new Color([0,255,255,0]),
+        _outlineFillColor: new Color([0,255,255,0]),
         _fillHiliteColor: new Color([0,255,255,0.1]),
         _lineHiliteColor: new Color("aqua"),
 
@@ -295,7 +295,7 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    var itemExtent, highlightGraphics, mapGraphicsLayer;
+                    var itemExtent, mapGraphicsLayer, highlightGraphic;
 
                     this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
@@ -326,12 +326,12 @@ define([
                     }
 
                     // Highlight the item
-                    highlightGraphics = this._createHighlightGraphics(item.geometry);
                     mapGraphicsLayer = this.map.graphics;
                     mapGraphicsLayer.clear();
-                    array.forEach(highlightGraphics, function (graphic) {
-                        mapGraphicsLayer.add(graphic);
-                    });
+                    highlightGraphic = this._createHighlightGraphic(item);
+                    if (highlightGraphic) {
+                        mapGraphicsLayer.add(highlightGraphic);
+                    }
 
                     // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                     // a no-op because that's the normal state for wider windows
@@ -456,6 +456,7 @@ define([
                      * second; inquality values are inverted if ascendingOrder is false
                      */
                     if (ascendingOrder) {
+                        // Ascending order sorting function
                         return function (itemA, itemB) {
                             if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
                                 return 0;
@@ -466,6 +467,7 @@ define([
                             }
                         }
                     } else {
+                        // Descending order sorting function
                         return function (itemA, itemB) {
                             if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
                                 return 0;
@@ -825,55 +827,54 @@ define([
         },
 
         /**
-         * Creates an array of graphics that can be used for highlighting.
-         * @param {object} geometry Geometry to be used to create graphics
-         * @param {object} attributes Attributes to be used to create graphics
-         * @param {object} infoTemplate Info template to be used to create graphics
-         * @return {array} An array of graphics for highlighting the content;
-         *        consists of a single graphic for a line or polygon and of
-         *        a set of concentric circles for a point
+         * Creates a graphic that can be used for highlighting.
+         * @param {object} item Graphic to be used to create highlight graphic
          */
-        _createHighlightGraphics: function (geometry, attributes, infoTemplate) {
-            var i, highlightGraphics = [];
+        _createHighlightGraphic: function (item) {
+            var i, highlightGraphic, outlineSquareSize = 30;
 
-            if (geometry.type === "polyline") {
+            if (item.geometry.type === "polyline") {
                 // Create a line symbol using the configured line highlight color
-                highlightGraphics.push(new Graphic(geometry,
+                highlightGraphic = new Graphic(item.geometry,
                     new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                         this._lineHiliteColor, 3),
-                    attributes, infoTemplate));
+                    item.attributes, item.infoTemplate);
 
             } else {
-                if (geometry.type === "point") {
+                if (item.geometry.type === "point") {
                     // JSAPI does not want NaN coordinates
-                    if (!geometry.x || !geometry.y || isNaN(geometry.x) || isNaN(geometry.y)) {
-                        return highlightGraphics;
+                    if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
+                        return highlightGraphic;
                     }
 
-                    // Create a series of concentric circle symbols using the configured line highlight color
-                    for (i = 1; i <= 2; ++i) {
-                        highlightGraphics.push(new Graphic(geometry,
-                            new SimpleMarkerSymbol(
-                                SimpleMarkerSymbol.STYLE_CIRCLE,
-                                i * 25 + 25,
-                                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                    this._lineHiliteColor, 2),
-                                this._concentricCircleFillColor
-                            ),
-                            attributes, infoTemplate));
+                    // Try to get the item's layer's symbol
+                    highlightGraphic = this._mapData.getItemLayer()._getSymbol(item);
+                    if (highlightGraphic && !isNaN(highlightGraphic.width) && !isNaN(highlightGraphic.height)) {
+                        outlineSquareSize = 1 + Math.max(highlightGraphic.width, highlightGraphic.height);
                     }
 
-                } else if (geometry.type) {
+                    // Create an outline square using the configured line highlight color
+                    highlightGraphic = new Graphic(item.geometry,
+                        new SimpleMarkerSymbol(
+                            SimpleMarkerSymbol.STYLE_SQUARE,
+                            outlineSquareSize,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                this._lineHiliteColor, 2),
+                            this._outlineFillColor
+                        ),
+                        item.attributes, item.infoTemplate);
+
+                } else if (item.geometry.type) {
                     // Create a polygon symbol using the configured line & fill highlight colors
-                    highlightGraphics.push(new esri.Graphic(geometry,
+                    highlightGraphic = new esri.Graphic(item.geometry,
                         new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
                             new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
                                 this._lineHiliteColor, 3), this._fillHiliteColor),
-                        attributes, infoTemplate));
+                        item.attributes, item.infoTemplate);
                 }
             }
 
-            return highlightGraphics;
+            return highlightGraphic;
         },
 
         //====================================================================================================================//

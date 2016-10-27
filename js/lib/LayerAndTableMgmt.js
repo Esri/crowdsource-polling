@@ -445,6 +445,12 @@ define([
             updateQuery.returnGeometry = true;
             updateQuery.outFields = ["*"];
 
+            // Apply filter if it exists
+            if (this._commentTableInWebmap.layerDefinition
+                && this._commentTableInWebmap.layerDefinition.definitionExpression) {
+                updateQuery.definitionExpression = this._commentTableInWebmap.layerDefinition.definitionExpression;
+            }
+
             updateQuery.relationshipId = this._itemLayer.relationships[this._commentTableRelateID].id;  // Note that we only consider the first relationship in the items layer
 
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {

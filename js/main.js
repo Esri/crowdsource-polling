@@ -453,30 +453,41 @@ define([
                      * is to be compared
                      * @return {number} -1 if itemA.attributes[compareAttributeName] <
                      * itemB.attributes[compareAttributeName], 0 if they're equal, +1 if the first is > the
-                     * second; inquality values are inverted if ascendingOrder is false
+                     * second; inquality values are inverted if ascendingOrder is false; nulls/undefineds come
+                     * before non-null values
                      */
-                    if (ascendingOrder) {
-                        // Ascending order sorting function
-                        return function (itemA, itemB) {
-                            if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
-                                return 0;
-                            } else if (itemA.attributes[compareAttributeName] < itemB.attributes[compareAttributeName]) {
-                                return -1;
+                    return function (itemA, itemB) {
+                        var sortOrder,
+                            attrItemA = itemA.attributes[compareAttributeName],
+                            attrItemB = itemB.attributes[compareAttributeName];
+
+                        if (attrItemA === null || typeof attrItemA === "undefined") {
+                            if (attrItemB === null || typeof attrItemB === "undefined") {
+                                // null A == null B
+                                sortOrder = 0;
                             } else {
-                                return 1;
+                                // null A < nonnull B
+                                sortOrder = -1;
                             }
+
+                        } else if (attrItemB === null || typeof attrItemB === "undefined") {
+                            // nonnull A > null B
+                            sortOrder = 1;
+
+                        } else if (attrItemA == attrItemB) {
+                            // nonnull A == nonnull B
+                            sortOrder = 0;
+
+                        } else if (attrItemA < attrItemB) {
+                            // nonnull A < nonnull B
+                            sortOrder = -1;
+
+                        } else {
+                            // nonnull A > nonnull B
+                            sortOrder = 1;
                         }
-                    } else {
-                        // Descending order sorting function
-                        return function (itemA, itemB) {
-                            if (itemA.attributes[compareAttributeName] == itemB.attributes[compareAttributeName]) {
-                                return 0;
-                            } else if (itemA.attributes[compareAttributeName] < itemB.attributes[compareAttributeName]) {
-                                return 1;
-                            } else {
-                                return -1;
-                            }
-                        }
+
+                        return (ascendingOrder ? sortOrder : -sortOrder);
                     }
                 }
 

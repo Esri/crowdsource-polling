@@ -220,7 +220,8 @@ define([
                     array.forEach(this._mapData.getItemFields(), lang.hitch(this, function (field) {
                         if (configuredSortField === field.name) {
                             this._sortField = configuredSortField;
-                        } else if (configuredVotesField === field.name &&
+                        }
+                        if (configuredVotesField === field.name &&
                             (field.type === "esriFieldTypeInteger" || field.type === "esriFieldTypeSmallInteger")) {
                             this._votesField = configuredVotesField;
                         }

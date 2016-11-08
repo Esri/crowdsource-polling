@@ -1,6 +1,5 @@
-﻿/*global define,dojo,Modernizr */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global Modernizr */
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,33 +15,33 @@
  | limitations under the License.
  */
 define([
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/_base/array',
+    "dojo/_base/declare",
+    "dojo/_base/lang",
+    "dojo/_base/array",
     "dojo/dom",
-    'dojo/dom-construct',
-    'dojo/dom-style',
-    'dojo/dom-class',
-    'dojo/dom-attr',
-    'dojo/query',
+    "dojo/dom-construct",
+    "dojo/dom-style",
+    "dojo/dom-class",
+    "dojo/dom-attr",
+    "dojo/query",
     "dojo/sniff",
     "dojo/topic",
-    'dojo/on',
-    'dojo/NodeList-dom',
+    "dojo/on",
+    "dojo/NodeList-dom",
 
-    'application/lib/SvgHelper',
+    "application/lib/SvgHelper",
 
-    'dijit/layout/ContentPane',
+    "dijit/layout/ContentPane",
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
+    "dijit/_WidgetBase",
+    "dijit/_TemplatedMixin",
 
     "esri/urlUtils",
 
     "application/widgets/DynamicForm/DynamicForm",
     "application/widgets/PopupWindow/PopupWindow",
 
-    'dojo/text!./ItemDetailsView.html'
+    "dojo/text!./ItemDetailsView.html"
 ], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, topic, on, nld,
     SvgHelper,
     ContentPane,
@@ -61,9 +60,9 @@ define([
          * @constructor
          */
         constructor: function () {
-            this.id = 'itemDetail';
-            this.baseClass = 'itemDetail';
-            this.itemTitle = 'default title';
+            this.id = "itemDetail";
+            this.baseClass = "itemDetail";
+            this.itemTitle = "default title";
             this.itemVotes = null;
             this.actionVisibilities = {
                 "showVotes": false,
@@ -103,26 +102,26 @@ define([
          */
         show: function () {
             if (!this.actionVisibilities.showVotes || !this.votesField) {
-                domStyle.set(this.likeButton, 'display', 'none');
-                domStyle.set(this.itemVotesGroup, 'display', 'none');
+                domStyle.set(this.likeButton, "display", "none");
+                domStyle.set(this.itemVotesGroup, "display", "none");
             }
             if (!this.actionVisibilities.showComments || !this.commentFields) {
-                domStyle.set(this.commentButton, 'display', 'none');
-                domStyle.set(this.commentsHeading, 'display', 'none');
-                domStyle.set(this.noCommentsDiv, 'display', 'none');
-                domStyle.set(this.commentsList, 'display', 'none');
+                domStyle.set(this.commentButton, "display", "none");
+                domStyle.set(this.commentsHeading, "display", "none");
+                domStyle.set(this.noCommentsDiv, "display", "none");
+                domStyle.set(this.commentsList, "display", "none");
             }
-            domStyle.set(this.domNode, 'display', '');
+            domStyle.set(this.domNode, "display", "");
 
             // Scroll to the top of the details; needed for Firefox
             this.scrollIntoView(this.descriptionDiv);
         },
 
         /**
-         * Hides the widget with a simple display: 'none'
+         * Hides the widget with a simple display: "none"
          */
         hide: function () {
-            domStyle.set(this.domNode, 'display', 'none');
+            domStyle.set(this.domNode, "display", "none");
             this.destroyCommentForm();
         },
 
@@ -193,18 +192,18 @@ define([
         addListeners: function () {
             var self = this;
             this.own(
-                on(this.backIcon, 'click', function () {
-                    topic.publish('detailsCancel');
+                on(this.backIcon, "click", function () {
+                    topic.publish("detailsCancel");
                 }),
-                on(this.commentButton, 'click', function () {
-                    topic.publish('getComment', self.item);
+                on(this.commentButton, "click", function () {
+                    topic.publish("getComment", self.item);
                 }),
-                on(this.mapButton, 'click', function () {
-                    topic.publish('showMapViewClicked');
+                on(this.mapButton, "click", function () {
+                    topic.publish("showMapViewClicked");
                 }),
-                on(this.galleryButton, 'click', lang.hitch(this, function () {
-                    topic.publish('showGallery', self.item);
-                    if (domStyle.get(this.gallery, 'display') === 'none') {
+                on(this.galleryButton, "click", lang.hitch(this, function () {
+                    topic.publish("showGallery", self.item);
+                    if (domStyle.get(this.gallery, "display") === "none") {
                         this.showGallery();
                     } else {
                         this.hideGallery();
@@ -242,7 +241,7 @@ define([
          * Creates the div to hold the current item's popup.
          */
         initContentPane: function () {
-            this.itemCP = new ContentPane({id: 'itemCP'}, this.descriptionDiv);
+            this.itemCP = new ContentPane({id: "itemCP"}, this.descriptionDiv);
             this.itemCP.startup();
         },
 
@@ -272,11 +271,11 @@ define([
                 this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip );
 
             } else {
-                this._likeButtonClickHandler = on(this.likeButton, 'click', lang.hitch(this, function () {
+                this._likeButtonClickHandler = on(this.likeButton, "click", lang.hitch(this, function () {
                     var objectId = this.item.attributes[this.item._layer.objectIdField];
 
                     if (array.indexOf(this.votedItemList, objectId) === -1) {
-                        topic.publish('addLike', this.item);
+                        topic.publish("addLike", this.item);
                         this.votedItemList.push(objectId);
                         this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
                         this._likeButtonClickHandler.remove();
@@ -312,7 +311,7 @@ define([
                 }
                 this.itemVotesDiv.innerHTML = this.itemVotes.label;
             } else {
-                domStyle.set(this.itemVotesGroup, 'display', 'none');
+                domStyle.set(this.itemVotesGroup, "display", "none");
             }
         },
 
@@ -334,7 +333,7 @@ define([
                 }
 
                 this.updateGallery(attachments);
-                domStyle.set(this.galleryButton, 'display', 'inline-block');
+                domStyle.set(this.galleryButton, "display", "inline-block");
             }
         },
 
@@ -355,42 +354,42 @@ define([
                     } else {
                         srcURL = urlsplit[0] + "/" + attachment.name;
                     }
-                    thumb = domConstruct.create('img', {
-                        'class': 'attachment',
-                        'title': attachment.name,
-                        'src': srcURL
+                    thumb = domConstruct.create("img", {
+                        "class": "attachment",
+                        "title": attachment.name,
+                        "src": srcURL
                     }, this.gallery);
-                    this.own(on(thumb, 'click', lang.hitch(this, function (attachment) {
+                    this.own(on(thumb, "click", lang.hitch(this, function (attachment) {
                         domConstruct.empty(this.enlargedViewPopup.popupContent);
-                        var imgContainer = domConstruct.create('div', {
-                            'class': 'popupImgContent'
+                        var imgContainer = domConstruct.create("div", {
+                            "class": "popupImgContent"
                         }, this.enlargedViewPopup.popupContent);
-                        domConstruct.create('img', {
-                            'class': 'attachment',
-                            'src': srcURL
+                        domConstruct.create("img", {
+                            "class": "attachment",
+                            "src": srcURL
                         }, imgContainer);
                         this.enlargedViewPopup.show();
                     })));
 
                 } else if (attachment.contentType === "application/pdf") {
-                    thumb = domConstruct.create('img', {
-                        'class': 'attachment',
-                        'title': attachment.name,
-                        'src': 'images/pdficon_large.png'
+                    thumb = domConstruct.create("img", {
+                        "class": "attachment",
+                        "title": attachment.name,
+                        "src": "images/pdficon_large.png"
                     }, this.gallery);
                     attachmentUrl = attachment.url;
-                    this.own(on(thumb, 'click', lang.hitch(this, function () {
+                    this.own(on(thumb, "click", lang.hitch(this, function () {
                         window.open(attachmentUrl, "_blank");
                     })));
 
                 } else if (attachment.url && attachment.url.length > 0) {
-                    thumb = domConstruct.create('img', {
-                        'class': 'attachment',
-                        'title': attachment.name,
-                        'src': 'images/file_wht.png'
+                    thumb = domConstruct.create("img", {
+                        "class": "attachment",
+                        "title": attachment.name,
+                        "src": "images/file_wht.png"
                     }, this.gallery);
                     attachmentUrl = attachment.url;
-                    this.own(on(thumb, 'click', lang.hitch(this, function () {
+                    this.own(on(thumb, "click", lang.hitch(this, function () {
                         window.open(attachmentUrl, "_blank");
                     })));
                 }
@@ -402,7 +401,7 @@ define([
          * Clears the gallery.
          */
         clearGallery: function () {
-            domStyle.set(this.galleryButton, 'display', 'none');
+            domStyle.set(this.galleryButton, "display", "none");
             this.hideGallery();
             domConstruct.empty(this.gallery);
         },
@@ -411,7 +410,7 @@ define([
          * Makes the gallery visible.
          */
         showGallery: function () {
-            domStyle.set(this.gallery, 'display', 'block');
+            domStyle.set(this.gallery, "display", "block");
             this.invertButton("gallery", true, this.galleryButton, this.galleryIcon);
         },
 
@@ -419,7 +418,7 @@ define([
          * Hides the gallery.
          */
         hideGallery: function () {
-            domStyle.set(this.gallery, 'display', 'none');
+            domStyle.set(this.gallery, "display", "none");
             this.invertButton("gallery", false, this.galleryButton, this.galleryIcon);
         },
 
@@ -540,9 +539,9 @@ define([
          * Completely clears the display for the current item.
          */
         clearItemDisplay: function () {
-            this.itemTitleDiv.innerHTML = '';
-            this.itemVotesDiv.innerHTML = '';
-            this.itemCP.set('content', '');
+            this.itemTitleDiv.innerHTML = "";
+            this.itemVotesDiv.innerHTML = "";
+            this.itemCP.set("content", "");
         },
 
         /**
@@ -551,7 +550,7 @@ define([
         buildItemDisplay: function () {
             this.itemTitleDiv.innerHTML = this.itemTitle;
             this.redrawItemVotes();
-            this.itemCP.set('content', this.item.getContent());
+            this.itemCP.set("content", this.item.getContent());
         },
 
         /**
@@ -560,7 +559,7 @@ define([
          */
         setComments: function (commentsArr) {
             this.clearComments();
-            domClass.toggle(this.noCommentsDiv, 'hide', commentsArr.length);
+            domClass.toggle(this.noCommentsDiv, "hide", commentsArr.length);
             array.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
 
         },
@@ -573,13 +572,13 @@ define([
         buildCommentDiv: function (comment) {
             var commentDiv;
 
-            commentDiv = domConstruct.create('div', {
-                'class': 'comment'
+            commentDiv = domConstruct.create("div", {
+                "class": "comment"
             }, this.commentsList);
 
             new ContentPane({
-                'class': 'content small-text',
-                'content': comment.getContent()
+                "class": "content small-text",
+                "content": comment.getContent()
             }, commentDiv).startup();
         },
 

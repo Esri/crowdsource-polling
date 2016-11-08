@@ -1,6 +1,5 @@
-﻿/*global define,Modernizr,console */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global esri,Modernizr */
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,7 +104,7 @@ define([
 
 
         startup: function (config) {
-            var promise, itemInfo, error;
+            var promise, itemInfo, error, link;
 
             parser.parse();
 
@@ -123,11 +122,11 @@ define([
 
                 //If application is loaded in RTL mode, change styles of required nodes
                 if (this.config.i18n.direction === "rtl") {
-                    link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.type = 'text/css';
+                    link = document.createElement("link");
+                    link.rel = "stylesheet";
+                    link.type = "text/css";
                     link.href = "./css/rtl.css";
-                    document.getElementsByTagName('head')[0].appendChild(link);
+                    document.getElementsByTagName("head")[0].appendChild(link);
                 }
 
                 promise = this._launch(itemInfo);
@@ -162,7 +161,7 @@ define([
                 this._sidebarCnt.showBusy(false);
 
                 // Display the error to the side of the map
-                var messageNode = domConstruct.create("div", {
+                domConstruct.create("div", {
                     className: "absoluteCover",
                     innerHTML: error
                 }, "sidebarContent", "first");
@@ -489,7 +488,7 @@ define([
                         }
 
                         return (ascendingOrder ? sortOrder : -sortOrder);
-                    }
+                    };
                 }
 
                 topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
@@ -550,8 +549,8 @@ define([
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
-                    domStyle.set("sidebarContent", 'display', 'none');
-                    domStyle.set("mapDiv", 'display', 'block');
+                    domStyle.set("sidebarContent", "display", "none");
+                    domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
                     this._sidebarHdr.setViewToggle(false);
                     needToggleCleanup = true;
@@ -559,9 +558,9 @@ define([
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
                     // Hide the map and restore the sidebar to the display that it has for this
                     // browser width
-                    domStyle.set("mapDiv", 'display', '');
-                    domStyle.set("sidebarContent", 'display', '');
-                    domStyle.set("sidebarContent", 'width', '');
+                    domStyle.set("mapDiv", "display", "");
+                    domStyle.set("sidebarContent", "display", "");
+                    domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
                     this._sidebarHdr.setViewToggle(true);
                     needToggleCleanup = true;
@@ -571,9 +570,9 @@ define([
                     // and now the screen is wider than the single-panel threshold, reset
                     // the Layout Container
                     if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
-                        domStyle.set("mapDiv", 'display', '');
-                        domStyle.set("sidebarContent", 'display', '');
-                        domStyle.set("sidebarContent", 'width', '');
+                        domStyle.set("mapDiv", "display", "");
+                        domStyle.set("sidebarContent", "display", "");
+                        domStyle.set("sidebarContent", "width", "");
                         contentContainer.resize();
                         this._sidebarHdr.setViewToggle(true);
                         needToggleCleanup = false;
@@ -843,7 +842,7 @@ define([
          * @param {object} item Graphic to be used to create highlight graphic
          */
         _createHighlightGraphic: function (item) {
-            var i, highlightGraphic, outlineSquareSize = 30;
+            var highlightGraphic, outlineSquareSize = 30;
 
             if (item.geometry.type === "polyline") {
                 // Create a line symbol using the configured line highlight color
@@ -912,19 +911,19 @@ define([
          * conditional comments.js</a>.
          */
         _isIE: function (version, comparison) {
-            var cc      = 'IE',
-                b       = document.createElement('B'),
+            var cc      = "IE",
+                b       = document.createElement("B"),
                 docElem = document.documentElement,
                 isIE;
 
             if (version) {
-                cc += ' ' + version;
-                if (comparison) { cc = comparison + ' ' + cc; }
+                cc += " " + version;
+                if (comparison) { cc = comparison + " " + cc; }
             }
 
-            b.innerHTML = '<!--[if ' + cc + ']><b id="iecctest"></b><![endif]-->';
+            b.innerHTML = "<!--[if " + cc + "]><b id='iecctest'></b><![endif]-->";
             docElem.appendChild(b);
-            isIE = !!document.getElementById('iecctest');
+            isIE = !!document.getElementById("iecctest");
             docElem.removeChild(b);
             return isIE;
         },

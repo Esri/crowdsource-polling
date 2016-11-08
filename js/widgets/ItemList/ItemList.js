@@ -1,6 +1,4 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,27 +14,27 @@
  | limitations under the License.
  */
 define([
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/_base/array',
-    'dojo/dom-construct',
-    'dojo/dom-style',
-    'dojo/dom-class',
+    "dojo/_base/declare",
+    "dojo/_base/lang",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom-style",
+    "dojo/dom-class",
     "dojo/dom-geometry",
-    'dojo/on',
-    'dojo/query',
-    'dojo/sniff',
-    'dojo/topic',
-    'dojo/NodeList-dom',
-    'dojox/mobile/Switch',  // pre-loaded as required by Dojo
+    "dojo/on",
+    "dojo/query",
+    "dojo/sniff",
+    "dojo/topic",
+    "dojo/NodeList-dom",
+    "dojox/mobile/Switch",  // pre-loaded as required by Dojo
 
-    'application/lib/SvgHelper',
+    "application/lib/SvgHelper",
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
+    "dijit/_WidgetBase",
+    "dijit/_TemplatedMixin",
+    "dijit/_WidgetsInTemplateMixin",
 
-    'dojo/text!./ItemListView.html'
+    "dojo/text!./ItemListView.html"
 ], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, has, topic, nld, Switch,
     SvgHelper,
     _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
@@ -87,7 +85,7 @@ define([
             this.inherited(arguments);
             this.linkToggleBtn.resize();
 
-            this.own(on(window, 'resize', lang.hitch(this, function () {
+            this.own(on(window, "resize", lang.hitch(this, function () {
                 this.fitFilterLabelToContainer();
             })));
 
@@ -134,7 +132,7 @@ define([
          * Shows the widget.
          */
         show: function () {
-            domStyle.set(this.domNode, 'display', 'block');
+            domStyle.set(this.domNode, "display", "block");
             this.fitFilterLabelToContainer();
 
             if (has("ff")) {
@@ -147,7 +145,7 @@ define([
          * Hides the widget.
          */
         hide: function () {
-            domStyle.set(this.domNode, 'display', 'none');
+            domStyle.set(this.domNode, "display", "none");
         },
 
         /**
@@ -211,15 +209,15 @@ define([
             itemVotes = this.getItemVotes(item);
 
 
-            itemSummaryDiv = domConstruct.create('div', {
-                'class': 'itemSummary',
-                'click': lang.partial(this.summaryClick, this, item)
+            itemSummaryDiv = domConstruct.create("div", {
+                "class": "itemSummary",
+                "click": lang.partial(this.summaryClick, this, item)
             }, this.list);
 
-            itemTitleDiv = domConstruct.create('div', {
-                'class': 'itemTitle',
-                'title': itemTitle,
-                'innerHTML': itemTitle
+            itemTitleDiv = domConstruct.create("div", {
+                "class": "itemTitle",
+                "title": itemTitle,
+                "innerHTML": itemTitle
             }, itemSummaryDiv);
 
             // If we're displaying votes, create the count and icon displays
@@ -228,18 +226,18 @@ define([
                     domClass.add(itemTitleDiv, "itemListTitleOverride");
                 }
 
-                favDiv = domConstruct.create('div', {
-                    'class': 'itemFav',
-                    'title': this.i18n.likesForThisItemTooltip
+                favDiv = domConstruct.create("div", {
+                    "class": "itemFav",
+                    "title": this.i18n.likesForThisItemTooltip
                 }, itemSummaryDiv);
 
-                domConstruct.create('div', {
-                    'class': 'itemVotes',
-                    'innerHTML': itemVotes.label
+                domConstruct.create("div", {
+                    "class": "itemVotes",
+                    "innerHTML": itemVotes.label
                 }, favDiv);
 
-                iconDiv = domConstruct.create('div', {
-                    'class': 'fav'
+                iconDiv = domConstruct.create("div", {
+                    "class": "fav"
                 }, favDiv);
 
                 SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
@@ -333,7 +331,7 @@ define([
          */
         summaryClick: function (self, feat, evt) {
             // 'this' = row click
-            topic.publish('itemSelected', feat);
+            topic.publish("itemSelected", feat);
         }
 
     });

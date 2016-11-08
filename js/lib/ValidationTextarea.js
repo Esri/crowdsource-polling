@@ -65,7 +65,7 @@ define([
             // Override TextBox._onInput() to enforce maxLength restriction
             if(this.maxLength){
                 var maxLength = parseInt(this.maxLength);
-                var value = this.textbox.value.replace(/\r/g, '');
+                var value = this.textbox.value.replace(/\r/g, "");
                 var overflow = value.length - maxLength;
                 if(overflow > 0){
                     var textarea = this.textbox;
@@ -82,7 +82,7 @@ define([
                         var range = this.ownerDocument.selection.createRange();
                         // delete overflow characters
                         range.moveStart("character", -overflow);
-                        range.text = '';
+                        range.text = "";
                         // show cursor
                         range.select();
                     }

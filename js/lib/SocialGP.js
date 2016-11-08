@@ -1,6 +1,5 @@
-﻿/*global define,dojo,Modernizr,gapi */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*global Modernizr,gapi */
+﻿/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,8 +57,8 @@ define([
                 Modernizr.load([{
                     load: "https://apis.google.com/js/client:platform.js",
                     complete: function () {
-                        gapi.load('auth2', function () {
-                            gapi.client.load('plus', 'v1').then(function () {
+                        gapi.load("auth2", function () {
+                            gapi.client.load("plus", "v1").then(function () {
                                 pThis.updateUser();
                             });
                         });

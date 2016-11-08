@@ -1,6 +1,4 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -100,7 +98,7 @@ define([
                 this.closeBtn.style.display = "block";
             }
 
-            this.own(on(window, 'resize', lang.hitch(this, function () {
+            this.own(on(window, "resize", lang.hitch(this, function () {
                 this.fitToWindow();
             })));
         },

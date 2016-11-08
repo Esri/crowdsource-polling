@@ -1,6 +1,4 @@
-﻿/*global define,dojo,js,require */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
-/*
+﻿/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -82,22 +80,22 @@ define([
             var pThis = this, baseUrl, package_path, redirect_uri, left, top, w, h;
 
             baseUrl = this._config.twitterSigninUrl;
-            package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-            redirect_uri = encodeURIComponent(location.protocol + '//' + location.host + package_path + this._config.twitterCallbackUrl);
+            package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
+            redirect_uri = encodeURIComponent(location.protocol + "//" + location.host + package_path + this._config.twitterCallbackUrl);
             left = (screen.width / 2) - (w / 2);
             top = (screen.height / 2) - (h / 2);
             w = screen.width / 2;
             h = screen.height / 1.5;
 
-            baseUrl += '?';
+            baseUrl += "?";
             if (forceLogin) {
-                baseUrl += 'force_login=true';
+                baseUrl += "force_login=true";
             }
             if (forceLogin && redirect_uri) {
-                baseUrl += '&';
+                baseUrl += "&";
             }
             if (redirect_uri) {
-                baseUrl += 'redirect_uri=' + redirect_uri;
+                baseUrl += "redirect_uri=" + redirect_uri;
             }
 
             window.open(baseUrl, "twoAuth", "scrollbars=yes, resizable=yes, left=" + left + ", top=" + top + ", width=" + w + ", height=" + h, true);

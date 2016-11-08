@@ -1,10 +1,6 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,bitwise:true */
-/* Known JSLint complaints about
- *   "Weird relation" and "Unexpected 'typeof'" on line 261
- *   "Expected a string and instead saw 'typeof'." on line 296
- */
-/*
+﻿/*global dijit */
+/* jshint -W016 */
+﻿/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -429,9 +425,9 @@ define([
                             if (field.dtFormat && field.dtFormat.dateFormat && field.dtFormat.dateFormat.length > 0) {
                                 if (field.dtFormat.dateFormat.indexOf("Time") > 0) {
                                     if (field.dtFormat.dateFormat.indexOf("Time24") > 0) {
-                                        options.constraints = {timePattern: 'HH:mm:ss'};
-                                    };
-                                    var inputItemTimeSupplement = new TimeTextBox(options, domConstruct.create("div", {}, row));
+                                        options.constraints = {timePattern: "HH:mm:ss"};
+                                    }
+                                    inputItemTimeSupplement = new TimeTextBox(options, domConstruct.create("div", {}, row));
                                     inputItemTimeSupplement.startup();
 
                                     // Arrange the date and time dijits side by side

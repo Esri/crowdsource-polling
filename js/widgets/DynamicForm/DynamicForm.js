@@ -1,6 +1,6 @@
 ﻿/*global dijit */
-/* jshint -W016 */
-﻿/*
+/* jshint -W016 *//* "Unexpected use of '&='/'~'/'|=' */
+/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");

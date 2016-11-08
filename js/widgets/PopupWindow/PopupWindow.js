@@ -1,4 +1,4 @@
-﻿/*
+/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@ define([
             this.baseClass = "popupWidget";
             this.showClose = false;
             this.minimumMargin = 10;
-            this.maxima = {  // default is no maximum in either direction
+            this.maxima = { // default is no maximum in either direction
                 "width": 0,
                 "height": 0
             };
@@ -110,7 +110,8 @@ define([
             // Collapse title if empty
             if (this.displayTitle.length === 0) {
                 domClass.add(this.popupTitleContainer, "popupTitleContainerEmpty");
-            } else {
+            }
+            else {
                 domClass.remove(this.popupTitleContainer, "popupTitleContainerEmpty");
             }
 
@@ -151,9 +152,9 @@ define([
 
 
             // Set the popup widget's content's dimensions so that its scrollbars work properly
-            contentHeight = (widgetHeight - (this.displayTitle.length === 0
-                ? 20
-                : 32) - 22) + "px";  // title + top & bottom margins
+            contentHeight = (widgetHeight - (this.displayTitle.length === 0 ?
+                20 :
+                32) - 22) + "px"; // title + top & bottom margins
             styleAttrs = {
                 "height": contentHeight
             };

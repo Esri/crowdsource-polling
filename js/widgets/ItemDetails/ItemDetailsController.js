@@ -1,5 +1,5 @@
-﻿/*global Modernizr */
-﻿/*
+/*global Modernizr */ ﻿
+/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -168,13 +168,14 @@ define([
                 domClass.remove(button, "btnNormal");
                 domClass.add(button, "btnInverse");
                 domAttr.set(icon, "src", "images/" + pngTag + "White.png");
-            } else {
+            }
+            else {
                 domClass.remove(button, "btnInverse");
                 domClass.add(button, "btnNormal");
                 domAttr.set(icon, "src", "images/" + pngTag + "Blue.png");
             }
             if (tooltip) {
-               domAttr.set(button, "title", tooltip);
+                domAttr.set(button, "title", tooltip);
             }
         },
 
@@ -205,7 +206,8 @@ define([
                     topic.publish("showGallery", self.item);
                     if (domStyle.get(this.gallery, "display") === "none") {
                         this.showGallery();
-                    } else {
+                    }
+                    else {
                         this.hideGallery();
                     }
                 }))
@@ -241,7 +243,9 @@ define([
          * Creates the div to hold the current item's popup.
          */
         initContentPane: function () {
-            this.itemCP = new ContentPane({id: "itemCP"}, this.descriptionDiv);
+            this.itemCP = new ContentPane({
+                id: "itemCP"
+            }, this.descriptionDiv);
             this.itemCP.startup();
         },
 
@@ -268,9 +272,10 @@ define([
             }
 
             if (array.indexOf(this.votedItemList, objectId) > -1) {
-                this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip );
+                this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
 
-            } else {
+            }
+            else {
                 this._likeButtonClickHandler = on(this.likeButton, "click", lang.hitch(this, function () {
                     var objectId = this.item.attributes[this.item._layer.objectIdField];
 
@@ -310,7 +315,8 @@ define([
                     domClass.add(this.itemTitleDiv, "itemDetailTitleOverride");
                 }
                 this.itemVotesDiv.innerHTML = this.itemVotes.label;
-            } else {
+            }
+            else {
                 domStyle.set(this.itemVotesGroup, "display", "none");
             }
         },
@@ -351,7 +357,8 @@ define([
                     urlsplit = attachment.url.split("?");
                     if (urlsplit.length > 1) {
                         srcURL = urlsplit[0] + "/" + attachment.name + "?" + urlsplit[1];
-                    } else {
+                    }
+                    else {
                         srcURL = urlsplit[0] + "/" + attachment.name;
                     }
                     thumb = domConstruct.create("img", {
@@ -371,7 +378,8 @@ define([
                         this.enlargedViewPopup.show();
                     })));
 
-                } else if (attachment.contentType === "application/pdf") {
+                }
+                else if (attachment.contentType === "application/pdf") {
                     thumb = domConstruct.create("img", {
                         "class": "attachment",
                         "title": attachment.name,
@@ -382,7 +390,8 @@ define([
                         window.open(attachmentUrl, "_blank");
                     })));
 
-                } else if (attachment.url && attachment.url.length > 0) {
+                }
+                else if (attachment.url && attachment.url.length > 0) {
                     thumb = domConstruct.create("img", {
                         "class": "attachment",
                         "title": attachment.name,
@@ -478,7 +487,8 @@ define([
             // unless it occurs a little later than the default behavior, hence the setTimeout.
             if (!has("ff")) {
                 nodeToMakeVisible.scrollIntoView();
-            } else {
+            }
+            else {
                 setTimeout(function () {
                     nodeToMakeVisible.scrollIntoView();
                 }, 500);
@@ -501,7 +511,9 @@ define([
          * @see http://dojo-toolkit.33424.n3.nabble.com/Stripping-HTML-tags-from-a-string-tp3999505p3999576.html
          */
         stripTags: function (str) {
-            return domConstruct.create("div", { innerHTML: str }).textContent;
+            return domConstruct.create("div", {
+                innerHTML: str
+            }).textContent;
         },
 
         /**
@@ -513,7 +525,8 @@ define([
          * returns null if the feature layer's votes field is unknown
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes;
+            var needSpace = false,
+                votes;
 
             if (this.votesField) {
                 votes = item.attributes[this.votesField] || 0;
@@ -523,7 +536,8 @@ define([
                     }
                     if (votes > 999999) {
                         votes = Math.floor(votes / 1000000) + "M";
-                    } else {
+                    }
+                    else {
                         votes = Math.floor(votes / 1000) + "k";
                     }
                 }

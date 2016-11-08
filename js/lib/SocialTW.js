@@ -1,4 +1,4 @@
-﻿/*
+/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,7 +77,8 @@ define([
          * @param {boolean} [forceLogin] If true, requires a re-login
          */
         showLoginWin: function (forceLogin) {
-            var pThis = this, baseUrl, package_path, redirect_uri, left, top, w, h;
+            var pThis = this,
+                baseUrl, package_path, redirect_uri, left, top, w, h;
 
             baseUrl = this._config.twitterSigninUrl;
             package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf("/"));
@@ -128,7 +129,8 @@ define([
                         "name": response.name,
                         "id": response.id_str
                     };
-                } else {
+                }
+                else {
                     this._user = {};
                 }
 

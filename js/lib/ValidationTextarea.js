@@ -3,7 +3,7 @@ define([
     "dojo/dom-class", // domClass.add
     "dojo/sniff", // has("ie") has("opera")
     "dijit/form/ValidationTextBox"
-], function(declare, domClass, has, ValidationTextBox){
+], function (declare, domClass, has, ValidationTextBox) {
 
     // module:
     //      ValidationTextarea
@@ -34,50 +34,52 @@ define([
 
         templateString: "<textarea ${!nameAttrSetting} data-dojo-attach-point='focusNode,containerNode,textbox' autocomplete='off'></textarea>",
 
-        pattern: "[\\S\\s]+", /* Match not-whitepsace or whitespace. Default pattern for ValidationTextBox is .* which does not match new line characters */
+        pattern: "[\\S\\s]+",
+        /* Match not-whitepsace or whitespace. Default pattern for ValidationTextBox is .* which does not match new line characters */
 
-        postMixInProperties: function(){
+        postMixInProperties: function () {
             // Copy value from srcNodeRef, unless user specified a value explicitly (or there is no srcNodeRef)
             // TODO: parser will handle this in 2.0
-            if(!this.value && this.srcNodeRef){
+            if (!this.value && this.srcNodeRef) {
                 this.value = this.srcNodeRef.value;
             }
             this.inherited(arguments);
         },
 
-        buildRendering: function(){
+        buildRendering: function () {
             this.inherited(arguments);
-            if(has("ie") && this.cols){ // attribute selectors is not supported in IE6
+            if (has("ie") && this.cols) { // attribute selectors is not supported in IE6
                 domClass.add(this.textbox, "dijitTextAreaCols");
             }
         },
 
-        filter: function(/*String*/ value){
+        filter: function ( /*String*/ value) {
             // Override TextBox.filter to deal with newlines... specifically (IIRC) this is for IE which writes newlines
             // as \r\n instead of just \n
-            if(value){
+            if (value) {
                 value = value.replace(/\r/g, "");
             }
             return this.inherited(arguments);
         },
 
-        _onInput: function(/*Event?*/ e){
+        _onInput: function ( /*Event?*/ e) {
             // Override TextBox._onInput() to enforce maxLength restriction
-            if(this.maxLength){
+            if (this.maxLength) {
                 var maxLength = parseInt(this.maxLength);
                 var value = this.textbox.value.replace(/\r/g, "");
                 var overflow = value.length - maxLength;
-                if(overflow > 0){
+                if (overflow > 0) {
                     var textarea = this.textbox;
-                    if(textarea.selectionStart){
+                    if (textarea.selectionStart) {
                         var pos = textarea.selectionStart;
                         var cr = 0;
-                        if(has("opera")){
+                        if (has("opera")) {
                             cr = (this.textbox.value.substring(0, pos).match(/\r/g) || []).length;
                         }
                         this.textbox.value = value.substring(0, pos - overflow - cr) + value.substring(pos - cr);
                         textarea.setSelectionRange(pos - overflow, pos - overflow);
-                    }else if(this.ownerDocument.selection){ //IE
+                    }
+                    else if (this.ownerDocument.selection) { //IE
                         textarea.focus();
                         var range = this.ownerDocument.selection.createRange();
                         // delete overflow characters

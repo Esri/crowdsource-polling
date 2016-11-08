@@ -1,5 +1,5 @@
-﻿/*global esri,Modernizr */
-﻿/*
+/*global esri,Modernizr */ ﻿
+/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,8 +98,8 @@ define([
         _hasCommentTable: false,
         _sortField: null,
         _votesField: null,
-        _outlineFillColor: new Color([0,255,255,0]),
-        _fillHiliteColor: new Color([0,255,255,0.1]),
+        _outlineFillColor: new Color([0, 255, 255, 0]),
+        _fillHiliteColor: new Color([0, 255, 255, 0.1]),
         _lineHiliteColor: new Color("aqua"),
 
 
@@ -130,7 +130,8 @@ define([
                 }
 
                 promise = this._launch(itemInfo);
-            } else {
+            }
+            else {
                 error = new Error("Main:: Config is not defined");
                 promise = this.reportError(error);
             }
@@ -152,7 +153,8 @@ define([
                 if (error.message) {
                     error = error.message;
                 }
-            } else {
+            }
+            else {
                 error = this.config.i18n.map.error;
             }
 
@@ -166,8 +168,9 @@ define([
                     innerHTML: error
                 }, "sidebarContent", "first");
 
-            // Otherwise, we need to use the backup middle-of-screen error display
-            } else {
+                // Otherwise, we need to use the backup middle-of-screen error display
+            }
+            else {
                 domStyle.set("contentDiv", "display", "none");
                 domClass.add(document.body, "app-error");
                 dom.byId("loading_message").innerHTML = error;
@@ -210,7 +213,8 @@ define([
                     array.forEach(this.config.featureLayer.fields, function (fieldSpec) {
                         if (fieldSpec.id === "sortField") {
                             configuredSortField = fieldSpec.fields[0];
-                        } else if (fieldSpec.id === "itemVotesField") {
+                        }
+                        else if (fieldSpec.id === "itemVotesField") {
                             configuredVotesField = fieldSpec.fields[0];
                         }
                     });
@@ -277,7 +281,8 @@ define([
 
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
-                    } else {
+                    }
+                    else {
                         userInfo = this._socialDialog.getSignedInUser();
                         this._itemDetails.showCommentForm(userInfo);
                         this._currentlyCommenting = true;
@@ -320,7 +325,8 @@ define([
                     }
                     if (itemExtent) {
                         this.map.setExtent(itemExtent.expand(1.75));
-                    } else {
+                    }
+                    else {
                         this.map.centerAndZoom(item.geometry,
                             Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
                     }
@@ -376,7 +382,8 @@ define([
                     if (!signedInUser) {
                         // Show the social media sign-in screen so that the user can sign in
                         this._socialDialog.show();
-                    } else {
+                    }
+                    else {
                         // Simply sign out
                         this._socialDialog.signOut(signedInUser);
                     }
@@ -417,8 +424,8 @@ define([
                  */
                 topic.subscribe("updatedAttachments", lang.hitch(this, function (item, attachments) {
                     if (this._currentItem &&
-                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
-                            item.attributes[item._layer.objectIdField]) {
+                        this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                        item.attributes[item._layer.objectIdField]) {
                         this._itemDetails.setAttachments(attachments);
                     }
                     this._sidebarCnt.showBusy(false);
@@ -430,8 +437,8 @@ define([
                  */
                 topic.subscribe("updatedCommentsList", lang.hitch(this, function (item, comments) {
                     if (this._currentItem &&
-                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
-                            item.attributes[item._layer.objectIdField]) {
+                        this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                        item.attributes[item._layer.objectIdField]) {
                         this._itemDetails.setComments(comments);
                     }
                     this._sidebarCnt.showBusy(false);
@@ -444,6 +451,7 @@ define([
                     compareFunction = createCompareFunction(
                         this._sortField, this.config.ascendingSortOrder);
                 }
+
                 function createCompareFunction(compareAttributeName, ascendingOrder) {
                     /**
                      * Compares attribute compareAttributeName for two items (a, b) for the desired sort order.
@@ -465,24 +473,29 @@ define([
                             if (attrItemB === null || typeof attrItemB === "undefined") {
                                 // null A == null B
                                 sortOrder = 0;
-                            } else {
+                            }
+                            else {
                                 // null A < nonnull B
                                 sortOrder = -1;
                             }
 
-                        } else if (attrItemB === null || typeof attrItemB === "undefined") {
+                        }
+                        else if (attrItemB === null || typeof attrItemB === "undefined") {
                             // nonnull A > null B
                             sortOrder = 1;
 
-                        } else if (attrItemA == attrItemB) {
+                        }
+                        else if (attrItemA == attrItemB) {
                             // nonnull A == nonnull B
                             sortOrder = 0;
 
-                        } else if (attrItemA < attrItemB) {
+                        }
+                        else if (attrItemA < attrItemB) {
                             // nonnull A < nonnull B
                             sortOrder = -1;
 
-                        } else {
+                        }
+                        else {
                             // nonnull A > nonnull B
                             sortOrder = 1;
                         }
@@ -584,9 +597,10 @@ define([
 
                 // Attempt to go to an item specified as a URL parameter
                 if (this.config.id) {
-                    var id = parseInt(this.config.id), _this = this;
+                    var id = parseInt(this.config.id),
+                        _this = this;
                     if (!isNaN(id)) {
-                        require(["esri/tasks/query", "esri/tasks/QueryTask"], function(Query, QueryTask) {
+                        require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
                             var query, queryTask, featureLayer = _this.map._layers[_this.map.graphicsLayerIds[0]];
                             queryTask = new QueryTask(featureLayer.url);
                             query = new Query();
@@ -620,7 +634,8 @@ define([
          * @return {object} Deferred
          */
         _setupUI: function () {
-            var deferred = new Deferred(), styleString = "";
+            var deferred = new Deferred(),
+                styleString = "";
             setTimeout(lang.hitch(this, function () {
 
                 // Set the theme colors
@@ -659,8 +674,8 @@ define([
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
-                    "showSignin": this._socialDialog.isAvailable() && this.config.commentNameField
-                        && (this.config.commentNameField.trim().length > 0),
+                    "showSignin": this._socialDialog.isAvailable() && this.config.commentNameField &&
+                        (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText
                 }).placeAt("sidebarHeading");
 
@@ -715,7 +730,7 @@ define([
                     // Optionally define additional map config here for example you can
                     // turn the slider off, display info windows, disable wraparound 180, slider position and more.
                 },
-                usePopupManager: false,  // disable searching thru all layers for infoTemplates
+                usePopupManager: false, // disable searching thru all layers for infoTemplates
                 //ignorePopups: true,
                 layerMixins: this.config.layerMixins || [],
                 editable: this.config.editable,
@@ -752,7 +767,8 @@ define([
                 // make sure map is loaded
                 if (this.map.loaded) {
                     mapCreateDeferred.resolve();
-                } else {
+                }
+                else {
                     on.once(this.map, "load", lang.hitch(this, function () {
                         mapCreateDeferred.resolve();
                     }));
@@ -787,8 +803,9 @@ define([
                             searchControl.emit("load");
                         }
 
-                    // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
-                    } else {
+                        // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
+                    }
+                    else {
                         domStyle.set("mapDiv_zoom_slider", "top", "16px");
                         domStyle.set("LocateButton", "top", "131px");
                     }
@@ -851,7 +868,8 @@ define([
                         this._lineHiliteColor, 3),
                     item.attributes, item.infoTemplate);
 
-            } else {
+            }
+            else {
                 if (item.geometry.type === "point") {
                     // JSAPI does not want NaN coordinates
                     if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
@@ -875,7 +893,8 @@ define([
                         ),
                         item.attributes, item.infoTemplate);
 
-                } else if (item.geometry.type) {
+                }
+                else if (item.geometry.type) {
                     // Create a polygon symbol using the configured line & fill highlight colors
                     highlightGraphic = new esri.Graphic(item.geometry,
                         new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
@@ -911,14 +930,16 @@ define([
          * conditional comments.js</a>.
          */
         _isIE: function (version, comparison) {
-            var cc      = "IE",
-                b       = document.createElement("B"),
+            var cc = "IE",
+                b = document.createElement("B"),
                 docElem = document.documentElement,
                 isIE;
 
             if (version) {
                 cc += " " + version;
-                if (comparison) { cc = comparison + " " + cc; }
+                if (comparison) {
+                    cc = comparison + " " + cc;
+                }
             }
 
             b.innerHTML = "<!--[if " + cc + "]><b id='iecctest'></b><![endif]-->";
@@ -953,9 +974,10 @@ define([
             // http://www.quirksmode.org/bugreports/archives/2006/01/IE_wont_allow_documentcreateElementstyle.html#c4088
             customStyles = document.createElement("style");
             customStyles.setAttribute("type", "text/css");
-            if (customStyles.styleSheet) {  // IE 7 & 8
+            if (customStyles.styleSheet) { // IE 7 & 8
                 customStyles.styleSheet.cssText = cssStr;
-            } else {  // W3C
+            }
+            else { // W3C
                 cssText = document.createTextNode(cssStr);
                 customStyles.appendChild(cssText);
             }

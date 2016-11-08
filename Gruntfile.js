@@ -4,6 +4,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    jsbeautifier: {
+      options: {
+        config: './.jsbeautifyrc'
+      },
+      files : ['config/**/*.js', 'js/**/*.js', '!js/lib/modernizr*.js', '!js/nls/**/*.js']
+    },
+
     jshint: {
       options: {
         jshintrc: true,
@@ -14,8 +21,9 @@ module.exports = function(grunt) {
   });
 
   // Load grunt plugins
+  grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  // Default task(s).
-  grunt.registerTask('default', ['jshint']);
+  // Default tasks
+  grunt.registerTask('default', ['jsbeautifier', 'jshint']);
 };

@@ -1,4 +1,4 @@
-﻿/*
+/*
  | Copyright 2015 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,7 +85,8 @@ define([
         showBusy: function (show) {
             if (show) {
                 domStyle.set(this.domNode, "display", "block");
-            } else {
+            }
+            else {
                 domStyle.set(this.domNode, "display", "none");
             }
         }

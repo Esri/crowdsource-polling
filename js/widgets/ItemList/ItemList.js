@@ -1,4 +1,4 @@
-﻿/*
+/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ define([
     "dojo/sniff",
     "dojo/topic",
     "dojo/NodeList-dom",
-    "dojox/mobile/Switch",  // pre-loaded as required by Dojo
+    "dojox/mobile/Switch", // pre-loaded as required by Dojo
 
     "application/lib/SvgHelper",
 
@@ -68,9 +68,9 @@ define([
 
             this.linkToggleBtn.set("leftLabel", "");
             this.linkToggleBtn.set("rightLabel", "");
-            this.linkToggleBtn.set("value", this.linkToMapView
-                ? "on"
-                : "off");
+            this.linkToggleBtn.set("value", this.linkToMapView ?
+                "on" :
+                "off");
             this.linkToggleBtn.set("title", this.i18n.linkToMapViewOptionTooltip);
 
             this.inherited(arguments);
@@ -108,7 +108,7 @@ define([
             actionBarBounds = domGeom.getMarginBox(this.itemListActionBar);
             switchBounds = domGeom.getMarginBox(this.linkToggleBtn.domNode);
 
-            newWidth = actionBarBounds.w - switchBounds.w - 12/*margins*/ - 8;/*padding*/
+            newWidth = actionBarBounds.w - switchBounds.w - 12 /*margins*/ - 8; /*padding*/
             if (newWidth > 0) {
                 domStyle.set(this.linkToggleLabel, "width", newWidth + "px");
 
@@ -120,9 +120,10 @@ define([
                         topic.publish("linkToMapViewChanged", true);
                     }
                 }
-            // If the screen is narrow enough that we're not showing the action bar,
-            // turn off linking the list to the map
-            } else if (!this.linkToMapViewIsTemporarilyOff) {
+                // If the screen is narrow enough that we're not showing the action bar,
+                // turn off linking the list to the map
+            }
+            else if (!this.linkToMapViewIsTemporarilyOff) {
                 this.linkToMapViewIsTemporarilyOff = true;
                 topic.publish("linkToMapViewChanged", false);
             }
@@ -257,7 +258,7 @@ define([
             // Firefox defaults to former scroll position if we're returning to a previously-scrolled node (which could
             // be a different item's details--they go into the same scrollable div). The scrollIntoView can't change this
             // unless it occurs a little later than the default behavior, hence the setTimeout.
-            setTimeout(function (){
+            setTimeout(function () {
                 nodeToMakeVisible.scrollIntoView();
             }, 500);
         },
@@ -279,7 +280,9 @@ define([
          */
         stripTags: function (str) {
             if (str) {
-                return domConstruct.create("div", { innerHTML: str }).textContent;
+                return domConstruct.create("div", {
+                    innerHTML: str
+                }).textContent;
             }
             return "";
         },
@@ -293,7 +296,8 @@ define([
          * returns null if the feature layer's votes field is unknown
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes;
+            var needSpace = false,
+                votes;
 
             if (this.votesField) {
                 votes = item.attributes[this.votesField] || 0;
@@ -305,13 +309,17 @@ define([
                     // Using SI prefixes from http://physics.nist.gov/cuu/pdf/sp811.pdf
                     if (votes > 999999999999999) {
                         votes = Math.floor(votes / 1000000000000000) + "P";
-                    } else if (votes > 999999999999) {
+                    }
+                    else if (votes > 999999999999) {
                         votes = Math.floor(votes / 1000000000000) + "T";
-                    } else if (votes > 999999999) {
+                    }
+                    else if (votes > 999999999) {
                         votes = Math.floor(votes / 1000000000) + "G";
-                    } else if (votes > 999999) {
+                    }
+                    else if (votes > 999999) {
                         votes = Math.floor(votes / 1000000) + "M";
-                    } else {
+                    }
+                    else {
                         votes = Math.floor(votes / 1000) + "k";
                     }
                 }

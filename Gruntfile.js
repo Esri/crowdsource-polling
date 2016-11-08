@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         jshintrc: true,
         ignores: ['js/lib/modernizr*.js']
       },
-      src: 'js/**/*.js'
+      src: ['config/**/*.js', 'js/**/*.js']
     }
   });
 

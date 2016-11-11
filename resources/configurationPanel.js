@@ -54,7 +54,7 @@
             "tooltip": "Text displayed in the help window. HTML tags can be used for formatting.",
             "stringFieldOption": "richtext"
         }, {
-            "label": "Show help widget text as splash screen",
+            "label": "Display the help widget as a splash screen",
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
         }]
@@ -73,24 +73,29 @@
                 "geometryTypes": ["esriGeometryPoint", "esriGeometryLine", "esriGeometryPolyline", "esriGeometryPolygon"]
             },
             "fields": [{
+                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
+                "multipleSelection": false,
+                "fieldName": "itemVotesField",
+                "label": "Field storing the vote tally for each report",
+                "tooltip": "Numeric field in the selected layer for tracking the votes received for each feature. Field name is case-sensitive."
+            }, {
                 "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger", "esriFieldTypeSingle",
                     "esriFieldTypeDouble", "esriFieldTypeString", "esriFieldTypeDate"],
                 "multipleSelection": false,
                 "fieldName": "sortField",
-                "label": "Field to use to sort items in app (optional)",
+                "label": "Field used for sorting the list of features",
                 "tooltip": "Field in the selected layer for sorting items listed in app. If omitted, items are not sorted."
-            }, {
-                "supportedTypes": ["esriFieldTypeSmallInteger", "esriFieldTypeInteger"],
-                "multipleSelection": false,
-                "fieldName": "itemVotesField",
-                "label": "Field to store the vote tally for each report (optional)",
-                "tooltip": "Numeric field in the selected layer for tracking the votes received for each feature. Field name is case-sensitive."
             }]
         }, {
-            "label": "If sort field specified, sort in ascending order?",
+            "label": "Sort order of features using values from the field defined above.",
             "fieldName": "ascendingSortOrder",
-            "type": "boolean",
-            "tooltip": "Item sorting uses the values in the sort field (if specified above)"
+            "type": "radio",
+            "tooltip": "Sorts features in ascending or descending order using the values of the sorting field. This parameter is ignored when no sorting field is specified.",
+			"items":[
+			{"label": "Ascending",
+			"value": true},
+			{"label": "Descending",
+			"value": false}]
         }]
     }, {
         "category": "<b>Access Settings</b>",
@@ -113,23 +118,27 @@
         }, {
             "label": "Allow users to sign in using Facebook",
             "fieldName": "allowFacebook",
-            "type": "boolean",
-            "tooltip": "Enable to allow users to sign in using their Facebook credentials"
-        }, {
-            "label": "Facebook AppId",
-            "fieldName": "facebookAppId",
-            "type": "string",
-            "tooltip": "AppId from registering this application with Facebook"
+            "type": "conditional",
+            "tooltip": "Enable to allow users to sign in using their Facebook credentials",
+            "condition": false,
+            "items": [{
+                "label": "Facebook AppId",
+                "fieldName": "facebookAppId",
+                "type": "string",
+                "tooltip": "AppId from registering this application with Facebook"
+            }]
         }, {
             "label": "Allow users to sign in using Google+",
             "fieldName": "allowGoogle",
-            "type": "boolean",
-            "tooltip": "Enable to allow users to sign in using their Google+ credentials"
-        }, {
-            "label": "Google+ Client ID",
-            "fieldName": "googleplusClientId",
-            "type": "string",
-            "tooltip": "Client ID from registering this application with Google+"
+            "type": "conditional",
+            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
+            "condition": false,
+            "items": [{
+                "label": "Google+ Client ID",
+                "fieldName": "googleplusClientId",
+                "type": "string",
+                "tooltip": "Client ID from registering this application with Google+"
+            }]
         }, {
             "label": "Sign in window text",
             "fieldName": "socialMediaDisclaimer",

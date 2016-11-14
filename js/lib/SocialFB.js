@@ -1,5 +1,4 @@
-﻿/*global define,dojo,FB */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
+/*global FB */ ﻿
 /*
  | Copyright 2015 Esri
  |
@@ -56,9 +55,9 @@ define([
 
                 FB.init({
                     appId: pThis._config.facebookAppId,
-                    cookie: false,  // enable cookies to allow the server to access the session
-                    xfbml: false,   // parse social plugins on this page such as Login
-                    status: true,  // check login status
+                    cookie: false, // enable cookies to allow the server to access the session
+                    xfbml: false, // parse social plugins on this page such as Login
+                    status: true, // check login status
                     version: "v2.2"
                 });
 
@@ -84,8 +83,9 @@ define([
          * @memberOf socialFB#
          */
         signIn: function () {
-            FB.login(lang.hitch(this, this.updateUser),
-                {scope: this._config.facebookAppScope});
+            FB.login(lang.hitch(this, this.updateUser), {
+                scope: this._config.facebookAppScope
+            });
         },
 
         /**
@@ -133,7 +133,9 @@ define([
             // If logged in, update info from the account
             this._user = {};
             if (this._loggedIn) {
-                FB.api("/me", {fields: "name,id"}, lang.hitch(this, function (response) {
+                FB.api("/me", {
+                    fields: "name,id"
+                }, lang.hitch(this, function (response) {
                     this._loggedIn = response.name !== undefined;
                     if (this._loggedIn) {
                         this._user = {

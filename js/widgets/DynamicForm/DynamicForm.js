@@ -1,9 +1,6 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true,bitwise:true */
-/* Known JSLint complaints about
- *   "Weird relation" and "Unexpected 'typeof'" on line 261
- *   "Expected a string and instead saw 'typeof'." on line 296
- */
+/*global dijit */
+/* jshint -W016 */
+/* "Unexpected use of '&='/'~'/'|=' */
 /*
  | Copyright 2015 Esri
  |
@@ -173,7 +170,8 @@ define([
          * and uninitialized required field
          */
         generateForm: function (formDivName, fields) {
-            var pThis = this, formDiv, form, actionsBar, dynamicFormCancel, nextReqFldStatusFlag = 1,
+            var pThis = this,
+                formDiv, form, actionsBar, dynamicFormCancel, nextReqFldStatusFlag = 1,
                 i18n = this.appConfig.i18n.dynamic_form,
                 isRTL = this.appConfig.i18n.direction === "rtl";
 
@@ -195,8 +193,8 @@ define([
 
             // Submit
             this.dynamicFormSubmit = domConstruct.create("div", {
-                className: "dynamicFormAction appTheme appThemeHover "
-                    + (isRTL ? "dynamicFormActionRight" : "dynamicFormActionLeft")
+                className: "dynamicFormAction appTheme appThemeHover " +
+                    (isRTL ? "dynamicFormActionRight" : "dynamicFormActionLeft")
             }, actionsBar);
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
                 var submission = this.assembleFormValues(this._entryForm);
@@ -210,8 +208,8 @@ define([
 
             // Cancel
             dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction appThemeInverted appThemeInvertedHover "
-                    + (isRTL ? "dynamicFormActionLeft" : "dynamicFormActionRight")
+                className: "dynamicFormAction appThemeInverted appThemeInvertedHover " +
+                    (isRTL ? "dynamicFormActionLeft" : "dynamicFormActionRight")
             }, actionsBar);
             on(dynamicFormCancel, "click", lang.hitch(this, function () {
                 topic.publish("cancelForm");
@@ -250,7 +248,8 @@ define([
                     if (field.length < value.length) {
                         inputItem.set("value", value.substr(0, field.length));
                         count.innerHTML = 0;
-                    } else {
+                    }
+                    else {
                         count.innerHTML = field.length - value.length;
                     }
                 }
@@ -279,7 +278,8 @@ define([
                             if (inputItem.dtManualValidationFlag) {
                                 domClass.remove(inputItem.domNode, "dijitTextBoxError");
                             }
-                        } else {
+                        }
+                        else {
                             // No value, so set spot in mask
                             pThis._requiredFieldsStatus |= (row.requiredFieldFlag);
                             if (inputItem.dtManualValidationFlag) {
@@ -326,8 +326,9 @@ define([
                         inputItem = new Select(options, domConstruct.create("div", {}, row));
                         inputItem.startup();
 
-                    // Free text
-                    } else if (field.type === "esriFieldTypeString") {
+                        // Free text
+                    }
+                    else if (field.type === "esriFieldTypeString") {
                         row = createRow();
 
                         // Create a characters-remaining counter
@@ -345,7 +346,8 @@ define([
                         if (field.dtStringFieldOption) {
                             useTextArea = field.dtStringFieldOption === "textarea" ||
                                 field.dtStringFieldOption === "richtext";
-                        } else {
+                        }
+                        else {
                             useTextArea = field.length > 32;
                         }
 
@@ -364,7 +366,8 @@ define([
                             options.rows = 4;
                             inputItem = new ValidationTextArea(options, domConstruct.create("div", {}, row));
                             inputItem.startup();
-                        } else {
+                        }
+                        else {
                             inputItem = new ValidationTextBox(options, domConstruct.create("div", {}, row));
                             inputItem.startup();
                         }
@@ -372,27 +375,30 @@ define([
                         // Keep the content within the field's length limit
                         this.setInputWatchers(inputItem, updateCharactersCount);
 
-                    // Free numerics or a date picker
-                    } else {
-                        if (field.type === "esriFieldTypeSmallInteger" || field.type === "esriFieldTypeInteger"
-                                || field.type === "esriFieldTypeSingle" || field.type === "esriFieldTypeDouble") {
+                        // Free numerics or a date picker
+                    }
+                    else {
+                        if (field.type === "esriFieldTypeSmallInteger" || field.type === "esriFieldTypeInteger" ||
+                            field.type === "esriFieldTypeSingle" || field.type === "esriFieldTypeDouble") {
                             row = createRow();
                             domConstruct.create("br", {}, row);
 
                             switch (field.type) {
-                            case "esriFieldTypeSmallInteger":
-                                pattern = "####0";
-                                break;
-                            case "esriFieldTypeInteger":
-                                pattern = "#########0";
-                                break;
-                            default:
-                                pattern = "########0.######";
-                                break;
+                                case "esriFieldTypeSmallInteger":
+                                    pattern = "####0";
+                                    break;
+                                case "esriFieldTypeInteger":
+                                    pattern = "#########0";
+                                    break;
+                                default:
+                                    pattern = "########0.######";
+                                    break;
                             }
 
                             options = {
-                                constraints: {pattern: pattern},
+                                constraints: {
+                                    pattern: pattern
+                                },
                                 required: !field.nullable
                             };
                             if (field.dtDefault) {
@@ -408,13 +414,15 @@ define([
                             inputItem = new NumberTextBox(options, domConstruct.create("div", {}, row));
                             inputItem.startup();
 
-                        } else if (field.type === "esriFieldTypeDate") {
+                        }
+                        else if (field.type === "esriFieldTypeDate") {
                             row = createRow();
                             domConstruct.create("br", {}, row);
                             options = {};
                             if (field.dtDefault) {
                                 options.value = field.dtDefault;
-                            } else {
+                            }
+                            else {
                                 options.value = new Date();
                             }
                             if (field.dtTooltip && field.dtTooltip.length > 0) {
@@ -429,9 +437,11 @@ define([
                             if (field.dtFormat && field.dtFormat.dateFormat && field.dtFormat.dateFormat.length > 0) {
                                 if (field.dtFormat.dateFormat.indexOf("Time") > 0) {
                                     if (field.dtFormat.dateFormat.indexOf("Time24") > 0) {
-                                        options.constraints = {timePattern: 'HH:mm:ss'};
-                                    };
-                                    var inputItemTimeSupplement = new TimeTextBox(options, domConstruct.create("div", {}, row));
+                                        options.constraints = {
+                                            timePattern: "HH:mm:ss"
+                                        };
+                                    }
+                                    inputItemTimeSupplement = new TimeTextBox(options, domConstruct.create("div", {}, row));
                                     inputItemTimeSupplement.startup();
 
                                     // Arrange the date and time dijits side by side
@@ -445,9 +455,10 @@ define([
                     if (esriLang.isDefined(inputItem)) {
                         // Set its initial value if supplied and trigger the 'change' event
                         if (this._presets[field.name]) {
-                            if (inputItem.set) {  // Dojo item
+                            if (inputItem.set) { // Dojo item
                                 inputItem.set("value", this._presets[field.name]);
-                            } else {              // HTML item
+                            }
+                            else { // HTML item
                                 inputItem.value = this._presets[field.name];
                             }
 
@@ -477,8 +488,9 @@ define([
                         });
                     }
 
-                // Special handling for non-editable pre-set items
-                } else if (!field.nullable) {
+                    // Special handling for non-editable pre-set items
+                }
+                else if (!field.nullable) {
                     // If a form item is pre-set, add it to the form
                     if (this._presets[field.name]) {
                         form.push({
@@ -486,13 +498,14 @@ define([
                             "value": this._presets[field.name]
                         });
 
-                    // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
-                    // then the form can't meet the condition for submission that all required fields have values
-                    } else if (field.type !== "esriFieldTypeOID" &&
-                               field.type !== "esriFieldTypeGUID" &&
-                               field.type !== "esriFieldTypeGlobalID") {
-                        topic.publish("showError", "[" + (field.alias || field.name) + "]<br>"
-                            + this.appConfig.i18n.dynamic_form.unsettableRequiredField);
+                        // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
+                        // then the form can't meet the condition for submission that all required fields have values
+                    }
+                    else if (field.type !== "esriFieldTypeOID" &&
+                        field.type !== "esriFieldTypeGUID" &&
+                        field.type !== "esriFieldTypeGlobalID") {
+                        topic.publish("showError", "[" + (field.alias || field.name) + "]<br>" +
+                            this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }
                 }
             }));
@@ -530,10 +543,12 @@ define([
                         if (entry.field.domain && entry.field.domain.type === "codedValue") {
                             // Convert list selection into the coded value
                             attr[entry.field.name] = entry.field.domain.codedValues[parseInt(value, 10)].code;
-                        } else if (value.getTime) {
+                        }
+                        else if (value.getTime) {
                             // Convert Date objects into milliseconds as required by the feature service REST endpoint
                             attr[entry.field.name] = value.getTime();
-                        } else {
+                        }
+                        else {
                             // Get the value
                             attr[entry.field.name] = value;
                         }

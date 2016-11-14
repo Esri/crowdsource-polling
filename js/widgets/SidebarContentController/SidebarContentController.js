@@ -1,5 +1,3 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2015 Esri
  |
@@ -87,7 +85,8 @@ define([
         showBusy: function (show) {
             if (show) {
                 domStyle.set(this.domNode, "display", "block");
-            } else {
+            }
+            else {
                 domStyle.set(this.domNode, "display", "none");
             }
         }

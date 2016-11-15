@@ -326,8 +326,8 @@ define([
                         inputItem = new Select(options, domConstruct.create("div", {}, row));
                         inputItem.startup();
 
-                        // Free text
                     }
+                    // Free text
                     else if (field.type === "esriFieldTypeString") {
                         row = createRow();
 
@@ -375,8 +375,8 @@ define([
                         // Keep the content within the field's length limit
                         this.setInputWatchers(inputItem, updateCharactersCount);
 
-                        // Free numerics or a date picker
                     }
+                    // Free numerics or a date picker
                     else {
                         if (field.type === "esriFieldTypeSmallInteger" || field.type === "esriFieldTypeInteger" ||
                             field.type === "esriFieldTypeSingle" || field.type === "esriFieldTypeDouble") {
@@ -488,8 +488,8 @@ define([
                         });
                     }
 
-                    // Special handling for non-editable pre-set items
                 }
+                // Special handling for non-editable pre-set items
                 else if (!field.nullable) {
                     // If a form item is pre-set, add it to the form
                     if (this._presets[field.name]) {
@@ -498,9 +498,9 @@ define([
                             "value": this._presets[field.name]
                         });
 
-                        // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
-                        // then the form can't meet the condition for submission that all required fields have values
                     }
+                    // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
+                    // then the form can't meet the condition for submission that all required fields have values
                     else if (field.type !== "esriFieldTypeOID" &&
                         field.type !== "esriFieldTypeGUID" &&
                         field.type !== "esriFieldTypeGlobalID") {

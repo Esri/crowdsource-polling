@@ -513,7 +513,6 @@ define([
             }));
 
             // Add the attachments section
-            this.appConfig.acceptAttachments = true; //???
             if (this.appConfig.acceptAttachments) {
                 this.createAttachmentsSection(actionsBar);
                 this.createAttachmentInputter("dynamicFormGetAttachments");
@@ -579,7 +578,7 @@ define([
          * @param {object} evt Event object which will be generated on file input change event
          */
         onFileSelected: function (evt) {
-            var target, fileNameParts, fileName;
+            var target, fileNameParts, filename;
 
             // Get the name of the attachment
             if (evt.currentTarget && evt.currentTarget.value) {
@@ -590,10 +589,10 @@ define([
             }
             if (target.value) {
                 fileNameParts = target.value.split("\\");
-                fileName = fileNameParts[fileNameParts.length - 1]; //??? scrub filename
+                filename = fileNameParts[fileNameParts.length - 1];
             }
             else {
-                fileName = "";
+                filename = "";
             }
 
             // Hide the input HTML item and flag it with a class for later retrieval
@@ -601,7 +600,7 @@ define([
             domClass.replace(target.parentNode, "esriCTFileToSubmit", "esriCTHideFileInputUI");
 
             // Add a UI item to show the name of the attachment along with a way to detach it
-            this.createAttachmentDisplay(fileName);
+            this.createAttachmentDisplay(filename);
 
             // Create a new attachment input item
             this.createAttachmentInputter("dynamicFormGetAttachments");
@@ -610,9 +609,9 @@ define([
         /**
          * Creates a DOM display for the name of an attached file and provides handling to permit the file
          * to be detached.
-         * @param {string} fileName Name of file
+         * @param {string} filename Name of file
          */
-        createAttachmentDisplay: function (fileName) {
+        createAttachmentDisplay: function (filename) {
             var attachmentDisplay, detachHandler,
                 inputterId = "dynamicFormAttachment" + this.numAttachments,
                 displayId = "dynamicFormAttachmentDisplay" + this.numAttachments;
@@ -622,8 +621,11 @@ define([
                 className: "dynamicFormAttachmentDisplay",
                 innerHTML: "<button type='button' class='dynamicFormAttachmentBtn dynamicFormDetachmentBtn' title='" +
                     this.appConfig.i18n.dynamic_form.removeAttachmentTooltip + "'>x</button>" +
-                    "<div class='dynamicFormAttachment'>" + fileName + "</span>"
+                    "<div class='dynamicFormAttachment'></div>"
             }, dom.byId("dynamicFormShowAttachments"));
+
+            // Add filename after scrubbing it
+            attachmentDisplay.childNodes[1].appendChild(document.createTextNode(filename));
 
             // Handle detach button click event
             detachHandler = on(attachmentDisplay, "click", lang.hitch(this, function (evt) {

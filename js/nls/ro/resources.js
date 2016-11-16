@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatoriu)",
     "unsettableRequiredField": "Un câmp obligatoriu nu este iniţializat sau nu este prezent în formular",
     "countOfRemainingCharactersTooltip": "Caractere rămase",
+    "attachmentsHeading": "Ă_Attachments____ș",
+    "addAttachmentTooltip": "Ă_Add attachment_____ș",
+    "removeAttachmentTooltip": "Ă_Remove attachment______ș",
     "cancelButtonLabel": "Anulare",
     "submitButtonLabel": "Trimitere"
   },

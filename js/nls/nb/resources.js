@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatorisk)",
     "unsettableRequiredField": "Et obligatorisk felt er verken initialisert eller i skjemaet",
     "countOfRemainingCharactersTooltip": "Gjenstående tegn",
+    "attachmentsHeading": "å_Attachments____ø",
+    "addAttachmentTooltip": "å_Add attachment_____ø",
+    "removeAttachmentTooltip": "å_Remove attachment______ø",
     "cancelButtonLabel": "Avbryt",
     "submitButtonLabel": "Send inn"
   },

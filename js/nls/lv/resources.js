@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (nepieciešams)",
     "unsettableRequiredField": "Nepieciešamais lauks nav ne inicializēts, ne veidlapā",
     "countOfRemainingCharactersTooltip": "Atlikušās rakstzīmes",
+    "attachmentsHeading": "ķ_Attachments____ū",
+    "addAttachmentTooltip": "ķ_Add attachment_____ū",
+    "removeAttachmentTooltip": "ķ_Remove attachment______ū",
     "cancelButtonLabel": "Atcelt",
     "submitButtonLabel": "Iesniegt"
   },

@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (nõutud)",
     "unsettableRequiredField": "Vajalikku välja pole initsialiseeritud ega ka vormis",
     "countOfRemainingCharactersTooltip": "Järelejäänud tähemärgid",
+    "attachmentsHeading": "Š_Attachments____ä",
+    "addAttachmentTooltip": "Š_Add attachment_____ä",
+    "removeAttachmentTooltip": "Š_Remove attachment______ä",
     "cancelButtonLabel": "Tühista",
     "submitButtonLabel": "Esita"
   },

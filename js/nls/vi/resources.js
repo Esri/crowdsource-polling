@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (bắt buộc)",
     "unsettableRequiredField": "Một trường bắt buộc không được khởi tạo và cũng không có trong mẫu",
     "countOfRemainingCharactersTooltip": "Ký tự còn lại",
+    "attachmentsHeading": "Đ_Attachments____ớ",
+    "addAttachmentTooltip": "Đ_Add attachment_____ớ",
+    "removeAttachmentTooltip": "Đ_Remove attachment______ớ",
     "cancelButtonLabel": "Hủy",
     "submitButtonLabel": "Đệ trình"
   },

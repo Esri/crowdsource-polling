@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (必須)",
     "unsettableRequiredField": "必須フィールドが初期化されておらず、フォーム内にありません",
     "countOfRemainingCharactersTooltip": "残りの文字数",
+    "attachmentsHeading": "須_Attachments____鷗",
+    "addAttachmentTooltip": "須_Add attachment_____鷗",
+    "removeAttachmentTooltip": "須_Remove attachment______鷗",
     "cancelButtonLabel": "キャンセル",
     "submitButtonLabel": "送信"
   },

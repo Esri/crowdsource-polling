@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (נדרש)",
     "unsettableRequiredField": "שדה נדרש כלשהו לא מופעל ולא קיים בטופס",
     "countOfRemainingCharactersTooltip": "תווים שנותרו",
+    "attachmentsHeading": "כן_Attachments____ש",
+    "addAttachmentTooltip": "כן_Add attachment_____ש",
+    "removeAttachmentTooltip": "כן_Remove attachment______ש",
     "cancelButtonLabel": "ביטול",
     "submitButtonLabel": "שלח"
   },

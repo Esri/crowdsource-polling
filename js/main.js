@@ -1,4 +1,4 @@
-/*global esri,Modernizr */ ﻿
+/*global esri,Modernizr */
 /*
  | Copyright 2014 Esri
  |
@@ -786,6 +786,7 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
 
                     mapDataReadyDeferred.resolve("map data");
 

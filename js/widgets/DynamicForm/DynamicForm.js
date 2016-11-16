@@ -510,7 +510,98 @@ define([
                 }
             }));
 
+            // Add the attachments section
+            this.appConfig.acceptAttachments = true; //???
+            if (this.appConfig.acceptAttachments) {
+                this.createAttachmentsSection(actionsBar);
+                this.createAttachmentInputter();
+            }
+
             return form;
+        },
+
+        createAttachmentsSection: function (followingSibling) {
+            var attachmentsBar;
+            this.numAttachments = 0;
+
+            attachmentsBar = domConstruct.create("div", {
+                className: "dynamicFormRow",
+                innerHTML: this.appConfig.i18n.dynamic_form.attachmentsHeading +
+                    "<div id='dynamicFormGetAttachments' class='dynamicFormAddAttach'>" +
+                    "<button type='button' class='dynamicFormAttachmentBtn'>+</button>" +
+                    "</div>" +
+                    "<div id='dynamicFormShowAttachments'></div>"
+            }, followingSibling, "before");
+        },
+
+        createAttachmentInputter: function () {
+            var attachmentInputter, fileChangeHandler;
+
+            this.numAttachments++;
+            attachmentInputter = domConstruct.create("form", {
+                id: "dynamicFormAttachment" + this.numAttachments,
+                className: "esriCTHideFileInputUI",
+                innerHTML: "<input class='dynamicFormAttachmentBtn' type='file' accept='image/*' title='" +
+                    this.appConfig.i18n.dynamic_form.addAttachmentTooltip + "' name='attachment'>"
+            }, dom.byId("dynamicFormGetAttachments"));
+
+            // Handle change event for file control
+            fileChangeHandler = on(attachmentInputter, "change", lang.hitch(this, function (evt) {
+                fileChangeHandler.remove();
+                this.onFileSelected(evt);
+            }));
+        },
+
+        onFileSelected: function (evt) {
+            var target, fileNameParts, fileName;
+
+            // Get the name of the attachment
+            if (evt.currentTarget && evt.currentTarget.value) {
+                target = evt.currentTarget;
+            }
+            else if (evt.target && evt.target.value) {
+                target = evt.target;
+            }
+            if (target.value) {
+                fileNameParts = target.value.split("\\");
+                fileName = fileNameParts[fileNameParts.length - 1]; //??? scrub filename
+            }
+            else {
+                fileName = "";
+            }
+
+            // Hide the input HTML item and flag it with a class for later retrieval
+            domStyle.set(target.parentNode, "display", "none");
+            domClass.replace(target.parentNode, "esriCTFileToSubmit", "esriCTHideFileInputUI");
+
+            // Add a UI item to show the name of the attachment along with a way to detach it
+            this.createAttachmentDisplay(fileName);
+
+            // Create a new attachment input item
+            this.createAttachmentInputter();
+        },
+
+        createAttachmentDisplay: function (fileName) {
+            var attachmentDisplay, detachHandler,
+                inputterId = "dynamicFormAttachment" + this.numAttachments,
+                displayId = "dynamicFormAttachmentDisplay" + this.numAttachments;
+
+            attachmentDisplay = domConstruct.create("div", {
+                id: displayId,
+                className: "dynamicFormAttachmentDisplay",
+                innerHTML: "<button type='button' class='dynamicFormAttachmentBtn dynamicFormDetachmentBtn' title='" +
+                    this.appConfig.i18n.dynamic_form.removeAttachmentTooltip + "'>x</button>" +
+                    "<div class='dynamicFormAttachment'>" + fileName + "</span>"
+            }, dom.byId("dynamicFormShowAttachments"));
+
+            // Handle detach button click event
+            detachHandler = on(attachmentDisplay, "click", lang.hitch(this, function (evt) {
+                if (confirm(this.appConfig.i18n.dynamic_form.removeAttachmentTooltip)) {
+                    detachHandler.remove();
+                    domConstruct.destroy(attachmentDisplay);
+                    domConstruct.destroy(inputterId);
+                }
+            }));
         },
 
         /**

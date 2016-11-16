@@ -917,6 +917,7 @@ img {
 .dynamicFormActions {
     font-size: 14px;
     height: 35px;
+    margin-top: 30px;
 }
 
 .dynamicFormAction {
@@ -948,3 +949,54 @@ img {
     width: 49%;
     display: inline-block
 }
+
+.dynamicFormAddAttach {
+    display: inline-block;
+    position: relative;
+}
+.dynamicFormAttachmentBtn {
+    cursor: pointer;
+    width: 20px;
+    height: 100%;
+    background-color: white;
+    color: #206bdb;
+    border: none;/*1px solid #ccc;*/
+    font-size: 20px;
+}
+.esriCTHideFileInputUI
+{
+    position: absolute;
+    top: 0;
+    filter: alpha(opacity = 0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+}
+#dynamicFormShowAttachments {
+    padding: 0 8px 0 16px;
+}
+
+
+
+.dynamicFormAttachmentDisplay {
+    position: relative;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+
+.dynamicFormDetachmentBtn {
+    position: absolute;
+    top: -5px;
+    left: 0px;
+}
+.dynamicFormDetachmentBtn:focus {
+    outline: none;
+}
+.dynamicFormAttachment {
+    margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+

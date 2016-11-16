@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (diperlukan)",
     "unsettableRequiredField": "Bidang yang harus diisi tidak diinisialisasi atau tidak ada dalam formulir",
     "countOfRemainingCharactersTooltip": "Karakter yang tersisa",
+    "attachmentsHeading": "ng_Attachments____ny",
+    "addAttachmentTooltip": "ng_Add attachment_____ny",
+    "removeAttachmentTooltip": "ng_Remove attachment______ny",
     "cancelButtonLabel": "Batal",
     "submitButtonLabel": "Kirim"
   },

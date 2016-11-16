@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (необходимо)",
     "unsettableRequiredField": "Требуемое поле неактивно либо отсутствует в форме",
     "countOfRemainingCharactersTooltip": "Символов осталось",
+    "attachmentsHeading": "Ж_Attachments____Я",
+    "addAttachmentTooltip": "Ж_Add attachment_____Я",
+    "removeAttachmentTooltip": "Ж_Remove attachment______Я",
     "cancelButtonLabel": "Отмена",
     "submitButtonLabel": "Подтвердить"
   },

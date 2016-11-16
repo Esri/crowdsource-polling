@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (vyžadováno)",
     "unsettableRequiredField": "Vyžadované pole není inicializováno a není ani ve formuláři.",
     "countOfRemainingCharactersTooltip": "Zbývající znaky",
+    "attachmentsHeading": "Ř_Attachments____ů",
+    "addAttachmentTooltip": "Ř_Add attachment_____ů",
+    "removeAttachmentTooltip": "Ř_Remove attachment______ů",
     "cancelButtonLabel": "Storno",
     "submitButtonLabel": "Odeslat"
   },

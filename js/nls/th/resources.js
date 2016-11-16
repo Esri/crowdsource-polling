@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (จำเป็นต้องใช้)",
     "unsettableRequiredField": "ฟิลด์ที่ต้องการต้องไม่เป็นค่าว่าง ในแบบฟอร์ม",
     "countOfRemainingCharactersTooltip": "อักษรที่เหลืออยู่",
+    "attachmentsHeading": "ก้_Attachments____ษฺ",
+    "addAttachmentTooltip": "ก้_Add attachment_____ษฺ",
+    "removeAttachmentTooltip": "ก้_Remove attachment______ษฺ",
     "cancelButtonLabel": "ยกเลิก",
     "submitButtonLabel": "ส่ง"
   },

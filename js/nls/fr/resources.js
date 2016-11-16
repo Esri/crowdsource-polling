@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (requis)",
     "unsettableRequiredField": "Un champ obligatoire n'est pas initialisé ou ne figure pas dans le formulaire",
     "countOfRemainingCharactersTooltip": "Caractères restants",
+    "attachmentsHeading": "æ_Attachments____Â",
+    "addAttachmentTooltip": "æ_Add attachment_____Â",
+    "removeAttachmentTooltip": "æ_Remove attachment______Â",
     "cancelButtonLabel": "Annuler",
     "submitButtonLabel": "Envoyer"
   },

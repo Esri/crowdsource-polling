@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (必填)",
     "unsettableRequiredField": "必填的欄位既未初始化也未在表單中",
     "countOfRemainingCharactersTooltip": "剩餘字元數",
+    "attachmentsHeading": "試_Attachments____驗",
+    "addAttachmentTooltip": "試_Add attachment_____驗",
+    "removeAttachmentTooltip": "試_Remove attachment______驗",
     "cancelButtonLabel": "取消",
     "submitButtonLabel": "提交"
   },

@@ -49,6 +49,9 @@ define({
             requiredFormItemFlag: " (required)",
             unsettableRequiredField: "A required field is neither initialized nor in the form",
             countOfRemainingCharactersTooltip: "Characters remaining",
+            attachmentsHeading: "Attachments",
+            addAttachmentTooltip: "Add attachment",
+            removeAttachmentTooltip: "Remove attachment",
             cancelButtonLabel: "Cancel",
             submitButtonLabel: "Submit"
         },

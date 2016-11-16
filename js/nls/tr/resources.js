@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +48,9 @@ define({
     "requiredFormItemFlag": " (gerekli)",
     "unsettableRequiredField": "Gerekli bir alan başlatılamadı veya form içinde değil",
     "countOfRemainingCharactersTooltip": "Karakter kaldı",
+    "attachmentsHeading": "ı_Attachments____İ",
+    "addAttachmentTooltip": "ı_Add attachment_____İ",
+    "removeAttachmentTooltip": "ı_Remove attachment______İ",
     "cancelButtonLabel": "İptal",
     "submitButtonLabel": "Gönder"
   },

@@ -516,13 +516,18 @@ define([
             this.appConfig.acceptAttachments = true; //???
             if (this.appConfig.acceptAttachments) {
                 this.createAttachmentsSection(actionsBar);
-                this.createAttachmentInputter();
+                this.createAttachmentInputter("dynamicFormGetAttachments");
             }
 
             return form;
         },
 
-        createAttachmentsSection: function (followingSibling) {
+        /**
+         * Creates the DOM section to accept, hold, and display attachments.
+         * @param {object} followingSiblingNode DOM node used for placement: attachments section goes into parent
+         * of followingSiblingNode just before it
+         */
+        createAttachmentsSection: function (followingSiblingNode) {
             var attachmentsBar;
             this.numAttachments = 0;
 
@@ -533,9 +538,12 @@ define([
                     "<button type='button' class='dynamicFormAttachmentBtn'>+</button>" +
                     "</div>" +
                     "<div id='dynamicFormShowAttachments'></div>"
-            }, followingSibling, "before");
+            }, followingSiblingNode, "before");
         },
 
+        /**
+         * Clears the attachments in the form.
+         */
         clearAttachments: function () {
             query(".esriCTFileToSubmit", "dynamicFormGetAttachments")
                 .concat(query(".dynamicFormAttachmentDisplay", "dynamicFormShowAttachments"))
@@ -544,7 +552,11 @@ define([
                 });
         },
 
-        createAttachmentInputter: function () {
+        /**
+         * Creates a DOM file input item.
+         * @param {object} parent DOM node to contain input item
+         */
+        createAttachmentInputter: function (parent) {
             var attachmentInputter, fileChangeHandler;
 
             this.numAttachments++;
@@ -553,7 +565,7 @@ define([
                 className: "esriCTHideFileInputUI",
                 innerHTML: "<input class='dynamicFormAttachmentBtn' type='file' accept='image/*' title='" +
                     this.appConfig.i18n.dynamic_form.addAttachmentTooltip + "' name='attachment'>"
-            }, dom.byId("dynamicFormGetAttachments"));
+            }, dom.byId(parent));
 
             // Handle change event for file control
             fileChangeHandler = on(attachmentInputter, "change", lang.hitch(this, function (evt) {
@@ -562,6 +574,10 @@ define([
             }));
         },
 
+        /**
+         * Show selected file on geoform and create new file control so that multiple files can be selected.
+         * @param {object} evt Event object which will be generated on file input change event
+         */
         onFileSelected: function (evt) {
             var target, fileNameParts, fileName;
 
@@ -588,9 +604,14 @@ define([
             this.createAttachmentDisplay(fileName);
 
             // Create a new attachment input item
-            this.createAttachmentInputter();
+            this.createAttachmentInputter("dynamicFormGetAttachments");
         },
 
+        /**
+         * Creates a DOM display for the name of an attached file and provides handling to permit the file
+         * to be detached.
+         * @param {string} fileName Name of file
+         */
         createAttachmentDisplay: function (fileName) {
             var attachmentDisplay, detachHandler,
                 inputterId = "dynamicFormAttachment" + this.numAttachments,
@@ -615,16 +636,19 @@ define([
         },
 
         /**
-         * Assembles an attribute object from the form.
+         * Assembles an object from the form containing attributes and attachments.
          * @param {array} form List of form entries, each of which is an object containing
          * "field" ({string}, name of field) and "input" ({object}, UI form item) or
          * "value ({object} invisible form item value)
-         * @return {object} Structure containing properties matching the form field names
-         * each of which has a value matching its corresponding input form item's value
+         * @return {object} Structure containing two properties: attrs--properties matching the form field names
+         * each of which has a value matching its corresponding input form item's value--and attachments--an array
+         * of file upload forms
          */
         assembleFormValues: function (form) {
-            var attr = {};
+            var attributes = {};
+            var attachments = [];
 
+            // Attributes
             if (form.length > 0) {
                 // Assemble the attributes for the submission from the form
                 array.forEach(form, lang.hitch(this, function (entry) {
@@ -643,21 +667,27 @@ define([
 
                         if (entry.field.domain && entry.field.domain.type === "codedValue") {
                             // Convert list selection into the coded value
-                            attr[entry.field.name] = entry.field.domain.codedValues[parseInt(value, 10)].code;
+                            attributes[entry.field.name] = entry.field.domain.codedValues[parseInt(value, 10)].code;
                         }
                         else if (value.getTime) {
                             // Convert Date objects into milliseconds as required by the feature service REST endpoint
-                            attr[entry.field.name] = value.getTime();
+                            attributes[entry.field.name] = value.getTime();
                         }
                         else {
                             // Get the value
-                            attr[entry.field.name] = value;
+                            attributes[entry.field.name] = value;
                         }
                     }
                 }));
             }
 
-            return attr;
+            // Attachments
+            attachments = query(".esriCTFileToSubmit", "dynamicFormGetAttachments");
+
+            return {
+                "attributes": attributes,
+                "attachments": attachments
+            };
         },
 
         /**

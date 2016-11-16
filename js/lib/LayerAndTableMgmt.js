@@ -396,7 +396,9 @@ define([
         /**
          * Adds a comment to the comment table.
          * @param {string} item Item associated with this comment
-         * @param {object} comment Comment as a set of attributes to be added for the item
+         * @param {object} comment Structure containing two properties: attrs--properties matching the form field names
+         * each of which has a value matching its corresponding input form item's value--and attachments--an array
+         * of file upload forms
          * @return {publish} "commentAdded" with the item associated with this comment
          * or "commentAddFailed" with an error message
          */
@@ -405,13 +407,16 @@ define([
 
             // Amend a copy of the comment with the foreign key pointing to the
             // associated item
-            attr = lang.clone(comment);
+            attr = lang.clone(comment.attributes);
             attr[this._foreignKeyField] = item.attributes[this._primaryKeyField];
 
             // Add the comment to the comment table
             gra = new Graphic(null, null, attr);
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
+                    var fileAttachedCounter = 0,
+                        fileAttachFailedCounter = 0;
+
                     if (results.length === 0) {
                         topic.publish("commentAddFailed", "missing field");
                     }
@@ -419,12 +424,43 @@ define([
                         topic.publish("commentAddFailed", results[0].error);
                     }
                     else {
-                        topic.publish("commentAdded", item);
+                        if (comment.attachments.length > 0) {
+                            comment.attachments.forEach(lang.hitch(this, function (node) {
+                                this._commentTable.addAttachment(results[0].objectId, node,
+                                    lang.hitch(this, function () { // success callback
+                                        this.monitorAttachmentUpload(item, comment.attachments.length,
+                                            ++fileAttachedCounter, fileAttachFailedCounter);
+                                    }),
+                                    lang.hitch(this, function () { // failure callback
+                                        this.monitorAttachmentUpload(item, comment.attachments.length,
+                                            fileAttachedCounter, ++fileAttachFailedCounter);
+                                    })
+                                );
+                            }));
+                        }
+                        else {
+                            topic.publish("commentAdded", item);
+                        }
                     }
                 }),
                 lang.hitch(this, function (err) {
                     topic.publish("commentAddFailed", err.message || "commentAddFailed");
                 }));
+        },
+
+        /**
+         * Publishes "commentAdded" when the expected number of uploads has succeeded or failed.
+         * @param {object} item Item being updated
+         * @param {number} numToUpload Total number of files to upload
+         * @param {number} numSucceeded Number of successes so far
+         * @param {number} numFailed Number of failures so far
+         */
+        monitorAttachmentUpload: function (item, numToUpload, numSucceeded, numFailed) {
+            console.log("upload: +" + numSucceeded + ",-" + numFailed + "/" + numToUpload); //???
+            if (numToUpload === numSucceeded + numFailed) {
+                console.log("upload done"); //???
+                topic.publish("commentAdded", item);
+            }
         },
 
         /**

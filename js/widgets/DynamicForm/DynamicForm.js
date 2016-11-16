@@ -33,6 +33,7 @@ define([
     "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/on",
+    "dojo/query",
     "dojo/sniff",
     "dojo/topic",
     "dojox/fx/scroll",
@@ -55,6 +56,7 @@ define([
     domConstruct,
     domStyle,
     on,
+    query,
     has,
     topic,
     scroller,
@@ -534,6 +536,14 @@ define([
             }, followingSibling, "before");
         },
 
+        clearAttachments: function () {
+            query(".esriCTFileToSubmit", "dynamicFormGetAttachments")
+                .concat(query(".dynamicFormAttachmentDisplay", "dynamicFormShowAttachments"))
+                .forEach(function (node) {
+                    domConstruct.destroy(node);
+                });
+        },
+
         createAttachmentInputter: function () {
             var attachmentInputter, fileChangeHandler;
 
@@ -655,6 +665,7 @@ define([
          */
         clearForm: function () {
             this._entryForm = [];
+            this.clearAttachments();
         }
 
     });

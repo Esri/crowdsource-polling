@@ -503,7 +503,8 @@ define([
                     }
                     else if (field.type !== "esriFieldTypeOID" &&
                         field.type !== "esriFieldTypeGUID" &&
-                        field.type !== "esriFieldTypeGlobalID") {
+                        field.type !== "esriFieldTypeGlobalID" &&
+                        field.name !== this._item._layer.objectIdField) {
                         topic.publish("showError", "[" + (field.alias || field.name) + "]<br>" +
                             this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }

@@ -497,8 +497,8 @@ define([
                 updateQuery.definitionExpression = this._commentTableInWebmap.layerDefinition.definitionExpression;
             }
 
+            // Fetch the comments
             updateQuery.relationshipId = this._itemLayer.relationships[this._commentTableRelateID].id; // Note that we only consider the first relationship in the items layer
-
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
                 var pThis = this,
                     fset, i, features;
@@ -521,8 +521,14 @@ define([
                     // Sort by descending OID order
                     features.sort(sortByOID);
 
-                    // Add the comment table popup
+                    // Update each comment to support its display in the item detail section
                     for (i = 0; i < features.length; ++i) {
+
+                        // Replace the layer that comes with the comment item with one that's
+                        // better for getting comment attachments
+                        features[i]._layer = this._commentTable;
+
+                        // Add the comment table popup
                         features[i].setInfoTemplate(this._commentPopupTemplate);
                     }
                 }

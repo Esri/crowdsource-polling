@@ -426,7 +426,7 @@ define([
                     if (this._currentItem &&
                         this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
                         item.attributes[item._layer.objectIdField]) {
-                        this._itemDetails.setAttachments(attachments);
+                        this._itemDetails.setCurrentItemAttachments(attachments);
                     }
                     this._sidebarCnt.showBusy(false);
                 }));

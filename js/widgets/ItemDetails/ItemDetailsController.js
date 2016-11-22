@@ -1,4 +1,4 @@
-/*global Modernizr */ ﻿
+/*global Modernizr */
 /*
  | Copyright 2014 Esri
  |
@@ -326,28 +326,39 @@ define([
          * hides the gallery button otherwise.
          * @param {array} attachments List of attachments for item
          */
-        setAttachments: function (attachments) {
+        setCurrentItemAttachments: function (attachments) {
             var showGalleryButton =
                 this.actionVisibilities.showGallery && attachments && attachments.length > 0;
             if (showGalleryButton) {
-                if (!this.enlargedViewPopup) {
-                    // Popup window for enlarged image
-                    this.enlargedViewPopup = new PopupWindow({
-                        "appConfig": this.appConfig,
-                        "showClose": true
-                    }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
-                }
-
-                this.updateGallery(attachments);
+                this.setAttachments(this.gallery, attachments);
                 domStyle.set(this.galleryButton, "display", "inline-block");
             }
         },
 
         /**
-         * Adds the specified attachments to the item's gallery.
+         * Shows the attachments for the current item if there are any and it is permitted;
+         * hides the gallery button otherwise.
+         * @param {object} gallery DOM container for attachments
          * @param {array} attachments List of attachments for item
          */
-        updateGallery: function (attachments) {
+        setAttachments: function (gallery, attachments) {
+            if (!this.enlargedViewPopup) {
+                // Popup window for enlarged image
+                this.enlargedViewPopup = new PopupWindow({
+                    "appConfig": this.appConfig,
+                    "showClose": true
+                }).placeAt(document.body); // placeAt triggers a startup call to _helpDialogContainer
+            }
+
+            this.updateGallery(gallery, attachments);
+        },
+
+        /**
+         * Adds the specified attachments to the item's gallery.
+         * @param {object} gallery DOM container for attachments
+         * @param {array} attachments List of attachments for item
+         */
+        updateGallery: function (gallery, attachments) {
             // Create gallery
 
             array.forEach(attachments, lang.hitch(this, function (attachment) {
@@ -365,7 +376,7 @@ define([
                         "class": "attachment",
                         "title": attachment.name,
                         "src": srcURL
-                    }, this.gallery);
+                    }, gallery);
                     this.own(on(thumb, "click", lang.hitch(this, function (attachment) {
                         domConstruct.empty(this.enlargedViewPopup.popupContent);
                         var imgContainer = domConstruct.create("div", {
@@ -575,7 +586,6 @@ define([
             this.clearComments();
             domClass.toggle(this.noCommentsDiv, "hide", commentsArr.length);
             array.forEach(commentsArr, lang.hitch(this, this.buildCommentDiv));
-
         },
 
         /**
@@ -584,7 +594,7 @@ define([
          * getContent() on it
          */
         buildCommentDiv: function (comment) {
-            var commentDiv;
+            var commentDiv, attachmentsDiv;
 
             commentDiv = domConstruct.create("div", {
                 "class": "comment"
@@ -594,6 +604,12 @@ define([
                 "class": "content small-text",
                 "content": comment.getContent()
             }, commentDiv).startup();
+
+            if (comment._layer.hasAttachments) {
+                attachmentsDiv = domConstruct.create("div", {
+                    "class": "attachmentsSection"
+                }, commentDiv);
+            }
         },
 
         /**

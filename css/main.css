@@ -772,15 +772,15 @@ label.css-label
     text-align: center;
 }
 
-.itemDescription .attachmentsSection {
+.itemDetail .attachmentsSection {
     display: none;
-    margin-bottom: 12px;
 }
-.itemComments .attachmentsSection {
+
+.itemDetail .attachmentsSection2 {
     margin-bottom: 12px;
 }
 
-.itemDetail .attachmentsSection .attachment {
+.itemDetail .attachment {
     max-width: 96%!important;
     max-height: 120px!important;
     margin: 0px 5px 5px 0px;

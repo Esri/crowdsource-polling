@@ -395,7 +395,7 @@ define([
                         "class": "attachment",
                         "title": attachment.name,
                         "src": "images/pdficon_large.png"
-                    }, this.gallery);
+                    }, gallery);
                     attachmentUrl = attachment.url;
                     this.own(on(thumb, "click", lang.hitch(this, function () {
                         window.open(attachmentUrl, "_blank");
@@ -407,7 +407,7 @@ define([
                         "class": "attachment",
                         "title": attachment.name,
                         "src": "images/file_wht.png"
-                    }, this.gallery);
+                    }, gallery);
                     attachmentUrl = attachment.url;
                     this.own(on(thumb, "click", lang.hitch(this, function () {
                         window.open(attachmentUrl, "_blank");
@@ -607,8 +607,17 @@ define([
 
             if (comment._layer.hasAttachments) {
                 attachmentsDiv = domConstruct.create("div", {
-                    "class": "attachmentsSection"
+                    "class": "attachmentsSection2"
                 }, commentDiv);
+
+                comment._layer.queryAttachmentInfos(comment.attributes[comment._layer.objectIdField],
+                    lang.hitch(this, function (attachments) {
+                        this.setAttachments(attachmentsDiv, attachments);
+                    }),
+                    function (error) {
+                        console.log(error);
+                    }
+                );
             }
         },
 

@@ -33,6 +33,7 @@ define([
     "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/on",
+    "dojo/query",
     "dojo/sniff",
     "dojo/topic",
     "dojox/fx/scroll",
@@ -55,6 +56,7 @@ define([
     domConstruct,
     domStyle,
     on,
+    query,
     has,
     topic,
     scroller,
@@ -326,8 +328,8 @@ define([
                         inputItem = new Select(options, domConstruct.create("div", {}, row));
                         inputItem.startup();
 
-                        // Free text
                     }
+                    // Free text
                     else if (field.type === "esriFieldTypeString") {
                         row = createRow();
 
@@ -375,8 +377,8 @@ define([
                         // Keep the content within the field's length limit
                         this.setInputWatchers(inputItem, updateCharactersCount);
 
-                        // Free numerics or a date picker
                     }
+                    // Free numerics or a date picker
                     else {
                         if (field.type === "esriFieldTypeSmallInteger" || field.type === "esriFieldTypeInteger" ||
                             field.type === "esriFieldTypeSingle" || field.type === "esriFieldTypeDouble") {
@@ -488,8 +490,8 @@ define([
                         });
                     }
 
-                    // Special handling for non-editable pre-set items
                 }
+                // Special handling for non-editable pre-set items
                 else if (!field.nullable) {
                     // If a form item is pre-set, add it to the form
                     if (this._presets[field.name]) {
@@ -498,9 +500,9 @@ define([
                             "value": this._presets[field.name]
                         });
 
-                        // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
-                        // then the form can't meet the condition for submission that all required fields have values
                     }
+                    // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
+                    // then the form can't meet the condition for submission that all required fields have values
                     else if (field.type !== "esriFieldTypeOID" &&
                         field.type !== "esriFieldTypeGUID" &&
                         field.type !== "esriFieldTypeGlobalID" &&
@@ -511,20 +513,145 @@ define([
                 }
             }));
 
+            // Add the attachments section
+            if (this.appConfig.acceptAttachments) {
+                this.createAttachmentsSection(actionsBar);
+                this.createAttachmentInputter("dynamicFormGetAttachments");
+            }
+
             return form;
         },
 
         /**
-         * Assembles an attribute object from the form.
+         * Creates the DOM section to accept, hold, and display attachments.
+         * @param {object} followingSiblingNode DOM node used for placement: attachments section goes into parent
+         * of followingSiblingNode just before it
+         */
+        createAttachmentsSection: function (followingSiblingNode) {
+            var attachmentsBar;
+            this.numAttachments = 0;
+
+            attachmentsBar = domConstruct.create("div", {
+                className: "dynamicFormRow",
+                innerHTML: this.appConfig.i18n.dynamic_form.attachmentsHeading +
+                    "<div id='dynamicFormGetAttachments' class='dynamicFormAddAttach'>" +
+                    "<button type='button' class='dynamicFormAttachmentBtn'>+</button>" +
+                    "</div>" +
+                    "<div id='dynamicFormShowAttachments'></div>"
+            }, followingSiblingNode, "before");
+        },
+
+        /**
+         * Clears the attachments in the form.
+         */
+        clearAttachments: function () {
+            query(".esriCTFileToSubmit", "dynamicFormGetAttachments")
+                .concat(query(".dynamicFormAttachmentDisplay", "dynamicFormShowAttachments"))
+                .forEach(function (node) {
+                    domConstruct.destroy(node);
+                });
+        },
+
+        /**
+         * Creates a DOM file input item.
+         * @param {object} parent DOM node to contain input item
+         */
+        createAttachmentInputter: function (parent) {
+            var attachmentInputter, fileChangeHandler;
+
+            this.numAttachments++;
+            attachmentInputter = domConstruct.create("form", {
+                id: "dynamicFormAttachment" + this.numAttachments,
+                className: "esriCTHideFileInputUI",
+                innerHTML: "<input class='dynamicFormAttachmentBtn' type='file' accept='image/*' title='" +
+                    this.appConfig.i18n.dynamic_form.addAttachmentTooltip + "' name='attachment'>"
+            }, dom.byId(parent));
+
+            // Handle change event for file control
+            fileChangeHandler = on(attachmentInputter, "change", lang.hitch(this, function (evt) {
+                fileChangeHandler.remove();
+                this.onFileSelected(evt);
+            }));
+        },
+
+        /**
+         * Show selected file on geoform and create new file control so that multiple files can be selected.
+         * @param {object} evt Event object which will be generated on file input change event
+         */
+        onFileSelected: function (evt) {
+            var target, fileNameParts, filename;
+
+            // Get the name of the attachment
+            if (evt.currentTarget && evt.currentTarget.value) {
+                target = evt.currentTarget;
+            }
+            else if (evt.target && evt.target.value) {
+                target = evt.target;
+            }
+            if (target.value) {
+                fileNameParts = target.value.split("\\");
+                filename = fileNameParts[fileNameParts.length - 1];
+            }
+            else {
+                filename = "";
+            }
+
+            // Hide the input HTML item and flag it with a class for later retrieval
+            domStyle.set(target.parentNode, "display", "none");
+            domClass.replace(target.parentNode, "esriCTFileToSubmit", "esriCTHideFileInputUI");
+
+            // Add a UI item to show the name of the attachment along with a way to detach it
+            this.createAttachmentDisplay(filename);
+
+            // Create a new attachment input item
+            this.createAttachmentInputter("dynamicFormGetAttachments");
+        },
+
+        /**
+         * Creates a DOM display for the name of an attached file and provides handling to permit the file
+         * to be detached.
+         * @param {string} filename Name of file
+         */
+        createAttachmentDisplay: function (filename) {
+            var attachmentDisplay, detachHandler,
+                inputterId = "dynamicFormAttachment" + this.numAttachments,
+                displayId = "dynamicFormAttachmentDisplay" + this.numAttachments;
+
+            attachmentDisplay = domConstruct.create("div", {
+                id: displayId,
+                className: "dynamicFormAttachmentDisplay",
+                innerHTML: "<button type='button' class='dynamicFormAttachmentBtn dynamicFormDetachmentBtn' title='" +
+                    this.appConfig.i18n.dynamic_form.removeAttachmentTooltip + "'>x</button>" +
+                    "<div class='dynamicFormAttachment'></div>"
+            }, dom.byId("dynamicFormShowAttachments"));
+
+            // Add filename after scrubbing it
+            attachmentDisplay.childNodes[1].appendChild(document.createTextNode(filename));
+
+            // Handle detach button click event
+            detachHandler = on(attachmentDisplay, "click", lang.hitch(this, function (evt) {
+                if (confirm(this.appConfig.i18n.dynamic_form.removeAttachmentTooltip)) {
+                    detachHandler.remove();
+                    domConstruct.destroy(attachmentDisplay);
+                    domConstruct.destroy(inputterId);
+                }
+            }));
+        },
+
+        /**
+         * Assembles an object from the form containing attributes and attachments.
          * @param {array} form List of form entries, each of which is an object containing
          * "field" ({string}, name of field) and "input" ({object}, UI form item) or
          * "value ({object} invisible form item value)
-         * @return {object} Structure containing properties matching the form field names
-         * each of which has a value matching its corresponding input form item's value
+         * @return {object} Structure containing two properties: attrs--properties matching the form field names
+         * each of which has a value matching its corresponding input form item's value--and attachments--an array
+         * of file upload forms
          */
         assembleFormValues: function (form) {
-            var attr = {};
+            var attributes = {};
+            var attachments = [];
 
+            // Attributes
             if (form.length > 0) {
                 // Assemble the attributes for the submission from the form
                 array.forEach(form, lang.hitch(this, function (entry) {
@@ -543,21 +670,27 @@ define([
 
                         if (entry.field.domain && entry.field.domain.type === "codedValue") {
                             // Convert list selection into the coded value
-                            attr[entry.field.name] = entry.field.domain.codedValues[parseInt(value, 10)].code;
+                            attributes[entry.field.name] = entry.field.domain.codedValues[parseInt(value, 10)].code;
                         }
                         else if (value.getTime) {
                             // Convert Date objects into milliseconds as required by the feature service REST endpoint
-                            attr[entry.field.name] = value.getTime();
+                            attributes[entry.field.name] = value.getTime();
                         }
                         else {
                             // Get the value
-                            attr[entry.field.name] = value;
+                            attributes[entry.field.name] = value;
                         }
                     }
                 }));
             }
 
-            return attr;
+            // Attachments
+            attachments = query(".esriCTFileToSubmit", "dynamicFormGetAttachments");
+
+            return {
+                "attributes": attributes,
+                "attachments": attachments
+            };
         },
 
         /**
@@ -565,6 +698,7 @@ define([
          */
         clearForm: function () {
             this._entryForm = [];
+            this.clearAttachments();
         }
 
     });

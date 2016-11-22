@@ -1,4 +1,4 @@
-/*global esri,Modernizr */ ﻿
+/*global esri,Modernizr */
 /*
  | Copyright 2014 Esri
  |
@@ -426,7 +426,7 @@ define([
                     if (this._currentItem &&
                         this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
                         item.attributes[item._layer.objectIdField]) {
-                        this._itemDetails.setAttachments(attachments);
+                        this._itemDetails.setCurrentItemAttachments(attachments);
                     }
                     this._sidebarCnt.showBusy(false);
                 }));
@@ -786,6 +786,7 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -803,8 +804,8 @@ define([
                             searchControl.emit("load");
                         }
 
-                        // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
                     }
+                    // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
                     else {
                         domStyle.set("mapDiv_zoom_slider", "top", "16px");
                         domStyle.set("LocateButton", "top", "131px");

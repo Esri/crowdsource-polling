@@ -98,8 +98,8 @@ define([
                     addLayersFromMap = true;
                     numSources += 1;
 
-                    // Otherwise, just use the layers configured in the webmap--which may be an empty list
                 }
+                // Otherwise, just use the layers configured in the webmap--which may be an empty list
                 else if (searchAppProperties.layers.length > 0) {
                     searchSources = searchSources.concat(
                         this.createWebMapItemSources(map, operationalLayers, searchAppProperties.layers, searchAppProperties.hintText)
@@ -163,8 +163,8 @@ define([
                         console.log(geocoder.url + " is missing the singleLineFieldName parameter");
                     }
                 }));
-                // If no geocoders are supplied, use the default one
             }
+            // If no geocoders are supplied, use the default one
             else {
                 sources.push(this.getDefaultSource(defaultGeocoderExtentsLimit));
             }

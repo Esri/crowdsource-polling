@@ -26,7 +26,7 @@
         "showDisplayTextAsSplashScreen": false
     },
     "configurationSettings": [{
-        "category": "<b>App Settings</b>",
+        "category": "<b>App</b>",
         "fields": [{
             "label": "Select a map",
             "fieldName": "webmap",
@@ -59,7 +59,7 @@
             "type": "boolean"
         }]
     }, {
-        "category": "<b>Content Settings</b>",
+        "category": "<b>Content</b>",
         "fields": [{
             "type": "paragraph",
             "value": "Configure how the application will interact with your layers."
@@ -98,7 +98,7 @@
 			"value": false}]
         }]
     }, {
-        "category": "<b>Access Settings</b>",
+        "category": "<b>Access</b>",
         "fields": [{
             "type": "paragraph",
             "value":"Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
@@ -116,30 +116,30 @@
             "type": "boolean",
             "tooltip": "Enable to allow users to sign in using their Twitter credentials"
         }, {
-            "label": "Allow users to sign in using Facebook",
-            "fieldName": "allowFacebook",
-            "type": "conditional",
-            "tooltip": "Enable to allow users to sign in using their Facebook credentials",
-            "condition": false,
-            "items": [{
-                "label": "Facebook AppId",
-                "fieldName": "facebookAppId",
-                "type": "string",
-                "tooltip": "AppId from registering this application with Facebook"
-            }]
-        }, {
-            "label": "Allow users to sign in using Google+",
-            "fieldName": "allowGoogle",
-            "type": "conditional",
-            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
-            "condition": false,
-            "items": [{
-                "label": "Google+ Client ID",
-                "fieldName": "googleplusClientId",
-                "type": "string",
-                "tooltip": "Client ID from registering this application with Google+"
-            }]
-        }, {
+	        "label": "Allow users to sign in using Facebook",
+	        "tooltip": "Enable to allow users to sign in using their Facebook credentials",
+	        "type": "conditional",
+	        "fieldName": "allowFacebook",
+			"condition": false,
+			"items":[{
+				"label": "Please register your app with Facebook and provide your Facebook AppId",
+				"tooltip": "Facebook AppId",
+				"type": "string",
+				"fieldName": "facebookAppId"
+	    }]
+	    }, {
+	        "label": "Allow users to sign in using Google+",
+	        "tooltip": "Enable to allow users to sign in using their Google+ credentials",
+	        "type": "conditional",
+	        "fieldName": "allowGoogle",
+			"condition":false,
+			"items":[{
+	        "label": "Please register your app with Google+ and provide your Google+ Client ID",
+	        "tooltip": "Google+ ClientId",
+	        "type": "string",
+	        "fieldName": "googleplusClientId"
+	    }]
+	    }, {
             "label": "Sign in window text",
             "fieldName": "socialMediaDisclaimer",
             "type": "string",

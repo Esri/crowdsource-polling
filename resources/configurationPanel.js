@@ -1,9 +1,9 @@
 {
     "values": {
-        "webmap": "",
+        "webmap": "56197689ee7e4a8aa9f0d8da09ffe721",
         "title": "Crowdsource Polling",
         "titleIcon": "images/banner.png",
-        "displayText": "<b>Welcome to the crowdsource polling application</b><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
+        "displayText": "<b>Welcome to the Crowdsource Polling application</b><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
         "color": "#206bdb",
         "featureLayer": {
             "id": "LandUseCasesVotesComments_8488",

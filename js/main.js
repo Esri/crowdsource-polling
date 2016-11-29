@@ -193,7 +193,7 @@ define([
          * @return {promise} Promise from a the _createWebMap Deferred
          */
         _launch: function (itemInfo) {
-            var setupUI, createMapPromise;
+            var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField;
 
             document.title = this.config.title || "";
             this.config.isIE8 = this._createIE8Test();
@@ -600,8 +600,6 @@ define([
                 console.log("app is ready");
 
                 // Do we have a custom URL search parameter?
-                var urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField;
-
                 if ((this.config.customUrlLayer.id !== null && this.config.customUrlLayer.fields.length > 0 &&
                         this.config.customUrlParam !== null)) {
 

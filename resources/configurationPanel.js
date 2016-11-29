@@ -23,7 +23,12 @@
         "googleplusClientId": "",
         "allowTwitter": true,
         "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
-        "showDisplayTextAsSplashScreen": false
+        "showDisplayTextAsSplashScreen": false,
+        "customUrlLayer": {
+            "id": null,
+            "fields": []
+        },
+        "customUrlParam": null
     },
     "configurationSettings": [{
         "category": "<b>App</b>",
@@ -183,4 +188,3 @@
         }]
     }]
 }
-

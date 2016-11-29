@@ -91,11 +91,45 @@
             "fieldName": "ascendingSortOrder",
             "type": "radio",
             "tooltip": "Sorts features in ascending or descending order using the values of the sorting field. This parameter is ignored when no sorting field is specified.",
-			"items":[
-			{"label": "Ascending",
-			"value": true},
-			{"label": "Descending",
-			"value": false}]
+            "items":[
+            {"label": "Ascending",
+            "value": true},
+            {"label": "Descending",
+            "value": false}]
+        }]
+    }, {
+        "category": "Custom URL Parameter",
+        "fields": [{
+            "type": "paragraph",
+            "value": "Set up the app to support a custom url parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a url parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application url using the custom parameter name you define. For example, if I set the custom param value to parcels a custom url would look like this index.html?parcel=3045"
+        }, {
+            "placeHolder": "i.e. parcels",
+            "label": "URL param name:",
+            "fieldName": "customUrlParam",
+            "type": "string",
+            "tooltip": "Custom URL param name"
+        }, {
+            "type": "layerAndFieldSelector",
+            "fieldName": "customUrlLayer",
+            "label": "Layer to search for custom url param value",
+            "tooltip": "Url param search layer",
+            "fields": [{
+                "multipleSelection": false,
+                "fieldName": "urlField",
+                "label": "URL param search field",
+                "tooltip": "URL param search field"
+            }],
+            "layerOptions": {
+                "supportedTypes": [
+                    "FeatureLayer"
+                ],
+                "geometryTypes": [
+                    "esriGeometryPoint",
+                    "esriGeometryLine",
+                    "esriGeometryPolyline",
+                    "esriGeometryPolygon"
+                ]
+            }
         }]
     }, {
         "category": "<b>Access</b>",
@@ -116,30 +150,30 @@
             "type": "boolean",
             "tooltip": "Enable to allow users to sign in using their Twitter credentials"
         }, {
-	        "label": "Allow users to sign in using Facebook",
-	        "tooltip": "Enable to allow users to sign in using their Facebook credentials",
-	        "type": "conditional",
-	        "fieldName": "allowFacebook",
-			"condition": false,
-			"items":[{
-				"label": "Please register your app with Facebook and provide your Facebook AppId",
-				"tooltip": "Facebook AppId",
-				"type": "string",
-				"fieldName": "facebookAppId"
-	    }]
-	    }, {
-	        "label": "Allow users to sign in using Google+",
-	        "tooltip": "Enable to allow users to sign in using their Google+ credentials",
-	        "type": "conditional",
-	        "fieldName": "allowGoogle",
-			"condition":false,
-			"items":[{
-	        "label": "Please register your app with Google+ and provide your Google+ Client ID",
-	        "tooltip": "Google+ ClientId",
-	        "type": "string",
-	        "fieldName": "googleplusClientId"
-	    }]
-	    }, {
+            "label": "Allow users to sign in using Facebook",
+            "tooltip": "Enable to allow users to sign in using their Facebook credentials",
+            "type": "conditional",
+            "fieldName": "allowFacebook",
+            "condition": false,
+            "items":[{
+                "label": "Please register your app with Facebook and provide your Facebook AppId",
+                "tooltip": "Facebook AppId",
+                "type": "string",
+                "fieldName": "facebookAppId"
+        }]
+        }, {
+            "label": "Allow users to sign in using Google+",
+            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
+            "type": "conditional",
+            "fieldName": "allowGoogle",
+            "condition":false,
+            "items":[{
+            "label": "Please register your app with Google+ and provide your Google+ Client ID",
+            "tooltip": "Google+ ClientId",
+            "type": "string",
+            "fieldName": "googleplusClientId"
+        }]
+        }, {
             "label": "Sign in window text",
             "fieldName": "socialMediaDisclaimer",
             "type": "string",

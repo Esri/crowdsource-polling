@@ -619,7 +619,7 @@ define([
                     if (searchValue) {
                         // Attempt to go to an item specified as a URL parameter
                         searchLayer = this.map.getLayer(this.config.customUrlLayer.id);
-                        if (searchLayer) {
+                        if (searchLayer && this.config.customUrlLayer.fields && this.config.customUrlLayer.fields.length > 0) {
                             searchField = this.config.customUrlLayer.fields[0].fields[0];
 
                             require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {

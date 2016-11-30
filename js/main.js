@@ -37,9 +37,11 @@ define([
     "esri/dijit/HomeButton",
     "esri/dijit/LocateButton",
     "esri/graphic",
+    "esri/lang",
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleMarkerSymbol",
+    "esri/urlUtils",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
@@ -76,9 +78,11 @@ define([
     HomeButton,
     LocateButton,
     Graphic,
+    esriLang,
     SimpleFillSymbol,
     SimpleLineSymbol,
     SimpleMarkerSymbol,
+    urlUtils,
     registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
@@ -189,7 +193,7 @@ define([
          * @return {promise} Promise from a the _createWebMap Deferred
          */
         _launch: function (itemInfo) {
-            var setupUI, createMapPromise;
+            var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField;
 
             document.title = this.config.title || "";
             this.config.isIE8 = this._createIE8Test();
@@ -595,33 +599,51 @@ define([
                 //----- Done -----
                 console.log("app is ready");
 
-                // Attempt to go to an item specified as a URL parameter
-                if (this.config.id) {
-                    var id = parseInt(this.config.id),
-                        _this = this;
-                    if (!isNaN(id)) {
-                        require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
-                            var query, queryTask, featureLayer = _this.map._layers[_this.map.graphicsLayerIds[0]];
-                            queryTask = new QueryTask(featureLayer.url);
-                            query = new Query();
-                            query.objectIds = [id];
-                            query.returnGeometry = true;
-                            query.outFields = ["*"];
+                // Do we have a custom URL search parameter?
+                if ((this.config.customUrlLayer.id !== null && this.config.customUrlLayer.fields.length > 0 &&
+                        this.config.customUrlParam !== null)) {
 
-                            queryTask.execute(query, function (results) {
-                                if (results && results.features && results.features.length > 0) {
-                                    var item = results.features[0];
-                                    item._layer = featureLayer;
-                                    item._graphicsLayer = featureLayer;
-                                    topic.publish("itemSelected", item);
-                                }
-                            }, function (error) {
-                                console.log(error);
+                    urlObject = urlUtils.urlToObject(document.location.href);
+                    urlObject.query = urlObject.query || {};
+                    urlObject.query = esriLang.stripTags(urlObject.query);
+                    searchValue = null;
+                    customUrlParamUC = this.config.customUrlParam.toUpperCase();
+                    for (prop in urlObject.query) {
+                        if (urlObject.query.hasOwnProperty(prop)) {
+                            if (prop.toUpperCase() === customUrlParamUC) {
+                                searchValue = urlObject.query[prop];
+                            }
+                        }
+                    }
+
+                    if (searchValue) {
+                        // Attempt to go to an item specified as a URL parameter
+                        searchLayer = this.map.getLayer(this.config.customUrlLayer.id);
+                        if (searchLayer && this.config.customUrlLayer.fields && this.config.customUrlLayer.fields.length > 0) {
+                            searchField = this.config.customUrlLayer.fields[0].fields[0];
+
+                            require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
+                                var query, queryTask;
+                                queryTask = new QueryTask(searchLayer.url);
+                                query = new Query();
+                                query.where = searchField + " = '" + searchValue + "'";
+                                query.returnGeometry = true;
+                                query.outFields = ["*"];
+
+                                queryTask.execute(query, function (results) {
+                                    if (results && results.features && results.features.length > 0) {
+                                        var item = results.features[0];
+                                        item._layer = searchLayer;
+                                        item._graphicsLayer = searchLayer;
+                                        topic.publish("itemSelected", item);
+                                    }
+                                }, function (error) {
+                                    console.log(error);
+                                });
                             });
-                        });
+                        }
                     }
                 }
-
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
             }));

@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +48,15 @@ define({
     "requiredFormItemFlag": " (مطلوب)",
     "unsettableRequiredField": "حقل مطلوب لم يتم تهيئته ولا يوجد في النموذج",
     "countOfRemainingCharactersTooltip": "الأحرف المتبقية",
+    "attachmentsHeading": "بيت_Attachments____لاحقة",
+    "addAttachmentTooltip": "بيت_Add attachment_____لاحقة",
+    "removeAttachmentTooltip": "بيت_Remove attachment______لاحقة",
     "cancelButtonLabel": "إلغاء الأمر",
     "submitButtonLabel": "ارسال"
   },
   "item_details": {
     "likeButtonTooltip": "تصويت لهذا العنصر",
+    "likeButtonInverseTooltip": "الاقتراع المحسوب",
     "commentButtonTooltip": "إضافة تعليق",
     "gotoMapViewTooltip": "انتقال إلى عرض الخريطة",
     "galleryButtonTooltip": "روية الملفات المرفقة",

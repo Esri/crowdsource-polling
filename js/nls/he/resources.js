@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +21,7 @@ define({
   },
   "sidebar_header": {
     "menuButtonTooltip": "הצג תפריט",
-    "signInButton": "הירשם",
+    "signInButton": "התחבר",
     "signInButtonTooltip": "התחבר",
     "signOutButton": "התנתק",
     "signOutButtonTooltip": "יציאה",
@@ -49,11 +48,15 @@ define({
     "requiredFormItemFlag": " (נדרש)",
     "unsettableRequiredField": "שדה נדרש כלשהו לא מופעל ולא קיים בטופס",
     "countOfRemainingCharactersTooltip": "תווים שנותרו",
+    "attachmentsHeading": "כן_Attachments____ש",
+    "addAttachmentTooltip": "כן_Add attachment_____ש",
+    "removeAttachmentTooltip": "כן_Remove attachment______ש",
     "cancelButtonLabel": "ביטול",
     "submitButtonLabel": "שלח"
   },
   "item_details": {
     "likeButtonTooltip": "הצבע עבור פריט זה",
+    "likeButtonInverseTooltip": "קול נספר",
     "commentButtonTooltip": "הוסף הערה",
     "gotoMapViewTooltip": "עבור לתצוגת מפה",
     "galleryButtonTooltip": "ראה קצבים מצורפים",

@@ -1,5 +1,3 @@
-/*global define,dojo,console */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
  |
@@ -53,7 +51,10 @@ define([
          * @return {object} The created dijit or null if it there were no search sources or none were enabled
          */
         createSearchDijit: function (map, operationalLayers, geocoders, appProperties, srcNode, searchAlwaysExpanded) {
-            var searchAppProperties, searchSources = [], addLayersFromMap = false, searchControl = null, numSources = 0,
+            var searchAppProperties, searchSources = [],
+                addLayersFromMap = false,
+                searchControl = null,
+                numSources = 0,
                 activeSource = "all";
 
             // Adjust the search properties with whatever's configured in the webmap;
@@ -97,8 +98,9 @@ define([
                     addLayersFromMap = true;
                     numSources += 1;
 
+                }
                 // Otherwise, just use the layers configured in the webmap--which may be an empty list
-                } else if (searchAppProperties.layers.length > 0) {
+                else if (searchAppProperties.layers.length > 0) {
                     searchSources = searchSources.concat(
                         this.createWebMapItemSources(map, operationalLayers, searchAppProperties.layers, searchAppProperties.hintText)
                     );
@@ -150,17 +152,20 @@ define([
                     if (geocoder.url.indexOf(".arcgis.com/arcgis/rest/services/World/GeocodeServer") > -1) {
                         sources.push(this.getDefaultSource(defaultGeocoderExtentsLimit, geocoder.name));
 
-                    // Otherwise be sure that geocoder supports single-line searches
-                    } else if (geocoder.singleLineFieldName) {
+                        // Otherwise be sure that geocoder supports single-line searches
+                    }
+                    else if (geocoder.singleLineFieldName) {
                         geocoderCopy = lang.clone(geocoder);
                         geocoderCopy.locator = new Locator(geocoderCopy.url);
                         sources.push(geocoderCopy);
-                    } else {
+                    }
+                    else {
                         console.log(geocoder.url + " is missing the singleLineFieldName parameter");
                     }
                 }));
+            }
             // If no geocoders are supplied, use the default one
-            } else {
+            else {
                 sources.push(this.getDefaultSource(defaultGeocoderExtentsLimit));
             }
             return sources;
@@ -223,7 +228,9 @@ define([
             //   }]
             var sources = [];
             array.forEach(searchLayers, lang.hitch(this, function (searchLayer) {
-                var layer = null, source = {}, url, name, mapLayer;
+                var layer = null,
+                    source = {},
+                    url, name, mapLayer;
 
                 // Get the title specified in the item
                 array.some(operationalLayers, function (opLayer) {
@@ -251,7 +258,8 @@ define([
                     mapLayer = map.getLayer(layer.id);
                     if (mapLayer && (mapLayer.type === "Feature Layer" || mapLayer.type === "FeatureLayer")) {
                         source.featureLayer = mapLayer;
-                    } else {
+                    }
+                    else {
                         source.featureLayer = new FeatureLayer(url, {
                             outFields: ["*"]
                         });

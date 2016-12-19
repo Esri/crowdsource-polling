@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +48,15 @@ define({
     "requiredFormItemFlag": " (exigido)",
     "unsettableRequiredField": "Um campo obrigatório não foi inicializado nem se encontra no formulário",
     "countOfRemainingCharactersTooltip": "Caracteres restantes",
+    "attachmentsHeading": "ã_Attachments____Ç",
+    "addAttachmentTooltip": "ã_Add attachment_____Ç",
+    "removeAttachmentTooltip": "ã_Remove attachment______Ç",
     "cancelButtonLabel": "Cancelar",
     "submitButtonLabel": "Submeter"
   },
   "item_details": {
     "likeButtonTooltip": "Votar neste item",
+    "likeButtonInverseTooltip": "Votos contados",
     "commentButtonTooltip": "Adicionar um comentário",
     "gotoMapViewTooltip": "Ir para a vista de mapa",
     "galleryButtonTooltip": "Ver ficheiros anexos",

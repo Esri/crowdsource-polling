@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +49,9 @@ define({
             requiredFormItemFlag: " (required)",
             unsettableRequiredField: "A required field is neither initialized nor in the form",
             countOfRemainingCharactersTooltip: "Characters remaining",
+            attachmentsHeading: "Attachments",
+            addAttachmentTooltip: "Add attachment",
+            removeAttachmentTooltip: "Remove attachment",
             cancelButtonLabel: "Cancel",
             submitButtonLabel: "Submit"
         },
@@ -69,6 +71,7 @@ define({
         }
     }),
     "ar": 1,
+    "bs": 1,
     "cs": 1,
     "da": 1,
     "de": 1,
@@ -79,6 +82,7 @@ define({
     "fr": 1,
     "he": 1,
     "hr": 1,
+    "id": 1,
     "it": 1,
     "ja": 1,
     "ko": 1,

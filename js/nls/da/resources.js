@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +48,15 @@ define({
     "requiredFormItemFlag": " (obligatorisk)",
     "unsettableRequiredField": "Et obligatorisk felt er hverken initialiseret eller placeret i formularen",
     "countOfRemainingCharactersTooltip": "Resterende tegn",
+    "attachmentsHeading": "ø_Attachments____å",
+    "addAttachmentTooltip": "ø_Add attachment_____å",
+    "removeAttachmentTooltip": "ø_Remove attachment______å",
     "cancelButtonLabel": "Annullér",
     "submitButtonLabel": "Indsend"
   },
   "item_details": {
     "likeButtonTooltip": "Stem på dette element",
+    "likeButtonInverseTooltip": "Stemmer optalt",
     "commentButtonTooltip": "Tilføj en kommentar",
     "gotoMapViewTooltip": "Gå til kortvisning",
     "galleryButtonTooltip": "Se vedhæftede filer",

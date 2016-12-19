@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +48,15 @@ define({
     "requiredFormItemFlag": " (απαιτούμενο)",
     "unsettableRequiredField": "Κάποιο απαιτούμενο πεδίο είτε δεν έχει αρχικοποιηθεί είτε δε βρίσκεται στη φόρμα",
     "countOfRemainingCharactersTooltip": "Χαρακτήρες που απομένουν",
+    "attachmentsHeading": "Đ_Attachments____ớ",
+    "addAttachmentTooltip": "Đ_Add attachment_____ớ",
+    "removeAttachmentTooltip": "Đ_Remove attachment______ớ",
     "cancelButtonLabel": "Ακύρωση",
     "submitButtonLabel": "Υποβολή"
   },
   "item_details": {
     "likeButtonTooltip": "Ψηφίστε για αυτό το αντικείμενο",
+    "likeButtonInverseTooltip": "Η ψήφος μετρήθηκε",
     "commentButtonTooltip": "Προσθήκη σχολίου",
     "gotoMapViewTooltip": "Μετάβαση στην προβολή χάρτη",
     "galleryButtonTooltip": "Προβολή συνημμένων αρχείων",

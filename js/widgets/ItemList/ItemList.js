@@ -1,5 +1,3 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
  |
@@ -16,27 +14,27 @@
  | limitations under the License.
  */
 define([
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/_base/array',
-    'dojo/dom-construct',
-    'dojo/dom-style',
-    'dojo/dom-class',
+    "dojo/_base/declare",
+    "dojo/_base/lang",
+    "dojo/_base/array",
+    "dojo/dom-construct",
+    "dojo/dom-style",
+    "dojo/dom-class",
     "dojo/dom-geometry",
-    'dojo/on',
-    'dojo/query',
-    'dojo/sniff',
-    'dojo/topic',
-    'dojo/NodeList-dom',
-    'dojox/mobile/Switch',  // pre-loaded as required by Dojo
+    "dojo/on",
+    "dojo/query",
+    "dojo/sniff",
+    "dojo/topic",
+    "dojo/NodeList-dom",
+    "dojox/mobile/Switch", // pre-loaded as required by Dojo
 
-    'application/lib/SvgHelper',
+    "application/lib/SvgHelper",
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
+    "dijit/_WidgetBase",
+    "dijit/_TemplatedMixin",
+    "dijit/_WidgetsInTemplateMixin",
 
-    'dojo/text!./ItemListView.html'
+    "dojo/text!./ItemListView.html"
 ], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, has, topic, nld, Switch,
     SvgHelper,
     _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
@@ -70,9 +68,9 @@ define([
 
             this.linkToggleBtn.set("leftLabel", "");
             this.linkToggleBtn.set("rightLabel", "");
-            this.linkToggleBtn.set("value", this.linkToMapView
-                ? "on"
-                : "off");
+            this.linkToggleBtn.set("value", this.linkToMapView ?
+                "on" :
+                "off");
             this.linkToggleBtn.set("title", this.i18n.linkToMapViewOptionTooltip);
 
             this.inherited(arguments);
@@ -87,7 +85,7 @@ define([
             this.inherited(arguments);
             this.linkToggleBtn.resize();
 
-            this.own(on(window, 'resize', lang.hitch(this, function () {
+            this.own(on(window, "resize", lang.hitch(this, function () {
                 this.fitFilterLabelToContainer();
             })));
 
@@ -110,7 +108,7 @@ define([
             actionBarBounds = domGeom.getMarginBox(this.itemListActionBar);
             switchBounds = domGeom.getMarginBox(this.linkToggleBtn.domNode);
 
-            newWidth = actionBarBounds.w - switchBounds.w - 12/*margins*/ - 8;/*padding*/
+            newWidth = actionBarBounds.w - switchBounds.w - 12 /*margins*/ - 8; /*padding*/
             if (newWidth > 0) {
                 domStyle.set(this.linkToggleLabel, "width", newWidth + "px");
 
@@ -122,9 +120,10 @@ define([
                         topic.publish("linkToMapViewChanged", true);
                     }
                 }
-            // If the screen is narrow enough that we're not showing the action bar,
-            // turn off linking the list to the map
-            } else if (!this.linkToMapViewIsTemporarilyOff) {
+                // If the screen is narrow enough that we're not showing the action bar,
+                // turn off linking the list to the map
+            }
+            else if (!this.linkToMapViewIsTemporarilyOff) {
                 this.linkToMapViewIsTemporarilyOff = true;
                 topic.publish("linkToMapViewChanged", false);
             }
@@ -134,7 +133,7 @@ define([
          * Shows the widget.
          */
         show: function () {
-            domStyle.set(this.domNode, 'display', 'block');
+            domStyle.set(this.domNode, "display", "block");
             this.fitFilterLabelToContainer();
 
             if (has("ff")) {
@@ -147,7 +146,7 @@ define([
          * Hides the widget.
          */
         hide: function () {
-            domStyle.set(this.domNode, 'display', 'none');
+            domStyle.set(this.domNode, "display", "none");
         },
 
         /**
@@ -162,11 +161,13 @@ define([
         /**
          * Sets the items to be displayed in the items list, and then builds the list.
          * @param {array} items feature collection or array
+         * @param {function} [compareFunction] Function to compare two items (a, b) for the desired sort order; returns
+         * <0 value if a < b, 0 if a = b, >0 if a > b
          */
-        setItems: function (items) {
+        setItems: function (items, compareFunction) {
             this.items = items;
             this.clearList();
-            this.buildList();
+            this.buildList(compareFunction);
         },
 
         /**
@@ -186,8 +187,13 @@ define([
 
         /**
          * Builds the items list
+         * @param {function} [compareFunction] Function to compare two items (a, b) for the desired sort order; returns
+         * <0 value if a < b, 0 if a = b, >0 if a > b
          */
-        buildList: function () {
+        buildList: function (compareFunction) {
+            if (compareFunction) {
+                this.items.sort(compareFunction);
+            }
             array.forEach(this.items, lang.hitch(this, this.buildItemSummary));
         },
 
@@ -204,15 +210,15 @@ define([
             itemVotes = this.getItemVotes(item);
 
 
-            itemSummaryDiv = domConstruct.create('div', {
-                'class': 'itemSummary',
-                'click': lang.partial(this.summaryClick, this, item)
+            itemSummaryDiv = domConstruct.create("div", {
+                "class": "itemSummary",
+                "click": lang.partial(this.summaryClick, this, item)
             }, this.list);
 
-            itemTitleDiv = domConstruct.create('div', {
-                'class': 'itemTitle',
-                'title': itemTitle,
-                'innerHTML': itemTitle
+            itemTitleDiv = domConstruct.create("div", {
+                "class": "itemTitle",
+                "title": itemTitle,
+                "innerHTML": itemTitle
             }, itemSummaryDiv);
 
             // If we're displaying votes, create the count and icon displays
@@ -221,18 +227,18 @@ define([
                     domClass.add(itemTitleDiv, "itemListTitleOverride");
                 }
 
-                favDiv = domConstruct.create('div', {
-                    'class': 'itemFav',
-                    'title': this.i18n.likesForThisItemTooltip
+                favDiv = domConstruct.create("div", {
+                    "class": "itemFav",
+                    "title": this.i18n.likesForThisItemTooltip
                 }, itemSummaryDiv);
 
-                domConstruct.create('div', {
-                    'class': 'itemVotes',
-                    'innerHTML': itemVotes.label
+                domConstruct.create("div", {
+                    "class": "itemVotes",
+                    "innerHTML": itemVotes.label
                 }, favDiv);
 
-                iconDiv = domConstruct.create('div', {
-                    'class': 'fav'
+                iconDiv = domConstruct.create("div", {
+                    "class": "fav"
                 }, favDiv);
 
                 SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
@@ -252,7 +258,7 @@ define([
             // Firefox defaults to former scroll position if we're returning to a previously-scrolled node (which could
             // be a different item's details--they go into the same scrollable div). The scrollIntoView can't change this
             // unless it occurs a little later than the default behavior, hence the setTimeout.
-            setTimeout(function (){
+            setTimeout(function () {
                 nodeToMakeVisible.scrollIntoView();
             }, 500);
         },
@@ -274,7 +280,9 @@ define([
          */
         stripTags: function (str) {
             if (str) {
-                return domConstruct.create("div", { innerHTML: str }).textContent;
+                return domConstruct.create("div", {
+                    innerHTML: str
+                }).textContent;
             }
             return "";
         },
@@ -288,7 +296,8 @@ define([
          * returns null if the feature layer's votes field is unknown
          */
         getItemVotes: function (item) {
-            var needSpace = false, votes;
+            var needSpace = false,
+                votes;
 
             if (this.votesField) {
                 votes = item.attributes[this.votesField] || 0;
@@ -300,13 +309,17 @@ define([
                     // Using SI prefixes from http://physics.nist.gov/cuu/pdf/sp811.pdf
                     if (votes > 999999999999999) {
                         votes = Math.floor(votes / 1000000000000000) + "P";
-                    } else if (votes > 999999999999) {
+                    }
+                    else if (votes > 999999999999) {
                         votes = Math.floor(votes / 1000000000000) + "T";
-                    } else if (votes > 999999999) {
+                    }
+                    else if (votes > 999999999) {
                         votes = Math.floor(votes / 1000000000) + "G";
-                    } else if (votes > 999999) {
+                    }
+                    else if (votes > 999999) {
                         votes = Math.floor(votes / 1000000) + "M";
-                    } else {
+                    }
+                    else {
                         votes = Math.floor(votes / 1000) + "k";
                     }
                 }
@@ -326,7 +339,7 @@ define([
          */
         summaryClick: function (self, feat, evt) {
             // 'this' = row click
-            topic.publish('itemSelected', feat);
+            topic.publish("itemSelected", feat);
         }
 
     });

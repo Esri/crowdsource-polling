@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,11 +48,15 @@ define({
     "requiredFormItemFlag": " (必填)",
     "unsettableRequiredField": "必填字段既未被初始化，也不在表单中",
     "countOfRemainingCharactersTooltip": "剩余字符数",
+    "attachmentsHeading": "试_Attachments____验",
+    "addAttachmentTooltip": "试_Add attachment_____验",
+    "removeAttachmentTooltip": "试_Remove attachment______验",
     "cancelButtonLabel": "取消",
     "submitButtonLabel": "提交"
   },
   "item_details": {
     "likeButtonTooltip": "投票支持此项目",
+    "likeButtonInverseTooltip": "已计数投票",
     "commentButtonTooltip": "添加评论",
     "gotoMapViewTooltip": "转至地图视图",
     "galleryButtonTooltip": "参见随附文件",

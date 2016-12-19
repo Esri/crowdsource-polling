@@ -1,5 +1,3 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2015 Esri
  |
@@ -64,7 +62,8 @@ define([
          * Initializes the widget once the DOM structure is ready.
          */
         postCreate: function () {
-            var i18n = this.appConfig.i18n.sidebar_header, signInBtnOnClick, signInMenuBtnOnClick,
+            var i18n = this.appConfig.i18n.sidebar_header,
+                signInBtnOnClick, signInMenuBtnOnClick,
                 helpMenuItem, helpBtnOnClick, helpMenuBtnOnClick, viewToggleMenuBtnOnClick, optionsOnClick;
 
             // Run any parent postCreate processes - can be done at any point
@@ -96,7 +95,8 @@ define([
             viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, function () {
                 if (this.viewToggleIsGoToMapView) {
                     topic.publish("showMapViewClicked");
-                } else {
+                }
+                else {
                     topic.publish("showListViewClicked");
                 }
             }));
@@ -125,7 +125,8 @@ define([
             optionsOnClick = on(this.options, "click", lang.hitch(this, function (evt) {
                 if (this.optionsDropdownIsOpen) {
                     topic.publish("hideOptionsMenu");
-                } else {
+                }
+                else {
                     topic.publish("showOptionsMenu");
                 }
                 evt.cancelBubble = true;
@@ -173,7 +174,8 @@ define([
         updateHelp: function (showIfEnabled) {
             if (showIfEnabled && this.showHelp) {
                 domStyle.set(this.helpBtn, "display", "inline-block");
-            } else {
+            }
+            else {
                 domStyle.set(this.helpBtn, "display", "none");
             }
         },
@@ -187,7 +189,8 @@ define([
             if (setGoToMapView) {
                 this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoMapViewLabel;
                 this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
-            } else {
+            }
+            else {
                 this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoListViewLabel;
                 this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
             }
@@ -209,13 +212,15 @@ define([
                     domStyle.set(this.signInBtn, "display", "block");
                     domStyle.set(this.signInMenuItem, "display", "block");
 
-                } else if (signedInUser.canSignOut) {
+                }
+                else if (signedInUser.canSignOut) {
                     this.signInBtn.innerHTML = this.signInMenuItem.innerHTML = i18n.signOutButton;
                     this.signInBtn.title = this.signInMenuItem.title = i18n.signOutButtonTooltip;
                     domStyle.set(this.signInBtn, "display", "block");
                     domStyle.set(this.signInMenuItem, "display", "block");
 
-                } else {
+                }
+                else {
                     domStyle.set(this.signInBtn, "display", "none");
                     domStyle.set(this.signInMenuItem, "display", "none");
                 }

@@ -1,5 +1,4 @@
-﻿/*global define,dojo,Modernizr,gapi */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
+/*global Modernizr,gapi */ ﻿
 /*
  | Copyright 2015 Esri
  |
@@ -52,14 +51,16 @@ define([
             // Load the SDK asynchronously; it calls window.ggAsyncInit when done
             (function () {
                 // Don't have Google+ API scan page for button
-                window.___gcfg = {parsetags: "explicit"};
+                window.___gcfg = {
+                    parsetags: "explicit"
+                };
 
                 // Modernizr/yepnope for load to get onload event cross-browser
                 Modernizr.load([{
                     load: "https://apis.google.com/js/client:platform.js",
                     complete: function () {
-                        gapi.load('auth2', function () {
-                            gapi.client.load('plus', 'v1').then(function () {
+                        gapi.load("auth2", function () {
+                            gapi.client.load("plus", "v1").then(function () {
                                 pThis.updateUser();
                             });
                         });
@@ -87,8 +88,8 @@ define([
         signOut: function () {
             try {
                 gapi.auth.signOut();
-            } catch (ignore) {
             }
+            catch (ignore) {}
             this.updateUser();
         },
 
@@ -119,8 +120,9 @@ define([
                     this._statusCallback(this.getUser());
                 }));
 
-            // Report not-logged-in state
-            } else {
+                // Report not-logged-in state
+            }
+            else {
                 this._statusCallback(this.getUser());
             }
         }

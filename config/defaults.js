@@ -1,4 +1,4 @@
-﻿/*global define,location */
+/*global define,location */
 /*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
@@ -30,16 +30,19 @@ define({
     //Template-specific properties in AGOL configuration
     "title": "Crowdsource Polling",
     "titleIcon": "images/banner.png",
-    "displayText": "<b>Welcome to the crowdsource polling application</b><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
-    "showDisplayTextAsSplashScreen": false,
+    "displayText": "<b>Welcome to the Crowdsource Polling application</b><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
     "color": "#206bdb",
     "featureLayer": {
         "id": "LandUseCasesVotesComments_8488",
         "fields": [{
+            "id": "sortField",
+            "fields": ["CASENAME"]
+        }, {
             "id": "itemVotesField",
             "fields": ["VOTES"]
         }]
     },
+    "ascendingSortOrder": true,
     "commentNameField": "NAME",
     "allowFacebook": false,
     "facebookAppId": "",
@@ -47,6 +50,17 @@ define({
     "googleplusClientId": "",
     "allowTwitter": true,
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
+    "showDisplayTextAsSplashScreen": false,
+    // Setup the app to support a custom url parameter. Use this if you want users
+    // to be able to search for a string field in a layer. For example if the web map
+    // has parcel data and you'd like to be able to zoom to a feature using its parcel id
+    // you could add a custom url param named parcel then users could enter
+    // a value for that param in the url. index.html?parcel=3203
+    "customUrlLayer": {
+        "id": null, // id of the search layer as defined in the web map
+        "fields": [] // Name of the string field to search
+    },
+    "customUrlParam": null, //Name of url param. For example parcels
 
     //Other template-specific properties
     "helpIcon": "[{'shape':{'type':'path','path':'M 9.6 0C 4.4 0 0.1 4.3 0.1 9.5 0.1 14.7 4.4 19 9.6 19 14.8 19 19.1 14.7 19.1 9.5 19.1 4.3 14.8 0 9.6 0zM 11 15.5c 0 0.2-0.1 0.3-0.3 0.3H 8.6c-0.2 0-0.3-0.1-0.3-0.3v-2.1c 0-0.2 0.1-0.3 0.3-0.3h 2.1c 0.2 0 0.3 0.1 0.3 0.3v 2.1zM 13 8.4C 12.8 8.7 12.4 9 11.9 9.5l-0.5 0.4c-0.2 0.2-0.4 0.4-0.4 0.6 0 0.1-0.1 0.3-0.1 0.8 0 0.2-0.1 0.3-0.3 0.3H 8.7c-0.1 0-0.2 0-0.2-0.1C 8.4 11.4 8.4 11.4 8.4 11.3 8.4 10.4 8.5 9.9 8.7 9.5 8.8 9.1 9.2 8.7 9.8 8.3L 10.3 7.9C 10.4 7.8 10.6 7.7 10.6 7.5 10.8 7.3 10.8 7.1 10.8 6.8 10.8 6.5 10.7 6.2 10.5 6 10.4 5.8 10 5.7 9.6 5.7 9.2 5.7 8.9 5.8 8.7 6.1 8.5 6.4 8.4 6.7 8.4 7.1 8.4 7.3 8.3 7.4 8.1 7.4H 6C 5.9 7.4 5.8 7.4 5.8 7.3 5.7 7.2 5.7 7.2 5.7 7.1 5.8 5.6 6.3 4.6 7.3 3.9 7.9 3.5 8.7 3.3 9.6 3.3c 1.1 0 2.1 0.3 2.9 0.8 0.8 0.6 1.2 1.4 1.2 2.6-0.1 0.6-0.3 1.2-0.7 1.7z'},'fill':{'r':0,'g':122,'b':194,'a':1}}]",
@@ -60,7 +74,7 @@ define({
     "twitterUserUrl": location.protocol + "//utility.arcgis.com/tproxy/proxy/1.1/account/verify_credentials.json?q=&include_entities=true&skip_status=true&locale=en",
     "twitterCallbackUrl": "/oauth-callback-twitter.html",
 
-    "searchAlwaysExpanded": false,  // Whether or not search button is always expanded (always shows its type-in box; true) or is dynamically expanded (false)
+    "searchAlwaysExpanded": false, // Whether or not search button is always expanded (always shows its type-in box; true) or is dynamically expanded (false)
     "bingKey": "", //Enter the url to your organizations bing maps key if you want to use bing basemaps
     //Defaults to arcgis.com. Set this value to your portal or organization host name.
     "sharinghost": location.protocol + "//" + "www.arcgis.com",

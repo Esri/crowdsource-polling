@@ -193,7 +193,8 @@ define([
          * @return {promise} Promise from a the _createWebMap Deferred
          */
         _launch: function (itemInfo) {
-            var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField;
+            var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField,
+                _this = this;
 
             document.title = this.config.title || "";
             this.config.isIE8 = this._createIE8Test();
@@ -629,6 +630,7 @@ define([
                                 query.where = searchField + " = '" + searchValue + "'";
                                 query.returnGeometry = true;
                                 query.outFields = ["*"];
+                                query.outSpatialReference = _this.map.spatialReference;
 
                                 queryTask.execute(query, function (results) {
                                     if (results && results.features && results.features.length > 0) {

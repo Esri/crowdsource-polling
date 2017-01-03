@@ -172,8 +172,8 @@ define([
                     innerHTML: error
                 }, "sidebarContent", "first");
 
-                // Otherwise, we need to use the backup middle-of-screen error display
             }
+            // Otherwise, we need to use the backup middle-of-screen error display
             else {
                 domStyle.set("contentDiv", "display", "none");
                 domClass.add(document.body, "app-error");
@@ -238,6 +238,9 @@ define([
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
                 this._itemDetails.setItemFields(this._votesField, commentFields);
+
+                // Adjust icon visibilities based on user level; need to also check user access to voting and comment layers
+                //itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
                 this._itemDetails.setActionsVisibility(this._votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----

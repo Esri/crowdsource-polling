@@ -539,6 +539,8 @@ define([
                         // use feet/miles only for the US and if nothing is set for a user
                         cfg.units = "english";
                     }
+                    // Do we have this user's access level?
+                    cfg.userLevel = response.user ? response.user.level : null;
                     // Get the helper services (routing, print, locator etc)
                     cfg.helperServices = response.helperServices;
                     // are any custom roles defined in the organization?

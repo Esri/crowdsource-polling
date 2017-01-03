@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obavezno)",
     "unsettableRequiredField": "Obavezno polje nije ni započeto ni u obrascu",
     "countOfRemainingCharactersTooltip": "Preostalo znakova",
-    "attachmentsHeading": "Č_Attachments____ž",
-    "addAttachmentTooltip": "Č_Add attachment_____ž",
-    "removeAttachmentTooltip": "Č_Remove attachment______ž",
+    "attachmentsHeading": "Privici",
+    "addAttachmentTooltip": "Dodaj privitak",
+    "removeAttachmentTooltip": "Ukloni privitak",
     "cancelButtonLabel": "Odustani",
     "submitButtonLabel": "Pošalji"
   },

@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (vereist)",
     "unsettableRequiredField": "Een verplicht veld is noch geïnitialiseerd noch in het formulier",
     "countOfRemainingCharactersTooltip": "Resterende tekens",
-    "attachmentsHeading": "Ĳ_Attachments____ä",
-    "addAttachmentTooltip": "Ĳ_Add attachment_____ä",
-    "removeAttachmentTooltip": "Ĳ_Remove attachment______ä",
+    "attachmentsHeading": "Bijlagen",
+    "addAttachmentTooltip": "Bijlage toevoegen",
+    "removeAttachmentTooltip": "Bijlage verwijderen",
     "cancelButtonLabel": "Annuleren",
     "submitButtonLabel": "Verzenden"
   },

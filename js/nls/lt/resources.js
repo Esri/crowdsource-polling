@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (privaloma)",
     "unsettableRequiredField": "Būtinas laukas neinicijuotas ir jo nėra formoje",
     "countOfRemainingCharactersTooltip": "Liko ženklų",
-    "attachmentsHeading": "Į_Attachments____š",
-    "addAttachmentTooltip": "Į_Add attachment_____š",
-    "removeAttachmentTooltip": "Į_Remove attachment______š",
+    "attachmentsHeading": "Priedai",
+    "addAttachmentTooltip": "Prisegti priedą",
+    "removeAttachmentTooltip": "Šalinti priedą",
     "cancelButtonLabel": "Atšaukti",
     "submitButtonLabel": "Pateikti"
   },

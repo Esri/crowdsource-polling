@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (pakollinen)",
     "unsettableRequiredField": "Pakollista kenttää ei ole alustettu eikä sitä ole lomakkeessa",
     "countOfRemainingCharactersTooltip": "Merkkiä jäljellä",
-    "attachmentsHeading": "Å_Attachments____ö",
-    "addAttachmentTooltip": "Å_Add attachment_____ö",
-    "removeAttachmentTooltip": "Å_Remove attachment______ö",
+    "attachmentsHeading": "Liitteet",
+    "addAttachmentTooltip": "Lisää liite",
+    "removeAttachmentTooltip": "Poista liite",
     "cancelButtonLabel": "Peruuta",
     "submitButtonLabel": "Lähetä"
   },

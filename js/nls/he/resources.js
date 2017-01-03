@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (נדרש)",
     "unsettableRequiredField": "שדה נדרש כלשהו לא מופעל ולא קיים בטופס",
     "countOfRemainingCharactersTooltip": "תווים שנותרו",
-    "attachmentsHeading": "כן_Attachments____ש",
-    "addAttachmentTooltip": "כן_Add attachment_____ש",
-    "removeAttachmentTooltip": "כן_Remove attachment______ש",
+    "attachmentsHeading": "קבצים מצורפים",
+    "addAttachmentTooltip": "הוסף קובץ מקושר",
+    "removeAttachmentTooltip": "הסר קובץ",
     "cancelButtonLabel": "ביטול",
     "submitButtonLabel": "שלח"
   },

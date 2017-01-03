@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (필수)",
     "unsettableRequiredField": "필수 필드가 초기화되지 않았거나 양식에 없습니다.",
     "countOfRemainingCharactersTooltip": "남은 문자 수",
-    "attachmentsHeading": "한_Attachments____빠",
-    "addAttachmentTooltip": "한_Add attachment_____빠",
-    "removeAttachmentTooltip": "한_Remove attachment______빠",
+    "attachmentsHeading": "첨부 파일",
+    "addAttachmentTooltip": "첨부 파일 추가",
+    "removeAttachmentTooltip": "첨부 파일 제거",
     "cancelButtonLabel": "취소",
     "submitButtonLabel": "제출"
   },

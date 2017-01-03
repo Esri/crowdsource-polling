@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (diperlukan)",
     "unsettableRequiredField": "Bidang yang harus diisi tidak diinisialisasi atau tidak ada dalam formulir",
     "countOfRemainingCharactersTooltip": "Karakter yang tersisa",
-    "attachmentsHeading": "ng_Attachments____ny",
-    "addAttachmentTooltip": "ng_Add attachment_____ny",
-    "removeAttachmentTooltip": "ng_Remove attachment______ny",
+    "attachmentsHeading": "Lampiran",
+    "addAttachmentTooltip": "Tambah lampiran",
+    "removeAttachmentTooltip": "Hapus lampiran",
     "cancelButtonLabel": "Batal",
     "submitButtonLabel": "Kirim"
   },

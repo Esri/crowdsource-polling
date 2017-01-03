@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (wymagane)",
     "unsettableRequiredField": "Pole wymagane nie zostało zainicjowane ani umieszczona na formularzu",
     "countOfRemainingCharactersTooltip": "Liczba pozostałych znaków",
-    "attachmentsHeading": "ł_Attachments____ą",
-    "addAttachmentTooltip": "ł_Add attachment_____ą",
-    "removeAttachmentTooltip": "ł_Remove attachment______ą",
+    "attachmentsHeading": "Załączniki",
+    "addAttachmentTooltip": "Dodaj załącznik",
+    "removeAttachmentTooltip": "Usuń załącznik",
     "cancelButtonLabel": "Anuluj",
     "submitButtonLabel": "Prześlij"
   },

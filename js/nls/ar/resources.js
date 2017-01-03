@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (مطلوب)",
     "unsettableRequiredField": "حقل مطلوب لم يتم تهيئته ولا يوجد في النموذج",
     "countOfRemainingCharactersTooltip": "الأحرف المتبقية",
-    "attachmentsHeading": "بيت_Attachments____لاحقة",
-    "addAttachmentTooltip": "بيت_Add attachment_____لاحقة",
-    "removeAttachmentTooltip": "بيت_Remove attachment______لاحقة",
+    "attachmentsHeading": "مرفقات",
+    "addAttachmentTooltip": "إضافة مرفق",
+    "removeAttachmentTooltip": "إزالة المرفق",
     "cancelButtonLabel": "إلغاء الأمر",
     "submitButtonLabel": "ارسال"
   },

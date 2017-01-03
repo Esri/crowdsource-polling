@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatorisk)",
     "unsettableRequiredField": "Et obligatorisk felt er hverken initialiseret eller placeret i formularen",
     "countOfRemainingCharactersTooltip": "Resterende tegn",
-    "attachmentsHeading": "ø_Attachments____å",
-    "addAttachmentTooltip": "ø_Add attachment_____å",
-    "removeAttachmentTooltip": "ø_Remove attachment______å",
+    "attachmentsHeading": "Vedhæftninger",
+    "addAttachmentTooltip": "Tilføj vedhæftning",
+    "removeAttachmentTooltip": "Fjern vedhæftning",
     "cancelButtonLabel": "Annullér",
     "submitButtonLabel": "Indsend"
   },

@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (nepieciešams)",
     "unsettableRequiredField": "Nepieciešamais lauks nav ne inicializēts, ne veidlapā",
     "countOfRemainingCharactersTooltip": "Atlikušās rakstzīmes",
-    "attachmentsHeading": "ķ_Attachments____ū",
-    "addAttachmentTooltip": "ķ_Add attachment_____ū",
-    "removeAttachmentTooltip": "ķ_Remove attachment______ū",
+    "attachmentsHeading": "Uzdevumi",
+    "addAttachmentTooltip": "Pievienot pielikumu",
+    "removeAttachmentTooltip": "Noņemt pielikumu",
     "cancelButtonLabel": "Atcelt",
     "submitButtonLabel": "Iesniegt"
   },

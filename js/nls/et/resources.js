@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (nõutud)",
     "unsettableRequiredField": "Vajalikku välja pole initsialiseeritud ega ka vormis",
     "countOfRemainingCharactersTooltip": "Järelejäänud tähemärgid",
-    "attachmentsHeading": "Š_Attachments____ä",
-    "addAttachmentTooltip": "Š_Add attachment_____ä",
-    "removeAttachmentTooltip": "Š_Remove attachment______ä",
+    "attachmentsHeading": "Manused",
+    "addAttachmentTooltip": "Lisa manus",
+    "removeAttachmentTooltip": "Eemalda manus",
     "cancelButtonLabel": "Tühista",
     "submitButtonLabel": "Esita"
   },

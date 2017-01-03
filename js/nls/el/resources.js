@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (απαιτούμενο)",
     "unsettableRequiredField": "Κάποιο απαιτούμενο πεδίο είτε δεν έχει αρχικοποιηθεί είτε δε βρίσκεται στη φόρμα",
     "countOfRemainingCharactersTooltip": "Χαρακτήρες που απομένουν",
-    "attachmentsHeading": "Đ_Attachments____ớ",
-    "addAttachmentTooltip": "Đ_Add attachment_____ớ",
-    "removeAttachmentTooltip": "Đ_Remove attachment______ớ",
+    "attachmentsHeading": "Συνημμένα",
+    "addAttachmentTooltip": "Προσθήκη συνημμένου",
+    "removeAttachmentTooltip": "Κατάργηση συνημμένου",
     "cancelButtonLabel": "Ακύρωση",
     "submitButtonLabel": "Υποβολή"
   },

@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (необходимо)",
     "unsettableRequiredField": "Требуемое поле неактивно либо отсутствует в форме",
     "countOfRemainingCharactersTooltip": "Символов осталось",
-    "attachmentsHeading": "Ж_Attachments____Я",
-    "addAttachmentTooltip": "Ж_Add attachment_____Я",
-    "removeAttachmentTooltip": "Ж_Remove attachment______Я",
+    "attachmentsHeading": "Вложения",
+    "addAttachmentTooltip": "Добавить вложения",
+    "removeAttachmentTooltip": "Удалить вложение",
     "cancelButtonLabel": "Отмена",
     "submitButtonLabel": "Подтвердить"
   },

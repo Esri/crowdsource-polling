@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (必須)",
     "unsettableRequiredField": "必須フィールドが初期化されておらず、フォーム内にありません",
     "countOfRemainingCharactersTooltip": "残りの文字数",
-    "attachmentsHeading": "須_Attachments____鷗",
-    "addAttachmentTooltip": "須_Add attachment_____鷗",
-    "removeAttachmentTooltip": "須_Remove attachment______鷗",
+    "attachmentsHeading": "添付ファイル",
+    "addAttachmentTooltip": "添付ファイルの追加",
+    "removeAttachmentTooltip": "添付ファイルの削除",
     "cancelButtonLabel": "キャンセル",
     "submitButtonLabel": "送信"
   },

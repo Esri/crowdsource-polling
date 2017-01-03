@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatoriu)",
     "unsettableRequiredField": "Un câmp obligatoriu nu este iniţializat sau nu este prezent în formular",
     "countOfRemainingCharactersTooltip": "Caractere rămase",
-    "attachmentsHeading": "Ă_Attachments____ș",
-    "addAttachmentTooltip": "Ă_Add attachment_____ș",
-    "removeAttachmentTooltip": "Ă_Remove attachment______ș",
+    "attachmentsHeading": "Ataşări",
+    "addAttachmentTooltip": "Adăugare ataşare",
+    "removeAttachmentTooltip": "Eliminare fişier ataşat",
     "cancelButtonLabel": "Anulare",
     "submitButtonLabel": "Trimitere"
   },

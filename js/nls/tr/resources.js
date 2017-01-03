@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (gerekli)",
     "unsettableRequiredField": "Gerekli bir alan başlatılamadı veya form içinde değil",
     "countOfRemainingCharactersTooltip": "Karakter kaldı",
-    "attachmentsHeading": "ı_Attachments____İ",
-    "addAttachmentTooltip": "ı_Add attachment_____İ",
-    "removeAttachmentTooltip": "ı_Remove attachment______İ",
+    "attachmentsHeading": "Ekler",
+    "addAttachmentTooltip": "Eklenti ekle",
+    "removeAttachmentTooltip": "Eklentiyi kaldır",
     "cancelButtonLabel": "İptal",
     "submitButtonLabel": "Gönder"
   },

@@ -539,16 +539,14 @@ define([
                         // use feet/miles only for the US and if nothing is set for a user
                         cfg.units = "english";
                     }
-                    // Do we have this user's access level?
-                    cfg.userLevel = response.user ? response.user.level : null;
+                    // Do we have a user and the user's access level?
+                    if (response.user) {
+                        cfg.userPrivileges = response.user.privileges;
+                        cfg.userLevel = Number(response.user.level);
+                        cfg.userRoleId = response.user.roleId;
+                    }
                     // Get the helper services (routing, print, locator etc)
                     cfg.helperServices = response.helperServices;
-                    // are any custom roles defined in the organization?
-                    if (response.user && esriLang.isDefined(response.user.roleId)) {
-                        if (response.user.privileges) {
-                            cfg.userPrivileges = response.user.privileges;
-                        }
-                    }
                     this.orgConfig = cfg;
                     deferred.resolve(cfg);
                 }), function (error) {

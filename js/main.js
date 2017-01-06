@@ -194,7 +194,8 @@ define([
          */
         _launch: function (itemInfo) {
             var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField,
-                _this = this;
+                _this = this,
+                editable = true;
 
             document.title = this.config.title || "";
             this.config.isIE8 = this._createIE8Test();
@@ -241,7 +242,13 @@ define([
 
                 // Adjust icon visibilities based on user level; need to also check user access to voting and comment layers
                 //itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
-                this._itemDetails.setActionsVisibility(this._votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
+                if (esriLang.isDefined(this.config.userPrivileges)) {
+                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1) {
+                        editable = false;
+                    }
+                }
+                this._itemDetails.setActionsVisibility(editable && this._votesField, editable && commentFields,
+                    this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 

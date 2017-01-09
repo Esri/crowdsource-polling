@@ -543,7 +543,7 @@ define([
                     if (response.user) {
                         cfg.userPrivileges = response.user.privileges;
                         cfg.userLevel = Number(response.user.level);
-                        cfg.userRoleId = response.user.roleId;
+                        cfg.userRoleId = (response.user.roleId) ? response.user.roleId : response.user.role;
                     }
                     // Get the helper services (routing, print, locator etc)
                     cfg.helperServices = response.helperServices;

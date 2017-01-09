@@ -194,8 +194,7 @@ define([
          */
         _launch: function (itemInfo) {
             var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField,
-                _this = this,
-                editable = true;
+                _this = this;
 
             document.title = this.config.title || "";
             this.config.isIE8 = this._createIE8Test();
@@ -212,7 +211,7 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
                 var configuredSortField, configuredVotesField, commentFields, contentContainer,
-                    needToggleCleanup, compareFunction;
+                    needToggleCleanup, compareFunction, userCanEdit = true;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
@@ -243,11 +242,12 @@ define([
                 // Adjust icon visibilities based on user level; need to also check user access to voting and comment layers
                 //itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
                 if (esriLang.isDefined(this.config.userPrivileges)) {
-                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1) {
-                        editable = false;
+                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
+                        array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
+                        userCanEdit = false;
                     }
                 }
-                this._itemDetails.setActionsVisibility(editable && this._votesField, editable && commentFields,
+                this._itemDetails.setActionsVisibility(userCanEdit && this._votesField, userCanEdit && commentFields,
                     this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----

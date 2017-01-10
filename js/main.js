@@ -697,8 +697,8 @@ define([
 
                 this.config.theme.accents = {
                     "headerAlt": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
-                    "body_background": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
-                    "body_text": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
+                    "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
+                    "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
 
                 // Set the theme CSS
@@ -714,19 +714,26 @@ define([
 
                 styleString += ".themeBody{color:" + this.config.theme.body.text +
                     ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemList{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".themeItemList:hover{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListSelected{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListVotes{color:" + this.config.theme.accents.bodyTextAlt + "}";
 
 
                 /*
-                                styleString += ".appTheme{color:" + this.config.theme.header.text +
-                                    ";background-color:" + this.config.theme.header.background + "}";
-                                styleString += ".appThemeHover:hover{color:" + this.config.theme.header.background +
-                                    ";background-color:" + this.config.theme.header.text + "!important}";
-                                styleString += ".appThemeInverted{color:" + this.config.theme.header.background +
-                                    ";background-color:" + this.config.theme.header.text + "}";
-                                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.header.text +
-                                    ";background-color:" + this.config.theme.header.background + "!important}";
-                                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accents.body_text + "}";
-                                styleString += ".appThemeAccentText{color:" + this.config.theme.accents.header_text + "!important}";
+                styleString += ".appTheme{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".appThemeHover:hover{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "!important}";
+                styleString += ".appThemeInverted{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "!important}";
+                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accents.body_text + "}";
+                styleString += ".appThemeAccentText{color:" + this.config.theme.accents.header_text + "!important}";
                 */
                 this.injectCSS(styleString);
 

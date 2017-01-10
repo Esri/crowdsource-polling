@@ -105,6 +105,11 @@ define([
 
 
             if (this.showHelp) {
+                var helpIconSurface;
+
+                helpIconSurface = SvgHelper.createSVGItem(this.appConfig.helpIcon, this.helpBtn, 20, 20);
+                SvgHelper.changeColor(helpIconSurface, this.appConfig.theme.header.text);
+
                 this.helpBtn.title = i18n.helpButtonTooltip;
                 helpMenuItem = domConstruct.create("div", {
                     className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover",

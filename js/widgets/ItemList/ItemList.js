@@ -95,8 +95,9 @@ define([
             }));
 
             array.forEach(query(".mblSwitchBgLeft", this.itemListActionBar), function (item) {
-                domClass.add(item, "appTheme");
+                domClass.add(item, "themeHeaderInverted");
             });
+            domStyle.set(this.itemListActionBar, "border-bottom-color", this.appConfig.theme.header.text);
         },
 
         /**
@@ -214,6 +215,7 @@ define([
                 "class": "itemSummary",
                 "click": lang.partial(this.summaryClick, this, item)
             }, this.list);
+            domStyle.set(itemSummaryDiv, "border-bottom-color", this.appConfig.theme.body.text);
 
             itemTitleDiv = domConstruct.create("div", {
                 "class": "itemTitle",
@@ -246,7 +248,7 @@ define([
 
             // If this item's OID matches the current selection, apply the theme to highlight it
             if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
-                domClass.add(itemSummaryDiv, "appTheme appThemeHover");
+                domClass.add(itemSummaryDiv, "themeHeaderInverted themeHeaderInvertedHover");
             }
         },
 

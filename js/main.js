@@ -680,42 +680,59 @@ define([
                 }
                 else {
                     this.config.theme = {
-                        "header": {
-                            "background": "white",
-                            "text": this.config.color
+                        "header": { // green
+                            "background": "#bdb76b", //"white",
+                            "text": "#006400" //this.config.color
                         },
-                        "body": {
-                            "background": "white",
-                            "text": this.config.color
+                        "body": { // blue
+                            "background": "#87cefa", //"white",
+                            "text": "#1e90ff" //this.config.color
                         },
-                        "button": {
-                            "background": "white",
-                            "text": this.config.color
+                        "button": { // orange
+                            "background": "#f0e68c", //"white",
+                            "text": "#ff8c00" //this.config.color
                         }
                     };
                 }
 
                 this.config.theme.accents = {
-                    "header_text": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
+                    "headerAlt": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
                     "body_background": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
                     "body_text": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
 
                 // Set the theme CSS
-                styleString += ".appTheme{color:" + this.config.theme.header.text +
+                styleString += ".themeHeader{color:" + this.config.theme.header.text +
                     ";background-color:" + this.config.theme.header.background + "}";
-                styleString += ".appThemeHover:hover{color:" + this.config.theme.header.background +
-                    ";background-color:" + this.config.theme.header.text + "!important}";
-                styleString += ".appThemeInverted{color:" + this.config.theme.header.background +
+                styleString += ".themeHeaderInverted{color:" + this.config.theme.header.background +
                     ";background-color:" + this.config.theme.header.text + "}";
-                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.header.text +
-                    ";background-color:" + this.config.theme.header.background + "!important}";
-                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accents.body_text + "}";
-                styleString += ".appThemeAccentText{color:" + this.config.theme.accents.header_text + "!important}";
+                styleString += ".themeHeaderInvertedHover:hover{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt +
+                    ";opacity:0.35}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + ";opacity:0.35}";
+
+                styleString += ".themeBody{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+
+
+                /*
+                                styleString += ".appTheme{color:" + this.config.theme.header.text +
+                                    ";background-color:" + this.config.theme.header.background + "}";
+                                styleString += ".appThemeHover:hover{color:" + this.config.theme.header.background +
+                                    ";background-color:" + this.config.theme.header.text + "!important}";
+                                styleString += ".appThemeInverted{color:" + this.config.theme.header.background +
+                                    ";background-color:" + this.config.theme.header.text + "}";
+                                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.header.text +
+                                    ";background-color:" + this.config.theme.header.background + "!important}";
+                                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accents.body_text + "}";
+                                styleString += ".appThemeAccentText{color:" + this.config.theme.accents.header_text + "!important}";
+                */
                 this.injectCSS(styleString);
 
-                // Apply the theme to the sidebar
-                domStyle.set("sidebarContent", "border-left-color", this.config.theme.body.text);
+                // Apply the theme to the border lines
+                domStyle.set("sidebarHeading", "border-bottom-color", this.config.theme.header.text);
+                domStyle.set("sidebarContent", "border-left-color", this.config.theme.header.text);
 
 
                 //----- Add the widgets -----

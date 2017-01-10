@@ -1,4 +1,3 @@
-/*global Modernizr */
 /*
  | Copyright 2014 Esri
  |
@@ -132,14 +131,13 @@ define([
          * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
-            var backIconSurface;
+            var backIconSurface, votesIconSurface;
 
             backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
-            if (!Modernizr.rgba) {
-                SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
-            }
+            SvgHelper.changeColor(backIconSurface, this.appConfig.theme.header.background);
 
-            SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
+            votesIconSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
+            SvgHelper.changeColor(votesIconSurface, this.appConfig.theme.accents.headerAlt);
 
             domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
             domAttr.set(this.likeButton, "title", this.i18n.likeButtonTooltip);

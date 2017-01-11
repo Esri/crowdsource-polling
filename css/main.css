@@ -108,15 +108,14 @@ textarea {
     width: 40px;
 }
 .mblSwitchBgLeft {
-    /*background-color: #007ac2;/* //??? */
     background-image: none;
 }
 .mblSwitchKnob {
-    background-color: #eee;/* //??? */
+    background-color: #eee;
     background-image: none;
 }
 .mblSwitchBgRight {
-    background-color: #eee;/* //??? */
+    background-color: #eee;
     background-image: none;
 }
 
@@ -341,8 +340,6 @@ textarea {
     height: 32px;
     float: right;
     cursor: pointer;
-    /*background: url(../images/options.png) no-repeat; //??? */
-    background-size: contain;
 }
 .sideHdrOptionsDropdown {
     display: none;
@@ -396,14 +393,11 @@ textarea {
     float: right;
     cursor: pointer;
     margin: 5px 0 0 12px;
-    /*background: url(../images/help.png) no-repeat; //???
-    background-size: contain;*/
 }
 
 .sideHdrTitle {
     font-size: 24px;
     line-height: 32px;
-    /*color: #ff00ff;  //??? */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -426,10 +420,6 @@ textarea {
 
 /* ---------- SidebarContentController ---------- */
 
-/* //??? #sidebarContent {
-    background-color: #eee;
-}*/
-
 
 /* ---------- ItemList ---------- */
 
@@ -438,7 +428,6 @@ textarea {
     top: 0px;
     width: 100%;
     height: 33px;
-    /*background-color: white; //??? */
     border-bottom: 1px solid #ccc;
 }
 .itemListAction {
@@ -461,7 +450,6 @@ textarea {
     font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
     font-weight: bold;
     font-size: 16px;
-    /*background-color: #eee; //??? */
 }
 @media only screen and (max-width: 640px) {
     .itemListActions {
@@ -481,10 +469,6 @@ textarea {
 .itemSummary {
     line-height: 0; /* reset */
 }
-
-/*.itemList .itemSummary:hover {  //???
-    background-color: white;
-}*/
 
 .itemSummary .itemTitle {
     width: 75%;
@@ -521,8 +505,6 @@ textarea {
 .itemSummary .itemFav {
     float: right;
     font-size: 20px;
-    /*color: rgb(150, 150, 150)!important;  //???
-    color: rgba(0, 0, 0, 0.35)!important;*/
     padding-left: 8px;
 }
 
@@ -610,10 +592,6 @@ label.css-label
 
 /* ---------- ItemDetails ---------- */
 
-/*.itemDetail {  //???
-    color: #555;
-}*/
-
 .itemDetail > .itemSummary > div {
     padding: 10px;
     line-height: 20px;
@@ -647,8 +625,6 @@ label.css-label
 }
 
 .itemDetail .itemDescription {
-    /*background-color: #fff;  //???
-    color: #999; */
     padding: 10px;
 }
 
@@ -667,40 +643,14 @@ label.css-label
     width: 15%;
     max-width: 80px;
     height: 18px;
-    /*border: 1px solid #ccc;//??? */
     display: inline-block;
     margin-right: 5px;
     padding: 4px 6px;
+    border: 1px solid #ccc;
     border-radius: 2px;
     cursor: pointer;
     text-align: center;
 }
-
-/*.itemDetail .btnNormal {  //???
-    color: #007ac2;
-}
-
-.itemDetail .btnNormal ::selection {
-    color: #007ac2;
-}
-
-.itemDetail .btnNormal ::-moz-selection {
-    color: #007ac2;
-}
-
-.itemDetail .btnInverse {
-    color: white;
-    background-color: #007ac2;
-    cursor:default;
-}
-
-.itemDetail .btnInverse ::selection {
-    color: white;
-}
-
-.itemDetail .btnInverse ::-moz-selection {
-    color: white;
-}*/
 
 .itemDetailsBox {
     position: absolute;
@@ -748,7 +698,6 @@ label.css-label
 }
 
 .itemDetail .itemComments {
-    /*background-color: #eee;//???*/
     padding: 10px;
 }
 
@@ -757,7 +706,6 @@ label.css-label
 }
 
 .btn .icon {
-    /*margin-right: 2px; //??? */
     position: relative;
     top: 2px;
 }
@@ -869,7 +817,6 @@ img {
 }
 
 .dynamicFormPanel {
-    /*background-color: white;//???*/
     overflow-y: auto;
 }
 
@@ -881,7 +828,6 @@ img {
     margin: 10px 0px 10px 0px;
     height: auto;
     line-height: 18px;
-    /*color: #555;//???*/
     font-size: 14px;
 }
 
@@ -889,7 +835,6 @@ img {
     width: 99%;
     height: 24px;
     font-size: 12px;
-    /*color: #555;//???*/
 }
 
 .dynamicFormTextAreaCtl {
@@ -898,7 +843,6 @@ img {
     resize: none;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    /*color: #555;//???*/
 }
 
 .dynamicFormCharactersRemaining {
@@ -912,7 +856,6 @@ img {
     width: 100%;
     height: 30px;
     font-size: 12px;
-    /*color: #555;//???*/
 }
 
 .dynamicFormActions {
@@ -934,7 +877,7 @@ img {
     height: 33px;
     display: table-cell;
     vertical-align: middle;
-    /*border: 1px solid #ccc;//??? */
+    border: 1px solid #ccc;
 }
 
 .dynamicFormActionLeft {
@@ -959,9 +902,7 @@ img {
     cursor: pointer;
     width: 20px;
     height: 100%;
-    /*background-color: white;  //???
-    color: #206bdb;*/
-    border: none;/*1px solid #ccc;*/
+    border: none;
     font-size: 20px;
 }
 .esriCTHideFileInputUI
@@ -976,8 +917,6 @@ img {
 #dynamicFormShowAttachments {
     padding: 0 8px 0 16px;
 }
-
-
 
 .dynamicFormAttachmentDisplay {
     position: relative;

@@ -700,7 +700,6 @@ define([
                     "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
                     "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
-                console.log(JSON.stringify(this.config.theme));
 
                 // Set the theme CSS
                 styleString += ".themeHeader{color:" + this.config.theme.header.text +

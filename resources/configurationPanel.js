@@ -28,13 +28,12 @@
             "fields": []
         },
         "customUrlParam": null,
-        "color": "#206bdb",
-        "headerBackgroundColor": "",
-        "headerTextColor": "",
-        "bodyBackgroundColor": "",
-        "bodyTextColor": "",
-        "buttonBackgroundColor": "",
-        "buttonTextColor": ""
+        "headerBackgroundColor": "white",
+        "headerTextColor": "#206bdb",
+        "bodyBackgroundColor": "white",
+        "bodyTextColor": "black",
+        "buttonBackgroundColor": "white",
+        "buttonTextColor": "#206bdb"
     },
     "configurationSettings": [{
         "category": "<b>App</b>",
@@ -54,11 +53,6 @@
             "type": "string",
             "sharedThemeProperty":"logo.small",
             "tooltip": "Icon in top left corner of application. Icon should be 48px high."
-        }, {
-            "label": "Color scheme",
-            "fieldName": "color",
-            "type": "color",
-            "tooltip": "Color scheme for app"
         }, {
             "label": "Help widget text",
             "fieldName": "displayText",
@@ -197,7 +191,7 @@
             "stringFieldOption": "richtext"
         }]
     }, {
-        "category": "<b>Org Theme</b>",
+        "category": "<b>Theme</b>",
         "fields": [{
             "type": "paragraph",
             "value": "User can change the theme settings and choose different colors for header, body, and buttons"

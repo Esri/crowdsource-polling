@@ -673,24 +673,24 @@ define([
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
 
-                // Set the theme colors
+                // Set the theme colors using either organization values or values configured or defaulted for this app
                 if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
                     this.config.orgInfo.portalProperties.sharedTheme) {
                     this.config.theme = this.config.orgInfo.portalProperties.sharedTheme;
                 }
                 else {
                     this.config.theme = {
-                        "header": { // green
-                            "background": "#bdb76b", //"white",
-                            "text": "#006400" //this.config.color
+                        "header": {
+                            "background": this.config.headerBackgroundColor,
+                            "text": this.config.headerTextColor
                         },
-                        "body": { // blue
-                            "background": "#87cefa", //"white",
-                            "text": "#1e90ff" //this.config.color
+                        "body": {
+                            "background": this.config.bodyBackgroundColor,
+                            "text": this.config.bodyTextColor
                         },
-                        "button": { // orange
-                            "background": "#f0e68c", //"white",
-                            "text": "#ff8c00" //this.config.color
+                        "button": {
+                            "background": this.config.buttonBackgroundColor,
+                            "text": this.config.buttonTextColor
                         }
                     };
                 }
@@ -700,6 +700,7 @@ define([
                     "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
                     "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
+                console.log(JSON.stringify(this.config.theme));
 
                 // Set the theme CSS
                 styleString += ".themeHeader{color:" + this.config.theme.header.text +
@@ -737,19 +738,6 @@ define([
                 styleString += ".themeButtonInvertedHover:hover{color:" + this.config.theme.button.text +
                     ";background-color:" + this.config.theme.button.background + "}";
 
-
-                /*
-                styleString += ".appTheme{color:" + this.config.theme.header.text +
-                    ";background-color:" + this.config.theme.header.background + "}";
-                styleString += ".appThemeHover:hover{color:" + this.config.theme.header.background +
-                    ";background-color:" + this.config.theme.header.text + "!important}";
-                styleString += ".appThemeInverted{color:" + this.config.theme.header.background +
-                    ";background-color:" + this.config.theme.header.text + "}";
-                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.header.text +
-                    ";background-color:" + this.config.theme.header.background + "!important}";
-                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accents.body_text + "}";
-                styleString += ".appThemeAccentText{color:" + this.config.theme.accents.header_text + "!important}";
-                */
                 this.injectCSS(styleString);
 
                 // Apply the theme to the border lines

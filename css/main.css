@@ -90,9 +90,6 @@ textarea {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
 }
-/*.mblBackground {  //???
-    background-color: white;
-}*/
 .mblSwitchBg {
     font-weight: normal;
 }
@@ -670,7 +667,7 @@ label.css-label
     width: 15%;
     max-width: 80px;
     height: 18px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;//??? */
     display: inline-block;
     margin-right: 5px;
     padding: 4px 6px;
@@ -760,7 +757,7 @@ label.css-label
 }
 
 .btn .icon {
-    margin-right: 2px;
+    /*margin-right: 2px; //??? */
     position: relative;
     top: 2px;
 }

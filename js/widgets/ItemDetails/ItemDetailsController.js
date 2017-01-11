@@ -139,38 +139,41 @@ define([
             votesIconSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
             SvgHelper.changeColor(votesIconSurface, this.appConfig.theme.accents.headerAlt);
 
-            domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
+            this.likeIconSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.likeIcon, 12, 12);
+            SvgHelper.changeColor(this.likeIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.likeButton, "title", this.i18n.likeButtonTooltip);
 
-            domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
+            this.commentIconSurface = SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 12, 12);
+            SvgHelper.changeColor(this.commentIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.commentButton, "title", this.i18n.commentButtonTooltip);
 
-            domAttr.set(this.mapIcon, "src", "images/mapmarkerBlue.png");
+            this.mapIconSurface = SvgHelper.createSVGItem(this.appConfig.mapMarkerIcon, this.mapIcon, 12, 12);
+            SvgHelper.changeColor(this.mapIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.mapButton, "title", this.i18n.gotoMapViewTooltip);
 
-            domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
+            this.galleryIconSurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 12, 12);
+            SvgHelper.changeColor(this.galleryIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.galleryButton, "title", this.i18n.galleryButtonTooltip);
         },
 
         /**
          * Sets the invert state of a button.
-         * @param {string} pngTag The unique part of the button PNG image file corresponding to
-         * the button, e.g., "like", "comment", "gallery"
+         * @param {object} svgSurface The SVG surface returned by SvgHelper.createSVGItem for the button
          * @param {boolean} toInvert Whether button should be shown in inverted state (true) or not
-         * @param {object} button The button to modify
+         * @param {object} button The button to modify; the button contains the SVG icon
          * @param {object} icon The icon img in the button
          * @param {object} tooltip Whether like button's tooltip should be changed or not
          */
-        invertButton: function (pngTag, toInvert, button, icon, tooltip) {
+        invertButton: function (svgSurface, toInvert, button, icon, tooltip) {
             if (toInvert) {
-                domClass.remove(button, "btnNormal");
-                domClass.add(button, "btnInverse");
-                domAttr.set(icon, "src", "images/" + pngTag + "White.png");
+                domClass.remove(button, "themeButton");
+                domClass.add(button, "themeButtonInverted");
+                SvgHelper.changeColor(svgSurface, this.appConfig.theme.button.background);
             }
             else {
-                domClass.remove(button, "btnInverse");
-                domClass.add(button, "btnNormal");
-                domAttr.set(icon, "src", "images/" + pngTag + "Blue.png");
+                domClass.remove(button, "themeButtonInverted");
+                domClass.add(button, "themeButton");
+                SvgHelper.changeColor(svgSurface, this.appConfig.theme.button.text);
             }
             if (tooltip) {
                 domAttr.set(button, "title", tooltip);
@@ -270,7 +273,7 @@ define([
             }
 
             if (array.indexOf(this.votedItemList, objectId) > -1) {
-                this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
+                this.invertButton(this.likeIconSurface, true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
 
             }
             else {
@@ -280,13 +283,13 @@ define([
                     if (array.indexOf(this.votedItemList, objectId) === -1) {
                         topic.publish("addLike", this.item);
                         this.votedItemList.push(objectId);
-                        this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
+                        this.invertButton(this.likeIconSurface, true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
                         this._likeButtonClickHandler.remove();
                         this._likeButtonClickHandler = null;
                     }
                 }));
 
-                this.invertButton("like", false, this.likeButton, this.likeIcon, this.i18n.likeButtonTooltip);
+                this.invertButton(this.likeIconSurface, false, this.likeButton, this.likeIcon, this.i18n.likeButtonTooltip);
             }
 
         },
@@ -429,7 +432,7 @@ define([
          */
         showGallery: function () {
             domStyle.set(this.gallery, "display", "block");
-            this.invertButton("gallery", true, this.galleryButton, this.galleryIcon);
+            this.invertButton(this.galleryIconSurface, true, this.galleryButton, this.galleryIcon);
         },
 
         /**
@@ -437,7 +440,7 @@ define([
          */
         hideGallery: function () {
             domStyle.set(this.gallery, "display", "none");
-            this.invertButton("gallery", false, this.galleryButton, this.galleryIcon);
+            this.invertButton(this.galleryIconSurface, false, this.galleryButton, this.galleryIcon);
         },
 
         /**
@@ -465,7 +468,7 @@ define([
 
                 // Show the form
                 this.itemAddComment.show();
-                this.invertButton("comment", true, this.commentButton, this.commentIcon);
+                this.invertButton(this.commentIconSurface, true, this.commentButton, this.commentIcon);
 
                 // Scroll the comment form into view if needed
                 this.scrollIntoView(this.itemAddComment.domNode);
@@ -479,7 +482,7 @@ define([
             if (this.itemAddComment) {
                 this.itemAddComment.destroy();
                 this.itemAddComment = null;
-                this.invertButton("comment", false, this.commentButton, this.commentIcon);
+                this.invertButton(this.commentIconSurface, false, this.commentButton, this.commentIcon);
 
                 // Scroll to the top of the details to restore context
                 this.scrollIntoView(this.descriptionDiv);

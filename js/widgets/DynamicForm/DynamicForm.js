@@ -210,7 +210,7 @@ define([
 
             // Cancel
             dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction appThemeInverted appThemeInvertedHover " +
+                className: "dynamicFormAction themeHeaderInverted themeHeaderInvertedHover " +
                     (isRTL ? "dynamicFormActionLeft" : "dynamicFormActionRight")
             }, actionsBar);
             on(dynamicFormCancel, "click", lang.hitch(this, function () {

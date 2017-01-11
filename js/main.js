@@ -722,6 +722,14 @@ define([
                     ";background-color:" + this.config.theme.body.background + "}";
                 styleString += ".themeItemListVotes{color:" + this.config.theme.accents.bodyTextAlt + "}";
 
+                styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
+                styleString += ".themeButton{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+                styleString += ".themeButtonInverted{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+
 
                 /*
                 styleString += ".appTheme{color:" + this.config.theme.header.text +

@@ -704,6 +704,8 @@ define([
                 // Set the theme CSS
                 styleString += ".themeHeader{color:" + this.config.theme.header.text +
                     ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeHeaderHover:hover{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
                 styleString += ".themeHeaderInverted{color:" + this.config.theme.header.background +
                     ";background-color:" + this.config.theme.header.text + "}";
                 styleString += ".themeHeaderInvertedHover:hover{color:" + this.config.theme.header.text +
@@ -725,10 +727,15 @@ define([
                 styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
                     ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
                 styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
+
                 styleString += ".themeButton{color:" + this.config.theme.button.text +
                     ";background-color:" + this.config.theme.button.background + "}";
+                styleString += ".themeButtonHover:hover{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
                 styleString += ".themeButtonInverted{color:" + this.config.theme.button.background +
                     ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInvertedHover:hover{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
 
 
                 /*

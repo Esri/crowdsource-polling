@@ -341,13 +341,13 @@ textarea {
     height: 32px;
     float: right;
     cursor: pointer;
-    background: url(../images/options.png) no-repeat;
+    /*background: url(../images/options.png) no-repeat; //??? */
     background-size: contain;
 }
 .sideHdrOptionsDropdown {
     display: none;
     position: fixed;
-    top: 49px;
+    top: 48px;
     right: 0px;
     border: 1px solid #ccc;
     z-index: 100;
@@ -934,7 +934,7 @@ img {
     height: 33px;
     display: table-cell;
     vertical-align: middle;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;//??? */
 }
 
 .dynamicFormActionLeft {

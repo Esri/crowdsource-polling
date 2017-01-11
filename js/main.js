@@ -286,7 +286,15 @@ define([
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
                     }
-                    topic.publish("showPanel", "itemsList");
+
+                    if (this._sidebarHdr.currentViewIsListView) {
+                        // In widescreen view or coming from items list in narrowscreen view, return to items list
+                        topic.publish("showPanel", "itemsList");
+                    }
+                    else {
+                        // Otherwise, we're coming from the map in narrowscreen view and will return to the map
+                        topic.publish("showMapViewClicked");
+                    }
                 }));
 
                 /**
@@ -581,7 +589,6 @@ define([
                     domStyle.set("sidebarContent", "display", "none");
                     domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(false);
                     needToggleCleanup = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
@@ -591,7 +598,6 @@ define([
                     domStyle.set("sidebarContent", "display", "");
                     domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(true);
                     needToggleCleanup = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
@@ -603,7 +609,7 @@ define([
                         domStyle.set("sidebarContent", "display", "");
                         domStyle.set("sidebarContent", "width", "");
                         contentContainer.resize();
-                        this._sidebarHdr.setViewToggle(true);
+                        this._sidebarHdr.setCurrentViewToListView(true);
                         needToggleCleanup = false;
                     }
                 }));

@@ -737,6 +737,20 @@ label.css-label
     margin-bottom: 12px;
 }
 
+#commentProgressContainer {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background-color: grey;
+}
+#commentProgressBar {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background-color: green;
+}
+
 /* ---------- Popup ---------- */
 
 .popupWidget {
@@ -900,10 +914,11 @@ img {
 }
 .dynamicFormAttachmentBtn {
     cursor: pointer;
-    width: 20px;
-    height: 100%;
+    width: 24px;
+    height: 140%;
     border: none;
     font-size: 20px;
+    margin-left: 5px;
 }
 .esriCTHideFileInputUI
 {
@@ -924,7 +939,6 @@ img {
     overflow: hidden;
 }
 
-
 .dynamicFormDetachmentBtn {
     position: absolute;
     top: -5px;
@@ -934,9 +948,7 @@ img {
     outline: none;
 }
 .dynamicFormAttachment {
-    margin-left: 20px;
+    margin-left: 34px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-

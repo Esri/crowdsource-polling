@@ -425,6 +425,7 @@ define([
                     }
                     else {
                         if (comment.attachments.length > 0) {
+                            topic.publish("startUploadProgress");
                             comment.attachments.forEach(lang.hitch(this, function (node) {
                                 this._commentTable.addAttachment(results[0].objectId, node,
                                     lang.hitch(this, function () { // success callback
@@ -456,9 +457,9 @@ define([
          * @param {number} numFailed Number of failures so far
          */
         monitorAttachmentUpload: function (item, numToUpload, numSucceeded, numFailed) {
-            console.log("upload: +" + numSucceeded + ",-" + numFailed + "/" + numToUpload); //???
+            topic.publish("updateUploadProgress", (100 * numSucceeded / numToUpload));
             if (numToUpload === numSucceeded + numFailed) {
-                console.log("upload done"); //???
+                topic.publish("stopUploadProgress");
                 topic.publish("commentAdded", item);
             }
         },

@@ -248,6 +248,20 @@ define([
                 id: "itemCP"
             }, this.descriptionDiv);
             this.itemCP.startup();
+
+            topic.subscribe("startUploadProgress", function () {
+                domStyle.set("commentProgressBar", "width", "0%");
+                domStyle.set("commentProgressContainer", "display", "block");
+            });
+            topic.subscribe("updateUploadProgress", function (percentDone) {
+                domStyle.set("commentProgressBar", "width", percentDone + "%");
+            });
+            topic.subscribe("stopUploadProgress", function () {
+                setTimeout(function () {
+                    domStyle.set("commentProgressContainer", "display", "none");
+                    domStyle.set("commentProgressBar", "width", "0%");
+                }, 2000);
+            });
         },
 
         /**

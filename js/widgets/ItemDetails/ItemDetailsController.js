@@ -256,7 +256,7 @@ define([
             topic.subscribe("updateUploadProgress", function (percentDone) {
                 domStyle.set("commentProgressBar", "width", percentDone + "%");
             });
-            topic.subscribe("stopUploadProgress", function () {
+            topic.subscribe("stopUploadProgress", function (numSucceeded, numFailed) {
                 setTimeout(function () {
                     domStyle.set("commentProgressContainer", "display", "none");
                     domStyle.set("commentProgressBar", "width", "0%");

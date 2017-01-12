@@ -459,7 +459,7 @@ define([
         monitorAttachmentUpload: function (item, numToUpload, numSucceeded, numFailed) {
             topic.publish("updateUploadProgress", (100 * numSucceeded / numToUpload));
             if (numToUpload === numSucceeded + numFailed) {
-                topic.publish("stopUploadProgress");
+                topic.publish("stopUploadProgress", numSucceeded, numFailed);
                 topic.publish("commentAdded", item);
             }
         },

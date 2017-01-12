@@ -48,6 +48,7 @@ define([
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         widgetsInTemplate: true,
+        currentViewIsListView: true,
 
         /**
          * Widget constructor
@@ -96,15 +97,16 @@ define([
                 className: "sideHdrOptionsMenuItem textButton themeHeaderHover"
             }, this.optionsDropdown);
             viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, function () {
-                if (this.viewToggleIsGoToMapView) {
+                if (this.currentViewIsListView) {
                     topic.publish("showMapViewClicked");
                 }
                 else {
                     topic.publish("showListViewClicked");
                 }
+                this.setCurrentViewToListView(!this.currentViewIsListView);
             }));
             this.own(viewToggleMenuBtnOnClick);
-            this.setViewToggle(true);
+            this.setCurrentViewToListView(true);
 
 
             if (this.showHelp) {
@@ -190,11 +192,11 @@ define([
 
         /**
          * Sets the map/list view toggle display.
-         * @param {boolean} setGoToMapView Set the toggle for the "go to map" state (true)
+         * @param {boolean} setCurrentViewToList Set the toggle for the "go to map" state (true)
          * or the "go to list" state (false)
          */
-        setViewToggle: function (setGoToMapView) {
-            if (setGoToMapView) {
+        setCurrentViewToListView: function (setCurrentViewToList) {
+            if (setCurrentViewToList) {
                 this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoMapViewLabel;
                 this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
             }
@@ -202,7 +204,7 @@ define([
                 this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoListViewLabel;
                 this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
             }
-            this.viewToggleIsGoToMapView = setGoToMapView;
+            this.currentViewIsListView = setCurrentViewToList;
         },
 
         /**

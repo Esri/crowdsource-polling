@@ -4,7 +4,6 @@
         "title": "Crowdsource Polling",
         "titleIcon": "images/banner.png",
         "displayText": "<b>Welcome to the Crowdsource Polling application</b><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
-        "color": "#206bdb",
         "featureLayer": {
             "id": "LandUseCasesVotesComments_8488",
             "fields": [{
@@ -28,7 +27,13 @@
             "id": null,
             "fields": []
         },
-        "customUrlParam": null
+        "customUrlParam": null,
+        "headerBackgroundColor": "white",
+        "headerTextColor": "#206bdb",
+        "bodyBackgroundColor": "white",
+        "bodyTextColor": "black",
+        "buttonBackgroundColor": "white",
+        "buttonTextColor": "#206bdb"
     },
     "configurationSettings": [{
         "category": "<b>App</b>",
@@ -46,12 +51,8 @@
             "label": "URL of application logo",
             "fieldName": "titleIcon",
             "type": "string",
+            "sharedThemeProperty":"logo.small",
             "tooltip": "Icon in top left corner of application. Icon should be 48px high."
-        }, {
-            "label": "Color scheme",
-            "fieldName": "color",
-            "type": "color",
-            "tooltip": "Color scheme for app"
         }, {
             "label": "Help widget text",
             "fieldName": "displayText",
@@ -188,6 +189,48 @@
             "placeholder": "",
             "tooltip": "Text to display in the Sign In window",
             "stringFieldOption": "richtext"
+        }]
+    }, {
+        "category": "<b>Theme</b>",
+        "fields": [{
+            "type": "paragraph",
+            "value": "User can change the theme settings and choose different colors for header, body, and buttons"
+        }, {
+            "label": "Header background color",
+            "tooltip": "Set header background color",
+            "type": "color",
+            "sharedThemeProperty":"header.background",
+            "fieldName": "headerBackgroundColor"
+        },  {
+            "label": "Header text color",
+            "tooltip": "Set header text color",
+            "type": "color",
+            "sharedThemeProperty":"header.text",
+            "fieldName": "headerTextColor"
+        }, {
+            "label": "Body background color",
+            "tooltip": "Set body background color",
+            "type": "color",
+            "sharedThemeProperty":"body.background",
+            "fieldName": "bodyBackgroundColor"
+        }, {
+            "label": "Body text color",
+            "tooltip": "Set body text color",
+            "type": "color",
+            "sharedThemeProperty":"body.text",
+            "fieldName": "bodyTextColor"
+        }, {
+            "label": "Button background color",
+            "tooltip": "Set button background color",
+            "type": "color",
+            "sharedThemeProperty":"button.background",
+            "fieldName": "buttonBackgroundColor"
+        }, {
+            "label": "Button text color",
+            "tooltip": "Set button text color",
+            "type": "color",
+            "sharedThemeProperty":"button.text",
+            "fieldName": "buttonTextColor"
         }]
     }]
 }

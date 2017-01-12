@@ -1,4 +1,4 @@
-/*global esri,Modernizr */
+/*global esri */
 /*
  | Copyright 2014 Esri
  |
@@ -32,6 +32,7 @@ define([
     "dojo/promise/first",
     "dojo/query",
     "dojo/topic",
+    "dojox/color",
     "esri/arcgis/utils",
     "esri/config",
     "esri/dijit/HomeButton",
@@ -53,7 +54,6 @@ define([
     "application/widgets/SidebarHeader/SidebarHeader",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
-    "dojox/color/_base",
     "dojo/domReady!"
 ], function (
     declare,
@@ -73,6 +73,7 @@ define([
     first,
     query,
     topic,
+    dojoxColor,
     arcgisUtils,
     esriConfig,
     HomeButton,
@@ -285,7 +286,15 @@ define([
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
                     }
-                    topic.publish("showPanel", "itemsList");
+
+                    if (this._sidebarHdr.currentViewIsListView) {
+                        // In widescreen view or coming from items list in narrowscreen view, return to items list
+                        topic.publish("showPanel", "itemsList");
+                    }
+                    else {
+                        // Otherwise, we're coming from the map in narrowscreen view and will return to the map
+                        topic.publish("showMapViewClicked");
+                    }
                 }));
 
                 /**
@@ -580,7 +589,6 @@ define([
                     domStyle.set("sidebarContent", "display", "none");
                     domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(false);
                     needToggleCleanup = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
@@ -590,7 +598,6 @@ define([
                     domStyle.set("sidebarContent", "display", "");
                     domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(true);
                     needToggleCleanup = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
@@ -602,7 +609,7 @@ define([
                         domStyle.set("sidebarContent", "display", "");
                         domStyle.set("sidebarContent", "width", "");
                         contentContainer.resize();
-                        this._sidebarHdr.setViewToggle(true);
+                        this._sidebarHdr.setCurrentViewToListView(true);
                         needToggleCleanup = false;
                     }
                 }));
@@ -672,25 +679,75 @@ define([
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
 
-                // Set the theme colors
-                this.config.theme = {
-                    "background": this.config.color,
-                    "foreground": "white",
-                    "accentBkgd": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : this.config.color),
-                    "accentText": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : "white")
+                // Set the theme colors using either organization values or values configured or defaulted for this app
+                if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
+                    this.config.orgInfo.portalProperties.sharedTheme) {
+                    this.config.theme = this.config.orgInfo.portalProperties.sharedTheme;
+                }
+                else {
+                    this.config.theme = {
+                        "header": {
+                            "background": this.config.headerBackgroundColor,
+                            "text": this.config.headerTextColor
+                        },
+                        "body": {
+                            "background": this.config.bodyBackgroundColor,
+                            "text": this.config.bodyTextColor
+                        },
+                        "button": {
+                            "background": this.config.buttonBackgroundColor,
+                            "text": this.config.buttonTextColor
+                        }
+                    };
+                }
+
+                this.config.theme.accents = {
+                    "headerAlt": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
+                    "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
+                    "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
 
                 // Set the theme CSS
-                styleString += ".appTheme{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "}";
-                styleString += ".appThemeHover:hover{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "!important}";
-                styleString += ".appThemeInverted{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "}";
-                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "!important}";
-                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accentBkgd + "}";
-                styleString += ".appThemeAccentText{color:" + this.config.theme.accentText + "!important}";
+                styleString += ".themeHeader{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeHeaderHover:hover{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".themeHeaderInverted{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".themeHeaderInvertedHover:hover{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt +
+                    ";opacity:0.35}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + ";opacity:0.35}";
+
+                styleString += ".themeBody{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemList{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".themeItemList:hover{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListSelected{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListVotes{color:" + this.config.theme.accents.bodyTextAlt + "}";
+
+                styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
+
+                styleString += ".themeButton{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+                styleString += ".themeButtonHover:hover{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInverted{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInvertedHover:hover{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+
                 this.injectCSS(styleString);
 
-                // Apply the theme to the sidebar
-                domStyle.set("sidebarContent", "border-left-color", this.config.theme.background);
+                // Apply the theme to the border lines
+                domStyle.set("sidebarHeading", "border-bottom-color", this.config.theme.header.text);
+                domStyle.set("sidebarContent", "border-left-color", this.config.theme.header.text);
 
 
                 //----- Add the widgets -----
@@ -940,6 +997,51 @@ define([
             }
 
             return highlightGraphic;
+        },
+
+        /**
+         * Creates a calculated color based upon another color.
+         * @param {string|array|object} baseColor Color to use as a base for the calculated color
+         * @param {number} luminosityThreshold Luminosity threshold: if base color's luminosity is below this value,
+         * the luminiosity adjustment is added to the base luminosity; otherwise, the luminosity adjustment is
+         * subtracted
+         * @param {number} luminosityAdjustment Amount by which luminosity of the base color is adjusted to create the
+         * calculated color
+         * @return {string} Hex form of calculated color
+         */
+        _adjustLuminosity: function (baseColor, luminosityThreshold, luminosityAdjustment) {
+            var baseColorAsHSL, calculatedColor;
+
+            baseColorAsHSL = (new Color(baseColor)).toHsl();
+            if (baseColorAsHSL.l < luminosityThreshold) {
+                calculatedColor = dojoxColor.fromHsl(baseColorAsHSL.h,
+                    baseColorAsHSL.s, baseColorAsHSL.l + luminosityAdjustment);
+            }
+            else {
+                calculatedColor = dojoxColor.fromHsl(baseColorAsHSL.h,
+                    baseColorAsHSL.s, baseColorAsHSL.l - luminosityAdjustment);
+            }
+
+            return calculatedColor.toHex();
+        },
+
+        /**
+         * Selects a contrasting black or white color based upon another color.
+         * @param {string|array|object} baseColor Color to use as a base for the color selection
+         * @param {number} luminosityThreshold Luminosity threshold: if base color's luminosity is below this value,
+         * white is returned; otherwise, black is returned
+         * @return {string} "#fff" or "#000"
+         */
+        _getContrastingWhiteOrBlack: function (baseColor, luminosityThreshold) {
+            var baseColorAsHSL;
+
+            baseColorAsHSL = (new Color(baseColor)).toHsl();
+            if (baseColorAsHSL.l < luminosityThreshold) {
+                return "#fff";
+            }
+            else {
+                return "#000";
+            }
         },
 
         //====================================================================================================================//

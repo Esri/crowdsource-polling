@@ -24,6 +24,7 @@ define([
     "dojo/dom-attr",
     "dojo/query",
     "dojo/sniff",
+    "dojo/string",
     "dojo/topic",
     "dojo/on",
     "dojo/NodeList-dom",
@@ -41,7 +42,7 @@ define([
     "application/widgets/PopupWindow/PopupWindow",
 
     "dojo/text!./ItemDetailsView.html"
-], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, topic, on, nld,
+], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, string, topic, on, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
@@ -111,6 +112,7 @@ define([
                 domStyle.set(this.commentsList, "display", "none");
             }
             domStyle.set(this.domNode, "display", "");
+            domStyle.set("headerMessageDiv", "display", "none");
 
             // Scroll to the top of the details; needed for Firefox
             this.scrollIntoView(this.descriptionDiv);
@@ -195,24 +197,40 @@ define([
             var self = this;
             this.own(
                 on(this.backIcon, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("detailsCancel");
                 }),
                 on(this.commentButton, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("getComment", self.item);
                 }),
                 on(this.mapButton, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("showMapViewClicked");
                 }),
-                on(this.galleryButton, "click", lang.hitch(this, function () {
+                on(this.galleryButton, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("showGallery", self.item);
-                    if (domStyle.get(this.gallery, "display") === "none") {
+                    if (domStyle.get(self.gallery, "display") === "none") {
                         this.showGallery();
                     }
                     else {
                         this.hideGallery();
                     }
-                }))
+                }),
+                on(dom.byId("headerMessageButton"), "click", function () {
+                    topic.publish("closeMessage");
+                })
             );
+
+            topic.subscribe("showMessage", function (message) {
+                dom.byId("headerMessageContent").innerHTML = message;
+                domStyle.set("headerMessageDiv", "display", "block");
+            });
+            topic.subscribe("closeMessage", function () {
+                dom.byId("headerMessageContent").innerHTML = "";
+                domStyle.set("headerMessageDiv", "display", "none");
+            });
         },
 
         /**
@@ -244,6 +262,7 @@ define([
          * Creates the div to hold the current item's popup.
          */
         initContentPane: function () {
+            var self = this;
             this.itemCP = new ContentPane({
                 id: "itemCP"
             }, this.descriptionDiv);
@@ -257,6 +276,21 @@ define([
                 domStyle.set("commentProgressBar", "width", percentDone + "%");
             });
             topic.subscribe("stopUploadProgress", function (numSucceeded, numFailed) {
+                var message;
+
+                // Report results of upload
+                if (numFailed === 0) {
+                    message = string.substitute(self.i18n.numberOfAttachmentsUploaded, [numSucceeded]);
+                    domClass.replace("headerMessageType", "alert-info", "alert-danger");
+                }
+                else {
+                    message = string.substitute(self.i18n.numberOfAttachmentsUploadedAndFailed, [numSucceeded, numFailed]);
+                    domClass.replace("headerMessageType", "alert-danger", "alert-info");
+                }
+                topic.publish("showMessage", message);
+
+                // Clear the progress bar, but not abruptly
+                domStyle.set("commentProgressBar", "width", "100%");
                 setTimeout(function () {
                     domStyle.set("commentProgressContainer", "display", "none");
                     domStyle.set("commentProgressBar", "width", "0%");

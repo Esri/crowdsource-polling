@@ -62,7 +62,9 @@ define({
             gotoMapViewTooltip: "Go to map view",
             galleryButtonTooltip: "See attached files",
             commentsListHeading: "Comments",
-            noCommentsPlaceholder: "No comments"
+            noCommentsPlaceholder: "No comments",
+            numberOfAttachmentsUploaded: "${0} attachment(s) uploaded",
+            numberOfAttachmentsUploadedAndFailed: "${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded"
         },
         item_list: {  // List of feature layer items
             linkToMapViewOptionLabel: "Filter list by map",

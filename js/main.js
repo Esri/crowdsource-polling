@@ -350,10 +350,6 @@ define([
                     if (itemExtent) {
                         this.map.setExtent(itemExtent.expand(1.75));
                     }
-                    else {
-                        this.map.centerAndZoom(item.geometry,
-                            Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
-                    }
 
                     // Highlight the item
                     mapGraphicsLayer = this.map.graphics;

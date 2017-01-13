@@ -733,6 +733,7 @@ define([
                 styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
                     ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
                 styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
+                styleString += ".esriViewPopup .mainSection .attrTable td.attrName{color:" + this.config.theme.body.text + "}";
 
                 styleString += ".themeButton{color:" + this.config.theme.button.text +
                     ";background-color:" + this.config.theme.button.background + "}";

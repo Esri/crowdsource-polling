@@ -212,10 +212,10 @@ define([
                     topic.publish("closeMessage");
                     topic.publish("showGallery", self.item);
                     if (domStyle.get(self.gallery, "display") === "none") {
-                        this.showGallery();
+                        self.showGallery();
                     }
                     else {
-                        this.hideGallery();
+                        self.hideGallery();
                     }
                 }),
                 on(dom.byId("headerMessageButton"), "click", function () {

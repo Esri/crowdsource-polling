@@ -44,7 +44,7 @@ define([
          * @memberOf social#
          */
         isAvailable: function () {
-            return !this._config.isIE8;
+            return !this._config.isUnusableIE;
         },
 
         /**
@@ -56,7 +56,7 @@ define([
         init: function (statusCallback) {
             this._statusCallback = statusCallback;
 
-            if (this._config.isIE8) {
+            if (this._config.isUnusableIE) {
                 statusCallback(null);
                 return;
             }

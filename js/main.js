@@ -122,6 +122,7 @@ define([
             // any url parameters and any application specific configuration information.
             if (config) {
                 this.config = config;
+
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
 
@@ -198,7 +199,7 @@ define([
                 _this = this;
 
             document.title = this.config.title || "";
-            this.config.isIE8 = this._createIE8Test();
+            this.config.isUnusableIE = this._browserIsUnusableIE();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
@@ -740,7 +741,7 @@ define([
                 styleString += ".themeButtonInvertedHover:hover{color:" + this.config.theme.button.text +
                     ";background-color:" + this.config.theme.button.background + "}";
 
-                this.injectCSS(styleString);
+                this._injectCSS(styleString);
 
                 // Apply the theme to the border lines
                 domStyle.set("sidebarHeading", "border-bottom-color", this.config.theme.header.text);
@@ -874,7 +875,8 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
-                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
+                        !this.config.isUnusableIE;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -1044,43 +1046,12 @@ define([
         //====================================================================================================================//
 
         /**
-         * Tests if the browser is IE 8 or lower.
-         * @return {boolean} True if the browser is IE 8 or lower
+         * Tests if the browser is IE < 10 or (IE 11 and not https).
+         * @return {boolean} True if the browser is IE
          */
-        _createIE8Test: function () {
-            return this._isIE(8, "lte");
-        },
-
-        /**
-         * Detects IE and version number through injected conditional comments (no UA detect, no need for conditional
-         * compilation / jscript check).
-         * @param {string} [version] IE version
-         * @param {string} [comparison] Operator testing multiple versions based on "version"
-         * parameter, e.g., 'lte', 'gte', etc.
-         * @return {boolean} Result of conditional test; note that since IE stopped supporting conditional comments with
-         * IE 10, this routine only works for IE 9 and below; for IE 10 and above, it always returns "false"
-         * @author Scott Jehl
-         * @see The <a href="https://gist.github.com/scottjehl/357727">detect IE and version number through injected
-         * conditional comments.js</a>.
-         */
-        _isIE: function (version, comparison) {
-            var cc = "IE",
-                b = document.createElement("B"),
-                docElem = document.documentElement,
-                isIE;
-
-            if (version) {
-                cc += " " + version;
-                if (comparison) {
-                    cc = comparison + " " + cc;
-                }
-            }
-
-            b.innerHTML = "<!--[if " + cc + "]><b id='iecctest'></b><![endif]-->";
-            docElem.appendChild(b);
-            isIE = !!document.getElementById("iecctest");
-            docElem.removeChild(b);
-            return isIE;
+        _browserIsUnusableIE: function () {
+            return (window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
+                (window.navigator.userAgent.indexOf("Trident/") >= 0 && window.location.protocol.toLowerCase() === "http:"));
         },
 
         /**
@@ -1091,7 +1062,7 @@ define([
          * require(["dojo/ready", "js/lgonlineBase"], function (ready) {
          *     ready(function () {
          *         var loader = new js.LGObject();
-         *         loader.injectCSS(
+         *         loader._injectCSS(
          *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;text-align:center;overflow:hidden;}"+
          *             ".title{font-size:24px;position:relative;top:25%}"
          *         );
@@ -1101,7 +1072,7 @@ define([
          * @param {string} cssStr A string of CSS text
          * @return {object} DOM style element
          */
-        injectCSS: function (cssStr) {
+        _injectCSS: function (cssStr) {
             var customStyles, cssText;
 
             // By Fredrik Johansson

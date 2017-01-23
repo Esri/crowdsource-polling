@@ -199,7 +199,9 @@ define([
                 _this = this;
 
             document.title = this.config.title || "";
-            this.config.isUnusableIE = this._browserIsUnusableIE();
+
+            this.config.isIE8 = this._isIE8();
+            this.config.browserCanUpload = this._browserCanUpload();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
@@ -883,7 +885,7 @@ define([
 
                     this._hasCommentTable = hasCommentTable;
                     this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
-                        !this.config.isUnusableIE;
+                        !this.config.browserCanUpload;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -1053,11 +1055,53 @@ define([
         //====================================================================================================================//
 
         /**
+         * Tests if the browser is IE 8 or lower.
+         * @return {boolean} True if the browser is IE 8 or lower
+         */
+        _isIE8: function () {
+            return this._isIE(8, "lte");
+        },
+
+        /**
+         * Detects IE and version number through injected conditional comments (no UA detect, no need for conditional
+         * compilation / jscript check).
+         * @param {string} [version] IE version
+         * @param {string} [comparison] Operator testing multiple versions based on "version"
+         * parameter, e.g., 'lte', 'gte', etc.
+         * @return {boolean} Result of conditional test; note that since IE stopped supporting conditional comments with
+         * IE 10, this routine only works for IE 9 and below; for IE 10 and above, it always returns "false"
+         * @author Scott Jehl
+         * @see The <a href="https://gist.github.com/scottjehl/357727">detect IE and version number through injected
+         * conditional comments.js</a>.
          * Tests if the browser is IE < 10 or (IE 11 and not https).
          * @return {boolean} True if the browser is IE
          */
-        _browserIsUnusableIE: function () {
-            return (window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
+        _isIE: function (version, comparison) {
+            var cc = "IE",
+                b = document.createElement("B"),
+                docElem = document.documentElement,
+                isIE;
+
+            if (version) {
+                cc += " " + version;
+                if (comparison) {
+                    cc = comparison + " " + cc;
+                }
+            }
+
+            b.innerHTML = "<!--[if " + cc + "]><b id='iecctest'></b><![endif]-->";
+            docElem.appendChild(b);
+            isIE = !!document.getElementById("iecctest");
+            docElem.removeChild(b);
+            return isIE;
+        },
+
+        /**
+         * Tests if the browser is a non-IE browser or it is (IE 11 and https).
+         * @return {boolean} True if the browser can upload
+         */
+        _browserCanUpload: function () {
+            return !(window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
                 (window.navigator.userAgent.indexOf("Trident/") >= 0 && window.location.protocol.toLowerCase() === "http:"));
         },
 

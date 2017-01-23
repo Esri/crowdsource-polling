@@ -206,7 +206,7 @@ define([
                 }),
                 on(this.mapButton, "click", function () {
                     topic.publish("closeMessage");
-                    topic.publish("showMapViewClicked");
+                    topic.publish("detailsCancel", true);
                 }),
                 on(this.galleryButton, "click", function () {
                     topic.publish("closeMessage");

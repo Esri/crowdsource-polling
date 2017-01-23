@@ -283,9 +283,13 @@ define([
                     topic.publish("showError", err);
                 }));
 
-                topic.subscribe("detailsCancel", lang.hitch(this, function () {
+                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
+                    }
+
+                    if (forceToMap) {
+                        this._sidebarHdr.setCurrentViewToListView(false);
                     }
 
                     if (this._sidebarHdr.currentViewIsListView) {

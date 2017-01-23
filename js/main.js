@@ -351,6 +351,9 @@ define([
                     if (itemExtent) {
                         this.map.setExtent(itemExtent.expand(1.75));
                     }
+                    else {
+                        this.map.centerAt(item.geometry);
+                    }
 
                     // Highlight the item
                     mapGraphicsLayer = this.map.graphics;

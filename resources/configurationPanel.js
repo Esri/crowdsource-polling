@@ -28,12 +28,12 @@
             "fields": []
         },
         "customUrlParam": null,
+        "color": "#206bdb",
         "headerBackgroundColor": "white",
-        "headerTextColor": "#206bdb",
-        "bodyBackgroundColor": "white",
         "bodyTextColor": "black",
-        "buttonBackgroundColor": "white",
-        "buttonTextColor": "#206bdb"
+        "bodyBackgroundColor": "white",
+        "buttonTextColor": "#206bdb",
+        "buttonBackgroundColor": "white"
     },
     "configurationSettings": [{
         "category": "<b>App</b>",
@@ -206,7 +206,7 @@
             "tooltip": "Set header text color",
             "type": "color",
             "sharedThemeProperty":"header.text",
-            "fieldName": "headerTextColor"
+            "fieldName": "color"
         }, {
             "label": "Body background color",
             "tooltip": "Set body background color",

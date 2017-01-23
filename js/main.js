@@ -684,31 +684,52 @@ define([
             var deferred = new Deferred(),
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
+                var contrastToTextColor;
 
-                // Set the theme colors using either organization values or values configured or defaulted for this app
-                if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
+                if (this.config.color) {
+                    // If the app has color(s) configured, we'll use it/them; missing colors use older app defaults
+                    contrastToTextColor = this._getContrastingWhiteOrBlack(this.config.color, 40);
+                    this.config.theme = {
+                        "header": {
+                            "text": this.config.color,
+                            "background": this.config.headerBackgroundColor || "white"
+                        },
+                        "body": {
+                            "text": this.config.bodyTextColor || "black",
+                            "background": this.config.bodyBackgroundColor || "white"
+                        },
+                        "button": {
+                            "text": this.config.buttonTextColor || this.config.color,
+                            "background": this.config.buttonBackgroundColor || "white"
+                        }
+                    };
+                }
+                else if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
                     this.config.orgInfo.portalProperties.sharedTheme) {
+                    // Otherwise, default to organization values if they exist
                     this.config.theme = this.config.orgInfo.portalProperties.sharedTheme;
                 }
                 else {
+                    // Otherwise, default to defaults.js values
                     this.config.theme = {
                         "header": {
-                            "background": this.config.headerBackgroundColor,
-                            "text": this.config.headerTextColor
+                            "background": this.config.defaultTheme.headerBackgroundColor,
+                            "text": this.config.defaultTheme.color
                         },
                         "body": {
-                            "background": this.config.bodyBackgroundColor,
-                            "text": this.config.bodyTextColor
+                            "background": this.config.defaultTheme.bodyBackgroundColor,
+                            "text": this.config.defaultTheme.bodyTextColor
                         },
                         "button": {
-                            "background": this.config.buttonBackgroundColor,
-                            "text": this.config.buttonTextColor
+                            "background": this.config.defaultTheme.buttonBackgroundColor,
+                            "text": this.config.defaultTheme.buttonTextColor
                         }
                     };
                 }
 
                 this.config.theme.accents = {
-                    "headerAlt": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
+                    //"headerAlt": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
+                    "headerAlt": this._adjustLuminosity(this.config.theme.header.text, 40, 10),
                     "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
                     "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
@@ -722,9 +743,11 @@ define([
                     ";background-color:" + this.config.theme.header.text + "}";
                 styleString += ".themeHeaderInvertedHover:hover{color:" + this.config.theme.header.text +
                     ";background-color:" + this.config.theme.header.background + "}";
-                styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt +
+                styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt + "}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + "}";
+                /*styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt +
                     ";opacity:0.35}";
-                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + ";opacity:0.35}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + ";opacity:0.35}";*/
 
                 styleString += ".themeBody{color:" + this.config.theme.body.text +
                     ";background-color:" + this.config.theme.body.background + "}";

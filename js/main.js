@@ -908,7 +908,7 @@ define([
 
                     this._hasCommentTable = hasCommentTable;
                     this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
-                        !this.config.browserCanUpload;
+                        this.config.browserCanUpload;
 
                     mapDataReadyDeferred.resolve("map data");
 

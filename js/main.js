@@ -367,6 +367,11 @@ define([
                     highlightGraphic = this._createHighlightGraphic(item);
                     if (highlightGraphic) {
                         mapGraphicsLayer.add(highlightGraphic);
+
+                        on(mapGraphicsLayer, "click", lang.hitch(this, function (evt) {
+                            evt.graphic = this._currentItem;
+                            this._mapData.getItemLayer().onClick(evt);
+                        }));
                     }
 
                     // If the screen is narrow, switch to the list view; if it isn't, switching to list view is

@@ -692,7 +692,7 @@ define([
             var deferred = new Deferred(),
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
-                var contrastToTextColor;
+                var contrastToTextColor, sharedTheme;
 
                 if (this.config.color) {
                     // If the app has color(s) configured, we'll use it/them; missing colors use older app defaults
@@ -714,29 +714,42 @@ define([
                 }
                 else if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
                     this.config.orgInfo.portalProperties.sharedTheme) {
-                    // Otherwise, default to organization values if they exist
-                    this.config.theme = this.config.orgInfo.portalProperties.sharedTheme;
+                    // Otherwise, default to organization values, falling back to defaults if omitted
+                    sharedTheme = this.config.orgInfo.portalProperties.sharedTheme;
+                    this.config.theme = {
+                        "header": {
+                            "text": sharedTheme.header.text || this.config.defaultTheme.color,
+                            "background": sharedTheme.header.background || this.config.defaultTheme.headerBackgroundColor
+                        },
+                        "body": {
+                            "text": sharedTheme.body.text || this.config.defaultTheme.bodyTextColor,
+                            "background": sharedTheme.body.background || this.config.defaultTheme.bodyBackgroundColor
+                        },
+                        "button": {
+                            "text": sharedTheme.button.text || this.config.defaultTheme.buttonTextColor,
+                            "background": sharedTheme.button.background || this.config.defaultTheme.buttonBackgroundColor
+                        }
+                    };
                 }
                 else {
                     // Otherwise, default to defaults.js values
                     this.config.theme = {
                         "header": {
-                            "background": this.config.defaultTheme.headerBackgroundColor,
-                            "text": this.config.defaultTheme.color
+                            "text": this.config.defaultTheme.color,
+                            "background": this.config.defaultTheme.headerBackgroundColor
                         },
                         "body": {
-                            "background": this.config.defaultTheme.bodyBackgroundColor,
-                            "text": this.config.defaultTheme.bodyTextColor
+                            "text": this.config.defaultTheme.bodyTextColor,
+                            "background": this.config.defaultTheme.bodyBackgroundColor
                         },
                         "button": {
-                            "background": this.config.defaultTheme.buttonBackgroundColor,
-                            "text": this.config.defaultTheme.buttonTextColor
+                            "text": this.config.defaultTheme.buttonTextColor,
+                            "background": this.config.defaultTheme.buttonBackgroundColor
                         }
                     };
                 }
 
                 this.config.theme.accents = {
-                    //"headerAlt": this._getContrastingWhiteOrBlack(this.config.theme.header.text, 40),
                     "headerAlt": this._adjustLuminosity(this.config.theme.header.text, 40, 10),
                     "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
                     "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)

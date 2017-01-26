@@ -331,8 +331,6 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    var itemExtent, mapGraphicsLayer, highlightGraphic;
-
                     this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
@@ -349,6 +347,15 @@ define([
                     }
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
+                    topic.publish("highlightItem", item);
+
+                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
+                    // a no-op because that's the normal state for wider windows
+                    topic.publish("showListViewClicked");
+                }));
+
+                topic.subscribe("highlightItem", lang.hitch(this, function (item) {
+                    var itemExtent, mapGraphicsLayer, highlightGraphic;
 
                     // Zoom to item if possible
                     if (item.geometry.getExtent) {
@@ -373,10 +380,6 @@ define([
                             this._mapData.getItemLayer().onClick(evt);
                         }));
                     }
-
-                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
-                    // a no-op because that's the normal state for wider windows
-                    topic.publish("showListViewClicked");
                 }));
 
                 /**
@@ -665,7 +668,7 @@ define([
                                         var item = results.features[0];
                                         item._layer = searchLayer;
                                         item._graphicsLayer = searchLayer;
-                                        topic.publish("itemSelected", item);
+                                        topic.publish("highlightItem", item);
                                     }
                                 }, function (error) {
                                     console.log(error);
@@ -963,7 +966,7 @@ define([
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-                    topic.publish("itemSelected", feature);
+                    topic.publish("highlightItem", feature);
                 }
             });
         },

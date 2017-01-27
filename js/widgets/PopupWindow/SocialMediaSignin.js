@@ -1,5 +1,3 @@
-﻿/*global define,dojo */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2015 Esri
  |
@@ -20,7 +18,7 @@ define([
     "dojo/_base/declare",
     "application/widgets/PopupWindow/PopupWindow",
     "dijit/_TemplatedMixin",
-    "dojo/text!./SocialMediaSignin.html",  // overrides PopupWindow's template
+    "dojo/text!./SocialMediaSignin.html", // overrides PopupWindow's template
     "dojo/dom",
     "dojo/_base/lang",
     "dojo/dom-construct",
@@ -66,7 +64,8 @@ define([
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var pThis = this, i18n = this.appConfig.i18n.social_media,
+            var pThis = this,
+                i18n = this.appConfig.i18n.social_media,
                 facebook, google, twitter;
 
             // Run any parent postCreate processes - can be done at any point
@@ -89,7 +88,8 @@ define([
                         };
                         pThis._currentProvider = facebook;
                         pThis.hide();
-                    } else {
+                    }
+                    else {
                         pThis.buttonFB.title = i18n.signIntoFacebookTooltip;
                         domStyle.set(pThis.buttonFB, "display", "inline-block");
                     }
@@ -106,7 +106,8 @@ define([
                     on(this.buttonFB, "click", function () {
                         if (facebook.isSignedIn()) {
                             facebook.signOut();
-                        } else {
+                        }
+                        else {
                             facebook.signIn();
                         }
                     });
@@ -128,7 +129,8 @@ define([
                         };
                         pThis._currentProvider = google;
                         pThis.hide();
-                    } else {
+                    }
+                    else {
                         pThis.buttonGP.title = i18n.signIntoGooglePlusTooltip;
                         domStyle.set(pThis.buttonGP, "display", "inline-block");
                     }
@@ -145,7 +147,8 @@ define([
                     on(this.buttonGP, "click", function () {
                         if (google.isSignedIn()) {
                             google.signOut();
-                        } else {
+                        }
+                        else {
                             google.signIn();
                         }
                     });
@@ -167,7 +170,8 @@ define([
                         };
                         pThis._currentProvider = twitter;
                         pThis.hide();
-                    } else {
+                    }
+                    else {
                         pThis.buttonTW.title = i18n.signIntoTwitterTooltip;
                         domStyle.set(pThis.buttonTW, "display", "inline-block");
                     }
@@ -184,7 +188,8 @@ define([
                     on(this.buttonTW, "click", function () {
                         if (twitter.isSignedIn()) {
                             twitter.signOut();
-                        } else {
+                        }
+                        else {
                             twitter.signIn();
                         }
                     });

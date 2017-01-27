@@ -1,5 +1,4 @@
-﻿/*global define */
-/*
+﻿/*
  | Copyright 2014 Esri
  |
  | Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,16 +49,22 @@ define({
             requiredFormItemFlag: " (required)",
             unsettableRequiredField: "A required field is neither initialized nor in the form",
             countOfRemainingCharactersTooltip: "Characters remaining",
+            attachmentsHeading: "Attachments",
+            addAttachmentTooltip: "Add attachment",
+            removeAttachmentTooltip: "Remove attachment",
             cancelButtonLabel: "Cancel",
             submitButtonLabel: "Submit"
         },
         item_details: {  // Detailed information about an item and a list of its comments
             likeButtonTooltip: "Vote for this item",
+            likeButtonInverseTooltip: "Vote counted",
             commentButtonTooltip: "Add a comment",
             gotoMapViewTooltip: "Go to map view",
             galleryButtonTooltip: "See attached files",
             commentsListHeading: "Comments",
-            noCommentsPlaceholder: "No comments"
+            noCommentsPlaceholder: "No comments",
+            numberOfAttachmentsUploaded: "${0} attachment(s) uploaded",
+            numberOfAttachmentsUploadedAndFailed: "${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded"
         },
         item_list: {  // List of feature layer items
             linkToMapViewOptionLabel: "Filter list by map",
@@ -68,6 +73,7 @@ define({
         }
     }),
     "ar": 1,
+    "bs": 1,
     "cs": 1,
     "da": 1,
     "de": 1,
@@ -77,7 +83,9 @@ define({
     "fi": 1,
     "fr": 1,
     "he": 1,
+    "hi": 1,
     "hr": 1,
+    "id": 1,
     "it": 1,
     "ja": 1,
     "ko": 1,

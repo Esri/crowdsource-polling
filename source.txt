@@ -1,0 +1,7 @@
+git repository crowdsource-polling, branch 
+develop
+commit 08e384f990c9cb7c9e158a31c38675ff0e6c8f99
+Author: MikeTschudi <mtschudi@esri.com>
+Date:   Thu Jan 26 09:20:06 2017 -0800
+
+    Replaced missing org colors with default colors

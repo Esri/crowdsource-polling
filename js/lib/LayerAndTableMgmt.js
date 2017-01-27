@@ -1,5 +1,3 @@
-﻿/*global define,dojo,console */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
 /*
  | Copyright 2014 Esri
  |
@@ -112,7 +110,8 @@ define([
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
-                var opLayers, iOpLayer = 0, promises = [];
+                var opLayers, iOpLayer = 0,
+                    promises = [];
 
                 // Operational layer provides item fields and formats
                 if (this.appConfig.itemInfo.itemData.operationalLayers.length === 0) {
@@ -137,7 +136,7 @@ define([
 
                 // Get the layer definition
                 this._itemLayerInWebmap = opLayers[iOpLayer];
-                if (this._itemLayerInWebmap.errors) {//Add by Mike M, itemLayer is null on secure data if signed in with wrong user
+                if (this._itemLayerInWebmap.errors) { //Add by Mike M, itemLayer is null on secure data if signed in with wrong user
 
                     if (this._itemLayerInWebmap.errors.length > 0) {
                         deferred.reject(this._itemLayerInWebmap.errors[0]);
@@ -159,12 +158,13 @@ define([
 
                 // Related table provides comment fields and formats; use the first relationship
                 if (this._itemLayer.relationships &&
-                        this._itemLayer.relationships.length > 0) {
+                    this._itemLayer.relationships.length > 0) {
 
                     // Try to find the table that's in this relationship. We'll do parallel searches in
                     // the hope that it'll be on average faster than serially stepping through the tables.
                     array.forEach(this.appConfig.itemInfo.itemData.tables, lang.hitch(this, function (table) {
-                        var commentTableURL, commentTableInWebmap = table, commentTable, loadDeferred = new Deferred();
+                        var commentTableURL, commentTableInWebmap = table,
+                            commentTable, loadDeferred = new Deferred();
 
                         // Remove the protocol from the comment table's URL so that it can be loaded in
                         // http or https environments
@@ -224,7 +224,8 @@ define([
                                 // Formatting of comment display
                                 if (this._commentTableInWebmap.popupInfo) {
                                     this._commentPopupTemplate = new PopupTemplate(this._commentTableInWebmap.popupInfo);
-                                } else {
+                                }
+                                else {
                                     this._commentPopupTemplate = new InfoTemplate();
                                 }
 
@@ -249,9 +250,10 @@ define([
                         }));
 
                         // We're done whether or not a table matched
-                        deferred.resolve(!(this._commentTable === undefined));
+                        deferred.resolve(this._commentTable !== undefined);
                     }));
-                } else {
+                }
+                else {
                     // No comments for this webmap
                     deferred.resolve(false);
                 }
@@ -275,7 +277,9 @@ define([
          *   dtDefault: {null|value}
          */
         amendFieldInformation: function (featureSvc, webmapPopup) {
-            var fields = featureSvc.fields, defaults = null, sortedFields, fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
+            var fields = featureSvc.fields,
+                defaults = null,
+                sortedFields, fieldInfos = webmapPopup ? webmapPopup.fieldInfos : null;
 
             // Do we have defaults in this feature service?
             if (featureSvc.templates && featureSvc.templates.length > 0 && featureSvc.templates[0].prototype.attributes) {
@@ -293,7 +297,8 @@ define([
                 // Add in default either from template or from field itself, falling back to null
                 if (defaults && defaults[field.name]) {
                     field.dtDefault = field.defaultValue || defaults[field.name];
-                } else {
+                }
+                else {
                     field.dtDefault = field.defaultValue || null;
                 }
 
@@ -355,11 +360,14 @@ define([
                 return arcGISDays;
             }
             return new Date(
-                ((arcGISDays
-                    - 25569)  // days from 12/31/1899 to 1/1/1970
-                    * 86400000)  // milliseconds in a day
-                    + ((new Date()).getTimezoneOffset()  // minutes to add to time so that it is interpreted as local
-                    * 60000)  // milliseconds in a minute
+                ((arcGISDays -
+                        25569) // days from 12/31/1899 to 1/1/1970
+                    *
+                    86400000) // milliseconds in a day
+                +
+                ((new Date()).getTimezoneOffset() // minutes to add to time so that it is interpreted as local
+                    *
+                    60000) // milliseconds in a minute
             );
         },
 
@@ -388,7 +396,9 @@ define([
         /**
          * Adds a comment to the comment table.
          * @param {string} item Item associated with this comment
-         * @param {object} comment Comment as a set of attributes to be added for the item
+         * @param {object} comment Structure containing two properties: attrs--properties matching the form field names
+         * each of which has a value matching its corresponding input form item's value--and attachments--an array
+         * of file upload forms
          * @return {publish} "commentAdded" with the item associated with this comment
          * or "commentAddFailed" with an error message
          */
@@ -397,24 +407,61 @@ define([
 
             // Amend a copy of the comment with the foreign key pointing to the
             // associated item
-            attr = lang.clone(comment);
+            attr = lang.clone(comment.attributes);
             attr[this._foreignKeyField] = item.attributes[this._primaryKeyField];
 
             // Add the comment to the comment table
             gra = new Graphic(null, null, attr);
             this._commentTable.applyEdits([gra], null, null,
                 lang.hitch(this, function (results) {
+                    var fileAttachedCounter = 0,
+                        fileAttachFailedCounter = 0;
+
                     if (results.length === 0) {
                         topic.publish("commentAddFailed", "missing field");
-                    } else if (results[0].error) {
+                    }
+                    else if (results[0].error) {
                         topic.publish("commentAddFailed", results[0].error);
-                    } else {
-                        topic.publish("commentAdded", item);
+                    }
+                    else {
+                        if (comment.attachments.length > 0) {
+                            topic.publish("startUploadProgress");
+                            comment.attachments.forEach(lang.hitch(this, function (node) {
+                                this._commentTable.addAttachment(results[0].objectId, node,
+                                    lang.hitch(this, function () { // success callback
+                                        this.monitorAttachmentUpload(item, comment.attachments.length,
+                                            ++fileAttachedCounter, fileAttachFailedCounter);
+                                    }),
+                                    lang.hitch(this, function () { // failure callback
+                                        this.monitorAttachmentUpload(item, comment.attachments.length,
+                                            fileAttachedCounter, ++fileAttachFailedCounter);
+                                    })
+                                );
+                            }));
+                        }
+                        else {
+                            topic.publish("commentAdded", item);
+                        }
                     }
                 }),
                 lang.hitch(this, function (err) {
                     topic.publish("commentAddFailed", err.message || "commentAddFailed");
                 }));
+        },
+
+        /**
+         * Publishes "commentAdded" when the expected number of uploads has succeeded or failed.
+         * @param {object} item Item being updated
+         * @param {number} numToUpload Total number of files to upload
+         * @param {number} numSucceeded Number of successes so far
+         * @param {number} numFailed Number of failures so far
+         */
+        monitorAttachmentUpload: function (item, numToUpload, numSucceeded, numFailed) {
+            topic.publish("updateUploadProgress", (100 * numSucceeded / numToUpload));
+            if (numToUpload === numSucceeded + numFailed) {
+                topic.publish("stopUploadProgress", numSucceeded, numFailed);
+                topic.publish("commentAdded", item);
+            }
         },
 
         /**
@@ -445,20 +492,27 @@ define([
             updateQuery.returnGeometry = true;
             updateQuery.outFields = ["*"];
 
-            updateQuery.relationshipId = this._itemLayer.relationships[this._commentTableRelateID].id;  // Note that we only consider the first relationship in the items layer
+            // Apply filter if it exists
+            if (this._commentTableInWebmap.layerDefinition &&
+                this._commentTableInWebmap.layerDefinition.definitionExpression) {
+                updateQuery.definitionExpression = this._commentTableInWebmap.layerDefinition.definitionExpression;
+            }
 
+            // Fetch the comments
+            updateQuery.relationshipId = this._itemLayer.relationships[this._commentTableRelateID].id; // Note that we only consider the first relationship in the items layer
             this._itemLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
-                var pThis = this, fset, i, features;
+                var pThis = this,
+                    fset, i, features;
 
                 // Function for descending-OID-order sort
                 function sortByOID(a, b) {
                     if (a.attributes[pThis._commentTable.objectIdField] > b.attributes[pThis._commentTable.objectIdField]) {
-                        return -1;  // order a before b
+                        return -1; // order a before b
                     }
                     if (a.attributes[pThis._commentTable.objectIdField] < b.attributes[pThis._commentTable.objectIdField]) {
-                        return 1;  // order b before a
+                        return 1; // order b before a
                     }
-                    return 0;  // a & b have same date, so relative order doesn't matter
+                    return 0; // a & b have same date, so relative order doesn't matter
                 }
 
                 fset = results[item.attributes[this._itemLayer.objectIdField]];
@@ -468,8 +522,14 @@ define([
                     // Sort by descending OID order
                     features.sort(sortByOID);
 
-                    // Add the comment table popup
+                    // Update each comment to support its display in the item detail section
                     for (i = 0; i < features.length; ++i) {
+
+                        // Replace the layer that comes with the comment item with one that's
+                        // better for getting comment attachments
+                        features[i]._layer = this._commentTable;
+
+                        // Add the comment table popup
                         features[i].setInfoTemplate(this._commentPopupTemplate);
                     }
                 }
@@ -509,7 +569,8 @@ define([
                 }), function () {
                     deferred.reject(item);
                 });
-            } else {
+            }
+            else {
                 deferred.resolve(item);
             }
 
@@ -533,9 +594,11 @@ define([
                     this._itemLayer.applyEdits(null, [item], null, lang.hitch(this, function (ignore, updates) {
                         if (updates.length === 0) {
                             topic.publish("voteUpdateFailed", "missing field");
-                        } else if (updates[0].error) {
+                        }
+                        else if (updates[0].error) {
                             topic.publish("voteUpdateFailed", updates[0].error);
-                        } else {
+                        }
+                        else {
                             topic.publish("voteUpdated", item);
                         }
                     }), lang.hitch(this, function (err) {

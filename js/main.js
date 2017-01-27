@@ -1,5 +1,4 @@
-﻿/*global define,Modernizr,console */
-/*jslint browser:true,sloppy:true,nomen:true,unparam:true,plusplus:true */
+/*global esri */
 /*
  | Copyright 2014 Esri
  |
@@ -33,10 +32,17 @@ define([
     "dojo/promise/first",
     "dojo/query",
     "dojo/topic",
+    "dojox/color",
     "esri/arcgis/utils",
     "esri/config",
     "esri/dijit/HomeButton",
     "esri/dijit/LocateButton",
+    "esri/graphic",
+    "esri/lang",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/symbols/SimpleMarkerSymbol",
+    "esri/urlUtils",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
@@ -48,7 +54,6 @@ define([
     "application/widgets/SidebarHeader/SidebarHeader",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
-    "dojox/color/_base",
     "dojo/domReady!"
 ], function (
     declare,
@@ -68,10 +73,17 @@ define([
     first,
     query,
     topic,
+    dojoxColor,
     arcgisUtils,
     esriConfig,
     HomeButton,
     LocateButton,
+    Graphic,
+    esriLang,
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    SimpleMarkerSymbol,
+    urlUtils,
     registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
@@ -89,10 +101,15 @@ define([
         _linkToMapView: false,
         _currentlyCommenting: false,
         _hasCommentTable: false,
+        _sortField: null,
         _votesField: null,
+        _outlineFillColor: new Color([0, 255, 255, 0]),
+        _fillHiliteColor: new Color([0, 255, 255, 0.1]),
+        _lineHiliteColor: new Color("aqua"),
+
 
         startup: function (config) {
-            var promise, itemInfo, error;
+            var promise, itemInfo, error, link;
 
             parser.parse();
 
@@ -105,11 +122,22 @@ define([
             // any url parameters and any application specific configuration information.
             if (config) {
                 this.config = config;
+
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
 
+                //If application is loaded in RTL mode, change styles of required nodes
+                if (this.config.i18n.direction === "rtl") {
+                    link = document.createElement("link");
+                    link.rel = "stylesheet";
+                    link.type = "text/css";
+                    link.href = "./css/rtl.css";
+                    document.getElementsByTagName("head")[0].appendChild(link);
+                }
+
                 promise = this._launch(itemInfo);
-            } else {
+            }
+            else {
                 error = new Error("Main:: Config is not defined");
                 promise = this.reportError(error);
             }
@@ -131,7 +159,8 @@ define([
                 if (error.message) {
                     error = error.message;
                 }
-            } else {
+            }
+            else {
                 error = this.config.i18n.map.error;
             }
 
@@ -140,13 +169,14 @@ define([
                 this._sidebarCnt.showBusy(false);
 
                 // Display the error to the side of the map
-                var messageNode = domConstruct.create("div", {
+                domConstruct.create("div", {
                     className: "absoluteCover",
                     innerHTML: error
                 }, "sidebarContent", "first");
 
+            }
             // Otherwise, we need to use the backup middle-of-screen error display
-            } else {
+            else {
                 domStyle.set("contentDiv", "display", "none");
                 domClass.add(document.body, "app-error");
                 dom.byId("loading_message").innerHTML = error;
@@ -165,10 +195,13 @@ define([
          * @return {promise} Promise from a the _createWebMap Deferred
          */
         _launch: function (itemInfo) {
-            var setupUI, createMapPromise;
+            var setupUI, createMapPromise, urlObject, searchValue, customUrlParamUC, prop, searchLayer, searchField,
+                _this = this;
 
             document.title = this.config.title || "";
-            this.config.isIE8 = this._createIE8Test();
+
+            this.config.isIE8 = this._isIE8();
+            this.config.browserCanUpload = this._browserCanUpload();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
@@ -181,23 +214,45 @@ define([
 
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
-                var configuredVotesField, commentFields, contentContainer, needToggleCleanup;
+                var configuredSortField, configuredVotesField, commentFields, contentContainer,
+                    needToggleCleanup, compareFunction, userCanEdit = true;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
-                    configuredVotesField = this.config.featureLayer.fields[0].fields[0];
+                    array.forEach(this.config.featureLayer.fields, function (fieldSpec) {
+                        if (fieldSpec.id === "sortField") {
+                            configuredSortField = fieldSpec.fields[0];
+                        }
+                        else if (fieldSpec.id === "itemVotesField") {
+                            configuredVotesField = fieldSpec.fields[0];
+                        }
+                    });
+
                     // Make sure that the configured votes field exists
-                    if (array.some(this._mapData.getItemFields(), lang.hitch(this, function (field) {
-                            return configuredVotesField === field.name &&
-                                (field.type === "esriFieldTypeInteger" || field.type === "esriFieldTypeSmallInteger");
-                        }))) {
-                        this._votesField = configuredVotesField;
-                    }
+                    array.forEach(this._mapData.getItemFields(), lang.hitch(this, function (field) {
+                        if (configuredSortField === field.name) {
+                            this._sortField = configuredSortField;
+                        }
+                        if (configuredVotesField === field.name &&
+                            (field.type === "esriFieldTypeInteger" || field.type === "esriFieldTypeSmallInteger")) {
+                            this._votesField = configuredVotesField;
+                        }
+                    }));
                 }
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
                 this._itemDetails.setItemFields(this._votesField, commentFields);
-                this._itemDetails.setActionsVisibility(this._votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
+
+                // Adjust icon visibilities based on user level; need to also check user access to voting and comment layers
+                //itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
+                if (esriLang.isDefined(this.config.userPrivileges)) {
+                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
+                        array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
+                        userCanEdit = false;
+                    }
+                }
+                this._itemDetails.setActionsVisibility(userCanEdit && this._votesField, userCanEdit && commentFields,
+                    this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 
@@ -230,11 +285,23 @@ define([
                     topic.publish("showError", err);
                 }));
 
-                topic.subscribe("detailsCancel", lang.hitch(this, function () {
+                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
                     }
-                    topic.publish("showPanel", "itemsList");
+
+                    if (forceToMap) {
+                        this._sidebarHdr.setCurrentViewToListView(false);
+                    }
+
+                    if (this._sidebarHdr.currentViewIsListView) {
+                        // In widescreen view or coming from items list in narrowscreen view, return to items list
+                        topic.publish("showPanel", "itemsList");
+                    }
+                    else {
+                        // Otherwise, we're coming from the map in narrowscreen view and will return to the map
+                        topic.publish("showMapViewClicked");
+                    }
                 }));
 
                 /**
@@ -245,7 +312,8 @@ define([
 
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
-                    } else {
+                    }
+                    else {
                         userInfo = this._socialDialog.getSignedInUser();
                         this._itemDetails.showCommentForm(userInfo);
                         this._currentlyCommenting = true;
@@ -263,8 +331,6 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    var itemExtent;
-
                     this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
@@ -281,21 +347,39 @@ define([
                     }
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
+                    topic.publish("highlightItem", item);
+
+                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
+                    // a no-op because that's the normal state for wider windows
+                    topic.publish("showListViewClicked");
+                }));
+
+                topic.subscribe("highlightItem", lang.hitch(this, function (item) {
+                    var itemExtent, mapGraphicsLayer, highlightGraphic;
 
                     // Zoom to item if possible
                     if (item.geometry.getExtent) {
                         itemExtent = item.geometry.getExtent();
                     }
                     if (itemExtent) {
-                        this.map.setExtent(itemExtent.expand(1.5));
-                    } else {
-                        this.map.centerAndZoom(item.geometry,
-                            Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
+                        this.map.setExtent(itemExtent.expand(1.75));
+                    }
+                    else {
+                        this.map.centerAt(item.geometry);
                     }
 
-                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
-                    // a no-op because that's the normal state for wider windows
-                    topic.publish("showListViewClicked");
+                    // Highlight the item
+                    mapGraphicsLayer = this.map.graphics;
+                    mapGraphicsLayer.clear();
+                    highlightGraphic = this._createHighlightGraphic(item);
+                    if (highlightGraphic) {
+                        mapGraphicsLayer.add(highlightGraphic);
+
+                        on(mapGraphicsLayer, "click", lang.hitch(this, function (evt) {
+                            evt.graphic = this._currentItem;
+                            this._mapData.getItemLayer().onClick(evt);
+                        }));
+                    }
                 }));
 
                 /**
@@ -336,7 +420,8 @@ define([
                     if (!signedInUser) {
                         // Show the social media sign-in screen so that the user can sign in
                         this._socialDialog.show();
-                    } else {
+                    }
+                    else {
                         // Simply sign out
                         this._socialDialog.signOut(signedInUser);
                     }
@@ -377,9 +462,9 @@ define([
                  */
                 topic.subscribe("updatedAttachments", lang.hitch(this, function (item, attachments) {
                     if (this._currentItem &&
-                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
-                            item.attributes[item._layer.objectIdField]) {
-                        this._itemDetails.setAttachments(attachments);
+                        this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                        item.attributes[item._layer.objectIdField]) {
+                        this._itemDetails.setCurrentItemAttachments(attachments);
                     }
                     this._sidebarCnt.showBusy(false);
                 }));
@@ -390,8 +475,8 @@ define([
                  */
                 topic.subscribe("updatedCommentsList", lang.hitch(this, function (item, comments) {
                     if (this._currentItem &&
-                            this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
-                            item.attributes[item._layer.objectIdField]) {
+                        this._currentItem.attributes[this._currentItem._layer.objectIdField] ===
+                        item.attributes[item._layer.objectIdField]) {
                         this._itemDetails.setComments(comments);
                     }
                     this._sidebarCnt.showBusy(false);
@@ -400,8 +485,65 @@ define([
                 /**
                  * @param {array} items List of items matching update request
                  */
+                if (this._sortField) {
+                    compareFunction = createCompareFunction(
+                        this._sortField, this.config.ascendingSortOrder);
+                }
+
+                function createCompareFunction(compareAttributeName, ascendingOrder) {
+                    /**
+                     * Compares attribute compareAttributeName for two items (a, b) for the desired sort order.
+                     * @param {object} itemA First item whose attributes property compareAttributeName
+                     * is to be compared
+                     * @param {object} itemB Second item whose attributes property compareAttributeName
+                     * is to be compared
+                     * @return {number} -1 if itemA.attributes[compareAttributeName] <
+                     * itemB.attributes[compareAttributeName], 0 if they're equal, +1 if the first is > the
+                     * second; inquality values are inverted if ascendingOrder is false; nulls/undefineds come
+                     * before non-null values
+                     */
+                    return function (itemA, itemB) {
+                        var sortOrder,
+                            attrItemA = itemA.attributes[compareAttributeName],
+                            attrItemB = itemB.attributes[compareAttributeName];
+
+                        if (attrItemA === null || typeof attrItemA === "undefined") {
+                            if (attrItemB === null || typeof attrItemB === "undefined") {
+                                // null A == null B
+                                sortOrder = 0;
+                            }
+                            else {
+                                // null A < nonnull B
+                                sortOrder = -1;
+                            }
+
+                        }
+                        else if (attrItemB === null || typeof attrItemB === "undefined") {
+                            // nonnull A > null B
+                            sortOrder = 1;
+
+                        }
+                        else if (attrItemA == attrItemB) {
+                            // nonnull A == nonnull B
+                            sortOrder = 0;
+
+                        }
+                        else if (attrItemA < attrItemB) {
+                            // nonnull A < nonnull B
+                            sortOrder = -1;
+
+                        }
+                        else {
+                            // nonnull A > nonnull B
+                            sortOrder = 1;
+                        }
+
+                        return (ascendingOrder ? sortOrder : -sortOrder);
+                    };
+                }
+
                 topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
-                    this._itemsList.setItems(items);
+                    this._itemsList.setItems(items, compareFunction);
                     this._sidebarCnt.showBusy(false);
                 }));
 
@@ -458,20 +600,18 @@ define([
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
-                    domStyle.set("sidebarContent", 'display', 'none');
-                    domStyle.set("mapDiv", 'display', 'block');
+                    domStyle.set("sidebarContent", "display", "none");
+                    domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(false);
                     needToggleCleanup = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
                     // Hide the map and restore the sidebar to the display that it has for this
                     // browser width
-                    domStyle.set("mapDiv", 'display', '');
-                    domStyle.set("sidebarContent", 'display', '');
-                    domStyle.set("sidebarContent", 'width', '');
+                    domStyle.set("mapDiv", "display", "");
+                    domStyle.set("sidebarContent", "display", "");
+                    domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(true);
                     needToggleCleanup = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
@@ -479,17 +619,64 @@ define([
                     // and now the screen is wider than the single-panel threshold, reset
                     // the Layout Container
                     if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
-                        domStyle.set("mapDiv", 'display', '');
-                        domStyle.set("sidebarContent", 'display', '');
-                        domStyle.set("sidebarContent", 'width', '');
+                        domStyle.set("mapDiv", "display", "");
+                        domStyle.set("sidebarContent", "display", "");
+                        domStyle.set("sidebarContent", "width", "");
                         contentContainer.resize();
-                        this._sidebarHdr.setViewToggle(true);
+                        this._sidebarHdr.setCurrentViewToListView(true);
                         needToggleCleanup = false;
                     }
                 }));
 
                 //----- Done -----
                 console.log("app is ready");
+
+                // Do we have a custom URL search parameter?
+                if ((this.config.customUrlLayer.id !== null && this.config.customUrlLayer.fields.length > 0 &&
+                        this.config.customUrlParam !== null)) {
+
+                    urlObject = urlUtils.urlToObject(document.location.href);
+                    urlObject.query = urlObject.query || {};
+                    urlObject.query = esriLang.stripTags(urlObject.query);
+                    searchValue = null;
+                    customUrlParamUC = this.config.customUrlParam.toUpperCase();
+                    for (prop in urlObject.query) {
+                        if (urlObject.query.hasOwnProperty(prop)) {
+                            if (prop.toUpperCase() === customUrlParamUC) {
+                                searchValue = urlObject.query[prop];
+                            }
+                        }
+                    }
+
+                    if (searchValue) {
+                        // Attempt to go to an item specified as a URL parameter
+                        searchLayer = this.map.getLayer(this.config.customUrlLayer.id);
+                        if (searchLayer && this.config.customUrlLayer.fields && this.config.customUrlLayer.fields.length > 0) {
+                            searchField = this.config.customUrlLayer.fields[0].fields[0];
+
+                            require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
+                                var query, queryTask;
+                                queryTask = new QueryTask(searchLayer.url);
+                                query = new Query();
+                                query.where = searchField + " = '" + searchValue + "'";
+                                query.returnGeometry = true;
+                                query.outFields = ["*"];
+                                query.outSpatialReference = _this.map.spatialReference;
+
+                                queryTask.execute(query, function (results) {
+                                    if (results && results.features && results.features.length > 0) {
+                                        var item = results.features[0];
+                                        item._layer = searchLayer;
+                                        item._graphicsLayer = searchLayer;
+                                        topic.publish("highlightItem", item);
+                                    }
+                                }, function (error) {
+                                    console.log(error);
+                                });
+                            });
+                        }
+                    }
+                }
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
             }));
@@ -502,28 +689,116 @@ define([
          * @return {object} Deferred
          */
         _setupUI: function () {
-            var deferred = new Deferred(), styleString = "";
+            var deferred = new Deferred(),
+                styleString = "";
             setTimeout(lang.hitch(this, function () {
+                var contrastToTextColor, sharedTheme;
 
-                // Set the theme colors
-                this.config.theme = {
-                    "background": this.config.color,
-                    "foreground": "white",
-                    "accentBkgd": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : this.config.color),
-                    "accentText": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : "white")
+                if (this.config.color) {
+                    // If the app has color(s) configured, we'll use it/them; missing colors use older app defaults
+                    contrastToTextColor = this._getContrastingWhiteOrBlack(this.config.color, 40);
+                    this.config.theme = {
+                        "header": {
+                            "text": this.config.color,
+                            "background": this.config.headerBackgroundColor || "white"
+                        },
+                        "body": {
+                            "text": this.config.bodyTextColor || "black",
+                            "background": this.config.bodyBackgroundColor || "white"
+                        },
+                        "button": {
+                            "text": this.config.buttonTextColor || this.config.color,
+                            "background": this.config.buttonBackgroundColor || "white"
+                        }
+                    };
+                }
+                else if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
+                    this.config.orgInfo.portalProperties.sharedTheme) {
+                    // Otherwise, default to organization values, falling back to defaults if omitted
+                    sharedTheme = this.config.orgInfo.portalProperties.sharedTheme;
+                    this.config.theme = {
+                        "header": {
+                            "text": sharedTheme.header.text || this.config.defaultTheme.color,
+                            "background": sharedTheme.header.background || this.config.defaultTheme.headerBackgroundColor
+                        },
+                        "body": {
+                            "text": sharedTheme.body.text || this.config.defaultTheme.bodyTextColor,
+                            "background": sharedTheme.body.background || this.config.defaultTheme.bodyBackgroundColor
+                        },
+                        "button": {
+                            "text": sharedTheme.button.text || this.config.defaultTheme.buttonTextColor,
+                            "background": sharedTheme.button.background || this.config.defaultTheme.buttonBackgroundColor
+                        }
+                    };
+                }
+                else {
+                    // Otherwise, default to defaults.js values
+                    this.config.theme = {
+                        "header": {
+                            "text": this.config.defaultTheme.color,
+                            "background": this.config.defaultTheme.headerBackgroundColor
+                        },
+                        "body": {
+                            "text": this.config.defaultTheme.bodyTextColor,
+                            "background": this.config.defaultTheme.bodyBackgroundColor
+                        },
+                        "button": {
+                            "text": this.config.defaultTheme.buttonTextColor,
+                            "background": this.config.defaultTheme.buttonBackgroundColor
+                        }
+                    };
+                }
+
+                this.config.theme.accents = {
+                    "headerAlt": this._adjustLuminosity(this.config.theme.header.text, 40, 10),
+                    "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
+                    "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
 
                 // Set the theme CSS
-                styleString += ".appTheme{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "}";
-                styleString += ".appThemeHover:hover{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "!important}";
-                styleString += ".appThemeInverted{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "}";
-                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "!important}";
-                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accentBkgd + "}";
-                styleString += ".appThemeAccentText{color:" + this.config.theme.accentText + "!important}";
-                this.injectCSS(styleString);
+                styleString += ".themeHeader{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeHeaderHover:hover{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".themeHeaderInverted{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".themeHeaderInvertedHover:hover{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt + "}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + "}";
+                /*styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt +
+                    ";opacity:0.35}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + ";opacity:0.35}";*/
 
-                // Apply the theme to the sidebar
-                domStyle.set("sidebarContent", "border-left-color", this.config.theme.background);
+                styleString += ".themeBody{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemList{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".themeItemList:hover{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListSelected{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListVotes{color:" + this.config.theme.accents.bodyTextAlt + "}";
+
+                styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
+                styleString += ".esriViewPopup .mainSection .attrTable td.attrName{color:" + this.config.theme.body.text + "}";
+
+                styleString += ".themeButton{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+                styleString += ".themeButtonHover:hover{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInverted{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInvertedHover:hover{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+
+                this._injectCSS(styleString);
+
+                // Apply the theme to the border lines
+                domStyle.set("sidebarHeading", "border-bottom-color", this.config.theme.header.text);
+                domStyle.set("sidebarContent", "border-left-color", this.config.theme.header.text);
 
 
                 //----- Add the widgets -----
@@ -541,7 +816,8 @@ define([
                 // Sidebar header
                 this._sidebarHdr = new SidebarHeader({
                     "appConfig": this.config,
-                    "showSignin": this._socialDialog.isAvailable() && (this.config.commentNameField.trim().length > 0),
+                    "showSignin": this._socialDialog.isAvailable() && this.config.commentNameField &&
+                        (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText
                 }).placeAt("sidebarHeading");
 
@@ -596,7 +872,7 @@ define([
                     // Optionally define additional map config here for example you can
                     // turn the slider off, display info windows, disable wraparound 180, slider position and more.
                 },
-                usePopupManager: false,  // disable searching thru all layers for infoTemplates
+                usePopupManager: false, // disable searching thru all layers for infoTemplates
                 //ignorePopups: true,
                 layerMixins: this.config.layerMixins || [],
                 editable: this.config.editable,
@@ -633,7 +909,8 @@ define([
                 // make sure map is loaded
                 if (this.map.loaded) {
                     mapCreateDeferred.resolve();
-                } else {
+                }
+                else {
                     on.once(this.map, "load", lang.hitch(this, function () {
                         mapCreateDeferred.resolve();
                     }));
@@ -651,6 +928,8 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
+                        this.config.browserCanUpload;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -668,8 +947,9 @@ define([
                             searchControl.emit("load");
                         }
 
+                    }
                     // Otherwise, shift zoom, home, and locate buttons up to fill the gap where the search would've been
-                    } else {
+                    else {
                         domStyle.set("mapDiv_zoom_slider", "top", "16px");
                         domStyle.set("LocateButton", "top", "131px");
                     }
@@ -699,7 +979,7 @@ define([
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-                    topic.publish("itemSelected", feature);
+                    topic.publish("highlightItem", feature);
                 }
             });
         },
@@ -718,13 +998,111 @@ define([
             }).play();
         },
 
+        /**
+         * Creates a graphic that can be used for highlighting.
+         * @param {object} item Graphic to be used to create highlight graphic
+         */
+        _createHighlightGraphic: function (item) {
+            var highlightGraphic, outlineSquareSize = 30;
+
+            if (item.geometry.type === "polyline") {
+                // Create a line symbol using the configured line highlight color
+                highlightGraphic = new Graphic(item.geometry,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                        this._lineHiliteColor, 3),
+                    item.attributes, item.infoTemplate);
+
+            }
+            else {
+                if (item.geometry.type === "point") {
+                    // JSAPI does not want NaN coordinates
+                    if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
+                        return highlightGraphic;
+                    }
+
+                    // Try to get the item's layer's symbol
+                    highlightGraphic = this._mapData.getItemLayer()._getSymbol(item);
+                    if (highlightGraphic && !isNaN(highlightGraphic.width) && !isNaN(highlightGraphic.height)) {
+                        outlineSquareSize = 1 + Math.max(highlightGraphic.width, highlightGraphic.height);
+                    }
+
+                    // Create an outline square using the configured line highlight color
+                    highlightGraphic = new Graphic(item.geometry,
+                        new SimpleMarkerSymbol(
+                            SimpleMarkerSymbol.STYLE_SQUARE,
+                            outlineSquareSize,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                this._lineHiliteColor, 2),
+                            this._outlineFillColor
+                        ),
+                        item.attributes, item.infoTemplate);
+
+                }
+                else if (item.geometry.type) {
+                    // Create a polygon symbol using the configured line & fill highlight colors
+                    highlightGraphic = new esri.Graphic(item.geometry,
+                        new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                this._lineHiliteColor, 3), this._fillHiliteColor),
+                        item.attributes, item.infoTemplate);
+                }
+            }
+
+            return highlightGraphic;
+        },
+
+        /**
+         * Creates a calculated color based upon another color.
+         * @param {string|array|object} baseColor Color to use as a base for the calculated color
+         * @param {number} luminosityThreshold Luminosity threshold: if base color's luminosity is below this value,
+         * the luminiosity adjustment is added to the base luminosity; otherwise, the luminosity adjustment is
+         * subtracted
+         * @param {number} luminosityAdjustment Amount by which luminosity of the base color is adjusted to create the
+         * calculated color
+         * @return {string} Hex form of calculated color
+         */
+        _adjustLuminosity: function (baseColor, luminosityThreshold, luminosityAdjustment) {
+            var baseColorAsHSL, calculatedColor;
+
+            baseColorAsHSL = (new Color(baseColor)).toHsl();
+            if (baseColorAsHSL.l < luminosityThreshold) {
+                calculatedColor = dojoxColor.fromHsl(baseColorAsHSL.h,
+                    baseColorAsHSL.s, baseColorAsHSL.l + luminosityAdjustment);
+            }
+            else {
+                calculatedColor = dojoxColor.fromHsl(baseColorAsHSL.h,
+                    baseColorAsHSL.s, baseColorAsHSL.l - luminosityAdjustment);
+            }
+
+            return calculatedColor.toHex();
+        },
+
+        /**
+         * Selects a contrasting black or white color based upon another color.
+         * @param {string|array|object} baseColor Color to use as a base for the color selection
+         * @param {number} luminosityThreshold Luminosity threshold: if base color's luminosity is below this value,
+         * white is returned; otherwise, black is returned
+         * @return {string} "#fff" or "#000"
+         */
+        _getContrastingWhiteOrBlack: function (baseColor, luminosityThreshold) {
+            var baseColorAsHSL;
+
+            baseColorAsHSL = (new Color(baseColor)).toHsl();
+            if (baseColorAsHSL.l < luminosityThreshold) {
+                return "#fff";
+            }
+            else {
+                return "#000";
+            }
+        },
+
         //====================================================================================================================//
 
         /**
          * Tests if the browser is IE 8 or lower.
          * @return {boolean} True if the browser is IE 8 or lower
          */
-        _createIE8Test: function () {
+        _isIE8: function () {
             return this._isIE(8, "lte");
         },
 
@@ -739,23 +1117,36 @@ define([
          * @author Scott Jehl
          * @see The <a href="https://gist.github.com/scottjehl/357727">detect IE and version number through injected
          * conditional comments.js</a>.
+         * Tests if the browser is IE < 10 or (IE 11 and not https).
+         * @return {boolean} True if the browser is IE
          */
         _isIE: function (version, comparison) {
-            var cc      = 'IE',
-                b       = document.createElement('B'),
+            var cc = "IE",
+                b = document.createElement("B"),
                 docElem = document.documentElement,
                 isIE;
 
             if (version) {
-                cc += ' ' + version;
-                if (comparison) { cc = comparison + ' ' + cc; }
+                cc += " " + version;
+                if (comparison) {
+                    cc = comparison + " " + cc;
+                }
             }
 
-            b.innerHTML = '<!--[if ' + cc + ']><b id="iecctest"></b><![endif]-->';
+            b.innerHTML = "<!--[if " + cc + "]><b id='iecctest'></b><![endif]-->";
             docElem.appendChild(b);
-            isIE = !!document.getElementById('iecctest');
+            isIE = !!document.getElementById("iecctest");
             docElem.removeChild(b);
             return isIE;
+        },
+
+        /**
+         * Tests if the browser is a non-IE browser or it is (IE 11 and https).
+         * @return {boolean} True if the browser can upload
+         */
+        _browserCanUpload: function () {
+            return !(window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
+                (window.navigator.userAgent.indexOf("Trident/") >= 0 && window.location.protocol.toLowerCase() === "http:"));
         },
 
         /**
@@ -766,7 +1157,7 @@ define([
          * require(["dojo/ready", "js/lgonlineBase"], function (ready) {
          *     ready(function () {
          *         var loader = new js.LGObject();
-         *         loader.injectCSS(
+         *         loader._injectCSS(
          *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;text-align:center;overflow:hidden;}"+
          *             ".title{font-size:24px;position:relative;top:25%}"
          *         );
@@ -776,16 +1167,17 @@ define([
          * @param {string} cssStr A string of CSS text
          * @return {object} DOM style element
          */
-        injectCSS: function (cssStr) {
+        _injectCSS: function (cssStr) {
             var customStyles, cssText;
 
             // By Fredrik Johansson
             // http://www.quirksmode.org/bugreports/archives/2006/01/IE_wont_allow_documentcreateElementstyle.html#c4088
             customStyles = document.createElement("style");
             customStyles.setAttribute("type", "text/css");
-            if (customStyles.styleSheet) {  // IE 7 & 8
+            if (customStyles.styleSheet) { // IE 7 & 8
                 customStyles.styleSheet.cssText = cssStr;
-            } else {  // W3C
+            }
+            else { // W3C
                 cssText = document.createTextNode(cssStr);
                 customStyles.appendChild(cssText);
             }

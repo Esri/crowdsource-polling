@@ -695,21 +695,11 @@ define([
             var deferred = new Deferred(),
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
-                var contrastToTextColor, sharedTheme;
-
-                if (this.config.orgInfo && this.config.orgInfo.portalProperties) {
-                    sharedTheme = this.config.orgInfo.portalProperties.sharedTheme;
-                }
+                var contrastToTextColor;
 
                 if (!this.config.titleIcon) {
-                    // If the app doesn't have a header icon configured, see if there's an org one to use
-                    if (sharedTheme && sharedTheme.logo.small) {
-                        this.config.titleIcon = (sharedTheme.logo && sharedTheme.logo.small);
-                    }
-                    // Fall back to default theme
-                    if (!this.config.titleIcon) {
-                        this.config.titleIcon = this.config.defaultTheme.titleIcon;
-                    }
+                    // If the app doesn't have a header icon configured, fall back to default theme
+                    this.config.titleIcon = this.config.defaultTheme.titleIcon;
                 }
 
                 if (this.config.color) {
@@ -727,29 +717,6 @@ define([
                         "button": {
                             "text": this.config.buttonTextColor || this.config.color,
                             "background": this.config.buttonBackgroundColor || "white"
-                        }
-                    };
-                }
-                else if (sharedTheme) {
-                    // Otherwise, default to organization values, falling back to defaults if omitted
-                    this.config.theme = {
-                        "header": {
-                            "text": (sharedTheme.header && sharedTheme.header.text) ||
-                                this.config.defaultTheme.color,
-                            "background": (sharedTheme.header && sharedTheme.header.background) ||
-                                this.config.defaultTheme.headerBackgroundColor
-                        },
-                        "body": {
-                            "text": (sharedTheme.body && sharedTheme.body.text) ||
-                                this.config.defaultTheme.bodyTextColor,
-                            "background": (sharedTheme.body && sharedTheme.body.background) ||
-                                this.config.defaultTheme.bodyBackgroundColor
-                        },
-                        "button": {
-                            "text": (sharedTheme.button && sharedTheme.button.text) ||
-                                this.config.defaultTheme.buttonTextColor,
-                            "background": (sharedTheme.button && sharedTheme.button.background) ||
-                                this.config.defaultTheme.buttonBackgroundColor
                         }
                     };
                 }

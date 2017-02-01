@@ -29,7 +29,6 @@ define({
 
     //Template-specific properties in AGOL configuration
     "title": "Crowdsource Polling",
-    "titleIcon": "images/banner.png",
     "displayText": "<b>Welcome to the Crowdsource Polling application</b><p>Use Crowdsource Polling to provide information and collect feedback on plans and issues around your community.</p><p>Search for a location or click an item in the list to get started.</p>",
     "featureLayer": {
         "id": "LandUseCasesVotesComments_8488",
@@ -66,6 +65,7 @@ define({
     // five colors are specified in the application, they take precedence; otherwise (as with an older
     // application in which only 'color' is specified), they are generated from the single color.
     "defaultTheme": {
+        "titleIcon": "images/banner.png",
         "color": "#206bdb", // this serves as the headerTextColor
         "headerBackgroundColor": "white",
         "bodyTextColor": "black",

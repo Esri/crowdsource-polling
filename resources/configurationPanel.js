@@ -51,7 +51,7 @@
             "label": "URL of application logo",
             "fieldName": "titleIcon",
             "type": "string",
-            "sharedThemeProperty":"logo.small",
+            "sharedThemeProperty": "logo.small",
             "tooltip": "Icon in top left corner of application. Icon should be 48px high."
         }, {
             "label": "Help widget text",
@@ -144,10 +144,10 @@
         "category": "<b>Access</b>",
         "fields": [{
             "type": "paragraph",
-            "value":"Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
+            "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
         },{
             "type": "paragraph",
-            "value":"See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
+            "value": "See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
         },{
             "label": "Field to store the name of authenticated commenters.",
             "fieldName": "commentNameField",
@@ -199,37 +199,37 @@
             "label": "Header background color",
             "tooltip": "Set header background color",
             "type": "color",
-            "sharedThemeProperty":"header.background",
+            "sharedThemeProperty": "header.background",
             "fieldName": "headerBackgroundColor"
         },  {
             "label": "Header text color",
             "tooltip": "Set header text color",
             "type": "color",
-            "sharedThemeProperty":"header.text",
+            "sharedThemeProperty": "header.text",
             "fieldName": "color"
         }, {
             "label": "Body background color",
             "tooltip": "Set body background color",
             "type": "color",
-            "sharedThemeProperty":"body.background",
+            "sharedThemeProperty": "body.background",
             "fieldName": "bodyBackgroundColor"
         }, {
             "label": "Body text color",
             "tooltip": "Set body text color",
             "type": "color",
-            "sharedThemeProperty":"body.text",
+            "sharedThemeProperty": "body.text",
             "fieldName": "bodyTextColor"
         }, {
             "label": "Button background color",
             "tooltip": "Set button background color",
             "type": "color",
-            "sharedThemeProperty":"button.background",
+            "sharedThemeProperty": "button.background",
             "fieldName": "buttonBackgroundColor"
         }, {
             "label": "Button text color",
             "tooltip": "Set button text color",
             "type": "color",
-            "sharedThemeProperty":"button.text",
+            "sharedThemeProperty": "button.text",
             "fieldName": "buttonTextColor"
         }]
     }]

@@ -117,8 +117,8 @@ define([
             // See https://bugs.dojotoolkit.org/ticket/15878
             window.document.dojoClick = false;
 
-            // config will contain application and user defined info for the template such as i18n strings, the web map id
-            // and application id
+            // config will contain application and user defined info for the template such as i18n strings,
+            // the web map id and application id
             // any url parameters and any application specific configuration information.
             if (config) {
                 this.config = config;
@@ -187,7 +187,7 @@ define([
             return def.promise;
         },
 
-        //========================================================================================================================//
+        //============================================================================================================//
 
         /**
          * Launches app.
@@ -218,7 +218,8 @@ define([
                     needToggleCleanup, compareFunction, userCanEdit = true;
 
                 //----- Merge map-loading info with UI items -----
-                if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
+                if (this.config.featureLayer && this.config.featureLayer.fields &&
+                    this.config.featureLayer.fields.length > 0) {
                     array.forEach(this.config.featureLayer.fields, function (fieldSpec) {
                         if (fieldSpec.id === "sortField") {
                             configuredSortField = fieldSpec.fields[0];
@@ -243,8 +244,9 @@ define([
                 this._itemsList.setFields(this._votesField);
                 this._itemDetails.setItemFields(this._votesField, commentFields);
 
-                // Adjust icon visibilities based on user level; need to also check user access to voting and comment layers
-                //itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
+                // Adjust icon visibilities based on user level; need to also check user access to voting
+                // and comment layers; visibility function's signature:
+                // itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
                 if (esriLang.isDefined(this.config.userPrivileges)) {
                     if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
                         array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
@@ -651,7 +653,8 @@ define([
                     if (searchValue) {
                         // Attempt to go to an item specified as a URL parameter
                         searchLayer = this.map.getLayer(this.config.customUrlLayer.id);
-                        if (searchLayer && this.config.customUrlLayer.fields && this.config.customUrlLayer.fields.length > 0) {
+                        if (searchLayer && this.config.customUrlLayer.fields &&
+                            this.config.customUrlLayer.fields.length > 0) {
                             searchField = this.config.customUrlLayer.fields[0].fields[0];
 
                             require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
@@ -694,6 +697,21 @@ define([
             setTimeout(lang.hitch(this, function () {
                 var contrastToTextColor, sharedTheme;
 
+                if (this.config.orgInfo && this.config.orgInfo.portalProperties) {
+                    sharedTheme = this.config.orgInfo.portalProperties.sharedTheme;
+                }
+
+                if (!this.config.titleIcon) {
+                    // If the app doesn't have a header icon configured, see if there's an org one to use
+                    if (sharedTheme && sharedTheme.logo.small) {
+                        this.config.titleIcon = (sharedTheme.logo && sharedTheme.logo.small);
+                    }
+                    // Fall back to default theme
+                    if (!this.config.titleIcon) {
+                        this.config.titleIcon = this.config.defaultTheme.titleIcon;
+                    }
+                }
+
                 if (this.config.color) {
                     // If the app has color(s) configured, we'll use it/them; missing colors use older app defaults
                     contrastToTextColor = this._getContrastingWhiteOrBlack(this.config.color, 40);
@@ -712,22 +730,26 @@ define([
                         }
                     };
                 }
-                else if (this.config.orgInfo && this.config.orgInfo.portalProperties &&
-                    this.config.orgInfo.portalProperties.sharedTheme) {
+                else if (sharedTheme) {
                     // Otherwise, default to organization values, falling back to defaults if omitted
-                    sharedTheme = this.config.orgInfo.portalProperties.sharedTheme;
                     this.config.theme = {
                         "header": {
-                            "text": sharedTheme.header.text || this.config.defaultTheme.color,
-                            "background": sharedTheme.header.background || this.config.defaultTheme.headerBackgroundColor
+                            "text": (sharedTheme.header && sharedTheme.header.text) ||
+                                this.config.defaultTheme.color,
+                            "background": (sharedTheme.header && sharedTheme.header.background) ||
+                                this.config.defaultTheme.headerBackgroundColor
                         },
                         "body": {
-                            "text": sharedTheme.body.text || this.config.defaultTheme.bodyTextColor,
-                            "background": sharedTheme.body.background || this.config.defaultTheme.bodyBackgroundColor
+                            "text": (sharedTheme.body && sharedTheme.body.text) ||
+                                this.config.defaultTheme.bodyTextColor,
+                            "background": (sharedTheme.body && sharedTheme.body.background) ||
+                                this.config.defaultTheme.bodyBackgroundColor
                         },
                         "button": {
-                            "text": sharedTheme.button.text || this.config.defaultTheme.buttonTextColor,
-                            "background": sharedTheme.button.background || this.config.defaultTheme.buttonBackgroundColor
+                            "text": (sharedTheme.button && sharedTheme.button.text) ||
+                                this.config.defaultTheme.buttonTextColor,
+                            "background": (sharedTheme.button && sharedTheme.button.background) ||
+                                this.config.defaultTheme.buttonBackgroundColor
                         }
                     };
                 }
@@ -783,7 +805,8 @@ define([
                 styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
                     ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
                 styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
-                styleString += ".esriViewPopup .mainSection .attrTable td.attrName{color:" + this.config.theme.body.text + "}";
+                styleString += ".esriViewPopup .mainSection .attrTable td.attrName{color:" +
+                    this.config.theme.body.text + "}";
 
                 styleString += ".themeButton{color:" + this.config.theme.button.text +
                     ";background-color:" + this.config.theme.button.background + "}";
@@ -891,7 +914,8 @@ define([
                     map: this.map,
                     theme: "HomeButtonLight"
                 }, "HomeButton");
-                domConstruct.place(homeButton.domNode, query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0], "after");
+                domConstruct.place(homeButton.domNode,
+                    query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0], "after");
                 homeButton.startup();
 
                 // Start up locate widget
@@ -974,7 +998,8 @@ define([
                 var feature;
                 // Make sure that we have a feature from a feature layer,
                 // then supplement the selection with the layer if it doesn't have one
-                if (selectResult && selectResult.source.featureLayer && selectResult.result && selectResult.result.feature) {
+                if (selectResult && selectResult.source.featureLayer &&
+                    selectResult.result && selectResult.result.feature) {
                     feature = selectResult.result.feature;
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
@@ -1096,7 +1121,7 @@ define([
             }
         },
 
-        //====================================================================================================================//
+        //============================================================================================================//
 
         /**
          * Tests if the browser is IE 8 or lower.
@@ -1146,7 +1171,8 @@ define([
          */
         _browserCanUpload: function () {
             return !(window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
-                (window.navigator.userAgent.indexOf("Trident/") >= 0 && window.location.protocol.toLowerCase() === "http:"));
+                (window.navigator.userAgent.indexOf("Trident/") >= 0 &&
+                    window.location.protocol.toLowerCase() === "http:"));
         },
 
         /**
@@ -1158,7 +1184,8 @@ define([
          *     ready(function () {
          *         var loader = new js.LGObject();
          *         loader._injectCSS(
-         *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;text-align:center;overflow:hidden;}"+
+         *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;
+         *                 text-align:center;overflow:hidden;}"+
          *             ".title{font-size:24px;position:relative;top:25%}"
          *         );
          *     });

@@ -333,7 +333,6 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
                     this._itemDetails.clearComments();
@@ -359,29 +358,35 @@ define([
                 topic.subscribe("highlightItem", lang.hitch(this, function (item) {
                     var itemExtent, mapGraphicsLayer, highlightGraphic;
 
-                    // Zoom to item if possible
-                    if (item.geometry.getExtent) {
-                        itemExtent = item.geometry.getExtent();
-                    }
-                    if (itemExtent) {
-                        this.map.setExtent(itemExtent.expand(1.75));
-                    }
-                    else {
-                        this.map.centerAt(item.geometry);
-                    }
+                    // Is this item in our data layer?
+                    if (item._layer.id === this._mapData.getItemLayer().id) {
+                        this._currentItem = item;
 
-                    // Highlight the item
-                    mapGraphicsLayer = this.map.graphics;
-                    mapGraphicsLayer.clear();
-                    highlightGraphic = this._createHighlightGraphic(item);
-                    if (highlightGraphic) {
-                        mapGraphicsLayer.add(highlightGraphic);
+                        // Zoom to item if possible
+                        if (item.geometry.getExtent) {
+                            itemExtent = item.geometry.getExtent();
+                        }
+                        if (itemExtent) {
+                            this.map.setExtent(itemExtent.expand(1.75));
+                        }
+                        else {
+                            this.map.centerAt(item.geometry);
+                        }
 
-                        on(mapGraphicsLayer, "click", lang.hitch(this, function (evt) {
-                            evt.graphic = this._currentItem;
-                            this._mapData.getItemLayer().onClick(evt);
-                        }));
+                        // Highlight the item
+                        mapGraphicsLayer = this.map.graphics;
+                        mapGraphicsLayer.clear();
+                        highlightGraphic = this._createHighlightGraphic(item);
+                        if (highlightGraphic) {
+                            mapGraphicsLayer.add(highlightGraphic);
+                        }
                     }
+                }));
+
+                on(this.map.graphics, "click", lang.hitch(this, function (evt) {
+                    evt.stopImmediatePropagation();
+                    evt.graphic = this._currentItem;
+                    this._mapData.getItemLayer().onClick(evt);
                 }));
 
                 /**

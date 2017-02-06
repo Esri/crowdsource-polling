@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Přejít na zobrazení mapy",
     "galleryButtonTooltip": "Zobrazit připojené soubory",
     "commentsListHeading": "Komentáře",
-    "noCommentsPlaceholder": "Žádné komentáře"
+    "noCommentsPlaceholder": "Žádné komentáře",
+    "numberOfAttachmentsUploaded": "Ř_${0} attachment(s) uploaded_________ů",
+    "numberOfAttachmentsUploadedAndFailed": "Ř_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ů"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrovat seznam podle mapy",

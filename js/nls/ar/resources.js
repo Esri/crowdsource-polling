@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "انتقال إلى عرض الخريطة",
     "galleryButtonTooltip": "روية الملفات المرفقة",
     "commentsListHeading": "التعليقات",
-    "noCommentsPlaceholder": "لا يوجد تعليقات"
+    "noCommentsPlaceholder": "لا يوجد تعليقات",
+    "numberOfAttachmentsUploaded": "بيت_${0} attachment(s) uploaded_________لاحقة",
+    "numberOfAttachmentsUploadedAndFailed": "بيت_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________لاحقة"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "تصفية القائمة بواسطة الخريطة",

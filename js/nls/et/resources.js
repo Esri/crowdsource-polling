@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Mine kaardivaatesse",
     "galleryButtonTooltip": "Vaadake manustatud faile",
     "commentsListHeading": "Kommentaarid",
-    "noCommentsPlaceholder": "Kommentaarid puuduvad"
+    "noCommentsPlaceholder": "Kommentaarid puuduvad",
+    "numberOfAttachmentsUploaded": "Š_${0} attachment(s) uploaded_________ä",
+    "numberOfAttachmentsUploadedAndFailed": "Š_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ä"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtreeri loend kaardi järgi",

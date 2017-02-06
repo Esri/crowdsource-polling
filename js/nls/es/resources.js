@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Ir a la vista de mapa",
     "galleryButtonTooltip": "Ver archivos adjuntos",
     "commentsListHeading": "Comentarios",
-    "noCommentsPlaceholder": "No hay comentarios"
+    "noCommentsPlaceholder": "No hay comentarios",
+    "numberOfAttachmentsUploaded": "á_${0} attachment(s) uploaded_________Ó",
+    "numberOfAttachmentsUploadedAndFailed": "á_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________Ó"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrar lista por mapa",

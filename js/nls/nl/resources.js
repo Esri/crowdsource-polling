@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Ga naar kaartweergave",
     "galleryButtonTooltip": "Zie bijgesloten bestanden",
     "commentsListHeading": "Opmerkingen",
-    "noCommentsPlaceholder": "Geen opmerkingen"
+    "noCommentsPlaceholder": "Geen opmerkingen",
+    "numberOfAttachmentsUploaded": "Ĳ_${0} attachment(s) uploaded_________ä",
+    "numberOfAttachmentsUploadedAndFailed": "Ĳ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ä"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Lijst filteren op kaart",

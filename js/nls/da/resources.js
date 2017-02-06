@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Gå til kortvisning",
     "galleryButtonTooltip": "Se vedhæftede filer",
     "commentsListHeading": "Comments",
-    "noCommentsPlaceholder": "Ingen kommentarer"
+    "noCommentsPlaceholder": "Ingen kommentarer",
+    "numberOfAttachmentsUploaded": "ø_${0} attachment(s) uploaded_________å",
+    "numberOfAttachmentsUploadedAndFailed": "ø_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________å"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrér liste efter kort",

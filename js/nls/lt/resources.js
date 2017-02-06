@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Eiti į žemėlapio vaizdą",
     "galleryButtonTooltip": "Rodyti pridėtus failus",
     "commentsListHeading": "Komentarai",
-    "noCommentsPlaceholder": "Komentarų nėra"
+    "noCommentsPlaceholder": "Komentarų nėra",
+    "numberOfAttachmentsUploaded": "Į_${0} attachment(s) uploaded_________š",
+    "numberOfAttachmentsUploadedAndFailed": "Į_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________š"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrų sąrašas pagal žemėlapį",

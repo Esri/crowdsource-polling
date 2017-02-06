@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "עבור לתצוגת מפה",
     "galleryButtonTooltip": "ראה קצבים מצורפים",
     "commentsListHeading": "הערות",
-    "noCommentsPlaceholder": "אין הערות"
+    "noCommentsPlaceholder": "אין הערות",
+    "numberOfAttachmentsUploaded": "כן_${0} attachment(s) uploaded_________ש",
+    "numberOfAttachmentsUploadedAndFailed": "כן_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ש"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "סנן את הרשימה לפי מפה",

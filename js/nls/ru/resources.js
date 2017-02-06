@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Перейти к виду карты",
     "galleryButtonTooltip": "Просмотр вложенных файлов",
     "commentsListHeading": "Комментарии",
-    "noCommentsPlaceholder": "Комментарии отсутствуют"
+    "noCommentsPlaceholder": "Комментарии отсутствуют",
+    "numberOfAttachmentsUploaded": "Ж_${0} attachment(s) uploaded_________Я",
+    "numberOfAttachmentsUploadedAndFailed": "Ж_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________Я"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Фильтр списка по картам",

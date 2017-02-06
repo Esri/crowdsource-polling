@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "マップ ビューに移動",
     "galleryButtonTooltip": "添付したファイルを参照",
     "commentsListHeading": "コメント",
-    "noCommentsPlaceholder": "コメントはありません"
+    "noCommentsPlaceholder": "コメントはありません",
+    "numberOfAttachmentsUploaded": "須_${0} attachment(s) uploaded_________鷗",
+    "numberOfAttachmentsUploadedAndFailed": "須_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________鷗"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "マップ別のフィルター リスト",

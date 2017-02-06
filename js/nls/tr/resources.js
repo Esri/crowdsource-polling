@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Harita görünümüne git",
     "galleryButtonTooltip": "Ekteki dosyaları incele",
     "commentsListHeading": "Yorumlar",
-    "noCommentsPlaceholder": "Yorum yok"
+    "noCommentsPlaceholder": "Yorum yok",
+    "numberOfAttachmentsUploaded": "ı_${0} attachment(s) uploaded_________İ",
+    "numberOfAttachmentsUploadedAndFailed": "ı_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________İ"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Listeyi haritaya göre filtrele",

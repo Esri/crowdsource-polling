@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "맵 보기로 이동",
     "galleryButtonTooltip": "첨부 파일 보기",
     "commentsListHeading": "설명",
-    "noCommentsPlaceholder": "설명 없음"
+    "noCommentsPlaceholder": "설명 없음",
+    "numberOfAttachmentsUploaded": "한_${0} attachment(s) uploaded_________빠",
+    "numberOfAttachmentsUploadedAndFailed": "한_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________빠"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "맵별 필터 목록",

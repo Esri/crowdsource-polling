@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Accesare vizualizare hartă",
     "galleryButtonTooltip": "Vizualizare fişiere ataşate",
     "commentsListHeading": "Comentarii",
-    "noCommentsPlaceholder": "Niciun comentariu"
+    "noCommentsPlaceholder": "Niciun comentariu",
+    "numberOfAttachmentsUploaded": "Ă_${0} attachment(s) uploaded_________ș",
+    "numberOfAttachmentsUploadedAndFailed": "Ă_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ș"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrare listă după hartă",

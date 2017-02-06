@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Idi na prikaz mape",
     "galleryButtonTooltip": "Pogledaj priložene datoteke",
     "commentsListHeading": "Komentari",
-    "noCommentsPlaceholder": "Nema komentara"
+    "noCommentsPlaceholder": "Nema komentara",
+    "numberOfAttachmentsUploaded": "Č_${0} attachment(s) uploaded_________ž",
+    "numberOfAttachmentsUploadedAndFailed": "Č_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ž"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtriraj listu po mapi",

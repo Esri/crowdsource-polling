@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Siirry karttanäkymään",
     "galleryButtonTooltip": "Näytä liitetyt tiedostot",
     "commentsListHeading": "Kommentit",
-    "noCommentsPlaceholder": "Ei kommentteja"
+    "noCommentsPlaceholder": "Ei kommentteja",
+    "numberOfAttachmentsUploaded": "Å_${0} attachment(s) uploaded_________ö",
+    "numberOfAttachmentsUploadedAndFailed": "Å_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ö"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Suodata luettelo kartan perusteella",

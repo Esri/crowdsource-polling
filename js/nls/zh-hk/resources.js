@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "轉至地圖檢視",
     "galleryButtonTooltip": "參閱隨附的檔案",
     "commentsListHeading": "評論",
-    "noCommentsPlaceholder": "無評論"
+    "noCommentsPlaceholder": "無評論",
+    "numberOfAttachmentsUploaded": "試_${0} attachment(s) uploaded_________驗",
+    "numberOfAttachmentsUploadedAndFailed": "試_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________驗"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "按地圖的篩選程式清單",

@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Μετάβαση στην προβολή χάρτη",
     "galleryButtonTooltip": "Προβολή συνημμένων αρχείων",
     "commentsListHeading": "Σχόλια",
-    "noCommentsPlaceholder": "Χωρίς σχόλια"
+    "noCommentsPlaceholder": "Χωρίς σχόλια",
+    "numberOfAttachmentsUploaded": "Đ_${0} attachment(s) uploaded_________ớ",
+    "numberOfAttachmentsUploadedAndFailed": "Đ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ớ"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Φιλτράρισμα λίστας βάσει χάρτη",

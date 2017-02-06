@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "ไปที่การแสดงแผนที่",
     "galleryButtonTooltip": "ดูไฟล์แนบ",
     "commentsListHeading": "ความเห็น",
-    "noCommentsPlaceholder": "ไม่มีความคิดเห็น"
+    "noCommentsPlaceholder": "ไม่มีความคิดเห็น",
+    "numberOfAttachmentsUploaded": "ก้_${0} attachment(s) uploaded_________ษฺ",
+    "numberOfAttachmentsUploadedAndFailed": "ก้_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ษฺ"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "รายการตัวกรองโดยแผนที่",

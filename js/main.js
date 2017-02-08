@@ -355,22 +355,24 @@ define([
                     topic.publish("showListViewClicked");
                 }));
 
-                topic.subscribe("highlightItem", lang.hitch(this, function (item) {
+                topic.subscribe("highlightItem", lang.hitch(this, function (item, skipZoom) {
                     var itemExtent, mapGraphicsLayer, highlightGraphic;
 
                     // Is this item in our data layer?
                     if (item._layer.id === this._mapData.getItemLayer().id) {
                         this._currentItem = item;
 
-                        // Zoom to item if possible
-                        if (item.geometry.getExtent) {
-                            itemExtent = item.geometry.getExtent();
-                        }
-                        if (itemExtent) {
-                            this.map.setExtent(itemExtent.expand(1.75));
-                        }
-                        else {
-                            this.map.centerAt(item.geometry);
+                        if (!skipZoom) {
+                            // Zoom to item if possible
+                            if (item.geometry.getExtent) {
+                                itemExtent = item.geometry.getExtent();
+                            }
+                            if (itemExtent) {
+                                this.map.setExtent(itemExtent.expand(1.75));
+                            }
+                            else {
+                                this.map.centerAt(item.geometry);
+                            }
                         }
 
                         // Highlight the item
@@ -976,7 +978,9 @@ define([
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-                    topic.publish("highlightItem", feature);
+
+                    // Do the app's highlighting
+                    topic.publish("highlightItem", feature, true);
                 }
             });
         },

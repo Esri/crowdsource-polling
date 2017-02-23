@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Passa a vista mappa",
     "galleryButtonTooltip": "Vedi file allegati",
     "commentsListHeading": "Commenti",
-    "noCommentsPlaceholder": "Nessun commento"
+    "noCommentsPlaceholder": "Nessun commento",
+    "numberOfAttachmentsUploaded": "${0} allegati caricati",
+    "numberOfAttachmentsUploadedAndFailed": "${0} allegati caricati<br>Impossibile caricare ${1} allegati"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtra elenco per mappa",

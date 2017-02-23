@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Przejdź do widoku mapy",
     "galleryButtonTooltip": "Zobacz załączone pliki",
     "commentsListHeading": "Komentarze",
-    "noCommentsPlaceholder": "Brak komentarzy"
+    "noCommentsPlaceholder": "Brak komentarzy",
+    "numberOfAttachmentsUploaded": "Przesłano następującą liczbę załączników: ${0}",
+    "numberOfAttachmentsUploadedAndFailed": "Przesłano następującą liczbę załączników: ${0}<br>Nie można przesłać następującej liczby załączników: ${1}"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtruj listę wg mapy",

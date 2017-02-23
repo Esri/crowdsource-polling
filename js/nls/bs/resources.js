@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Idi na prikaz karte",
     "galleryButtonTooltip": "Vidi datoteke u privitku",
     "commentsListHeading": "Komentari",
-    "noCommentsPlaceholder": "Nema komentara"
+    "noCommentsPlaceholder": "Nema komentara",
+    "numberOfAttachmentsUploaded": "${0} privitaka učitano",
+    "numberOfAttachmentsUploadedAndFailed": "${0} privitaka učitano<br>${1} privitaka nije se moglo učitati"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtriraj popis prema karti",

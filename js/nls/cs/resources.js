@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Přejít na zobrazení mapy",
     "galleryButtonTooltip": "Zobrazit připojené soubory",
     "commentsListHeading": "Komentáře",
-    "noCommentsPlaceholder": "Žádné komentáře"
+    "noCommentsPlaceholder": "Žádné komentáře",
+    "numberOfAttachmentsUploaded": "Bylo nahráno ${0} příloh.",
+    "numberOfAttachmentsUploadedAndFailed": "Bylo nahráno ${0} příloh<br>${1} příloh nelze nahrát."
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrovat seznam podle mapy",

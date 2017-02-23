@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Đến chế độ xem bản đồ",
     "galleryButtonTooltip": "Xem tệp đính kèm",
     "commentsListHeading": "Bình luận",
-    "noCommentsPlaceholder": "Không có bình luận"
+    "noCommentsPlaceholder": "Không có bình luận",
+    "numberOfAttachmentsUploaded": "${0} tệp đính kèm được tải lên",
+    "numberOfAttachmentsUploadedAndFailed": "${0} tệp đính kèm được tải lên<br>Không thể tải lên ${1} tệp đính kèm"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Lọc danh sách theo bản đồ",

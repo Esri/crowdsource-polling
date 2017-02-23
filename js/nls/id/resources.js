@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Buka tampilan peta",
     "galleryButtonTooltip": "Lihat file terlampir",
     "commentsListHeading": "Komentar",
-    "noCommentsPlaceholder": "Tak ada komentar"
+    "noCommentsPlaceholder": "Tak ada komentar",
+    "numberOfAttachmentsUploaded": "${0} lampiran diunggah",
+    "numberOfAttachmentsUploadedAndFailed": "${0} lampiran diunggah<br>${1} lampiran tidak dapat diunggah"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Daftar filter menurut peta",

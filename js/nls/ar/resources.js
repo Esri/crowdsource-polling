@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "انتقال إلى عرض الخريطة",
     "galleryButtonTooltip": "روية الملفات المرفقة",
     "commentsListHeading": "التعليقات",
-    "noCommentsPlaceholder": "لا يوجد تعليقات"
+    "noCommentsPlaceholder": "لا يوجد تعليقات",
+    "numberOfAttachmentsUploaded": "تم تحميل ${0} مرفق",
+    "numberOfAttachmentsUploadedAndFailed": "تم تحميل ${0} مرفق. تعذر تحميل <br>${1} مرفق"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "تصفية القائمة بواسطة الخريطة",

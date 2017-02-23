@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (आवश्यक है)",
     "unsettableRequiredField": "एक आवश्यक फील्ड न तो प्रांरभ हुई है और न ही फार्म में है",
     "countOfRemainingCharactersTooltip": "अक्षर शेष हैं",
-    "attachmentsHeading": "आ_Attachments____ज",
-    "addAttachmentTooltip": "आ_Add attachment_____ज",
-    "removeAttachmentTooltip": "आ_Remove attachment______ज",
+    "attachmentsHeading": "अनुलग्नक",
+    "addAttachmentTooltip": "अनुलग्नक जोड़ें",
+    "removeAttachmentTooltip": "अनुलग्नक हटाएँ",
     "cancelButtonLabel": "रद्द करें",
     "submitButtonLabel": "सबमिट करें"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "मानचित्र दृश्य पर जाएं",
     "galleryButtonTooltip": "संलग्न फाइलें देखें",
     "commentsListHeading": "टिप्पणियाँ",
-    "noCommentsPlaceholder": "कोई टिप्पणी नहीं"
+    "noCommentsPlaceholder": "कोई टिप्पणी नहीं",
+    "numberOfAttachmentsUploaded": "${0} अनुलग्नक अपलोड हुए",
+    "numberOfAttachmentsUploadedAndFailed": "${0} अनुलग्नक अपलोड हुए<br>${1} अनुलग्नक अपलोड नहीं हो सका/सके"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "मानचित्र द्वारा सूची फ़िल्टर करें",

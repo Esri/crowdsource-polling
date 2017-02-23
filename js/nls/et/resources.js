@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Mine kaardivaatesse",
     "galleryButtonTooltip": "Vaadake manustatud faile",
     "commentsListHeading": "Kommentaarid",
-    "noCommentsPlaceholder": "Kommentaarid puuduvad"
+    "noCommentsPlaceholder": "Kommentaarid puuduvad",
+    "numberOfAttachmentsUploaded": "${0} manus(t) üles laaditud",
+    "numberOfAttachmentsUploadedAndFailed": "${0} manus(t) üles laaditud<br>${1} manust ei saanud üles laadida"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtreeri loend kaardi järgi",

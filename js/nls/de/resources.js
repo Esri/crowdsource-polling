@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Zur Kartenansicht wechseln",
     "galleryButtonTooltip": "Angehängte Dateien anzeigen",
     "commentsListHeading": "Kommentare",
-    "noCommentsPlaceholder": "Keine Kommentare"
+    "noCommentsPlaceholder": "Keine Kommentare",
+    "numberOfAttachmentsUploaded": "${0} Anlage(n) hochgeladen",
+    "numberOfAttachmentsUploadedAndFailed": "${0} Anlage(n) hochgeladen<br>${1} Anlage(n) konnten nicht hochgeladen werden"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Liste nach Karte filtern",

@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Iet uz kartes skatu",
     "galleryButtonTooltip": "Skatīt pievienotos failus",
     "commentsListHeading": "Komentāri",
-    "noCommentsPlaceholder": "Nav komentāru"
+    "noCommentsPlaceholder": "Nav komentāru",
+    "numberOfAttachmentsUploaded": "Augšupielādēti(-s) ${0} pielikumi(-s)",
+    "numberOfAttachmentsUploadedAndFailed": "Augšupielādēti(-s) ${0} pielikumi(-s)<br>${1} pielikumus(-s) nevarēja augšupielādēt"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrēt sarakstu pēc kartes",

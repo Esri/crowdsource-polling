@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "转至地图视图",
     "galleryButtonTooltip": "参见随附文件",
     "commentsListHeading": "评论",
-    "noCommentsPlaceholder": "无评论"
+    "noCommentsPlaceholder": "无评论",
+    "numberOfAttachmentsUploaded": "${0} 个附件已上传",
+    "numberOfAttachmentsUploadedAndFailed": "${0} 个附件已上传<br>${1} 个附件无法上传"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "按地图过滤列表",

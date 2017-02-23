@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Μετάβαση στην προβολή χάρτη",
     "galleryButtonTooltip": "Προβολή συνημμένων αρχείων",
     "commentsListHeading": "Σχόλια",
-    "noCommentsPlaceholder": "Χωρίς σχόλια"
+    "noCommentsPlaceholder": "Χωρίς σχόλια",
+    "numberOfAttachmentsUploaded": "${0} συνημμένα μεταφορτώθηκαν",
+    "numberOfAttachmentsUploadedAndFailed": "${0} συνημμένα μεταφορτώθηκαν<br>${1} συνημμένα δεν ήταν δυνατό να μεταφορτωθούν"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Φιλτράρισμα λίστας βάσει χάρτη",

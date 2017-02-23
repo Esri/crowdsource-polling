@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Gå till kartvy",
     "galleryButtonTooltip": "Se bifogade filer",
     "commentsListHeading": "Kommentarer",
-    "noCommentsPlaceholder": "Inga kommentarer"
+    "noCommentsPlaceholder": "Inga kommentarer",
+    "numberOfAttachmentsUploaded": "${0} bilagor har laddats upp",
+    "numberOfAttachmentsUploadedAndFailed": "${0} bilagor har laddats upp<br>${1} bilagor kunde inte laddas upp"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrera lista efter karta",

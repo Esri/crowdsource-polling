@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Перейти к виду карты",
     "galleryButtonTooltip": "Просмотр вложенных файлов",
     "commentsListHeading": "Комментарии",
-    "noCommentsPlaceholder": "Комментарии отсутствуют"
+    "noCommentsPlaceholder": "Комментарии отсутствуют",
+    "numberOfAttachmentsUploaded": "${0} вложений загружено",
+    "numberOfAttachmentsUploadedAndFailed": "${0} вложений загружено<br>${1} вложений загрузить не удалось"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Фильтр списка по картам",

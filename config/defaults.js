@@ -40,7 +40,7 @@ define({
             "fields": ["VOTES"]
         }]
     },
-    "ascendingSortOrder": true,
+    "ascendingSortOrder": "true",
     "commentNameField": "NAME",
     "allowFacebook": false,
     "facebookAppId": "",

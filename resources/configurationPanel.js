@@ -14,7 +14,7 @@
                 "fields": ["VOTES"]
             }]
         },
-        "ascendingSortOrder": true,
+        "ascendingSortOrder": "true",
         "commentNameField": "NAME",
         "allowFacebook": false,
         "facebookAppId": "",
@@ -105,11 +105,11 @@
             "tooltip": "Sorts features in ascending or descending order using the values of the sorting field. This parameter is ignored when no sorting field is specified.",
             "items":[{
                 "label": "Ascending",
-                "value": true,
+                "value": "true",
                 "checked": true
             }, {
                 "label": "Descending",
-                "value": false
+                "value": "false"
             }]
         }]
     }, {

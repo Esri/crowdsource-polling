@@ -497,7 +497,7 @@ define([
                  */
                 if (this._sortField) {
                     compareFunction = createCompareFunction(
-                        this._sortField, this.config.ascendingSortOrder);
+                        this._sortField, this.config.ascendingSortOrder !== "false");
                 }
 
                 function createCompareFunction(compareAttributeName, ascendingOrder) {

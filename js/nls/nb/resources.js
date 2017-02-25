@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Se vedlagte filer",
     "commentsListHeading": "Kommentarer",
     "noCommentsPlaceholder": "Ingen kommentarer",
-    "numberOfAttachmentsUploaded": "å_${0} attachment(s) uploaded_________ø",
-    "numberOfAttachmentsUploadedAndFailed": "å_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ø"
+    "numberOfAttachmentsUploaded": "${0} vedlegg lastet opp",
+    "numberOfAttachmentsUploadedAndFailed": "${0} vedlegg lastet opp<br>${1} vedlegg kunne ikke lastes opp"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrer listen etter kart",

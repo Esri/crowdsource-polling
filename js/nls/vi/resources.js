@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Xem tệp đính kèm",
     "commentsListHeading": "Bình luận",
     "noCommentsPlaceholder": "Không có bình luận",
-    "numberOfAttachmentsUploaded": "Đ_${0} attachment(s) uploaded_________ớ",
-    "numberOfAttachmentsUploadedAndFailed": "Đ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ớ"
+    "numberOfAttachmentsUploaded": "${0} tệp đính kèm được tải lên",
+    "numberOfAttachmentsUploadedAndFailed": "${0} tệp đính kèm được tải lên<br>Không thể tải lên ${1} tệp đính kèm"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Lọc danh sách theo bản đồ",

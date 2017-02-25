@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Pogledaj priložene datoteke",
     "commentsListHeading": "Komentari",
     "noCommentsPlaceholder": "Nema komentara",
-    "numberOfAttachmentsUploaded": "Č_${0} attachment(s) uploaded_________ž",
-    "numberOfAttachmentsUploadedAndFailed": "Č_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ž"
+    "numberOfAttachmentsUploaded": "${0} prilog(a) otpremljen(o)",
+    "numberOfAttachmentsUploadedAndFailed": "${0} prilog(a) otpremljen(o)<br>${1} prilog(a) nije otpremljeno"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtriraj listu po mapi",

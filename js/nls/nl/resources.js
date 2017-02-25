@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Zie bijgesloten bestanden",
     "commentsListHeading": "Opmerkingen",
     "noCommentsPlaceholder": "Geen opmerkingen",
-    "numberOfAttachmentsUploaded": "Ĳ_${0} attachment(s) uploaded_________ä",
-    "numberOfAttachmentsUploadedAndFailed": "Ĳ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ä"
+    "numberOfAttachmentsUploaded": "${0} bijlage(n) geüpload",
+    "numberOfAttachmentsUploadedAndFailed": "${0} bijlage(n) geüpload<br>${1} bijlage(n) kon(den) niet worden geüpload"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Lijst filteren op kaart",

@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "ดูไฟล์แนบ",
     "commentsListHeading": "ความเห็น",
     "noCommentsPlaceholder": "ไม่มีความคิดเห็น",
-    "numberOfAttachmentsUploaded": "ก้_${0} attachment(s) uploaded_________ษฺ",
-    "numberOfAttachmentsUploadedAndFailed": "ก้_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ษฺ"
+    "numberOfAttachmentsUploaded": "${0} ไฟล์แนบถูกอัพโหลด",
+    "numberOfAttachmentsUploadedAndFailed": "${0} ไฟล์แนบถูกอัพโหลด<br>${1} ไฟล์แนบไม่ได้อัพโหลด"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "รายการตัวกรองโดยแผนที่",

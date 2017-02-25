@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Angehängte Dateien anzeigen",
     "commentsListHeading": "Kommentare",
     "noCommentsPlaceholder": "Keine Kommentare",
-    "numberOfAttachmentsUploaded": "ä_${0} attachment(s) uploaded_________Ü",
-    "numberOfAttachmentsUploadedAndFailed": "ä_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________Ü"
+    "numberOfAttachmentsUploaded": "${0} Anlage(n) hochgeladen",
+    "numberOfAttachmentsUploadedAndFailed": "${0} Anlage(n) hochgeladen<br>${1} Anlage(n) konnten nicht hochgeladen werden"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Liste nach Karte filtern",

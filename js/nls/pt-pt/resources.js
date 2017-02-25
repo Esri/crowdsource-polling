@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Ver ficheiros anexos",
     "commentsListHeading": "Comentários",
     "noCommentsPlaceholder": "Sem comentários",
-    "numberOfAttachmentsUploaded": "ã_${0} attachment(s) uploaded_________Ç",
-    "numberOfAttachmentsUploadedAndFailed": "ã_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________Ç"
+    "numberOfAttachmentsUploaded": "${0} anexo(s) carregado(s)",
+    "numberOfAttachmentsUploadedAndFailed": "${0} anexo(s) carregado(s)<br>${1} anexo não pôde ser carregado"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrar lista por mapa",

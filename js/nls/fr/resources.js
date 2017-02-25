@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Voir les fichiers joints",
     "commentsListHeading": "Commentaires",
     "noCommentsPlaceholder": "Aucun commentaire",
-    "numberOfAttachmentsUploaded": "æ_${0} attachment(s) uploaded_________Â",
-    "numberOfAttachmentsUploadedAndFailed": "æ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________Â"
+    "numberOfAttachmentsUploaded": "${0} pièces(s) jointe(s) chargée(s)",
+    "numberOfAttachmentsUploadedAndFailed": "${0} pièces(s) jointe(s) chargée(s)<br>${1} pièces jointes n’ont pas pu être chargées"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrer la liste par cartes",

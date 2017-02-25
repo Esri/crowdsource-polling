@@ -105,8 +105,10 @@ define([
                 domStyle.set(this.likeButton, "display", "none");
                 domStyle.set(this.itemVotesGroup, "display", "none");
             }
-            if (!this.actionVisibilities.showComments || !this.commentFields) {
+            if (!this.actionVisibilities.addComments) {
                 domStyle.set(this.commentButton, "display", "none");
+            }
+            if (!this.actionVisibilities.showComments || !this.commentFields) {
                 domStyle.set(this.commentsHeading, "display", "none");
                 domStyle.set(this.noCommentsDiv, "display", "none");
                 domStyle.set(this.commentsList, "display", "none");
@@ -245,14 +247,16 @@ define([
         },
 
         /**
-         * Sets the permitted visibility of the votes, comments, and gallery buttons.
+         * Sets the permitted visibility of the votes, comments, and gallery buttons and the comments themselves
          * @param {boolean} showVotes Display button if the votes field is known
-         * @param {boolean} showComments Display button if the comments fields are known
+         * @param {boolean} addComments Display button if the comments fields are known
+         * @param {boolean} showComments Display comments if the comments fields are known
          * @param {boolean} showGallery Display button if current item has attachments
          */
-        setActionsVisibility: function (showVotes, showComments, showGallery) {
+        setActionsVisibility: function (showVotes, addComments, showComments, showGallery) {
             this.actionVisibilities = {
                 "showVotes": showVotes,
+                "addComments": addComments,
                 "showComments": showComments,
                 "showGallery": showGallery
             };

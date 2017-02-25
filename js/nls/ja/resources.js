@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "添付したファイルを参照",
     "commentsListHeading": "コメント",
     "noCommentsPlaceholder": "コメントはありません",
-    "numberOfAttachmentsUploaded": "須_${0} attachment(s) uploaded_________鷗",
-    "numberOfAttachmentsUploadedAndFailed": "須_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________鷗"
+    "numberOfAttachmentsUploaded": "${0} 件の添付ファイルがアップロードされました",
+    "numberOfAttachmentsUploadedAndFailed": "${0} 件の添付ファイルがアップロードされました<br>${1} 件の添付ファイルはアップロードできませんでした"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "マップ別のフィルター リスト",

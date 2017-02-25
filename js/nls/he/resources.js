@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "ראה קצבים מצורפים",
     "commentsListHeading": "הערות",
     "noCommentsPlaceholder": "אין הערות",
-    "numberOfAttachmentsUploaded": "כן_${0} attachment(s) uploaded_________ש",
-    "numberOfAttachmentsUploadedAndFailed": "כן_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ש"
+    "numberOfAttachmentsUploaded": "${0} קבצים מצורפים הועלו",
+    "numberOfAttachmentsUploadedAndFailed": "${0} קבצים מצורפים הועלו<br>ההעלאה של ${1} קבצים מצורפים נכשלה"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "סנן את הרשימה לפי מפה",

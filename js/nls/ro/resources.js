@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Vizualizare fişiere ataşate",
     "commentsListHeading": "Comentarii",
     "noCommentsPlaceholder": "Niciun comentariu",
-    "numberOfAttachmentsUploaded": "Ă_${0} attachment(s) uploaded_________ș",
-    "numberOfAttachmentsUploadedAndFailed": "Ă_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ș"
+    "numberOfAttachmentsUploaded": "${0} ataşament(e) încărcat(e)",
+    "numberOfAttachmentsUploadedAndFailed": "${0} ataşament(e) încărcat(e)<br>${1} ataşament(e) nu a(u) putut fi încărcat(e)"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrare listă după hartă",

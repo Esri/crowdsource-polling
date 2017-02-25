@@ -245,8 +245,9 @@ define([
                 this._itemDetails.setItemFields(this._votesField, commentFields);
 
                 // Adjust icon visibilities based on user level; need to also check user access to voting
-                // and comment layers; visibility function's signature:
-                // itemDetails.setActionsVisibility(showVotes, showComments, showGallery);
+                // and comment layers;
+                // Visibility function's signature:
+                // itemDetails.setActionsVisibility(showVotes, addComments, showComments, showGallery);
                 if (esriLang.isDefined(this.config.userPrivileges)) {
                     if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
                         array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
@@ -254,7 +255,7 @@ define([
                     }
                 }
                 this._itemDetails.setActionsVisibility(userCanEdit && this._votesField, userCanEdit && commentFields,
-                    this._mapData.getItemLayer().hasAttachments);
+                    commentFields, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 

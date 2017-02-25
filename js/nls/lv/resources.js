@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Skatīt pievienotos failus",
     "commentsListHeading": "Komentāri",
     "noCommentsPlaceholder": "Nav komentāru",
-    "numberOfAttachmentsUploaded": "ķ_${0} attachment(s) uploaded_________ū",
-    "numberOfAttachmentsUploadedAndFailed": "ķ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ū"
+    "numberOfAttachmentsUploaded": "Augšupielādēti(-s) ${0} pielikumi(-s)",
+    "numberOfAttachmentsUploadedAndFailed": "Augšupielādēti(-s) ${0} pielikumi(-s)<br>${1} pielikumus(-s) nevarēja augšupielādēt"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrēt sarakstu pēc kartes",

@@ -38,6 +38,9 @@
     "configurationSettings": [{
         "category": "<b>App</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "App settings"
+        },{
             "label": "Select a map",
             "fieldName": "webmap",
             "type": "webmap",
@@ -48,7 +51,7 @@
             "type": "string",
             "tooltip": "Application name (max 23 chars)"
         }, {
-            "label": "URL of application logo",
+            "label": "Application logo",
             "fieldName": "titleIcon",
             "type": "string",
             "sharedThemeProperty": "logo.small",
@@ -67,6 +70,9 @@
     }, {
         "category": "<b>Content</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "Content"
+        },{
             "type": "paragraph",
             "value": "Configure how the application will interact with your layers."
         }, {
@@ -109,6 +115,9 @@
     }, {
         "category": "Custom URL Parameter",
         "fields": [{
+            "type": "subcategory",
+            "label": "Custom URL parameter"
+        },{
             "type": "paragraph",
             "value": "Set up the app to support a custom url parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a url parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application url using the custom parameter name you define. For example, if I set the custom param value to parcels a custom url would look like this index.html?parcel=3045"
         }, {
@@ -143,6 +152,9 @@
     }, {
         "category": "<b>Access</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "Sign in options"
+        },{
             "type": "paragraph",
             "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
         },{
@@ -191,8 +203,11 @@
             "stringFieldOption": "richtext"
         }]
     }, {
-        "category": "<b>Theme</b>",
+        "category": "<b>App Color</b>",
         "fields": [{
+            "type": "subcategory",
+            "label": "App color"
+        },{
             "type": "paragraph",
             "value": "User can change the theme settings and choose different colors for header, body, and buttons"
         }, {

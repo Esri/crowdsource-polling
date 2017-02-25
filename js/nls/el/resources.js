@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Προβολή συνημμένων αρχείων",
     "commentsListHeading": "Σχόλια",
     "noCommentsPlaceholder": "Χωρίς σχόλια",
-    "numberOfAttachmentsUploaded": "Đ_${0} attachment(s) uploaded_________ớ",
-    "numberOfAttachmentsUploadedAndFailed": "Đ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ớ"
+    "numberOfAttachmentsUploaded": "${0} συνημμένα μεταφορτώθηκαν",
+    "numberOfAttachmentsUploadedAndFailed": "${0} συνημμένα μεταφορτώθηκαν<br>${1} συνημμένα δεν ήταν δυνατό να μεταφορτωθούν"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Φιλτράρισμα λίστας βάσει χάρτη",

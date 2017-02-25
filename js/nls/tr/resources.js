@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Ekteki dosyaları incele",
     "commentsListHeading": "Yorumlar",
     "noCommentsPlaceholder": "Yorum yok",
-    "numberOfAttachmentsUploaded": "ı_${0} attachment(s) uploaded_________İ",
-    "numberOfAttachmentsUploadedAndFailed": "ı_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________İ"
+    "numberOfAttachmentsUploaded": "${0} ek yüklendi",
+    "numberOfAttachmentsUploadedAndFailed": "${0} ek yüklendi<br>${1} ek yüklenemedi"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Listeyi haritaya göre filtrele",

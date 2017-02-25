@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Rodyti pridėtus failus",
     "commentsListHeading": "Komentarai",
     "noCommentsPlaceholder": "Komentarų nėra",
-    "numberOfAttachmentsUploaded": "Į_${0} attachment(s) uploaded_________š",
-    "numberOfAttachmentsUploadedAndFailed": "Į_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________š"
+    "numberOfAttachmentsUploaded": "Įkelta priedų: ${0}",
+    "numberOfAttachmentsUploadedAndFailed": "Įkelta priedų: ${0}<br>${1} priedo (-ų) įkelti nepavyko"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrų sąrašas pagal žemėlapį",

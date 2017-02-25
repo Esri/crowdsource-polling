@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Zobacz załączone pliki",
     "commentsListHeading": "Komentarze",
     "noCommentsPlaceholder": "Brak komentarzy",
-    "numberOfAttachmentsUploaded": "ł_${0} attachment(s) uploaded_________ą",
-    "numberOfAttachmentsUploadedAndFailed": "ł_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ą"
+    "numberOfAttachmentsUploaded": "Przesłano następującą liczbę załączników: ${0}",
+    "numberOfAttachmentsUploadedAndFailed": "Przesłano następującą liczbę załączników: ${0}<br>Nie można przesłać następującej liczby załączników: ${1}"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtruj listę wg mapy",

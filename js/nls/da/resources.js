@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Se vedhæftede filer",
     "commentsListHeading": "Comments",
     "noCommentsPlaceholder": "Ingen kommentarer",
-    "numberOfAttachmentsUploaded": "ø_${0} attachment(s) uploaded_________å",
-    "numberOfAttachmentsUploadedAndFailed": "ø_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________å"
+    "numberOfAttachmentsUploaded": "${0} vedhæftning(er) overført",
+    "numberOfAttachmentsUploadedAndFailed": "${0} vedhæftning(er) overført<br>${1} vedhæftning(er) kunne ikke overføres"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrér liste efter kort",

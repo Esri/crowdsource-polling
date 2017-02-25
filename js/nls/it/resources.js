@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Vedi file allegati",
     "commentsListHeading": "Commenti",
     "noCommentsPlaceholder": "Nessun commento",
-    "numberOfAttachmentsUploaded": "é_${0} attachment(s) uploaded_________È",
-    "numberOfAttachmentsUploadedAndFailed": "é_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________È"
+    "numberOfAttachmentsUploaded": "${0} allegati caricati",
+    "numberOfAttachmentsUploadedAndFailed": "${0} allegati caricati<br>Impossibile caricare ${1} allegati"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtra elenco per mappa",

@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Vaadake manustatud faile",
     "commentsListHeading": "Kommentaarid",
     "noCommentsPlaceholder": "Kommentaarid puuduvad",
-    "numberOfAttachmentsUploaded": "Š_${0} attachment(s) uploaded_________ä",
-    "numberOfAttachmentsUploadedAndFailed": "Š_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ä"
+    "numberOfAttachmentsUploaded": "${0} manus(t) üles laaditud",
+    "numberOfAttachmentsUploadedAndFailed": "${0} manus(t) üles laaditud<br>${1} manust ei saanud üles laadida"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtreeri loend kaardi järgi",

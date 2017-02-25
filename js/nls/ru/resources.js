@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Просмотр вложенных файлов",
     "commentsListHeading": "Комментарии",
     "noCommentsPlaceholder": "Комментарии отсутствуют",
-    "numberOfAttachmentsUploaded": "Ж_${0} attachment(s) uploaded_________Я",
-    "numberOfAttachmentsUploadedAndFailed": "Ж_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________Я"
+    "numberOfAttachmentsUploaded": "${0} вложений загружено",
+    "numberOfAttachmentsUploadedAndFailed": "${0} вложений загружено<br>${1} вложений загрузить не удалось"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Фильтр списка по картам",

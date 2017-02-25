@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Näytä liitetyt tiedostot",
     "commentsListHeading": "Kommentit",
     "noCommentsPlaceholder": "Ei kommentteja",
-    "numberOfAttachmentsUploaded": "Å_${0} attachment(s) uploaded_________ö",
-    "numberOfAttachmentsUploadedAndFailed": "Å_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ö"
+    "numberOfAttachmentsUploaded": "${0} liitettä ladattu",
+    "numberOfAttachmentsUploadedAndFailed": "${0} liitettä ladattu<br>${1} liitteen lataaminen ei onnistunut"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Suodata luettelo kartan perusteella",

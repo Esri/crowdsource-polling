@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Zobrazit připojené soubory",
     "commentsListHeading": "Komentáře",
     "noCommentsPlaceholder": "Žádné komentáře",
-    "numberOfAttachmentsUploaded": "Ř_${0} attachment(s) uploaded_________ů",
-    "numberOfAttachmentsUploadedAndFailed": "Ř_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ů"
+    "numberOfAttachmentsUploaded": "Bylo nahráno ${0} příloh.",
+    "numberOfAttachmentsUploadedAndFailed": "Bylo nahráno ${0} příloh<br>${1} příloh nelze nahrát."
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrovat seznam podle mapy",

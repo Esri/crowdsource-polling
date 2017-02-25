@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Vidi datoteke u privitku",
     "commentsListHeading": "Komentari",
     "noCommentsPlaceholder": "Nema komentara",
-    "numberOfAttachmentsUploaded": "Č_${0} attachment(s) uploaded_________ž",
-    "numberOfAttachmentsUploadedAndFailed": "Č_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ž"
+    "numberOfAttachmentsUploaded": "${0} privitaka učitano",
+    "numberOfAttachmentsUploadedAndFailed": "${0} privitaka učitano<br>${1} privitaka nije se moglo učitati"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtriraj popis prema karti",

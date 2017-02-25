@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "첨부 파일 보기",
     "commentsListHeading": "설명",
     "noCommentsPlaceholder": "설명 없음",
-    "numberOfAttachmentsUploaded": "한_${0} attachment(s) uploaded_________빠",
-    "numberOfAttachmentsUploadedAndFailed": "한_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________빠"
+    "numberOfAttachmentsUploaded": "${0}개 첨부 파일이 업로드됨",
+    "numberOfAttachmentsUploadedAndFailed": "${0}개 첨부 파일이 업로드됨<br>${1}개 첨부 파일을 업로드할 수 없음"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "맵별 필터 목록",

@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "संलग्न फाइलें देखें",
     "commentsListHeading": "टिप्पणियाँ",
     "noCommentsPlaceholder": "कोई टिप्पणी नहीं",
-    "numberOfAttachmentsUploaded": "आ_${0} attachment(s) uploaded_________ज",
-    "numberOfAttachmentsUploadedAndFailed": "आ_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ज"
+    "numberOfAttachmentsUploaded": "${0} अनुलग्नक अपलोड हुए",
+    "numberOfAttachmentsUploadedAndFailed": "${0} अनुलग्नक अपलोड हुए<br>${1} अनुलग्नक अपलोड नहीं हो सका/सके"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "मानचित्र द्वारा सूची फ़िल्टर करें",

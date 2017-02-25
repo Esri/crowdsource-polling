@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "參閱隨附的檔案",
     "commentsListHeading": "評論",
     "noCommentsPlaceholder": "無評論",
-    "numberOfAttachmentsUploaded": "試_${0} attachment(s) uploaded_________驗",
-    "numberOfAttachmentsUploadedAndFailed": "試_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________驗"
+    "numberOfAttachmentsUploaded": "已上傳 ${0} 個附件",
+    "numberOfAttachmentsUploadedAndFailed": "已上傳 ${0} 個附件<br>${1} 個附件無法上傳"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "按地圖的篩選程式清單",

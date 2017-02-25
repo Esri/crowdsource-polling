@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Se bifogade filer",
     "commentsListHeading": "Kommentarer",
     "noCommentsPlaceholder": "Inga kommentarer",
-    "numberOfAttachmentsUploaded": "Å_${0} attachment(s) uploaded_________ö",
-    "numberOfAttachmentsUploadedAndFailed": "Å_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ö"
+    "numberOfAttachmentsUploaded": "${0} bilagor har laddats upp",
+    "numberOfAttachmentsUploadedAndFailed": "${0} bilagor har laddats upp<br>${1} bilagor kunde inte laddas upp"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrera lista efter karta",

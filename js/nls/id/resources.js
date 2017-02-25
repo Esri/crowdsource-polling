@@ -62,8 +62,8 @@ define({
     "galleryButtonTooltip": "Lihat file terlampir",
     "commentsListHeading": "Komentar",
     "noCommentsPlaceholder": "Tak ada komentar",
-    "numberOfAttachmentsUploaded": "ng_${0} attachment(s) uploaded_________ny",
-    "numberOfAttachmentsUploadedAndFailed": "ng_${0} attachment(s) uploaded<br>${1} attachment(s) could not be uploaded______________________ny"
+    "numberOfAttachmentsUploaded": "${0} lampiran diunggah",
+    "numberOfAttachmentsUploadedAndFailed": "${0} lampiran diunggah<br>${1} lampiran tidak dapat diunggah"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Daftar filter menurut peta",

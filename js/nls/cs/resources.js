@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (vyžadováno)",
     "unsettableRequiredField": "Vyžadované pole není inicializováno a není ani ve formuláři.",
     "countOfRemainingCharactersTooltip": "Zbývající znaky",
-    "attachmentsHeading": "Ř_Attachments____ů",
-    "addAttachmentTooltip": "Ř_Add attachment_____ů",
-    "removeAttachmentTooltip": "Ř_Remove attachment______ů",
+    "attachmentsHeading": "Přílohy",
+    "addAttachmentTooltip": "Připojit přílohu",
+    "removeAttachmentTooltip": "Odebrat přílohu",
     "cancelButtonLabel": "Storno",
     "submitButtonLabel": "Odeslat"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Přejít na zobrazení mapy",
     "galleryButtonTooltip": "Zobrazit připojené soubory",
     "commentsListHeading": "Komentáře",
-    "noCommentsPlaceholder": "Žádné komentáře"
+    "noCommentsPlaceholder": "Žádné komentáře",
+    "numberOfAttachmentsUploaded": "Bylo nahráno ${0} příloh.",
+    "numberOfAttachmentsUploadedAndFailed": "Bylo nahráno ${0} příloh<br>${1} příloh nelze nahrát."
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrovat seznam podle mapy",

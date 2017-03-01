@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (privaloma)",
     "unsettableRequiredField": "Būtinas laukas neinicijuotas ir jo nėra formoje",
     "countOfRemainingCharactersTooltip": "Liko ženklų",
-    "attachmentsHeading": "Į_Attachments____š",
-    "addAttachmentTooltip": "Į_Add attachment_____š",
-    "removeAttachmentTooltip": "Į_Remove attachment______š",
+    "attachmentsHeading": "Priedai",
+    "addAttachmentTooltip": "Prisegti priedą",
+    "removeAttachmentTooltip": "Šalinti priedą",
     "cancelButtonLabel": "Atšaukti",
     "submitButtonLabel": "Pateikti"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Eiti į žemėlapio vaizdą",
     "galleryButtonTooltip": "Rodyti pridėtus failus",
     "commentsListHeading": "Komentarai",
-    "noCommentsPlaceholder": "Komentarų nėra"
+    "noCommentsPlaceholder": "Komentarų nėra",
+    "numberOfAttachmentsUploaded": "Įkelta priedų: ${0}",
+    "numberOfAttachmentsUploadedAndFailed": "Įkelta priedų: ${0}<br>${1} priedo (-ų) įkelti nepavyko"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrų sąrašas pagal žemėlapį",

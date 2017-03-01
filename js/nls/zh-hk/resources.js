@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (必填)",
     "unsettableRequiredField": "必填的欄位既未初始化也未在表單中",
     "countOfRemainingCharactersTooltip": "剩餘字元數",
-    "attachmentsHeading": "試_Attachments____驗",
-    "addAttachmentTooltip": "試_Add attachment_____驗",
-    "removeAttachmentTooltip": "試_Remove attachment______驗",
+    "attachmentsHeading": "附件",
+    "addAttachmentTooltip": "新增附件",
+    "removeAttachmentTooltip": "移除附件",
     "cancelButtonLabel": "取消",
     "submitButtonLabel": "提交"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "轉至地圖檢視",
     "galleryButtonTooltip": "參閱隨附的檔案",
     "commentsListHeading": "評論",
-    "noCommentsPlaceholder": "無評論"
+    "noCommentsPlaceholder": "無評論",
+    "numberOfAttachmentsUploaded": "已上傳 ${0} 個附件",
+    "numberOfAttachmentsUploadedAndFailed": "已上傳 ${0} 個附件<br>${1} 個附件無法上傳"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "按地圖的篩選程式清單",

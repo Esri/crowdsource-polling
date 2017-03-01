@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (nõutud)",
     "unsettableRequiredField": "Vajalikku välja pole initsialiseeritud ega ka vormis",
     "countOfRemainingCharactersTooltip": "Järelejäänud tähemärgid",
-    "attachmentsHeading": "Š_Attachments____ä",
-    "addAttachmentTooltip": "Š_Add attachment_____ä",
-    "removeAttachmentTooltip": "Š_Remove attachment______ä",
+    "attachmentsHeading": "Manused",
+    "addAttachmentTooltip": "Lisa manus",
+    "removeAttachmentTooltip": "Eemalda manus",
     "cancelButtonLabel": "Tühista",
     "submitButtonLabel": "Esita"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Mine kaardivaatesse",
     "galleryButtonTooltip": "Vaadake manustatud faile",
     "commentsListHeading": "Kommentaarid",
-    "noCommentsPlaceholder": "Kommentaarid puuduvad"
+    "noCommentsPlaceholder": "Kommentaarid puuduvad",
+    "numberOfAttachmentsUploaded": "${0} manus(t) üles laaditud",
+    "numberOfAttachmentsUploadedAndFailed": "${0} manus(t) üles laaditud<br>${1} manust ei saanud üles laadida"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtreeri loend kaardi järgi",

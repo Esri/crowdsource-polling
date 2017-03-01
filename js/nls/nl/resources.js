@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (vereist)",
     "unsettableRequiredField": "Een verplicht veld is noch geïnitialiseerd noch in het formulier",
     "countOfRemainingCharactersTooltip": "Resterende tekens",
-    "attachmentsHeading": "Ĳ_Attachments____ä",
-    "addAttachmentTooltip": "Ĳ_Add attachment_____ä",
-    "removeAttachmentTooltip": "Ĳ_Remove attachment______ä",
+    "attachmentsHeading": "Bijlagen",
+    "addAttachmentTooltip": "Bijlage toevoegen",
+    "removeAttachmentTooltip": "Bijlage verwijderen",
     "cancelButtonLabel": "Annuleren",
     "submitButtonLabel": "Verzenden"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Ga naar kaartweergave",
     "galleryButtonTooltip": "Zie bijgesloten bestanden",
     "commentsListHeading": "Opmerkingen",
-    "noCommentsPlaceholder": "Geen opmerkingen"
+    "noCommentsPlaceholder": "Geen opmerkingen",
+    "numberOfAttachmentsUploaded": "${0} bijlage(n) geüpload",
+    "numberOfAttachmentsUploadedAndFailed": "${0} bijlage(n) geüpload<br>${1} bijlage(n) kon(den) niet worden geüpload"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Lijst filteren op kaart",

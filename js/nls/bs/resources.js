@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obavezno)",
     "unsettableRequiredField": "Obavezno polje nije ni započeto ni u obrascu",
     "countOfRemainingCharactersTooltip": "Preostalo znakova",
-    "attachmentsHeading": "Č_Attachments____ž",
-    "addAttachmentTooltip": "Č_Add attachment_____ž",
-    "removeAttachmentTooltip": "Č_Remove attachment______ž",
+    "attachmentsHeading": "Privici",
+    "addAttachmentTooltip": "Dodaj privitak",
+    "removeAttachmentTooltip": "Ukloni privitak",
     "cancelButtonLabel": "Odustani",
     "submitButtonLabel": "Pošalji"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Idi na prikaz karte",
     "galleryButtonTooltip": "Vidi datoteke u privitku",
     "commentsListHeading": "Komentari",
-    "noCommentsPlaceholder": "Nema komentara"
+    "noCommentsPlaceholder": "Nema komentara",
+    "numberOfAttachmentsUploaded": "${0} privitaka učitano",
+    "numberOfAttachmentsUploadedAndFailed": "${0} privitaka učitano<br>${1} privitaka nije se moglo učitati"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtriraj popis prema karti",

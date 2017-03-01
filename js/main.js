@@ -1,4 +1,4 @@
-/*global esri,Modernizr */
+/*global esri */
 /*
  | Copyright 2014 Esri
  |
@@ -32,6 +32,7 @@ define([
     "dojo/promise/first",
     "dojo/query",
     "dojo/topic",
+    "dojox/color",
     "esri/arcgis/utils",
     "esri/config",
     "esri/dijit/HomeButton",
@@ -53,7 +54,6 @@ define([
     "application/widgets/SidebarHeader/SidebarHeader",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
-    "dojox/color/_base",
     "dojo/domReady!"
 ], function (
     declare,
@@ -73,6 +73,7 @@ define([
     first,
     query,
     topic,
+    dojoxColor,
     arcgisUtils,
     esriConfig,
     HomeButton,
@@ -116,11 +117,12 @@ define([
             // See https://bugs.dojotoolkit.org/ticket/15878
             window.document.dojoClick = false;
 
-            // config will contain application and user defined info for the template such as i18n strings, the web map id
-            // and application id
+            // config will contain application and user defined info for the template such as i18n strings,
+            // the web map id and application id
             // any url parameters and any application specific configuration information.
             if (config) {
                 this.config = config;
+
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
 
@@ -172,8 +174,8 @@ define([
                     innerHTML: error
                 }, "sidebarContent", "first");
 
-                // Otherwise, we need to use the backup middle-of-screen error display
             }
+            // Otherwise, we need to use the backup middle-of-screen error display
             else {
                 domStyle.set("contentDiv", "display", "none");
                 domClass.add(document.body, "app-error");
@@ -185,7 +187,7 @@ define([
             return def.promise;
         },
 
-        //========================================================================================================================//
+        //============================================================================================================//
 
         /**
          * Launches app.
@@ -197,7 +199,9 @@ define([
                 _this = this;
 
             document.title = this.config.title || "";
-            this.config.isIE8 = this._createIE8Test();
+
+            this.config.isIE8 = this._isIE8();
+            this.config.browserCanUpload = this._browserCanUpload();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
@@ -211,10 +215,11 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
                 var configuredSortField, configuredVotesField, commentFields, contentContainer,
-                    needToggleCleanup, compareFunction;
+                    needToggleCleanup, compareFunction, userCanEdit = true;
 
                 //----- Merge map-loading info with UI items -----
-                if (this.config.featureLayer && this.config.featureLayer.fields && this.config.featureLayer.fields.length > 0) {
+                if (this.config.featureLayer && this.config.featureLayer.fields &&
+                    this.config.featureLayer.fields.length > 0) {
                     array.forEach(this.config.featureLayer.fields, function (fieldSpec) {
                         if (fieldSpec.id === "sortField") {
                             configuredSortField = fieldSpec.fields[0];
@@ -238,7 +243,19 @@ define([
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
                 this._itemDetails.setItemFields(this._votesField, commentFields);
-                this._itemDetails.setActionsVisibility(this._votesField, commentFields, this._mapData.getItemLayer().hasAttachments);
+
+                // Adjust icon visibilities based on user level; need to also check user access to voting
+                // and comment layers;
+                // Visibility function's signature:
+                // itemDetails.setActionsVisibility(showVotes, addComments, showComments, showGallery);
+                if (esriLang.isDefined(this.config.userPrivileges)) {
+                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
+                        array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
+                        userCanEdit = false;
+                    }
+                }
+                this._itemDetails.setActionsVisibility(userCanEdit && this._votesField, userCanEdit && commentFields,
+                    commentFields, this._mapData.getItemLayer().hasAttachments);
 
                 //----- Catch published messages and wire them to their actions -----
 
@@ -271,11 +288,23 @@ define([
                     topic.publish("showError", err);
                 }));
 
-                topic.subscribe("detailsCancel", lang.hitch(this, function () {
+                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
                     }
-                    topic.publish("showPanel", "itemsList");
+
+                    if (forceToMap) {
+                        this._sidebarHdr.setCurrentViewToListView(false);
+                    }
+
+                    if (this._sidebarHdr.currentViewIsListView) {
+                        // In widescreen view or coming from items list in narrowscreen view, return to items list
+                        topic.publish("showPanel", "itemsList");
+                    }
+                    else {
+                        // Otherwise, we're coming from the map in narrowscreen view and will return to the map
+                        topic.publish("showMapViewClicked");
+                    }
                 }));
 
                 /**
@@ -305,9 +334,6 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    var itemExtent, mapGraphicsLayer, highlightGraphic;
-
-                    this._currentItem = item;
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
                     this._itemDetails.clearComments();
@@ -323,30 +349,47 @@ define([
                     }
                     topic.publish("updateComments", item);
                     topic.publish("showPanel", "itemDetails");
-
-                    // Zoom to item if possible
-                    if (item.geometry.getExtent) {
-                        itemExtent = item.geometry.getExtent();
-                    }
-                    if (itemExtent) {
-                        this.map.setExtent(itemExtent.expand(1.75));
-                    }
-                    else {
-                        this.map.centerAndZoom(item.geometry,
-                            Math.min(2 + this.map.getZoom(), this.map.getMaxZoom()));
-                    }
-
-                    // Highlight the item
-                    mapGraphicsLayer = this.map.graphics;
-                    mapGraphicsLayer.clear();
-                    highlightGraphic = this._createHighlightGraphic(item);
-                    if (highlightGraphic) {
-                        mapGraphicsLayer.add(highlightGraphic);
-                    }
+                    topic.publish("highlightItem", item);
 
                     // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                     // a no-op because that's the normal state for wider windows
                     topic.publish("showListViewClicked");
+                }));
+
+                topic.subscribe("highlightItem", lang.hitch(this, function (item, skipZoom) {
+                    var itemExtent, mapGraphicsLayer, highlightGraphic;
+
+                    // Is this item in our data layer?
+                    if (item._layer.id === this._mapData.getItemLayer().id) {
+                        this._currentItem = item;
+
+                        if (!skipZoom) {
+                            // Zoom to item if possible
+                            if (item.geometry.getExtent) {
+                                itemExtent = item.geometry.getExtent();
+                            }
+                            if (itemExtent) {
+                                this.map.setExtent(itemExtent.expand(1.75));
+                            }
+                            else {
+                                this.map.centerAt(item.geometry);
+                            }
+                        }
+
+                        // Highlight the item
+                        mapGraphicsLayer = this.map.graphics;
+                        mapGraphicsLayer.clear();
+                        highlightGraphic = this._createHighlightGraphic(item);
+                        if (highlightGraphic) {
+                            mapGraphicsLayer.add(highlightGraphic);
+                        }
+                    }
+                }));
+
+                on(this.map.graphics, "click", lang.hitch(this, function (evt) {
+                    evt.stopImmediatePropagation();
+                    evt.graphic = this._currentItem;
+                    this._mapData.getItemLayer().onClick(evt);
                 }));
 
                 /**
@@ -570,7 +613,6 @@ define([
                     domStyle.set("sidebarContent", "display", "none");
                     domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(false);
                     needToggleCleanup = true;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
@@ -580,7 +622,6 @@ define([
                     domStyle.set("sidebarContent", "display", "");
                     domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
-                    this._sidebarHdr.setViewToggle(true);
                     needToggleCleanup = true;
                 }));
                 on(window, "resize", lang.hitch(this, function (event) {
@@ -592,7 +633,7 @@ define([
                         domStyle.set("sidebarContent", "display", "");
                         domStyle.set("sidebarContent", "width", "");
                         contentContainer.resize();
-                        this._sidebarHdr.setViewToggle(true);
+                        this._sidebarHdr.setCurrentViewToListView(true);
                         needToggleCleanup = false;
                     }
                 }));
@@ -620,7 +661,8 @@ define([
                     if (searchValue) {
                         // Attempt to go to an item specified as a URL parameter
                         searchLayer = this.map.getLayer(this.config.customUrlLayer.id);
-                        if (searchLayer && this.config.customUrlLayer.fields && this.config.customUrlLayer.fields.length > 0) {
+                        if (searchLayer && this.config.customUrlLayer.fields &&
+                            this.config.customUrlLayer.fields.length > 0) {
                             searchField = this.config.customUrlLayer.fields[0].fields[0];
 
                             require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
@@ -637,7 +679,7 @@ define([
                                         var item = results.features[0];
                                         item._layer = searchLayer;
                                         item._graphicsLayer = searchLayer;
-                                        topic.publish("itemSelected", item);
+                                        topic.publish("highlightItem", item);
                                     }
                                 }, function (error) {
                                     console.log(error);
@@ -661,26 +703,100 @@ define([
             var deferred = new Deferred(),
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
+                var contrastToTextColor;
 
-                // Set the theme colors
-                this.config.theme = {
-                    "background": this.config.color,
-                    "foreground": "white",
-                    "accentBkgd": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : this.config.color),
-                    "accentText": (Modernizr.rgba ? "rgba(255, 255, 255, 0.35)" : "white")
+                if (!this.config.titleIcon) {
+                    // If the app doesn't have a header icon configured, fall back to default theme
+                    this.config.titleIcon = this.config.defaultTheme.titleIcon;
+                }
+
+                if (this.config.color) {
+                    // If the app has color(s) configured, we'll use it/them; missing colors use older app defaults
+                    contrastToTextColor = this._getContrastingWhiteOrBlack(this.config.color, 40);
+                    this.config.theme = {
+                        "header": {
+                            "text": this.config.color,
+                            "background": this.config.headerBackgroundColor || "white"
+                        },
+                        "body": {
+                            "text": this.config.bodyTextColor || "black",
+                            "background": this.config.bodyBackgroundColor || "white"
+                        },
+                        "button": {
+                            "text": this.config.buttonTextColor || this.config.color,
+                            "background": this.config.buttonBackgroundColor || "white"
+                        }
+                    };
+                }
+                else {
+                    // Otherwise, default to defaults.js values
+                    this.config.theme = {
+                        "header": {
+                            "text": this.config.defaultTheme.color,
+                            "background": this.config.defaultTheme.headerBackgroundColor
+                        },
+                        "body": {
+                            "text": this.config.defaultTheme.bodyTextColor,
+                            "background": this.config.defaultTheme.bodyBackgroundColor
+                        },
+                        "button": {
+                            "text": this.config.defaultTheme.buttonTextColor,
+                            "background": this.config.defaultTheme.buttonBackgroundColor
+                        }
+                    };
+                }
+
+                this.config.theme.accents = {
+                    "headerAlt": this._adjustLuminosity(this.config.theme.header.text, 40, 10),
+                    "bodyBkgdAlt": this._adjustLuminosity(this.config.theme.body.background, 50, 6),
+                    "bodyTextAlt": this._adjustLuminosity(this.config.theme.body.text, 50, 21)
                 };
 
                 // Set the theme CSS
-                styleString += ".appTheme{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "}";
-                styleString += ".appThemeHover:hover{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "!important}";
-                styleString += ".appThemeInverted{color:" + this.config.theme.background + ";background-color:" + this.config.theme.foreground + "}";
-                styleString += ".appThemeInvertedHover:hover{color:" + this.config.theme.foreground + ";background-color:" + this.config.theme.background + "!important}";
-                styleString += ".appThemeAccentBkgd{background-color:" + this.config.theme.accentBkgd + "}";
-                styleString += ".appThemeAccentText{color:" + this.config.theme.accentText + "!important}";
-                this.injectCSS(styleString);
+                styleString += ".themeHeader{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeHeaderHover:hover{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".themeHeaderInverted{color:" + this.config.theme.header.background +
+                    ";background-color:" + this.config.theme.header.text + "}";
+                styleString += ".themeHeaderInvertedHover:hover{color:" + this.config.theme.header.text +
+                    ";background-color:" + this.config.theme.header.background + "}";
+                styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt + "}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + "}";
+                /*styleString += ".themeBackButtonOverlay{background-color:" + this.config.theme.accents.headerAlt +
+                    ";opacity:0.35}";
+                styleString += ".themeHeaderAlt{color:" + this.config.theme.accents.headerAlt + ";opacity:0.35}";*/
 
-                // Apply the theme to the sidebar
-                domStyle.set("sidebarContent", "border-left-color", this.config.theme.background);
+                styleString += ".themeBody{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemList{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".themeItemList:hover{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListSelected{color:" + this.config.theme.body.text +
+                    ";background-color:" + this.config.theme.body.background + "}";
+                styleString += ".themeItemListVotes{color:" + this.config.theme.accents.bodyTextAlt + "}";
+
+                styleString += ".themeComments{color:" + this.config.theme.accents.bodyTextAlt +
+                    ";background-color:" + this.config.theme.accents.bodyBkgdAlt + "}";
+                styleString += ".esriViewPopup .hzLine{border-top-color:" + this.config.theme.body.text + "}";
+                styleString += ".esriViewPopup .mainSection .attrTable td.attrName{color:" +
+                    this.config.theme.body.text + "}";
+
+                styleString += ".themeButton{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+                styleString += ".themeButtonHover:hover{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInverted{color:" + this.config.theme.button.background +
+                    ";background-color:" + this.config.theme.button.text + "}";
+                styleString += ".themeButtonInvertedHover:hover{color:" + this.config.theme.button.text +
+                    ";background-color:" + this.config.theme.button.background + "}";
+
+                this._injectCSS(styleString);
+
+                // Apply the theme to the border lines
+                domStyle.set("sidebarHeading", "border-bottom-color", this.config.theme.header.text);
+                domStyle.set("sidebarContent", "border-left-color", this.config.theme.header.text);
 
 
                 //----- Add the widgets -----
@@ -773,7 +889,8 @@ define([
                     map: this.map,
                     theme: "HomeButtonLight"
                 }, "HomeButton");
-                domConstruct.place(homeButton.domNode, query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0], "after");
+                domConstruct.place(homeButton.domNode,
+                    query(".esriSimpleSliderIncrementButton", "mapDiv_zoom_slider")[0], "after");
                 homeButton.startup();
 
                 // Start up locate widget
@@ -810,7 +927,8 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
-                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
+                        this.config.browserCanUpload;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -855,12 +973,15 @@ define([
                 var feature;
                 // Make sure that we have a feature from a feature layer,
                 // then supplement the selection with the layer if it doesn't have one
-                if (selectResult && selectResult.source.featureLayer && selectResult.result && selectResult.result.feature) {
+                if (selectResult && selectResult.source.featureLayer &&
+                    selectResult.result && selectResult.result.feature) {
                     feature = selectResult.result.feature;
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-                    topic.publish("itemSelected", feature);
+
+                    // Do the app's highlighting
+                    topic.publish("highlightItem", feature, true);
                 }
             });
         },
@@ -932,13 +1053,58 @@ define([
             return highlightGraphic;
         },
 
-        //====================================================================================================================//
+        /**
+         * Creates a calculated color based upon another color.
+         * @param {string|array|object} baseColor Color to use as a base for the calculated color
+         * @param {number} luminosityThreshold Luminosity threshold: if base color's luminosity is below this value,
+         * the luminiosity adjustment is added to the base luminosity; otherwise, the luminosity adjustment is
+         * subtracted
+         * @param {number} luminosityAdjustment Amount by which luminosity of the base color is adjusted to create the
+         * calculated color
+         * @return {string} Hex form of calculated color
+         */
+        _adjustLuminosity: function (baseColor, luminosityThreshold, luminosityAdjustment) {
+            var baseColorAsHSL, calculatedColor;
+
+            baseColorAsHSL = (new Color(baseColor)).toHsl();
+            if (baseColorAsHSL.l < luminosityThreshold) {
+                calculatedColor = dojoxColor.fromHsl(baseColorAsHSL.h,
+                    baseColorAsHSL.s, baseColorAsHSL.l + luminosityAdjustment);
+            }
+            else {
+                calculatedColor = dojoxColor.fromHsl(baseColorAsHSL.h,
+                    baseColorAsHSL.s, baseColorAsHSL.l - luminosityAdjustment);
+            }
+
+            return calculatedColor.toHex();
+        },
+
+        /**
+         * Selects a contrasting black or white color based upon another color.
+         * @param {string|array|object} baseColor Color to use as a base for the color selection
+         * @param {number} luminosityThreshold Luminosity threshold: if base color's luminosity is below this value,
+         * white is returned; otherwise, black is returned
+         * @return {string} "#fff" or "#000"
+         */
+        _getContrastingWhiteOrBlack: function (baseColor, luminosityThreshold) {
+            var baseColorAsHSL;
+
+            baseColorAsHSL = (new Color(baseColor)).toHsl();
+            if (baseColorAsHSL.l < luminosityThreshold) {
+                return "#fff";
+            }
+            else {
+                return "#000";
+            }
+        },
+
+        //============================================================================================================//
 
         /**
          * Tests if the browser is IE 8 or lower.
          * @return {boolean} True if the browser is IE 8 or lower
          */
-        _createIE8Test: function () {
+        _isIE8: function () {
             return this._isIE(8, "lte");
         },
 
@@ -953,6 +1119,8 @@ define([
          * @author Scott Jehl
          * @see The <a href="https://gist.github.com/scottjehl/357727">detect IE and version number through injected
          * conditional comments.js</a>.
+         * Tests if the browser is IE < 10 or (IE 11 and not https).
+         * @return {boolean} True if the browser is IE
          */
         _isIE: function (version, comparison) {
             var cc = "IE",
@@ -975,6 +1143,16 @@ define([
         },
 
         /**
+         * Tests if the browser is a non-IE browser or it is (IE 11 and https).
+         * @return {boolean} True if the browser can upload
+         */
+        _browserCanUpload: function () {
+            return !(window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
+                (window.navigator.userAgent.indexOf("Trident/") >= 0 &&
+                    window.location.protocol.toLowerCase() === "http:"));
+        },
+
+        /**
          * Injects a string of CSS into the document.
          * @example
          * <pre>
@@ -982,8 +1160,9 @@ define([
          * require(["dojo/ready", "js/lgonlineBase"], function (ready) {
          *     ready(function () {
          *         var loader = new js.LGObject();
-         *         loader.injectCSS(
-         *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;text-align:center;overflow:hidden;}"+
+         *         loader._injectCSS(
+         *             ".titleBox{width:100%;height:52px;margin:0px;padding:4px;color:white;background-color:#1e90ff;
+         *                 text-align:center;overflow:hidden;}"+
          *             ".title{font-size:24px;position:relative;top:25%}"
          *         );
          *     });
@@ -992,7 +1171,7 @@ define([
          * @param {string} cssStr A string of CSS text
          * @return {object} DOM style element
          */
-        injectCSS: function (cssStr) {
+        _injectCSS: function (cssStr) {
             var customStyles, cssText;
 
             // By Fredrik Johansson

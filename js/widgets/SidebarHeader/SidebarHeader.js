@@ -48,6 +48,7 @@ define([
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         widgetsInTemplate: true,
+        currentViewIsListView: true,
 
         /**
          * Widget constructor
@@ -63,19 +64,22 @@ define([
          */
         postCreate: function () {
             var i18n = this.appConfig.i18n.sidebar_header,
-                signInBtnOnClick, signInMenuBtnOnClick,
+                signInBtnOnClick, signInMenuBtnOnClick, optionsIconSurface,
                 helpMenuItem, helpBtnOnClick, helpMenuBtnOnClick, viewToggleMenuBtnOnClick, optionsOnClick;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
 
             // Set up the UI
-            domStyle.set(this.optionsDropdown, "border-color", this.appConfig.theme.background);
+            optionsIconSurface = SvgHelper.createSVGItem(this.appConfig.optionsIcon, this.options, 32, 32);
+            SvgHelper.changeColor(optionsIconSurface, this.appConfig.theme.header.text);
+
+            domStyle.set(this.optionsDropdown, "border-color", this.appConfig.theme.header.text);
 
             domStyle.set(this.signInBtn, "display", "none");
             if (this.showSignin) {
                 this.signInMenuItem = domConstruct.create("div", {
-                    className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover"
+                    className: "sideHdrOptionsMenuItem textButton themeHeaderHover"
                 }, this.optionsDropdown);
                 domStyle.set(this.signInMenuItem, "display", "none");
 
@@ -90,24 +94,30 @@ define([
 
 
             this.viewToggleMenuItem = domConstruct.create("div", {
-                className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover"
+                className: "sideHdrOptionsMenuItem textButton themeHeaderHover"
             }, this.optionsDropdown);
             viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, function () {
-                if (this.viewToggleIsGoToMapView) {
+                if (this.currentViewIsListView) {
                     topic.publish("showMapViewClicked");
                 }
                 else {
                     topic.publish("showListViewClicked");
                 }
+                this.setCurrentViewToListView(!this.currentViewIsListView);
             }));
             this.own(viewToggleMenuBtnOnClick);
-            this.setViewToggle(true);
+            this.setCurrentViewToListView(true);
 
 
             if (this.showHelp) {
+                var helpIconSurface;
+
+                helpIconSurface = SvgHelper.createSVGItem(this.appConfig.helpIcon, this.helpBtn, 20, 20);
+                SvgHelper.changeColor(helpIconSurface, this.appConfig.theme.header.text);
+
                 this.helpBtn.title = i18n.helpButtonTooltip;
                 helpMenuItem = domConstruct.create("div", {
-                    className: "sideHdrOptionsMenuItem textButton appThemeInvertedHover",
+                    className: "sideHdrOptionsMenuItem textButton themeHeaderHover",
                     title: i18n.helpButtonTooltip,
                     innerHTML: i18n.helpButtonLabel
                 }, this.optionsDropdown);
@@ -182,11 +192,11 @@ define([
 
         /**
          * Sets the map/list view toggle display.
-         * @param {boolean} setGoToMapView Set the toggle for the "go to map" state (true)
+         * @param {boolean} setCurrentViewToList Set the toggle for the "go to map" state (true)
          * or the "go to list" state (false)
          */
-        setViewToggle: function (setGoToMapView) {
-            if (setGoToMapView) {
+        setCurrentViewToListView: function (setCurrentViewToList) {
+            if (setCurrentViewToList) {
                 this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoMapViewLabel;
                 this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoMapViewTooltip;
             }
@@ -194,7 +204,7 @@ define([
                 this.viewToggleMenuItem.innerHTML = this.appConfig.i18n.sidebar_header.gotoListViewLabel;
                 this.viewToggleMenuItem.title = this.appConfig.i18n.sidebar_header.gotoListViewTooltip;
             }
-            this.viewToggleIsGoToMapView = setGoToMapView;
+            this.currentViewIsListView = setCurrentViewToList;
         },
 
         /**

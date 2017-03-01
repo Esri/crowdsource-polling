@@ -1,4 +1,3 @@
-/*global Modernizr */
 /*
  | Copyright 2014 Esri
  |
@@ -25,6 +24,7 @@ define([
     "dojo/dom-attr",
     "dojo/query",
     "dojo/sniff",
+    "dojo/string",
     "dojo/topic",
     "dojo/on",
     "dojo/NodeList-dom",
@@ -42,7 +42,7 @@ define([
     "application/widgets/PopupWindow/PopupWindow",
 
     "dojo/text!./ItemDetailsView.html"
-], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, topic, on, nld,
+], function (declare, lang, array, dom, domConstruct, domStyle, domClass, domAttr, query, has, string, topic, on, nld,
     SvgHelper,
     ContentPane,
     _WidgetBase, _TemplatedMixin,
@@ -105,13 +105,16 @@ define([
                 domStyle.set(this.likeButton, "display", "none");
                 domStyle.set(this.itemVotesGroup, "display", "none");
             }
-            if (!this.actionVisibilities.showComments || !this.commentFields) {
+            if (!this.actionVisibilities.addComments) {
                 domStyle.set(this.commentButton, "display", "none");
+            }
+            if (!this.actionVisibilities.showComments || !this.commentFields) {
                 domStyle.set(this.commentsHeading, "display", "none");
                 domStyle.set(this.noCommentsDiv, "display", "none");
                 domStyle.set(this.commentsList, "display", "none");
             }
             domStyle.set(this.domNode, "display", "");
+            domStyle.set("headerMessageDiv", "display", "none");
 
             // Scroll to the top of the details; needed for Firefox
             this.scrollIntoView(this.descriptionDiv);
@@ -132,47 +135,49 @@ define([
          * https://code.google.com/p/tatami/issues/detail?id=40
          */
         initTemplateIcons: function () {
-            var backIconSurface;
+            var backIconSurface, votesIconSurface;
 
             backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.backIcon, 12, 20);
-            if (!Modernizr.rgba) {
-                SvgHelper.changeColor(backIconSurface, this.appConfig.theme.foreground);
-            }
+            SvgHelper.changeColor(backIconSurface, this.appConfig.theme.header.background);
 
-            SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
+            votesIconSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.itemVotesIcon, 12, 12);
+            SvgHelper.changeColor(votesIconSurface, this.appConfig.theme.accents.headerAlt);
 
-            domAttr.set(this.likeIcon, "src", "images/likeBlue.png");
+            this.likeIconSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, this.likeIcon, 12, 12);
+            SvgHelper.changeColor(this.likeIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.likeButton, "title", this.i18n.likeButtonTooltip);
 
-            domAttr.set(this.commentIcon, "src", "images/commentBlue.png");
+            this.commentIconSurface = SvgHelper.createSVGItem(this.appConfig.commentIcon, this.commentIcon, 12, 12);
+            SvgHelper.changeColor(this.commentIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.commentButton, "title", this.i18n.commentButtonTooltip);
 
-            domAttr.set(this.mapIcon, "src", "images/mapmarkerBlue.png");
+            this.mapIconSurface = SvgHelper.createSVGItem(this.appConfig.mapMarkerIcon, this.mapIcon, 12, 12);
+            SvgHelper.changeColor(this.mapIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.mapButton, "title", this.i18n.gotoMapViewTooltip);
 
-            domAttr.set(this.galleryIcon, "src", "images/galleryBlue.png");
+            this.galleryIconSurface = SvgHelper.createSVGItem(this.appConfig.galleryIcon, this.galleryIcon, 12, 12);
+            SvgHelper.changeColor(this.galleryIconSurface, this.appConfig.theme.button.text);
             domAttr.set(this.galleryButton, "title", this.i18n.galleryButtonTooltip);
         },
 
         /**
          * Sets the invert state of a button.
-         * @param {string} pngTag The unique part of the button PNG image file corresponding to
-         * the button, e.g., "like", "comment", "gallery"
+         * @param {object} svgSurface The SVG surface returned by SvgHelper.createSVGItem for the button
          * @param {boolean} toInvert Whether button should be shown in inverted state (true) or not
-         * @param {object} button The button to modify
+         * @param {object} button The button to modify; the button contains the SVG icon
          * @param {object} icon The icon img in the button
          * @param {object} tooltip Whether like button's tooltip should be changed or not
          */
-        invertButton: function (pngTag, toInvert, button, icon, tooltip) {
+        invertButton: function (svgSurface, toInvert, button, icon, tooltip) {
             if (toInvert) {
-                domClass.remove(button, "btnNormal");
-                domClass.add(button, "btnInverse");
-                domAttr.set(icon, "src", "images/" + pngTag + "White.png");
+                domClass.remove(button, "themeButton");
+                domClass.add(button, "themeButtonInverted");
+                SvgHelper.changeColor(svgSurface, this.appConfig.theme.button.background);
             }
             else {
-                domClass.remove(button, "btnInverse");
-                domClass.add(button, "btnNormal");
-                domAttr.set(icon, "src", "images/" + pngTag + "Blue.png");
+                domClass.remove(button, "themeButtonInverted");
+                domClass.add(button, "themeButton");
+                SvgHelper.changeColor(svgSurface, this.appConfig.theme.button.text);
             }
             if (tooltip) {
                 domAttr.set(button, "title", tooltip);
@@ -194,24 +199,40 @@ define([
             var self = this;
             this.own(
                 on(this.backIcon, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("detailsCancel");
                 }),
                 on(this.commentButton, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("getComment", self.item);
                 }),
                 on(this.mapButton, "click", function () {
-                    topic.publish("showMapViewClicked");
+                    topic.publish("closeMessage");
+                    topic.publish("detailsCancel", true);
                 }),
-                on(this.galleryButton, "click", lang.hitch(this, function () {
+                on(this.galleryButton, "click", function () {
+                    topic.publish("closeMessage");
                     topic.publish("showGallery", self.item);
-                    if (domStyle.get(this.gallery, "display") === "none") {
-                        this.showGallery();
+                    if (domStyle.get(self.gallery, "display") === "none") {
+                        self.showGallery();
                     }
                     else {
-                        this.hideGallery();
+                        self.hideGallery();
                     }
-                }))
+                }),
+                on(dom.byId("headerMessageButton"), "click", function () {
+                    topic.publish("closeMessage");
+                })
             );
+
+            topic.subscribe("showMessage", function (message) {
+                dom.byId("headerMessageContent").innerHTML = message;
+                domStyle.set("headerMessageDiv", "display", "block");
+            });
+            topic.subscribe("closeMessage", function () {
+                dom.byId("headerMessageContent").innerHTML = "";
+                domStyle.set("headerMessageDiv", "display", "none");
+            });
         },
 
         /**
@@ -226,14 +247,16 @@ define([
         },
 
         /**
-         * Sets the permitted visibility of the votes, comments, and gallery buttons.
+         * Sets the permitted visibility of the votes, comments, and gallery buttons and the comments themselves
          * @param {boolean} showVotes Display button if the votes field is known
-         * @param {boolean} showComments Display button if the comments fields are known
+         * @param {boolean} addComments Display button if the comments fields are known
+         * @param {boolean} showComments Display comments if the comments fields are known
          * @param {boolean} showGallery Display button if current item has attachments
          */
-        setActionsVisibility: function (showVotes, showComments, showGallery) {
+        setActionsVisibility: function (showVotes, addComments, showComments, showGallery) {
             this.actionVisibilities = {
                 "showVotes": showVotes,
+                "addComments": addComments,
                 "showComments": showComments,
                 "showGallery": showGallery
             };
@@ -243,10 +266,40 @@ define([
          * Creates the div to hold the current item's popup.
          */
         initContentPane: function () {
+            var self = this;
             this.itemCP = new ContentPane({
                 id: "itemCP"
             }, this.descriptionDiv);
             this.itemCP.startup();
+
+            topic.subscribe("startUploadProgress", function () {
+                domStyle.set("commentProgressBar", "width", "0%");
+                domStyle.set("commentProgressContainer", "display", "block");
+            });
+            topic.subscribe("updateUploadProgress", function (percentDone) {
+                domStyle.set("commentProgressBar", "width", percentDone + "%");
+            });
+            topic.subscribe("stopUploadProgress", function (numSucceeded, numFailed) {
+                var message;
+
+                // Report results of upload
+                if (numFailed === 0) {
+                    message = string.substitute(self.i18n.numberOfAttachmentsUploaded, [numSucceeded]);
+                    domClass.replace("headerMessageType", "alert-info", "alert-danger");
+                }
+                else {
+                    message = string.substitute(self.i18n.numberOfAttachmentsUploadedAndFailed, [numSucceeded, numFailed]);
+                    domClass.replace("headerMessageType", "alert-danger", "alert-info");
+                }
+                topic.publish("showMessage", message);
+
+                // Clear the progress bar, but not abruptly
+                domStyle.set("commentProgressBar", "width", "100%");
+                setTimeout(function () {
+                    domStyle.set("commentProgressContainer", "display", "none");
+                    domStyle.set("commentProgressBar", "width", "0%");
+                }, 2000);
+            });
         },
 
         /**
@@ -272,7 +325,7 @@ define([
             }
 
             if (array.indexOf(this.votedItemList, objectId) > -1) {
-                this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
+                this.invertButton(this.likeIconSurface, true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
 
             }
             else {
@@ -282,13 +335,13 @@ define([
                     if (array.indexOf(this.votedItemList, objectId) === -1) {
                         topic.publish("addLike", this.item);
                         this.votedItemList.push(objectId);
-                        this.invertButton("like", true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
+                        this.invertButton(this.likeIconSurface, true, this.likeButton, this.likeIcon, this.i18n.likeButtonInverseTooltip);
                         this._likeButtonClickHandler.remove();
                         this._likeButtonClickHandler = null;
                     }
                 }));
 
-                this.invertButton("like", false, this.likeButton, this.likeIcon, this.i18n.likeButtonTooltip);
+                this.invertButton(this.likeIconSurface, false, this.likeButton, this.likeIcon, this.i18n.likeButtonTooltip);
             }
 
         },
@@ -431,7 +484,7 @@ define([
          */
         showGallery: function () {
             domStyle.set(this.gallery, "display", "block");
-            this.invertButton("gallery", true, this.galleryButton, this.galleryIcon);
+            this.invertButton(this.galleryIconSurface, true, this.galleryButton, this.galleryIcon);
         },
 
         /**
@@ -439,7 +492,7 @@ define([
          */
         hideGallery: function () {
             domStyle.set(this.gallery, "display", "none");
-            this.invertButton("gallery", false, this.galleryButton, this.galleryIcon);
+            this.invertButton(this.galleryIconSurface, false, this.galleryButton, this.galleryIcon);
         },
 
         /**
@@ -467,7 +520,7 @@ define([
 
                 // Show the form
                 this.itemAddComment.show();
-                this.invertButton("comment", true, this.commentButton, this.commentIcon);
+                this.invertButton(this.commentIconSurface, true, this.commentButton, this.commentIcon);
 
                 // Scroll the comment form into view if needed
                 this.scrollIntoView(this.itemAddComment.domNode);
@@ -481,7 +534,7 @@ define([
             if (this.itemAddComment) {
                 this.itemAddComment.destroy();
                 this.itemAddComment = null;
-                this.invertButton("comment", false, this.commentButton, this.commentIcon);
+                this.invertButton(this.commentIconSurface, false, this.commentButton, this.commentIcon);
 
                 // Scroll to the top of the details to restore context
                 this.scrollIntoView(this.descriptionDiv);

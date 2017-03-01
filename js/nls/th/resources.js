@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (จำเป็นต้องใช้)",
     "unsettableRequiredField": "ฟิลด์ที่ต้องการต้องไม่เป็นค่าว่าง ในแบบฟอร์ม",
     "countOfRemainingCharactersTooltip": "อักษรที่เหลืออยู่",
-    "attachmentsHeading": "ก้_Attachments____ษฺ",
-    "addAttachmentTooltip": "ก้_Add attachment_____ษฺ",
-    "removeAttachmentTooltip": "ก้_Remove attachment______ษฺ",
+    "attachmentsHeading": "แนบ",
+    "addAttachmentTooltip": "เพิ่มไฟล์แนบ",
+    "removeAttachmentTooltip": "ลบสิ่งที่แนบมา",
     "cancelButtonLabel": "ยกเลิก",
     "submitButtonLabel": "ส่ง"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "ไปที่การแสดงแผนที่",
     "galleryButtonTooltip": "ดูไฟล์แนบ",
     "commentsListHeading": "ความเห็น",
-    "noCommentsPlaceholder": "ไม่มีความคิดเห็น"
+    "noCommentsPlaceholder": "ไม่มีความคิดเห็น",
+    "numberOfAttachmentsUploaded": "${0} ไฟล์แนบถูกอัพโหลด",
+    "numberOfAttachmentsUploadedAndFailed": "${0} ไฟล์แนบถูกอัพโหลด<br>${1} ไฟล์แนบไม่ได้อัพโหลด"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "รายการตัวกรองโดยแผนที่",

@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (exigido)",
     "unsettableRequiredField": "Um campo exigido não inicializou nem está no formulário",
     "countOfRemainingCharactersTooltip": "Caracteres restantes",
-    "attachmentsHeading": "ã_Attachments____Ç",
-    "addAttachmentTooltip": "ã_Add attachment_____Ç",
-    "removeAttachmentTooltip": "ã_Remove attachment______Ç",
+    "attachmentsHeading": "Anexos",
+    "addAttachmentTooltip": "Adicionar anexo",
+    "removeAttachmentTooltip": "Remover anexo",
     "cancelButtonLabel": "Cancelar",
     "submitButtonLabel": "Enviar"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Ir para visualização do mapa",
     "galleryButtonTooltip": "Cosultar arquivos anexados",
     "commentsListHeading": "Comentários",
-    "noCommentsPlaceholder": "Sem comentários"
+    "noCommentsPlaceholder": "Sem comentários",
+    "numberOfAttachmentsUploaded": "${0} anexos carregados",
+    "numberOfAttachmentsUploadedAndFailed": "${0} anexos carregados<br>${1} anexos não foram carregados"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrar lista por mapa",

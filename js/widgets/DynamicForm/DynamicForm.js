@@ -195,7 +195,7 @@ define([
 
             // Submit
             this.dynamicFormSubmit = domConstruct.create("div", {
-                className: "dynamicFormAction appTheme appThemeHover " +
+                className: "dynamicFormAction themeButton themeButtonHover " +
                     (isRTL ? "dynamicFormActionRight" : "dynamicFormActionLeft")
             }, actionsBar);
             on(this.dynamicFormSubmit, "click", lang.hitch(this, function () {
@@ -210,7 +210,7 @@ define([
 
             // Cancel
             dynamicFormCancel = domConstruct.create("div", {
-                className: "dynamicFormAction appThemeInverted appThemeInvertedHover " +
+                className: "dynamicFormAction themeButtonInverted themeButtonInvertedHover " +
                     (isRTL ? "dynamicFormActionLeft" : "dynamicFormActionRight")
             }, actionsBar);
             on(dynamicFormCancel, "click", lang.hitch(this, function () {

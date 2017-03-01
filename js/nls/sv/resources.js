@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatoriskt)",
     "unsettableRequiredField": "Ett obligatoriskt fält har varken initierats eller har rätt format",
     "countOfRemainingCharactersTooltip": "Tecken kvar",
-    "attachmentsHeading": "Å_Attachments____ö",
-    "addAttachmentTooltip": "Å_Add attachment_____ö",
-    "removeAttachmentTooltip": "Å_Remove attachment______ö",
+    "attachmentsHeading": "Bilagor",
+    "addAttachmentTooltip": "Lägg till bilaga",
+    "removeAttachmentTooltip": "Ta bort bilaga",
     "cancelButtonLabel": "Avbryt",
     "submitButtonLabel": "Skicka"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Gå till kartvy",
     "galleryButtonTooltip": "Se bifogade filer",
     "commentsListHeading": "Kommentarer",
-    "noCommentsPlaceholder": "Inga kommentarer"
+    "noCommentsPlaceholder": "Inga kommentarer",
+    "numberOfAttachmentsUploaded": "${0} bilagor har laddats upp",
+    "numberOfAttachmentsUploadedAndFailed": "${0} bilagor har laddats upp<br>${1} bilagor kunde inte laddas upp"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrera lista efter karta",

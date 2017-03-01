@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatoriu)",
     "unsettableRequiredField": "Un câmp obligatoriu nu este iniţializat sau nu este prezent în formular",
     "countOfRemainingCharactersTooltip": "Caractere rămase",
-    "attachmentsHeading": "Ă_Attachments____ș",
-    "addAttachmentTooltip": "Ă_Add attachment_____ș",
-    "removeAttachmentTooltip": "Ă_Remove attachment______ș",
+    "attachmentsHeading": "Ataşări",
+    "addAttachmentTooltip": "Adăugare ataşare",
+    "removeAttachmentTooltip": "Eliminare fişier ataşat",
     "cancelButtonLabel": "Anulare",
     "submitButtonLabel": "Trimitere"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Accesare vizualizare hartă",
     "galleryButtonTooltip": "Vizualizare fişiere ataşate",
     "commentsListHeading": "Comentarii",
-    "noCommentsPlaceholder": "Niciun comentariu"
+    "noCommentsPlaceholder": "Niciun comentariu",
+    "numberOfAttachmentsUploaded": "${0} ataşament(e) încărcat(e)",
+    "numberOfAttachmentsUploadedAndFailed": "${0} ataşament(e) încărcat(e)<br>${1} ataşament(e) nu a(u) putut fi încărcat(e)"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrare listă după hartă",

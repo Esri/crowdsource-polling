@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (nepieciešams)",
     "unsettableRequiredField": "Nepieciešamais lauks nav ne inicializēts, ne veidlapā",
     "countOfRemainingCharactersTooltip": "Atlikušās rakstzīmes",
-    "attachmentsHeading": "ķ_Attachments____ū",
-    "addAttachmentTooltip": "ķ_Add attachment_____ū",
-    "removeAttachmentTooltip": "ķ_Remove attachment______ū",
+    "attachmentsHeading": "Uzdevumi",
+    "addAttachmentTooltip": "Pievienot pielikumu",
+    "removeAttachmentTooltip": "Noņemt pielikumu",
     "cancelButtonLabel": "Atcelt",
     "submitButtonLabel": "Iesniegt"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Iet uz kartes skatu",
     "galleryButtonTooltip": "Skatīt pievienotos failus",
     "commentsListHeading": "Komentāri",
-    "noCommentsPlaceholder": "Nav komentāru"
+    "noCommentsPlaceholder": "Nav komentāru",
+    "numberOfAttachmentsUploaded": "Augšupielādēti(-s) ${0} pielikumi(-s)",
+    "numberOfAttachmentsUploadedAndFailed": "Augšupielādēti(-s) ${0} pielikumi(-s)<br>${1} pielikumus(-s) nevarēja augšupielādēt"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrēt sarakstu pēc kartes",

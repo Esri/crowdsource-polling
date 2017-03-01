@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obligatorisk)",
     "unsettableRequiredField": "Et obligatorisk felt er hverken initialiseret eller placeret i formularen",
     "countOfRemainingCharactersTooltip": "Resterende tegn",
-    "attachmentsHeading": "ø_Attachments____å",
-    "addAttachmentTooltip": "ø_Add attachment_____å",
-    "removeAttachmentTooltip": "ø_Remove attachment______å",
+    "attachmentsHeading": "Vedhæftninger",
+    "addAttachmentTooltip": "Tilføj vedhæftning",
+    "removeAttachmentTooltip": "Fjern vedhæftning",
     "cancelButtonLabel": "Annullér",
     "submitButtonLabel": "Indsend"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Gå til kortvisning",
     "galleryButtonTooltip": "Se vedhæftede filer",
     "commentsListHeading": "Comments",
-    "noCommentsPlaceholder": "Ingen kommentarer"
+    "noCommentsPlaceholder": "Ingen kommentarer",
+    "numberOfAttachmentsUploaded": "${0} vedhæftning(er) overført",
+    "numberOfAttachmentsUploadedAndFailed": "${0} vedhæftning(er) overført<br>${1} vedhæftning(er) kunne ikke overføres"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrér liste efter kort",

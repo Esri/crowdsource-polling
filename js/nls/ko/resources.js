@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (필수)",
     "unsettableRequiredField": "필수 필드가 초기화되지 않았거나 양식에 없습니다.",
     "countOfRemainingCharactersTooltip": "남은 문자 수",
-    "attachmentsHeading": "한_Attachments____빠",
-    "addAttachmentTooltip": "한_Add attachment_____빠",
-    "removeAttachmentTooltip": "한_Remove attachment______빠",
+    "attachmentsHeading": "첨부 파일",
+    "addAttachmentTooltip": "첨부 파일 추가",
+    "removeAttachmentTooltip": "첨부 파일 제거",
     "cancelButtonLabel": "취소",
     "submitButtonLabel": "제출"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "맵 보기로 이동",
     "galleryButtonTooltip": "첨부 파일 보기",
     "commentsListHeading": "설명",
-    "noCommentsPlaceholder": "설명 없음"
+    "noCommentsPlaceholder": "설명 없음",
+    "numberOfAttachmentsUploaded": "${0}개 첨부 파일이 업로드됨",
+    "numberOfAttachmentsUploadedAndFailed": "${0}개 첨부 파일이 업로드됨<br>${1}개 첨부 파일을 업로드할 수 없음"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "맵별 필터 목록",

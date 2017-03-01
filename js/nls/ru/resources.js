@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (необходимо)",
     "unsettableRequiredField": "Требуемое поле неактивно либо отсутствует в форме",
     "countOfRemainingCharactersTooltip": "Символов осталось",
-    "attachmentsHeading": "Ж_Attachments____Я",
-    "addAttachmentTooltip": "Ж_Add attachment_____Я",
-    "removeAttachmentTooltip": "Ж_Remove attachment______Я",
+    "attachmentsHeading": "Вложения",
+    "addAttachmentTooltip": "Добавить вложения",
+    "removeAttachmentTooltip": "Удалить вложение",
     "cancelButtonLabel": "Отмена",
     "submitButtonLabel": "Подтвердить"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Перейти к виду карты",
     "galleryButtonTooltip": "Просмотр вложенных файлов",
     "commentsListHeading": "Комментарии",
-    "noCommentsPlaceholder": "Комментарии отсутствуют"
+    "noCommentsPlaceholder": "Комментарии отсутствуют",
+    "numberOfAttachmentsUploaded": "${0} вложений загружено",
+    "numberOfAttachmentsUploadedAndFailed": "${0} вложений загружено<br>${1} вложений загрузить не удалось"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Фильтр списка по картам",

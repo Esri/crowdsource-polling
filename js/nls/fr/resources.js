@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (requis)",
     "unsettableRequiredField": "Un champ obligatoire n'est pas initialisé ou ne figure pas dans le formulaire",
     "countOfRemainingCharactersTooltip": "Caractères restants",
-    "attachmentsHeading": "æ_Attachments____Â",
-    "addAttachmentTooltip": "æ_Add attachment_____Â",
-    "removeAttachmentTooltip": "æ_Remove attachment______Â",
+    "attachmentsHeading": "Pièces jointes",
+    "addAttachmentTooltip": "Ajouter une pièce jointe",
+    "removeAttachmentTooltip": "Supprimer une pièce jointe",
     "cancelButtonLabel": "Annuler",
     "submitButtonLabel": "Envoyer"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Accéder à la vue cartographique",
     "galleryButtonTooltip": "Voir les fichiers joints",
     "commentsListHeading": "Commentaires",
-    "noCommentsPlaceholder": "Aucun commentaire"
+    "noCommentsPlaceholder": "Aucun commentaire",
+    "numberOfAttachmentsUploaded": "${0} pièces(s) jointe(s) chargée(s)",
+    "numberOfAttachmentsUploadedAndFailed": "${0} pièces(s) jointe(s) chargée(s)<br>${1} pièces jointes n’ont pas pu être chargées"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrer la liste par cartes",

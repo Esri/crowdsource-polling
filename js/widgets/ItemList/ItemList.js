@@ -95,8 +95,9 @@ define([
             }));
 
             array.forEach(query(".mblSwitchBgLeft", this.itemListActionBar), function (item) {
-                domClass.add(item, "appTheme");
+                domClass.add(item, "themeHeaderInverted");
             });
+            domStyle.set(this.itemListActionBar, "border-bottom-color", this.appConfig.theme.header.text);
         },
 
         /**
@@ -202,8 +203,7 @@ define([
          * @param  {feature} item to display in the list
          */
         buildItemSummary: function (item) {
-
-            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv;
+            var itemTitle, itemVotes, itemSummaryDiv, itemTitleDiv, favDiv, iconDiv, votesIconSurface;
 
             itemTitle = this.getItemTitle(item) || "&nbsp;";
 
@@ -211,9 +211,10 @@ define([
 
 
             itemSummaryDiv = domConstruct.create("div", {
-                "class": "itemSummary",
+                "class": "itemSummary themeItemList",
                 "click": lang.partial(this.summaryClick, this, item)
             }, this.list);
+            domStyle.set(itemSummaryDiv, "border-bottom-color", this.appConfig.theme.body.text);
 
             itemTitleDiv = domConstruct.create("div", {
                 "class": "itemTitle",
@@ -233,7 +234,7 @@ define([
                 }, itemSummaryDiv);
 
                 domConstruct.create("div", {
-                    "class": "itemVotes",
+                    "class": "itemVotes themeItemListVotes",
                     "innerHTML": itemVotes.label
                 }, favDiv);
 
@@ -241,12 +242,13 @@ define([
                     "class": "fav"
                 }, favDiv);
 
-                SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
+                votesIconSurface = SvgHelper.createSVGItem(this.appConfig.likeIcon, iconDiv, 12, 12);
+                SvgHelper.changeColor(votesIconSurface, this.appConfig.theme.accents.bodyTextAlt);
             }
 
             // If this item's OID matches the current selection, apply the theme to highlight it
             if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
-                domClass.add(itemSummaryDiv, "appTheme appThemeHover");
+                domClass.add(itemSummaryDiv, "themeItemListSelected");
             }
         },
 

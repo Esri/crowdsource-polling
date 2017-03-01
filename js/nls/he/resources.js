@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (נדרש)",
     "unsettableRequiredField": "שדה נדרש כלשהו לא מופעל ולא קיים בטופס",
     "countOfRemainingCharactersTooltip": "תווים שנותרו",
-    "attachmentsHeading": "כן_Attachments____ש",
-    "addAttachmentTooltip": "כן_Add attachment_____ש",
-    "removeAttachmentTooltip": "כן_Remove attachment______ש",
+    "attachmentsHeading": "קבצים מצורפים",
+    "addAttachmentTooltip": "הוסף קובץ מקושר",
+    "removeAttachmentTooltip": "הסר קובץ",
     "cancelButtonLabel": "ביטול",
     "submitButtonLabel": "שלח"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "עבור לתצוגת מפה",
     "galleryButtonTooltip": "ראה קצבים מצורפים",
     "commentsListHeading": "הערות",
-    "noCommentsPlaceholder": "אין הערות"
+    "noCommentsPlaceholder": "אין הערות",
+    "numberOfAttachmentsUploaded": "${0} קבצים מצורפים הועלו",
+    "numberOfAttachmentsUploadedAndFailed": "${0} קבצים מצורפים הועלו<br>ההעלאה של ${1} קבצים מצורפים נכשלה"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "סנן את הרשימה לפי מפה",

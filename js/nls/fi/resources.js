@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (pakollinen)",
     "unsettableRequiredField": "Pakollista kenttää ei ole alustettu eikä sitä ole lomakkeessa",
     "countOfRemainingCharactersTooltip": "Merkkiä jäljellä",
-    "attachmentsHeading": "Å_Attachments____ö",
-    "addAttachmentTooltip": "Å_Add attachment_____ö",
-    "removeAttachmentTooltip": "Å_Remove attachment______ö",
+    "attachmentsHeading": "Liitteet",
+    "addAttachmentTooltip": "Lisää liite",
+    "removeAttachmentTooltip": "Poista liite",
     "cancelButtonLabel": "Peruuta",
     "submitButtonLabel": "Lähetä"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Siirry karttanäkymään",
     "galleryButtonTooltip": "Näytä liitetyt tiedostot",
     "commentsListHeading": "Kommentit",
-    "noCommentsPlaceholder": "Ei kommentteja"
+    "noCommentsPlaceholder": "Ei kommentteja",
+    "numberOfAttachmentsUploaded": "${0} liitettä ladattu",
+    "numberOfAttachmentsUploadedAndFailed": "${0} liitettä ladattu<br>${1} liitteen lataaminen ei onnistunut"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Suodata luettelo kartan perusteella",

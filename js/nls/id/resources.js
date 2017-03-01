@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (diperlukan)",
     "unsettableRequiredField": "Bidang yang harus diisi tidak diinisialisasi atau tidak ada dalam formulir",
     "countOfRemainingCharactersTooltip": "Karakter yang tersisa",
-    "attachmentsHeading": "ng_Attachments____ny",
-    "addAttachmentTooltip": "ng_Add attachment_____ny",
-    "removeAttachmentTooltip": "ng_Remove attachment______ny",
+    "attachmentsHeading": "Lampiran",
+    "addAttachmentTooltip": "Tambah lampiran",
+    "removeAttachmentTooltip": "Hapus lampiran",
     "cancelButtonLabel": "Batal",
     "submitButtonLabel": "Kirim"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Buka tampilan peta",
     "galleryButtonTooltip": "Lihat file terlampir",
     "commentsListHeading": "Komentar",
-    "noCommentsPlaceholder": "Tak ada komentar"
+    "noCommentsPlaceholder": "Tak ada komentar",
+    "numberOfAttachmentsUploaded": "${0} lampiran diunggah",
+    "numberOfAttachmentsUploadedAndFailed": "${0} lampiran diunggah<br>${1} lampiran tidak dapat diunggah"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Daftar filter menurut peta",

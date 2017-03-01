@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (obbligatorio)",
     "unsettableRequiredField": "Un campo obbligatorio non è né inizializzato né incluso nel modulo",
     "countOfRemainingCharactersTooltip": "Caratteri restanti",
-    "attachmentsHeading": "é_Attachments____È",
-    "addAttachmentTooltip": "é_Add attachment_____È",
-    "removeAttachmentTooltip": "é_Remove attachment______È",
+    "attachmentsHeading": "Allegati",
+    "addAttachmentTooltip": "Aggiungi allegato",
+    "removeAttachmentTooltip": "Rimuovi allegato",
     "cancelButtonLabel": "Annulla",
     "submitButtonLabel": "Invia"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Passa a vista mappa",
     "galleryButtonTooltip": "Vedi file allegati",
     "commentsListHeading": "Commenti",
-    "noCommentsPlaceholder": "Nessun commento"
+    "noCommentsPlaceholder": "Nessun commento",
+    "numberOfAttachmentsUploaded": "${0} allegati caricati",
+    "numberOfAttachmentsUploadedAndFailed": "${0} allegati caricati<br>Impossibile caricare ${1} allegati"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Filtra elenco per mappa",

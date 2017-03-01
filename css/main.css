@@ -90,9 +90,6 @@ textarea {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
 }
-.mblBackground {
-    background-color: white;
-}
 .mblSwitchBg {
     font-weight: normal;
 }
@@ -111,7 +108,6 @@ textarea {
     width: 40px;
 }
 .mblSwitchBgLeft {
-    background-color: #007ac2;
     background-image: none;
 }
 .mblSwitchKnob {
@@ -344,13 +340,11 @@ textarea {
     height: 32px;
     float: right;
     cursor: pointer;
-    background: url(../images/options.png) no-repeat;
-    background-size: contain;
 }
 .sideHdrOptionsDropdown {
     display: none;
     position: fixed;
-    top: 49px;
+    top: 48px;
     right: 0px;
     border: 1px solid #ccc;
     z-index: 100;
@@ -399,14 +393,11 @@ textarea {
     float: right;
     cursor: pointer;
     margin: 5px 0 0 12px;
-    background: url(../images/help.png) no-repeat;
-    background-size: contain;
 }
 
 .sideHdrTitle {
     font-size: 24px;
     line-height: 32px;
-    color: #007ac2;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -429,10 +420,6 @@ textarea {
 
 /* ---------- SidebarContentController ---------- */
 
-#sidebarContent {
-    background-color: #eee;
-}
-
 
 /* ---------- ItemList ---------- */
 
@@ -441,7 +428,6 @@ textarea {
     top: 0px;
     width: 100%;
     height: 33px;
-    background-color: white;
     border-bottom: 1px solid #ccc;
 }
 .itemListAction {
@@ -464,7 +450,6 @@ textarea {
     font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
     font-weight: bold;
     font-size: 16px;
-    background-color: #eee;
 }
 @media only screen and (max-width: 640px) {
     .itemListActions {
@@ -483,10 +468,6 @@ textarea {
 
 .itemSummary {
     line-height: 0; /* reset */
-}
-
-.itemList .itemSummary:hover {
-    background-color: white;
 }
 
 .itemSummary .itemTitle {
@@ -524,8 +505,6 @@ textarea {
 .itemSummary .itemFav {
     float: right;
     font-size: 20px;
-    color: rgb(150, 150, 150)!important;
-    color: rgba(0, 0, 0, 0.35)!important;
     padding-left: 8px;
 }
 
@@ -613,10 +592,6 @@ label.css-label
 
 /* ---------- ItemDetails ---------- */
 
-.itemDetail {
-    color: #555;
-}
-
 .itemDetail > .itemSummary > div {
     padding: 10px;
     line-height: 20px;
@@ -646,11 +621,10 @@ label.css-label
 .itemDetail .itemFav .icon {
     font-size: 20px;
     margin-left: 5px;
+    opacity:0.35;
 }
 
 .itemDetail .itemDescription {
-    background-color: #fff;
-    color: #999;
     padding: 10px;
 }
 
@@ -669,39 +643,13 @@ label.css-label
     width: 15%;
     max-width: 80px;
     height: 18px;
-    border: 1px solid #ccc;
     display: inline-block;
     margin-right: 5px;
     padding: 4px 6px;
+    border: 1px solid #ccc;
     border-radius: 2px;
     cursor: pointer;
     text-align: center;
-}
-
-.itemDetail .btnNormal {
-    color: #007ac2;
-}
-
-.itemDetail .btnNormal ::selection {
-    color: #007ac2;
-}
-
-.itemDetail .btnNormal ::-moz-selection {
-    color: #007ac2;
-}
-
-.itemDetail .btnInverse {
-    color: white;
-    background-color: #007ac2;
-    cursor:default;
-}
-
-.itemDetail .btnInverse ::selection {
-    color: white;
-}
-
-.itemDetail .btnInverse ::-moz-selection {
-    color: white;
 }
 
 .itemDetailsBox {
@@ -750,7 +698,6 @@ label.css-label
 }
 
 .itemDetail .itemComments {
-    background-color: #eee;
     padding: 10px;
 }
 
@@ -759,7 +706,6 @@ label.css-label
 }
 
 .btn .icon {
-    margin-right: 2px;
     position: relative;
     top: 2px;
 }
@@ -789,6 +735,23 @@ label.css-label
 
 .commentsForm {
     margin-bottom: 12px;
+}
+
+#commentProgressContainer {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background-color: lightgray;
+}
+#commentProgressBar {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background-color: green;
+}
+#headerMessageDiv {
+    display: none;
 }
 
 /* ---------- Popup ---------- */
@@ -871,7 +834,6 @@ img {
 }
 
 .dynamicFormPanel {
-    background-color: white;
     overflow-y: auto;
 }
 
@@ -883,7 +845,6 @@ img {
     margin: 10px 0px 10px 0px;
     height: auto;
     line-height: 18px;
-    color: #555;
     font-size: 14px;
 }
 
@@ -891,7 +852,6 @@ img {
     width: 99%;
     height: 24px;
     font-size: 12px;
-    color: #555;
 }
 
 .dynamicFormTextAreaCtl {
@@ -900,7 +860,6 @@ img {
     resize: none;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-    color: #555;
 }
 
 .dynamicFormCharactersRemaining {
@@ -914,7 +873,6 @@ img {
     width: 100%;
     height: 30px;
     font-size: 12px;
-    color: #555;
 }
 
 .dynamicFormActions {
@@ -959,12 +917,11 @@ img {
 }
 .dynamicFormAttachmentBtn {
     cursor: pointer;
-    width: 20px;
-    height: 100%;
-    background-color: white;
-    color: #206bdb;
-    border: none;/*1px solid #ccc;*/
+    width: 24px;
+    height: 140%;
+    border: none;
     font-size: 20px;
+    margin-left: 5px;
 }
 .esriCTHideFileInputUI
 {
@@ -979,14 +936,11 @@ img {
     padding: 0 8px 0 16px;
 }
 
-
-
 .dynamicFormAttachmentDisplay {
     position: relative;
     margin-top: 4px;
     overflow: hidden;
 }
-
 
 .dynamicFormDetachmentBtn {
     position: absolute;
@@ -997,9 +951,44 @@ img {
     outline: none;
 }
 .dynamicFormAttachment {
-    margin-left: 20px;
+    margin-left: 34px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* ---------- bootstrap ---------- */
+/*!
+ * Bootstrap v3.3.0 (http://getbootstrap.com)
+ * Copyright 2011-2014 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+.alert .alert-link{font-weight:700}
+.alert h4{margin-top:0;color:inherit}
+.alert-danger .alert-link{color:#843534}
+.alert-danger hr{border-top-color:#e4b9c0}
+.alert-danger{background-image:-webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-image:-o-linear-gradient(top,#f2dede 0,#e7c3c3 100%);background-image:-webkit-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));background-image:linear-gradient(to bottom,#f2dede 0,#e7c3c3 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);background-repeat:repeat-x;border-color:#dca7a7}
+.alert-danger{color:#a94442;background-color:#f2dede;border-color:#ebccd1}
+.alert-dismissable .close,.alert-dismissible .close{position:relative;top:-2px;right:-21px;color:inherit}
+.alert-dismissable,.alert-dismissible{padding-right:35px}
+.alert-info .alert-link{color:#245269}
+.alert-info hr{border-top-color:#a6e1ec}
+.alert-info{background-image:-webkit-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-image:-o-linear-gradient(top,#d9edf7 0,#b9def0 100%);background-image:-webkit-gradient(linear,left top,left bottom,from(#d9edf7),to(#b9def0));background-image:linear-gradient(to bottom,#d9edf7 0,#b9def0 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffd9edf7', endColorstr='#ffb9def0', GradientType=0);background-repeat:repeat-x;border-color:#9acfea}
+.alert-info{color:#31708f;background-color:#d9edf7;border-color:#bce8f1}
+.alert-success .alert-link{color:#2b542c}
+.alert-success hr{border-top-color:#c9e2b3}
+.alert-success{background-image:-webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-image:-o-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);background-image:-webkit-gradient(linear,left top,left bottom,from(#dff0d8),to(#c8e5bc));background-image:linear-gradient(to bottom,#dff0d8 0,#c8e5bc 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdff0d8', endColorstr='#ffc8e5bc', GradientType=0);background-repeat:repeat-x;border-color:#b2dba1}
+.alert-success{color:#3c763d;background-color:#dff0d8;border-color:#d6e9c6}
+.alert-warning .alert-link{color:#66512c}
+.alert-warning hr{border-top-color:#f7e1b5}
+.alert-warning{background-image:-webkit-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-image:-o-linear-gradient(top,#fcf8e3 0,#f8efc0 100%);background-image:-webkit-gradient(linear,left top,left bottom,from(#fcf8e3),to(#f8efc0));background-image:linear-gradient(to bottom,#fcf8e3 0,#f8efc0 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffcf8e3', endColorstr='#fff8efc0', GradientType=0);background-repeat:repeat-x;border-color:#f5e79e}
+.alert-warning{color:#8a6d3b;background-color:#fcf8e3;border-color:#faebcc}
+.alert>p+p{margin-top:5px}
+.alert>p,.alert>ul{margin-bottom:0}
+.alert{padding:15px;margin-bottom:20px;border:1px solid transparent;border-radius:4px}
+.alert{text-shadow:0 1px 0 rgba(255,255,255,.2);-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 1px 2px rgba(0,0,0,.05);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 1px 2px rgba(0,0,0,.05)}
+
+.close{float:right;font-size:21px;font-weight:700;line-height:1;color:#000;text-shadow:0 1px 0 #fff;filter:alpha(opacity=20);opacity:.2}
+.close:hover,.close:focus{color:#000;text-decoration:none;cursor:pointer;filter:alpha(opacity=50);opacity:.5}
+button.close{-webkit-appearance:none;padding:0;cursor:pointer;background:0 0;border:0}
 
 

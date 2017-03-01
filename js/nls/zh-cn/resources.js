@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (必填)",
     "unsettableRequiredField": "必填字段既未被初始化，也不在表单中",
     "countOfRemainingCharactersTooltip": "剩余字符数",
-    "attachmentsHeading": "试_Attachments____验",
-    "addAttachmentTooltip": "试_Add attachment_____验",
-    "removeAttachmentTooltip": "试_Remove attachment______验",
+    "attachmentsHeading": "附件",
+    "addAttachmentTooltip": "添加附件",
+    "removeAttachmentTooltip": "移除附件",
     "cancelButtonLabel": "取消",
     "submitButtonLabel": "提交"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "转至地图视图",
     "galleryButtonTooltip": "参见随附文件",
     "commentsListHeading": "评论",
-    "noCommentsPlaceholder": "无评论"
+    "noCommentsPlaceholder": "无评论",
+    "numberOfAttachmentsUploaded": "${0} 个附件已上传",
+    "numberOfAttachmentsUploadedAndFailed": "${0} 个附件已上传<br>${1} 个附件无法上传"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "按地图过滤列表",

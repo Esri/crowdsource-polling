@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (απαιτούμενο)",
     "unsettableRequiredField": "Κάποιο απαιτούμενο πεδίο είτε δεν έχει αρχικοποιηθεί είτε δε βρίσκεται στη φόρμα",
     "countOfRemainingCharactersTooltip": "Χαρακτήρες που απομένουν",
-    "attachmentsHeading": "Đ_Attachments____ớ",
-    "addAttachmentTooltip": "Đ_Add attachment_____ớ",
-    "removeAttachmentTooltip": "Đ_Remove attachment______ớ",
+    "attachmentsHeading": "Συνημμένα",
+    "addAttachmentTooltip": "Προσθήκη συνημμένου",
+    "removeAttachmentTooltip": "Κατάργηση συνημμένου",
     "cancelButtonLabel": "Ακύρωση",
     "submitButtonLabel": "Υποβολή"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Μετάβαση στην προβολή χάρτη",
     "galleryButtonTooltip": "Προβολή συνημμένων αρχείων",
     "commentsListHeading": "Σχόλια",
-    "noCommentsPlaceholder": "Χωρίς σχόλια"
+    "noCommentsPlaceholder": "Χωρίς σχόλια",
+    "numberOfAttachmentsUploaded": "${0} συνημμένα μεταφορτώθηκαν",
+    "numberOfAttachmentsUploadedAndFailed": "${0} συνημμένα μεταφορτώθηκαν<br>${1} συνημμένα δεν ήταν δυνατό να μεταφορτωθούν"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Φιλτράρισμα λίστας βάσει χάρτη",

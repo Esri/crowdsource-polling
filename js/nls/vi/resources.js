@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (bắt buộc)",
     "unsettableRequiredField": "Một trường bắt buộc không được khởi tạo và cũng không có trong mẫu",
     "countOfRemainingCharactersTooltip": "Ký tự còn lại",
-    "attachmentsHeading": "Đ_Attachments____ớ",
-    "addAttachmentTooltip": "Đ_Add attachment_____ớ",
-    "removeAttachmentTooltip": "Đ_Remove attachment______ớ",
+    "attachmentsHeading": "Tệp đính kèm",
+    "addAttachmentTooltip": "Thêm tệp đính kèm",
+    "removeAttachmentTooltip": "Xóa tệp đính kèm",
     "cancelButtonLabel": "Hủy",
     "submitButtonLabel": "Đệ trình"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Đến chế độ xem bản đồ",
     "galleryButtonTooltip": "Xem tệp đính kèm",
     "commentsListHeading": "Bình luận",
-    "noCommentsPlaceholder": "Không có bình luận"
+    "noCommentsPlaceholder": "Không có bình luận",
+    "numberOfAttachmentsUploaded": "${0} tệp đính kèm được tải lên",
+    "numberOfAttachmentsUploadedAndFailed": "${0} tệp đính kèm được tải lên<br>Không thể tải lên ${1} tệp đính kèm"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Lọc danh sách theo bản đồ",

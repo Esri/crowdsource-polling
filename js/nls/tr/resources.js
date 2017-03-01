@@ -48,9 +48,9 @@ define({
     "requiredFormItemFlag": " (gerekli)",
     "unsettableRequiredField": "Gerekli bir alan başlatılamadı veya form içinde değil",
     "countOfRemainingCharactersTooltip": "Karakter kaldı",
-    "attachmentsHeading": "ı_Attachments____İ",
-    "addAttachmentTooltip": "ı_Add attachment_____İ",
-    "removeAttachmentTooltip": "ı_Remove attachment______İ",
+    "attachmentsHeading": "Ekler",
+    "addAttachmentTooltip": "Eklenti ekle",
+    "removeAttachmentTooltip": "Eklentiyi kaldır",
     "cancelButtonLabel": "İptal",
     "submitButtonLabel": "Gönder"
   },
@@ -61,7 +61,9 @@ define({
     "gotoMapViewTooltip": "Harita görünümüne git",
     "galleryButtonTooltip": "Ekteki dosyaları incele",
     "commentsListHeading": "Yorumlar",
-    "noCommentsPlaceholder": "Yorum yok"
+    "noCommentsPlaceholder": "Yorum yok",
+    "numberOfAttachmentsUploaded": "${0} ek yüklendi",
+    "numberOfAttachmentsUploadedAndFailed": "${0} ek yüklendi<br>${1} ek yüklenemedi"
   },
   "item_list": {
     "linkToMapViewOptionLabel": "Listeyi haritaya göre filtrele",

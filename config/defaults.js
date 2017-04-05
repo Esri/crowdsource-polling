@@ -42,6 +42,7 @@ define({
     },
     "ascendingSortOrder": "true",
     "showAllFeatures": "true",
+    "showListViewFirst": "true",
     "commentNameField": "NAME",
     "allowFacebook": false,
     "facebookAppId": "",
@@ -50,7 +51,6 @@ define({
     "allowTwitter": true,
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
     "showDisplayTextAsSplashScreen": false,
-    "showListViewFirst": "true",
     // Setup the app to support a custom url parameter. Use this if you want users
     // to be able to search for a string field in a layer. For example if the web map
     // has parcel data and you'd like to be able to zoom to a feature using its parcel id

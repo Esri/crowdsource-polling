@@ -122,10 +122,12 @@ define([
             // any url parameters and any application specific configuration information.
             if (config) {
                 this.config = config;
-                //converting string value stored in nls for showListViewFirst to boolean(true/false)
-                this.config.showListViewFirst = config.showListViewFirst === "true" ? true : false;
-                //converting string value stored in nls for showAllFeatures to boolean(true/false)
-                this.config.showAllFeatures = config.showAllFeatures === "true" ? true : false;
+
+                // Normalize string booleans
+                this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);
+                this.config.showAllFeatures = this._toBoolean(config.showAllFeatures);
+                this.config.showListViewFirst = this._toBoolean(config.showListViewFirst);
+
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
 
@@ -502,7 +504,7 @@ define([
                  */
                 if (this._sortField) {
                     compareFunction = createCompareFunction(
-                        this._sortField, this.config.ascendingSortOrder !== "false");
+                        this._sortField, this.config.ascendingSortOrder);
                 }
 
                 function createCompareFunction(compareAttributeName, ascendingOrder) {
@@ -1130,6 +1132,47 @@ define([
             else {
                 return "#000";
             }
+        },
+
+        /**
+         * Normalizes a boolean value to true or false.
+         * @param {boolean|string} boolValue A true or false
+         *        value that is returned directly or a string
+         *        "true" or "false" (case-insensitive) that
+         *        is checked and returned; if neither a
+         *        a boolean or a usable string, falls back to
+         *        defaultValue
+         * @param {boolean} [defaultValue] A true or false
+         *        that is returned if boolValue can't be
+         *        used; if not defined, true is returned
+         * @return {boolean} Normalized boolean or defaultValue
+         */
+        _toBoolean: function (boolValue, defaultValue) {
+            var lowercaseValue;
+
+            // Shortcut true|false
+            if (boolValue === true) {
+                return true;
+            }
+            if (boolValue === false) {
+                return false;
+            }
+
+            // Handle a true|false string
+            if (typeof boolValue === "string") {
+                lowercaseValue = boolValue.toLowerCase();
+                if (lowercaseValue === "true") {
+                    return true;
+                }
+                if (lowercaseValue === "false") {
+                    return false;
+                }
+            }
+            // Fall back to default
+            if (defaultValue === undefined) {
+                return true;
+            }
+            return defaultValue;
         },
 
         //============================================================================================================//

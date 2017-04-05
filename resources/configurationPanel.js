@@ -15,6 +15,7 @@
             }]
         },
         "ascendingSortOrder": "true",
+        "showAllFeatures": "true",
         "commentNameField": "NAME",
         "allowFacebook": false,
         "facebookAppId": "",
@@ -66,7 +67,20 @@
             "label": "Display the help widget as a splash screen",
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
-        }]
+        }, {
+            "label": "Select Show all features/ filter by extent",
+            "fieldName": "showAllFeatures",
+            "type": "radio",
+            "tooltip": "Select Show all features or filter by extent to display features on application load according to selected option",
+            "items":[{
+                "label": "Show all features",
+                "value": "true",
+                "checked": true
+            }, {
+                "label": "Filter by extent",
+                "value": "false"
+            }]
+		}]
     }, {
         "category": "<b>Content</b>",
         "fields": [{

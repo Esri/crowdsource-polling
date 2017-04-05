@@ -123,6 +123,8 @@ define([
             if (config) {
                 this.config = config;
 
+                //converting string value stored in nls for showAllFeatures to boolean(true/false)
+                this.config.showAllFeatures = config.showAllFeatures === "true" ? true : false;
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
 

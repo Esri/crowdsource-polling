@@ -41,6 +41,7 @@ define({
         }]
     },
     "ascendingSortOrder": "true",
+    "showAllFeatures": "true",
     "commentNameField": "NAME",
     "allowFacebook": false,
     "facebookAppId": "",

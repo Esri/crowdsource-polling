@@ -51,7 +51,6 @@ define([
          */
         constructor: function () {
             this.votesField = null;
-            this.linkToMapViewIsTemporarilyOff = false;
         },
 
         /**
@@ -65,7 +64,8 @@ define([
 
             // Adjust the toggle for linking the item list to the map extents
             this.linkToggleLabel.innerHTML = this.i18n.linkToMapViewOptionLabel;
-
+            this.linkToMapViewIsTemporarilyOff = this.appConfig.showAllFeatures;
+            this.linkToMapView = !this.appConfig.showAllFeatures;
             this.linkToggleBtn.set("leftLabel", "");
             this.linkToggleBtn.set("rightLabel", "");
             this.linkToggleBtn.set("value", this.linkToMapView ?
@@ -115,8 +115,8 @@ define([
 
                 // If the screen is wide enough to show map and list, restore the linkage of
                 // map to list if it was on the last time that we could see the action bar
-                if (this.linkToMapViewIsTemporarilyOff) {
-                    this.linkToMapViewIsTemporarilyOff = false;
+                if (!this.linkToMapViewIsTemporarilyOff) {
+                    this.linkToMapViewIsTemporarilyOff = true;
                     if (this.linkToMapView) {
                         topic.publish("linkToMapViewChanged", true);
                     }
@@ -124,8 +124,8 @@ define([
                 // If the screen is narrow enough that we're not showing the action bar,
                 // turn off linking the list to the map
             }
-            else if (!this.linkToMapViewIsTemporarilyOff) {
-                this.linkToMapViewIsTemporarilyOff = true;
+            else if (this.linkToMapViewIsTemporarilyOff) {
+                this.linkToMapViewIsTemporarilyOff = false;
                 topic.publish("linkToMapViewChanged", false);
             }
         },

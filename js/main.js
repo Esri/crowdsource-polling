@@ -633,7 +633,7 @@ define([
                     needToggleCleanupForMobile = false;
                 }));
                 // Start with config option selected to show list or map view first
-                if (window.innerWidth < 640) {
+                if (window.innerWidth <= 640) {
                     this._switchToListOrMapViewForMobile();
                 }
                 on(window, "resize", lang.hitch(this, function (event) {
@@ -649,7 +649,7 @@ define([
                         needToggleCleanup = false;
                         needToggleCleanupForMobile = true;
                     }
-                    else if (event.currentTarget.innerWidth < 640) {
+                    else if (event.currentTarget.innerWidth <= 640) {
                         if (needToggleCleanupForMobile) {
                             this._switchToListOrMapViewForMobile();
                             //Sets the map/list view toggle display in mobile view.
@@ -717,7 +717,7 @@ define([
         /**
          * checks configured value for map or list view to load first and displays view accordigly on mobile view
          */
-        _switchToListOrMapViewForMobile: function() {
+        _switchToListOrMapViewForMobile: function () {
             //If configured option is show List view first in mobile view
             if (this.config.showListViewFirst) {
                 topic.publish("showListViewClicked");
@@ -733,7 +733,8 @@ define([
          * @return {object} Deferred
          */
         _setupUI: function () {
-            var deferred = new Deferred(), popupContainer,
+            var deferred = new Deferred(),
+                popupContainer,
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
                 var contrastToTextColor;
@@ -851,8 +852,7 @@ define([
                         (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText
                 }).placeAt("sidebarHeading");
-                popupContainer = domConstruct.create("div", {
-                }, document.body);
+                popupContainer = domConstruct.create("div", {}, document.body);
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,

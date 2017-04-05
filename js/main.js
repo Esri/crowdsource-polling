@@ -700,7 +700,7 @@ define([
          * @return {object} Deferred
          */
         _setupUI: function () {
-            var deferred = new Deferred(),
+            var deferred = new Deferred(), popupContainer,
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
                 var contrastToTextColor;
@@ -818,7 +818,8 @@ define([
                         (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText
                 }).placeAt("sidebarHeading");
-
+                popupContainer = domConstruct.create("div", {
+                }, document.body);
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,
@@ -827,7 +828,7 @@ define([
                         "width": 350,
                         "height": 300
                     }
-                }).placeAt(document.body);
+                }).placeAt(popupContainer);
 
                 // Sidebar content controller
                 this._sidebarCnt = new SidebarContentController({

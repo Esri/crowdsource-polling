@@ -122,7 +122,8 @@ define([
             // any url parameters and any application specific configuration information.
             if (config) {
                 this.config = config;
-
+                //converting string value stored in nls for showListViewFirst to boolean(true/false)
+                this.config.showListViewFirst = config.showListViewFirst === "true" ? true : false;
                 //converting string value stored in nls for showAllFeatures to boolean(true/false)
                 this.config.showAllFeatures = config.showAllFeatures === "true" ? true : false;
                 //supply either the webmap id or, if available, the item info
@@ -217,7 +218,7 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
                 var configuredSortField, configuredVotesField, commentFields, contentContainer,
-                    needToggleCleanup, compareFunction, userCanEdit = true;
+                    needToggleCleanup, needToggleCleanupForMobile, compareFunction, userCanEdit = true;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields &&
@@ -356,6 +357,8 @@ define([
                     // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                     // a no-op because that's the normal state for wider windows
                     topic.publish("showListViewClicked");
+                    //switch toggle option to map view as currently list view will be shown
+                    this._sidebarHdr.setCurrentViewToListView(true);
                 }));
 
                 topic.subscribe("highlightItem", lang.hitch(this, function (item, skipZoom) {
@@ -609,6 +612,7 @@ define([
                 // Handle the switch between list and map views for narrow screens
                 contentContainer = registry.byId("contentDiv");
                 needToggleCleanup = true;
+                needToggleCleanupForMobile = true;
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
@@ -616,6 +620,7 @@ define([
                     domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
                     needToggleCleanup = true;
+                    needToggleCleanupForMobile = false;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
                     // Hide the map and restore the sidebar to the display that it has for this
@@ -625,7 +630,12 @@ define([
                     domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
                     needToggleCleanup = true;
+                    needToggleCleanupForMobile = false;
                 }));
+                // Start with config option selected to show list or map view first
+                if (window.innerWidth < 640) {
+                    this._switchToListOrMapViewForMobile();
+                }
                 on(window, "resize", lang.hitch(this, function (event) {
                     // If we've tinkered with the Layout Container for the narrow screen
                     // and now the screen is wider than the single-panel threshold, reset
@@ -637,6 +647,14 @@ define([
                         contentContainer.resize();
                         this._sidebarHdr.setCurrentViewToListView(true);
                         needToggleCleanup = false;
+                        needToggleCleanupForMobile = true;
+                    }
+                    else if (event.currentTarget.innerWidth < 640) {
+                        if (needToggleCleanupForMobile) {
+                            this._switchToListOrMapViewForMobile();
+                            //Sets the map/list view toggle display in mobile view.
+                            this._sidebarHdr.setCurrentViewToListView(this.config.showListViewFirst);
+                        }
                     }
                 }));
 
@@ -695,6 +713,19 @@ define([
             }));
 
             return createMapPromise;
+        },
+        /**
+         * checks configured value for map or list view to load first and displays view accordigly on mobile view
+         */
+        _switchToListOrMapViewForMobile: function() {
+            //If configured option is show List view first in mobile view
+            if (this.config.showListViewFirst) {
+                topic.publish("showListViewClicked");
+            }
+            //else if configured option is show map view first in mobile view
+            else {
+                topic.publish("showMapViewClicked");
+            }
         },
 
         /**

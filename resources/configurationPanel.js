@@ -15,6 +15,7 @@
             }]
         },
         "ascendingSortOrder": "true",
+        "showListViewFirst": "true",
         "showAllFeatures": "true",
         "commentNameField": "NAME",
         "allowFacebook": false,
@@ -67,6 +68,19 @@
             "label": "Display the help widget as a splash screen",
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
+        }, {
+            "label": "Select Map View first / List view first in mobile view",
+            "fieldName": "showListViewFirst",
+            "type": "radio",
+            "tooltip": "Select map or list view to display first on load of application",
+            "items":[{
+                "label": "list",
+                "value": "true",
+                "checked": true
+            }, {
+                "label": "map",
+                "value": "false"
+            }]
         }, {
             "label": "Select Show all features/ filter by extent",
             "fieldName": "showAllFeatures",

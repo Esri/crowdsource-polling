@@ -66,7 +66,8 @@ define([
             var i18n = this.appConfig.i18n.sidebar_header,
                 signInBtnOnClick, signInMenuBtnOnClick, optionsIconSurface,
                 helpMenuItem, helpBtnOnClick, helpMenuBtnOnClick, viewToggleMenuBtnOnClick, optionsOnClick;
-
+            //set value of currentViewIsListView to configured value for showListViewFirst
+            this.currentViewIsListView = this.appConfig.showListViewFirst;
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
 
@@ -106,7 +107,8 @@ define([
                 this.setCurrentViewToListView(!this.currentViewIsListView);
             }));
             this.own(viewToggleMenuBtnOnClick);
-            this.setCurrentViewToListView(true);
+            //switch toggler button while checking current view displayed
+            this.setCurrentViewToListView(this.appConfig.showListViewFirst);
 
 
             if (this.showHelp) {

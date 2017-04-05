@@ -42,7 +42,7 @@
         "fields": [{
             "type": "subcategory",
             "label": "App settings"
-        },{
+        }, {
             "label": "Select a map",
             "fieldName": "webmap",
             "type": "webmap",
@@ -69,10 +69,10 @@
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
         }, {
-            "label": "Select Map View first / List view first in mobile view",
+            "label": "Select List View first / Map View first in mobile view",
             "fieldName": "showListViewFirst",
             "type": "radio",
-            "tooltip": "Select map or list view to display first on load of application",
+            "tooltip": "Select list or map view to display first on load of application",
             "items":[{
                 "label": "list",
                 "value": "true",
@@ -94,13 +94,13 @@
                 "label": "Filter by extent",
                 "value": "false"
             }]
-		}]
+        }]
     }, {
         "category": "<b>Content</b>",
         "fields": [{
             "type": "subcategory",
             "label": "Content"
-        },{
+        }, {
             "type": "paragraph",
             "value": "Configure how the application will interact with your layers."
         }, {
@@ -145,7 +145,7 @@
         "fields": [{
             "type": "subcategory",
             "label": "Custom URL parameter"
-        },{
+        }, {
             "type": "paragraph",
             "value": "Set up the app to support a custom url parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a url parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application url using the custom parameter name you define. For example, if I set the custom param value to parcels a custom url would look like this index.html?parcel=3045"
         }, {
@@ -182,13 +182,13 @@
         "fields": [{
             "type": "subcategory",
             "label": "Sign in options"
-        },{
+        }, {
             "type": "paragraph",
             "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
-        },{
+        }, {
             "type": "paragraph",
             "value": "See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
-        },{
+        }, {
             "label": "Field to store the name of authenticated commenters.",
             "fieldName": "commentNameField",
             "type": "string",
@@ -235,7 +235,7 @@
         "fields": [{
             "type": "subcategory",
             "label": "App color"
-        },{
+        }, {
             "type": "paragraph",
             "value": "User can change the theme settings and choose different colors for header, body, and buttons"
         }, {

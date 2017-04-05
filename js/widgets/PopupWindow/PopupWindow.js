@@ -24,7 +24,8 @@ define([
     "dojo/dom-class",
     "dojo/dom-geometry",
     "dojo/dom-style",
-    "dojo/on"
+    "dojo/on",
+    "application/lib/SvgHelper"
 ], function (
     declare,
     _WidgetBase,
@@ -35,7 +36,8 @@ define([
     domClass,
     domGeom,
     domStyle,
-    on
+    on,
+    SvgHelper
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
@@ -85,8 +87,10 @@ define([
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var i18n = this.appConfig.i18n.popup_Close;
+            var i18n = this.appConfig.i18n.popup_Close, closeIconSurface;
 
+            closeIconSurface = SvgHelper.createSVGItem(this.appConfig.closeIcon, this.closeBtn, 20, 20);
+            SvgHelper.changeColor(closeIconSurface, this.appConfig.theme.header.text);
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
 
@@ -98,9 +102,6 @@ define([
                 this.closeBtn.style.display = "block";
             }
 
-            this.own(on(window, "resize", lang.hitch(this, function () {
-                this.fitToWindow();
-            })));
         },
 
         /**
@@ -118,47 +119,7 @@ define([
             // Change display from none to block
             this.domNode.style.visibility = "hidden";
             this.domNode.style.display = "block";
-            this.fitToWindow();
             this.domNode.style.visibility = "visible";
-        },
-
-        fitToWindow: function () {
-            var bodyBounds, widgetWidth, widgetHeight, horizOffset, vertOffset, styleAttrs, contentHeight;
-
-            // Constrain the popup to the document body reduced by the minimum margin
-            // then to the maxima
-            bodyBounds = domGeom.getMarginBox(document.body);
-
-            widgetWidth = bodyBounds.w - this.minimumMargin - this.minimumMargin;
-            if (this.maxima.width > 0 && this.maxima.width < widgetWidth) {
-                widgetWidth = this.maxima.width;
-            }
-            horizOffset = (bodyBounds.w - widgetWidth) / 2;
-
-            widgetHeight = bodyBounds.h - this.minimumMargin - this.minimumMargin;
-            if (this.maxima.height > 0 && this.maxima.height < widgetHeight) {
-                widgetHeight = this.maxima.height;
-            }
-            vertOffset = (bodyBounds.h - widgetHeight) / 2;
-
-            // Set the popup widget's dimensions
-            styleAttrs = {
-                "top": vertOffset + "px",
-                "right": horizOffset + "px",
-                "bottom": vertOffset + "px",
-                "left": horizOffset + "px"
-            };
-            domStyle.set(this.domNode, styleAttrs);
-
-
-            // Set the popup widget's content's dimensions so that its scrollbars work properly
-            contentHeight = (widgetHeight - (this.displayTitle.length === 0 ?
-                20 :
-                32) - 22) + "px"; // title + top & bottom margins
-            styleAttrs = {
-                "height": contentHeight
-            };
-            domStyle.set(this.popupContent, styleAttrs);
         },
 
         /**

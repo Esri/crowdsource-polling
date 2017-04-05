@@ -123,8 +123,11 @@ define([
             if (config) {
                 this.config = config;
 
-                //converting string value stored in nls for showAllFeatures to boolean(true/false)
-                this.config.showAllFeatures = config.showAllFeatures === "true" ? true : false;
+                // Normalize string booleans
+                this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);
+                this.config.showAllFeatures = this._toBoolean(config.showAllFeatures);
+                this.config.showListViewFirst = this._toBoolean(config.showListViewFirst);
+
                 //supply either the webmap id or, if available, the item info
                 itemInfo = this.config.itemInfo || this.config.webmap;
 
@@ -217,7 +220,7 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
                 var configuredSortField, configuredVotesField, commentFields, contentContainer,
-                    needToggleCleanup, compareFunction, userCanEdit = true;
+                    needToggleCleanup, needToggleCleanupForMobile, compareFunction, userCanEdit = true;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields &&
@@ -356,6 +359,8 @@ define([
                     // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                     // a no-op because that's the normal state for wider windows
                     topic.publish("showListViewClicked");
+                    //switch toggle option to map view as currently list view will be shown
+                    this._sidebarHdr.setCurrentViewToListView(true);
                 }));
 
                 topic.subscribe("highlightItem", lang.hitch(this, function (item, skipZoom) {
@@ -499,7 +504,7 @@ define([
                  */
                 if (this._sortField) {
                     compareFunction = createCompareFunction(
-                        this._sortField, this.config.ascendingSortOrder !== "false");
+                        this._sortField, this.config.ascendingSortOrder);
                 }
 
                 function createCompareFunction(compareAttributeName, ascendingOrder) {
@@ -609,6 +614,7 @@ define([
                 // Handle the switch between list and map views for narrow screens
                 contentContainer = registry.byId("contentDiv");
                 needToggleCleanup = true;
+                needToggleCleanupForMobile = true;
                 topic.subscribe("showMapViewClicked", lang.hitch(this, function (err) {
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
@@ -616,6 +622,7 @@ define([
                     domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
                     needToggleCleanup = true;
+                    needToggleCleanupForMobile = false;
                 }));
                 topic.subscribe("showListViewClicked", lang.hitch(this, function (err) {
                     // Hide the map and restore the sidebar to the display that it has for this
@@ -625,7 +632,12 @@ define([
                     domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
                     needToggleCleanup = true;
+                    needToggleCleanupForMobile = false;
                 }));
+                // Start with config option selected to show list or map view first
+                if (window.innerWidth <= 640) {
+                    this._switchToListOrMapViewForMobile();
+                }
                 on(window, "resize", lang.hitch(this, function (event) {
                     // If we've tinkered with the Layout Container for the narrow screen
                     // and now the screen is wider than the single-panel threshold, reset
@@ -637,6 +649,14 @@ define([
                         contentContainer.resize();
                         this._sidebarHdr.setCurrentViewToListView(true);
                         needToggleCleanup = false;
+                        needToggleCleanupForMobile = true;
+                    }
+                    else if (event.currentTarget.innerWidth <= 640) {
+                        if (needToggleCleanupForMobile) {
+                            this._switchToListOrMapViewForMobile();
+                            //Sets the map/list view toggle display in mobile view.
+                            this._sidebarHdr.setCurrentViewToListView(this.config.showListViewFirst);
+                        }
                     }
                 }));
 
@@ -696,13 +716,27 @@ define([
 
             return createMapPromise;
         },
+        /**
+         * checks configured value for map or list view to load first and displays view accordigly on mobile view
+         */
+        _switchToListOrMapViewForMobile: function () {
+            //If configured option is show List view first in mobile view
+            if (this.config.showListViewFirst) {
+                topic.publish("showListViewClicked");
+            }
+            //else if configured option is show map view first in mobile view
+            else {
+                topic.publish("showMapViewClicked");
+            }
+        },
 
         /**
          * Sets up UI.
          * @return {object} Deferred
          */
         _setupUI: function () {
-            var deferred = new Deferred(), popupContainer,
+            var deferred = new Deferred(),
+                popupContainer,
                 styleString = "";
             setTimeout(lang.hitch(this, function () {
                 var contrastToTextColor;
@@ -820,8 +854,7 @@ define([
                         (this.config.commentNameField.trim().length > 0),
                     "showHelp": this.config.displayText
                 }).placeAt("sidebarHeading");
-                popupContainer = domConstruct.create("div", {
-                }, document.body);
+                popupContainer = domConstruct.create("div", {}, document.body);
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
                     "appConfig": this.config,
@@ -1099,6 +1132,47 @@ define([
             else {
                 return "#000";
             }
+        },
+
+        /**
+         * Normalizes a boolean value to true or false.
+         * @param {boolean|string} boolValue A true or false
+         *        value that is returned directly or a string
+         *        "true" or "false" (case-insensitive) that
+         *        is checked and returned; if neither a
+         *        a boolean or a usable string, falls back to
+         *        defaultValue
+         * @param {boolean} [defaultValue] A true or false
+         *        that is returned if boolValue can't be
+         *        used; if not defined, true is returned
+         * @return {boolean} Normalized boolean or defaultValue
+         */
+        _toBoolean: function (boolValue, defaultValue) {
+            var lowercaseValue;
+
+            // Shortcut true|false
+            if (boolValue === true) {
+                return true;
+            }
+            if (boolValue === false) {
+                return false;
+            }
+
+            // Handle a true|false string
+            if (typeof boolValue === "string") {
+                lowercaseValue = boolValue.toLowerCase();
+                if (lowercaseValue === "true") {
+                    return true;
+                }
+                if (lowercaseValue === "false") {
+                    return false;
+                }
+            }
+            // Fall back to default
+            if (defaultValue === undefined) {
+                return true;
+            }
+            return defaultValue;
         },
 
         //============================================================================================================//

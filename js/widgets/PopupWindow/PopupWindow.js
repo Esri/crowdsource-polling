@@ -87,7 +87,8 @@ define([
          * Initializes the widget once the DOM structure is ready
          */
         postCreate: function () {
-            var i18n = this.appConfig.i18n.popup_Close, closeIconSurface;
+            var i18n = this.appConfig.i18n.popup_Close,
+                closeIconSurface;
 
             closeIconSurface = SvgHelper.createSVGItem(this.appConfig.closeIcon, this.closeBtn, 20, 20);
             SvgHelper.changeColor(closeIconSurface, this.appConfig.theme.header.text);

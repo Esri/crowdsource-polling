@@ -173,7 +173,8 @@ define([
          */
         generateForm: function (formDivName, fields) {
             var pThis = this,
-                formDiv, form, actionsBar, dynamicFormCancel, nextReqFldStatusFlag = 1,
+                formDiv, form, actionsBar, dynamicFormCancel, value,
+                nextReqFldStatusFlag = 1,
                 i18n = this.appConfig.i18n.dynamic_form,
                 isRTL = this.appConfig.i18n.direction === "rtl";
 
@@ -491,19 +492,44 @@ define([
                     }
 
                 }
-                // Special handling for non-editable pre-set items
-                else if (!field.nullable) {
-                    // If a form item is pre-set, add it to the form
+                // Special handling for non-editable form item
+                else {
+                    // If the form item is pre-set, add it to the form
                     if (this._presets[field.name]) {
                         form.push({
                             "field": field,
                             "value": this._presets[field.name]
                         });
-
                     }
-                    // If a form item is non-editable, required, not an OID/GUID field, and not pre-set,
+
+                    // If the form item has a default, use it
+                    else if (esriLang.isDefined(field.dtDefault)) {
+                        // If field is a coded value, convert default to the offset of the value into list of
+                        // coded values; this is done to keep it parallel to the options list that would have
+                        // been used had the field been editable
+                        if (field.domain && field.domain.type === "codedValue") {
+                            value = "0"; // default to first item if we don't have a valid default
+                            array.some(field.domain.codedValues, function (cv, i) {
+                                if (cv.code === field.dtDefault) {
+                                    value = i.toString();
+                                    return true;
+                                }
+                            });
+                        }
+                        else {
+                            value = field.dtDefault;
+                        }
+
+                        form.push({
+                            "field": field,
+                            "value": value
+                        });
+                    }
+
+                    // If the form item is non-editable, required, not an OID/GUID field, and not pre-set,
                     // then the form can't meet the condition for submission that all required fields have values
-                    else if (field.type !== "esriFieldTypeOID" &&
+                    else if (!field.nullable &&
+                        field.type !== "esriFieldTypeOID" &&
                         field.type !== "esriFieldTypeGUID" &&
                         field.type !== "esriFieldTypeGlobalID" &&
                         field.name !== this._item._layer.objectIdField) {
@@ -657,7 +683,7 @@ define([
                 array.forEach(form, lang.hitch(this, function (entry) {
                     var value, valueTimeSupplement;
 
-                    value = entry.input.get("value");
+                    value = entry.input ? entry.input.get("value") : entry.value;
 
                     if (esriLang.isDefined(value)) {
                         if (entry.inputTimeSupplement) {

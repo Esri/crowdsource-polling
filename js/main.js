@@ -25,6 +25,7 @@ define([
     "dojo/dom-class",
     "dojo/dom-construct",
     "dojo/dom-style",
+    "dojo/dom-geometry",
     "dojo/json",
     "dojo/on",
     "dojo/parser",
@@ -66,6 +67,7 @@ define([
     domClass,
     domConstruct,
     domStyle,
+    domGeom,
     JSON,
     on,
     parser,
@@ -106,6 +108,8 @@ define([
         _outlineFillColor: new Color([0, 255, 255, 0]),
         _fillHiliteColor: new Color([0, 255, 255, 0.1]),
         _lineHiliteColor: new Color("aqua"),
+        _windowResizeTimer: null,
+        _searchControls: {},
 
 
         startup: function (config) {
@@ -193,6 +197,56 @@ define([
         },
 
         //============================================================================================================//
+        /**
+        * Window resize handler
+        **/
+        _resize: function () {
+            if (this._itemsList || this._itemsList.searchContainer) {
+                domClass.add(this._itemsList.searchContainer, "hideItemListSearch");
+            }
+            if (this._windowResizeTimer) {
+                clearTimeout(this._windowResizeTimer);
+            }
+            this._windowResizeTimer = setTimeout(lang.hitch(this, this._resizeSearchControl),
+                500);
+        },
+
+        /**
+        * Resize the search control in item list according to updated window size
+        **/
+        _resizeSearchControl: function () {
+            var containerGeom, calculatedWidth, searchGroup, sidebarContent, searchContainerNodeElement;
+            if (!this._itemsList || !this._itemsList.searchContainer) {
+                return;
+            }
+            //get search group to override max width overridden by some themes
+            searchGroup = query(
+                ".arcgisSearch .searchGroup", this._itemsList.searchContainer
+            )[0];
+
+            if (!searchContainerNodeElement) {
+                searchContainerNodeElement = query(
+                    ".arcgisSearch .searchGroup .searchInput", this._itemsList.searchContainer
+                )[0];
+            }
+            sidebarContent = dom.byId("sidebarContent");
+            //reset the width of search control to fit in available panel width
+            if (sidebarContent && searchContainerNodeElement) {
+                containerGeom = domGeom.position(sidebarContent);
+                if (containerGeom && containerGeom.w) {
+                    calculatedWidth = (containerGeom.w - 102);
+                    if (calculatedWidth > 0) {
+                        searchContainerNodeElement.style.setProperty("width",
+                            calculatedWidth + "px", "important");
+                        if (searchGroup) {
+                            searchGroup.style.setProperty("max-width", "100%", "important");
+                        }
+                    }
+                }
+                domClass.remove(this._itemsList.searchContainer, "hideItemListSearch");
+            }
+        },
+
 
         /**
          * Launches app.
@@ -220,7 +274,8 @@ define([
             // Complete wiring-up when all of the setups complete
             all([setupUI, createMapPromise]).then(lang.hitch(this, function (statusList) {
                 var configuredSortField, configuredVotesField, commentFields, contentContainer,
-                    needToggleCleanup, needToggleCleanupForMobile, compareFunction, userCanEdit = true;
+                    needToggleCleanup, needToggleCleanupForMobile, compareFunction, userCanEdit = true,
+                    searchControl;
 
                 //----- Merge map-loading info with UI items -----
                 if (this.config.featureLayer && this.config.featureLayer.fields &&
@@ -244,6 +299,31 @@ define([
                             this._votesField = configuredVotesField;
                         }
                     }));
+
+                    // Create search bar in issueList
+                    // Add search control with always expanded mode
+                    searchControl = SearchDijitHelper.createSearchDijit(
+                        this.map, this.config.itemInfo.itemData.operationalLayers,
+                        this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
+                        this._itemsList.searchBar, true);
+
+                    // If the search dijit is enabled, connect the results of selecting a search result with
+                    // displaying the details about the item
+                    if (searchControl) {
+                        //set the search control in _searchControls which will be used to sync text
+                        this._searchControls.itemList = searchControl;
+                        //subscribe the syncSearchText event
+                        topic.subscribe("syncSearchText", lang.hitch(this, this._syncSearchText));
+                        on.once(searchControl, "load", lang.hitch(this, function () {
+                            this._connectSearchResult(this._searchControls.itemList);
+                        }));
+                        if (searchControl.loaded) {
+                            searchControl.emit("load");
+                            this._resize();
+                        }
+                        //reset the search component width window resize
+                        on(window, 'resize', lang.hitch(this, this._resize));
+                    }
                 }
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
@@ -423,6 +503,8 @@ define([
                     this._sidebarCnt.showPanel(name);
 
                     if (name === "itemsList") {
+                        //resize the search control
+                        this._resize();
                         this._itemsList.clearList();
                         topic.publish("updateItems");
                     }
@@ -631,6 +713,8 @@ define([
                     domStyle.set("sidebarContent", "display", "");
                     domStyle.set("sidebarContent", "width", "");
                     contentContainer.resize();
+                    //resize the search control
+                    this._resize();
                     needToggleCleanup = true;
                     needToggleCleanupForMobile = false;
                 }));
@@ -977,7 +1061,10 @@ define([
                     // If the search dijit is enabled, connect the results of selecting a search result with
                     // displaying the details about the item
                     if (searchControl) {
-                        on.once(searchControl, "load", this._connectSearchResult);
+                        this._searchControls.map = searchControl;
+                        on.once(searchControl, "load", lang.hitch(this, function () {
+                            this._connectSearchResult(this._searchControls.map);
+                        }));
                         if (searchControl.loaded) {
                             searchControl.emit("load");
                         }
@@ -1003,10 +1090,14 @@ define([
          * Converts the search dijit result-selection event to the app's publish-subscribe system.
          * <p>Expects search dijit to be provided via "this".</p>
          */
-        _connectSearchResult: function () {
-            var searchControl = this;
-            on(searchControl, "select-result", function (selectResult) {
-                var feature;
+        _connectSearchResult: function (searchControl) {
+            var isItemListSearchCnt = false;
+            //Set if search control is of itemList
+            if (searchControl.id === this._searchControls.itemList.id) {
+                isItemListSearchCnt = true;
+            }
+            on(searchControl, "select-result", lang.hitch(this, function (selectResult) {
+                var feature, navigateToMapView = true;
                 // Make sure that we have a feature from a feature layer,
                 // then supplement the selection with the layer if it doesn't have one
                 if (selectResult && selectResult.source.featureLayer &&
@@ -1015,11 +1106,37 @@ define([
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-
-                    // Do the app's highlighting
-                    topic.publish("highlightItem", feature, true);
+                    //if selected feature is of item layer show details panle
+                    if (this._mapData.getItemLayer().id === feature._layer.id) {
+                        // Select the item so that its details panel will be open
+                        topic.publish("itemSelected", feature);
+                        navigateToMapView = false;
+                    } else {
+                        // Do the app's highlighting
+                        topic.publish("highlightItem", feature, true);
+                    }
                 }
-            });
+                //If search control is of item list &
+                //result is not from feature layer navigate user to map view
+                if (isItemListSearchCnt && navigateToMapView) {
+                    topic.publish("toggleMenu");
+                }
+                //If valid select result, sync text of both the search controls
+                if (selectResult) {
+                    topic.publish("syncSearchText", isItemListSearchCnt);
+                }
+            }));
+        },
+
+        /**
+         * Syncs the text between two search control on map and itemlist.
+         */
+        _syncSearchText: function (isItemListSearchCnt) {
+            if (isItemListSearchCnt) {
+                this._searchControls.map.set("value", this._searchControls.itemList.get("value"));
+            } else {
+                this._searchControls.itemList.set("value", this._searchControls.map.get("value"));
+            }
         },
 
         /**

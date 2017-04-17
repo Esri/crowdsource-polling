@@ -451,12 +451,21 @@ textarea {
     font-weight: bold;
     font-size: 16px;
 }
+.searchContainer {
+    display: none;
+}
+.hideItemListSearch {
+    display: none !important;
+}
 @media only screen and (max-width: 640px) {
     .itemListActions {
         display: none;
     }
+    .searchContainer {
+        display: block;
+    }
     .itemListBox {
-        top: 0px;
+        top: 32px;
     }
 }
 

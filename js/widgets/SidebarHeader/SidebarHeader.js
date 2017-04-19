@@ -97,19 +97,11 @@ define([
             this.viewToggleMenuItem = domConstruct.create("div", {
                 className: "sideHdrOptionsMenuItem textButton themeHeaderHover"
             }, this.optionsDropdown);
-            viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, function () {
-                if (this.currentViewIsListView) {
-                    topic.publish("showMapViewClicked");
-                }
-                else {
-                    topic.publish("showListViewClicked");
-                }
-                this.setCurrentViewToListView(!this.currentViewIsListView);
-            }));
+            viewToggleMenuBtnOnClick = on(this.viewToggleMenuItem, "click", lang.hitch(this, this._toggleMenu));
             this.own(viewToggleMenuBtnOnClick);
             //switch toggler button while checking current view displayed
             this.setCurrentViewToListView(this.appConfig.showListViewFirst);
-
+            topic.subscribe("toggleMenu", lang.hitch(this, this._toggleMenu));
 
             if (this.showHelp) {
                 var helpIconSurface;
@@ -169,6 +161,19 @@ define([
             if (this.appConfig.titleIcon) {
                 domAttr.set(this.bannerImg, "src", this.appConfig.titleIcon);
             }
+        },
+
+        /**
+         * Toggles the item in menu list and switches to map/list view based on the current view.
+         */
+        _toggleMenu: function () {
+            if (this.currentViewIsListView) {
+                topic.publish("showMapViewClicked");
+            }
+            else {
+                topic.publish("showListViewClicked");
+            }
+            this.setCurrentViewToListView(!this.currentViewIsListView);
         },
 
         /**

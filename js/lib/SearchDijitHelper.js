@@ -115,7 +115,7 @@ define([
                     searchControl = new Search({
                         activeSourceIndex: activeSource,
                         addLayersFromMap: addLayersFromMap,
-                        enableButtonMode: true,
+                        enableButtonMode: !searchAlwaysExpanded,
                         enableInfoWindow: false,
                         map: map,
                         sources: searchSources,

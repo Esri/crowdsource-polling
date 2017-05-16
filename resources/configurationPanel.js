@@ -38,26 +38,17 @@
         "buttonBackgroundColor": "white"
     },
     "configurationSettings": [{
-        "category": "<b>App</b>",
+        "category": "<b>General</b>",
         "fields": [{
-            "type": "subcategory",
-            "label": "App settings"
-        }, {
             "label": "Select a map",
             "fieldName": "webmap",
             "type": "webmap",
-            "tooltip": "Web map displayed in the application"
+            "tooltip": "Map displayed in the application"
         }, {
             "label": "Application title",
             "fieldName": "title",
             "type": "string",
             "tooltip": "Application name (max 23 chars)"
-        }, {
-            "label": "Application logo",
-            "fieldName": "titleIcon",
-            "type": "string",
-            "sharedThemeProperty": "logo.small",
-            "tooltip": "Icon in top left corner of application. Icon should be 48px high."
         }, {
             "label": "Help widget text",
             "fieldName": "displayText",
@@ -69,41 +60,104 @@
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
         }, {
-            "label": "Select List View first / Map View first in mobile view",
-            "fieldName": "showListViewFirst",
-            "type": "radio",
-            "tooltip": "Select list or map view to display first on load of application",
-            "items":[{
-                "label": "list",
-                "value": "true",
-                "checked": true
-            }, {
-                "label": "map",
-                "value": "false"
-            }]
-        }, {
-            "label": "Select Show all features/ filter by extent",
-            "fieldName": "showAllFeatures",
-            "type": "radio",
-            "tooltip": "Select Show all features or filter by extent to display features on application load according to selected option",
-            "items":[{
-                "label": "Show all features",
-                "value": "true",
-                "checked": true
-            }, {
-                "label": "Filter by extent",
-                "value": "false"
-            }]
-        }]
-    }, {
-        "category": "<b>Content</b>",
-        "fields": [{
             "type": "subcategory",
-            "label": "Content"
+            "label": "Sign in options"
         }, {
             "type": "paragraph",
-            "value": "Configure how the application will interact with your layers."
+            "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
         }, {
+            "type": "paragraph",
+            "value": "See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
+        }, {
+            "label": "Field to store the name of authenticated commenters.",
+            "fieldName": "commentNameField",
+            "type": "string",
+            "tooltip": "Field in a table with a geodatabase relationship to the selected feature layer for storing the name of authenticated commenters. Table must exist in map. Field name is case-sensitive."
+        }, {
+            "label": "Allow users to sign in using Twitter",
+            "fieldName": "allowTwitter",
+            "type": "boolean",
+            "tooltip": "Enable to allow users to sign in using their Twitter credentials"
+        }, {
+            "label": "Allow users to sign in using Facebook",
+            "tooltip": "Enable to allow users to sign in using their Facebook credentials",
+            "type": "conditional",
+            "fieldName": "allowFacebook",
+            "condition": false,
+            "items":[{
+                "label": "Please register your app with Facebook and provide your Facebook AppId",
+                "tooltip": "Facebook AppId",
+                "type": "string",
+                "fieldName": "facebookAppId"
+            }]
+        }, {
+            "label": "Allow users to sign in using Google+",
+            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
+            "type": "conditional",
+            "fieldName": "allowGoogle",
+            "condition":false,
+            "items":[{
+                "label": "Please register your app with Google+ and provide your Google+ Client ID",
+                "tooltip": "Google+ ClientId",
+                "type": "string",
+                "fieldName": "googleplusClientId"
+            }]
+        }, {
+            "label": "Sign in window text",
+            "fieldName": "socialMediaDisclaimer",
+            "type": "string",
+            "placeholder": "",
+            "tooltip": "Text to display in the Sign In window",
+            "stringFieldOption": "richtext"
+        }]
+    }, {
+        "category": "<b>Theme</b>",
+        "fields": [{
+            "label": "Header text color",
+            "tooltip": "Set header text color",
+            "type": "color",
+            "sharedThemeProperty": "header.text",
+            "fieldName": "color"
+        }, {
+            "label": "Header background color",
+            "tooltip": "Set header background color",
+            "type": "color",
+            "sharedThemeProperty": "header.background",
+            "fieldName": "headerBackgroundColor"
+        }, {
+            "label": "Body text color",
+            "tooltip": "Set body text color",
+            "type": "color",
+            "sharedThemeProperty": "body.text",
+            "fieldName": "bodyTextColor"
+        }, {
+            "label": "Body background color",
+            "tooltip": "Set body background color",
+            "type": "color",
+            "sharedThemeProperty": "body.background",
+            "fieldName": "bodyBackgroundColor"
+        }, {
+            "label": "Button text color",
+            "tooltip": "Set button text color",
+            "type": "color",
+            "sharedThemeProperty": "button.text",
+            "fieldName": "buttonTextColor"
+        }, {
+            "label": "Button background color",
+            "tooltip": "Set button background color",
+            "type": "color",
+            "sharedThemeProperty": "button.background",
+            "fieldName": "buttonBackgroundColor"
+        }, {
+            "label": "Application logo",
+            "fieldName": "titleIcon",
+            "type": "string",
+            "sharedThemeProperty": "logo.small",
+            "tooltip": "Icon in top left corner of application. Icon should be 48px high."
+        }]
+    }, {
+        "category": "<b>Options</b>",
+        "fields": [{
             "label": "Polling feature layer",
             "fieldName": "featureLayer",
             "type": "layerAndFieldSelector",
@@ -139,31 +193,54 @@
                 "label": "Descending",
                 "value": "false"
             }]
+        }, {
+            "label": "Initial view on mobile devices",
+            "fieldName": "showListViewFirst",
+            "type": "radio",
+            "tooltip": "Choose to initially load a map view or a list view of the features",
+            "items":[{
+                "label": "Show list first",
+                "value": "true",
+                "checked": true
+            }, {
+                "label": "Show map first",
+                "value": "false"
+            }]
+        }, {
+            "label": "Initial feature display",
+            "fieldName": "showAllFeatures",
+            "type": "radio",
+            "tooltip": "Choose to initially list all features, or to list only the features that are currently visible on the map",
+            "items":[{
+                "label": "Show all features",
+                "value": "true",
+                "checked": true
+            }, {
+                "label": "Show features in current map extent",
+                "value": "false"
+            }]
         }]
     }, {
         "category": "Custom URL Parameter",
         "fields": [{
-            "type": "subcategory",
-            "label": "Custom URL parameter"
-        }, {
             "type": "paragraph",
-            "value": "Set up the app to support a custom url parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a url parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application url using the custom parameter name you define. For example, if I set the custom param value to parcels a custom url would look like this index.html?parcel=3045"
+            "value": "Set up the app to support a custom URL parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a URL parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application URL using the custom parameter name you define. For example, if I set the custom param value to parcels a custom URL would look like this index.html?parcel=3045"
         }, {
             "placeHolder": "i.e. parcels",
-            "label": "URL param name:",
+            "label": "URL parameter name:",
             "fieldName": "customUrlParam",
             "type": "string",
-            "tooltip": "Custom URL param name"
+            "tooltip": "Custom URL parameter name"
         }, {
             "type": "layerAndFieldSelector",
             "fieldName": "customUrlLayer",
-            "label": "Layer to search for custom url param value",
-            "tooltip": "Url param search layer",
+            "label": "Layer to search for custom URL parameter value",
+            "tooltip": "URL parameter search layer",
             "fields": [{
                 "multipleSelection": false,
                 "fieldName": "urlField",
-                "label": "URL param search field",
-                "tooltip": "URL param search field"
+                "label": "URL parameter search field",
+                "tooltip": "URL parameter search field"
             }],
             "layerOptions": {
                 "supportedTypes": [
@@ -176,104 +253,6 @@
                     "esriGeometryPolygon"
                 ]
             }
-        }]
-    }, {
-        "category": "<b>Access</b>",
-        "fields": [{
-            "type": "subcategory",
-            "label": "Sign in options"
-        }, {
-            "type": "paragraph",
-            "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
-        }, {
-            "type": "paragraph",
-            "value": "See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
-        }, {
-            "label": "Field to store the name of authenticated commenters.",
-            "fieldName": "commentNameField",
-            "type": "string",
-            "tooltip": "Field in a table with a geodatabase relationship to the selected feature layer for storing the name of authenticated commenters. Table must exist in map. Field name is case-sensitive."
-        }, {
-            "label": "Allow users to sign in using Twitter",
-            "fieldName": "allowTwitter",
-            "type": "boolean",
-            "tooltip": "Enable to allow users to sign in using their Twitter credentials"
-        }, {
-            "label": "Allow users to sign in using Facebook",
-            "tooltip": "Enable to allow users to sign in using their Facebook credentials",
-            "type": "conditional",
-            "fieldName": "allowFacebook",
-            "condition": false,
-            "items":[{
-                "label": "Please register your app with Facebook and provide your Facebook AppId",
-                "tooltip": "Facebook AppId",
-                "type": "string",
-                "fieldName": "facebookAppId"
-        }]
-        }, {
-            "label": "Allow users to sign in using Google+",
-            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
-            "type": "conditional",
-            "fieldName": "allowGoogle",
-            "condition":false,
-            "items":[{
-            "label": "Please register your app with Google+ and provide your Google+ Client ID",
-            "tooltip": "Google+ ClientId",
-            "type": "string",
-            "fieldName": "googleplusClientId"
-        }]
-        }, {
-            "label": "Sign in window text",
-            "fieldName": "socialMediaDisclaimer",
-            "type": "string",
-            "placeholder": "",
-            "tooltip": "Text to display in the Sign In window",
-            "stringFieldOption": "richtext"
-        }]
-    }, {
-        "category": "<b>App Color</b>",
-        "fields": [{
-            "type": "subcategory",
-            "label": "App color"
-        }, {
-            "type": "paragraph",
-            "value": "User can change the theme settings and choose different colors for header, body, and buttons"
-        }, {
-            "label": "Header background color",
-            "tooltip": "Set header background color",
-            "type": "color",
-            "sharedThemeProperty": "header.background",
-            "fieldName": "headerBackgroundColor"
-        },  {
-            "label": "Header text color",
-            "tooltip": "Set header text color",
-            "type": "color",
-            "sharedThemeProperty": "header.text",
-            "fieldName": "color"
-        }, {
-            "label": "Body background color",
-            "tooltip": "Set body background color",
-            "type": "color",
-            "sharedThemeProperty": "body.background",
-            "fieldName": "bodyBackgroundColor"
-        }, {
-            "label": "Body text color",
-            "tooltip": "Set body text color",
-            "type": "color",
-            "sharedThemeProperty": "body.text",
-            "fieldName": "bodyTextColor"
-        }, {
-            "label": "Button background color",
-            "tooltip": "Set button background color",
-            "type": "color",
-            "sharedThemeProperty": "button.background",
-            "fieldName": "buttonBackgroundColor"
-        }, {
-            "label": "Button text color",
-            "tooltip": "Set button text color",
-            "type": "color",
-            "sharedThemeProperty": "button.text",
-            "fieldName": "buttonTextColor"
         }]
     }]
 }

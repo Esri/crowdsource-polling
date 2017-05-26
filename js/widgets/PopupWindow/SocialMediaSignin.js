@@ -70,7 +70,7 @@ define([
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
-
+            this.popupTitle.innerHTML = i18n.singInHeaderTitle;
             // See what social media are available
 
             // Facebook

@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Đóng"
   },
   "social_media": {
+    "signInHeaderTitle": "Đ_Social Media Sign In_______ớ",
     "signIntoFacebookTooltip": "Đăng nhập bằng Facebook",
     "signIntoGooglePlusTooltip": "Đăng nhập bằng Google+",
     "signIntoTwitterTooltip": "Đăng nhập bằng Twitter",

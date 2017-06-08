@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Tutup"
   },
   "social_media": {
+    "signInHeaderTitle": "ng_Social Media Sign In_______ny",
     "signIntoFacebookTooltip": "Masuk dengan Facebook",
     "signIntoGooglePlusTooltip": "Masuk dengan Google+",
     "signIntoTwitterTooltip": "Masuk dengan Twitter",

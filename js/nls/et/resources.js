@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Sulge"
   },
   "social_media": {
+    "signInHeaderTitle": "Š_Social Media Sign In_______ä",
     "signIntoFacebookTooltip": "Logige sisse Facebooki konto kaudu",
     "signIntoGooglePlusTooltip": "Logige sisse Google+ kasutajana",
     "signIntoTwitterTooltip": "Logige sisse Twitteri konto kaudu",

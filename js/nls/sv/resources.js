@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Stäng"
   },
   "social_media": {
+    "signInHeaderTitle": "Å_Social Media Sign In_______ö",
     "signIntoFacebookTooltip": "Logga in med Facebook",
     "signIntoGooglePlusTooltip": "Logga in med Google+",
     "signIntoTwitterTooltip": "Logga in med Twitter",

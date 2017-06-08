@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Luk"
   },
   "social_media": {
+    "signInHeaderTitle": "ø_Social Media Sign In_______å",
     "signIntoFacebookTooltip": "Log ind med Facebook",
     "signIntoGooglePlusTooltip": "Log ind med Google+",
     "signIntoTwitterTooltip": "Log ind med Twitter",

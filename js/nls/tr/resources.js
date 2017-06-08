@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Kapat"
   },
   "social_media": {
+    "signInHeaderTitle": "ı_Social Media Sign In_______İ",
     "signIntoFacebookTooltip": "Facebook ile oturum aç",
     "signIntoGooglePlusTooltip": "Google+ ile oturum aç",
     "signIntoTwitterTooltip": "Twitter ile oturum aç",

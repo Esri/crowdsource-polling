@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Tallennettu"
   },
   "social_media": {
+    "signInHeaderTitle": "Å_Social Media Sign In_______ö",
     "signIntoFacebookTooltip": "Kirjaudu sisään Facebook-tunnuksella",
     "signIntoGooglePlusTooltip": "Kirjaudu sisään Google+-tunnuksella",
     "signIntoTwitterTooltip": "Kirjaudu sisään Twitter-tunnuksella",

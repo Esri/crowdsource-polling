@@ -115,7 +115,6 @@ define([
          * Updates the information held about the signed-in user.
          * @param {object} [response] Service-specific response object
          * @memberOf socialTW#
-         * @abstract
          */
         updateUser: function (access_token) {
             var query = {
@@ -156,6 +155,11 @@ define([
             }));
         },
 
+        /**
+         * Tests availability of local storage.
+         * @return {boolean} True if local storage can be written to
+         * @memberOf socialTW#
+         */
         lsTest: function () {
             var test = "test";
             try {

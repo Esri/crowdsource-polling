@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "Aizvērt"
   },
   "social_media": {
-    "signInHeaderTitle": "ķ_Social Media Sign In_______ū",
+    "signInHeaderTitle": "Pierakstīšanās sociālajos tīklos",
     "signIntoFacebookTooltip": "Pieteikties ar Facebook",
     "signIntoGooglePlusTooltip": "Pieteikties ar Google+",
     "signIntoTwitterTooltip": "Pieteikties ar Twitter",

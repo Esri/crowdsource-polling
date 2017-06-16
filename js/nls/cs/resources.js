@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "Zavřít"
   },
   "social_media": {
-    "signInHeaderTitle": "Ř_Social Media Sign In_______ů",
+    "signInHeaderTitle": "Přihlášení prostřednictvím sociálních sítí",
     "signIntoFacebookTooltip": "Přihlásit se pomocí Facebooku",
     "signIntoGooglePlusTooltip": "Přihlásit se pomocí Google+",
     "signIntoTwitterTooltip": "Přihlásit se pomocí Twitteru",

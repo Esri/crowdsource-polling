@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "Κλείσιμο"
   },
   "social_media": {
-    "signInHeaderTitle": "Đ_Social Media Sign In_______ớ",
+    "signInHeaderTitle": "Είσοδος σε μέσα κοινωνικής δικτύωσης",
     "signIntoFacebookTooltip": "Σύνδεση με Facebook",
     "signIntoGooglePlusTooltip": "Σύνδεση με Google+",
     "signIntoTwitterTooltip": "Σύνδεση με Twitter",

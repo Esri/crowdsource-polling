@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "Užverti"
   },
   "social_media": {
-    "signInHeaderTitle": "Į_Social Media Sign In_______š",
+    "signInHeaderTitle": "Prisijungimas per socialinius tinklus",
     "signIntoFacebookTooltip": "Prisijungti naudojant Facebook",
     "signIntoGooglePlusTooltip": "Prisijungti naudojant Google+",
     "signIntoTwitterTooltip": "Prisijungti naudojant Twitter",

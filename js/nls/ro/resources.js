@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "Închidere"
   },
   "social_media": {
-    "signInHeaderTitle": "Ă_Social Media Sign In_______ș",
+    "signInHeaderTitle": "Conectare la reţelele de socializare",
     "signIntoFacebookTooltip": "Autentificare cu Facebook",
     "signIntoGooglePlusTooltip": "Autentificare cu Google+",
     "signIntoTwitterTooltip": "Autentificare cu Twitter",

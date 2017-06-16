@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "إغلاق"
   },
   "social_media": {
-    "signInHeaderTitle": "بيت_Social Media Sign In_______لاحقة",
+    "signInHeaderTitle": "تسجيل الدخول إلى شبكات التواصل الاجتماعي",
     "signIntoFacebookTooltip": "تسجيل الدخول باستخدام Facebook",
     "signIntoGooglePlusTooltip": "تسجيل الدخول باستخدام Google+",
     "signIntoTwitterTooltip": "تسجيل الدخول باستخدام Twitter",

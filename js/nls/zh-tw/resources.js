@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "關閉"
   },
   "social_media": {
-    "signInHeaderTitle": "試_Social Media Sign In_______驗",
+    "signInHeaderTitle": "社交媒體登入",
     "signIntoFacebookTooltip": "使用 Facebook 登入",
     "signIntoGooglePlusTooltip": "使用 Google+ 登入",
     "signIntoTwitterTooltip": "使用 Twitter 登入",

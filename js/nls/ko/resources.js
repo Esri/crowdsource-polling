@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "닫기"
   },
   "social_media": {
-    "signInHeaderTitle": "한_Social Media Sign In_______빠",
+    "signInHeaderTitle": "소셜 미디어 로그인",
     "signIntoFacebookTooltip": "Facebook으로 로그인",
     "signIntoGooglePlusTooltip": "Google+로 로그인",
     "signIntoTwitterTooltip": "Twitter로 로그인",

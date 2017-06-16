@@ -36,7 +36,7 @@ define({
     "closeButtonTooltip": "Schließen"
   },
   "social_media": {
-    "signInHeaderTitle": "ä_Social Media Sign In_______Ü",
+    "signInHeaderTitle": "Anmeldung bei sozialen Medien",
     "signIntoFacebookTooltip": "Mit Facebook anmelden",
     "signIntoGooglePlusTooltip": "Mit Google+ anmelden",
     "signIntoTwitterTooltip": "Mit Twitter anmelden",

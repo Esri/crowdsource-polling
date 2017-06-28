@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Zatvori"
   },
   "social_media": {
+    "signInHeaderTitle": "Prijavljivanje na društvene medije",
     "signIntoFacebookTooltip": "Prijavite se putem Facebook naloga",
     "signIntoGooglePlusTooltip": "Prijavite se putem Google+ naloga",
     "signIntoTwitterTooltip": "Prijavite se putem Twitter naloga",

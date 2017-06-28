@@ -30,6 +30,8 @@ define([
 
     return declare([social], {
 
+        TWITTER_ACCESS_TOKEN: "twitter_access_token",
+
         /**
          * Constructor for class.
          * @param {object} config App configuration object; required parameters: twitterSigninUrl, twitterUserUrl,
@@ -100,29 +102,36 @@ define([
             }
 
             window.open(baseUrl, "twoAuth", "scrollbars=yes, resizable=yes, left=" + left + ", top=" + top + ", width=" + w + ", height=" + h, true);
-            window.oAuthCallback = function () {
-                pThis.updateUser();
-            };
+            window.twitterCallback = lang.hitch(this, function (query) {
+                var access_token = query.access_token || "";
+                if (this.lsTest()) {
+                    localStorage.setItem(this.TWITTER_ACCESS_TOKEN, access_token);
+                }
+                pThis.updateUser(access_token);
+            });
         },
 
         /**
          * Updates the information held about the signed-in user.
          * @param {object} [response] Service-specific response object
          * @memberOf socialTW#
-         * @abstract
          */
-        updateUser: function () {
+        updateUser: function (access_token) {
             var query = {
                 include_entities: true,
                 skip_status: true
             };
-            esriRequest({
+            var requestParams = {
                 url: this._config.twitterUserUrl,
                 handleAs: "json",
                 timeout: 10000,
                 content: query,
                 callbackParamName: "callback"
-            }).then(lang.hitch(this, function (response) {
+            };
+            if (access_token) {
+                query.access_token = access_token;
+            }
+            esriRequest(requestParams).then(lang.hitch(this, function (response) {
                 this._loggedIn = !response.hasOwnProperty("signedIn");
                 if (this._loggedIn) {
                     this._user = {
@@ -144,6 +153,23 @@ define([
                 // Update the calling app
                 this._statusCallback(this.getUser());
             }));
+        },
+
+        /**
+         * Tests availability of local storage.
+         * @return {boolean} True if local storage can be written to
+         * @memberOf socialTW#
+         */
+        lsTest: function () {
+            var test = "test";
+            try {
+                localStorage.setItem(test, test);
+                localStorage.removeItem(test);
+                return true;
+            }
+            catch (e) {
+                return false;
+            }
         }
 
     });

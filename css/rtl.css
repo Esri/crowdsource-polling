@@ -67,5 +67,10 @@
 
 .popupClose {
     right: auto;
-    left: 0px;
+    left: 10px;
+}
+
+.popupTitle {
+    margin-left: 40px;
+    margin-right: 10px;
 }

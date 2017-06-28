@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "बंद करें"
   },
   "social_media": {
+    "signInHeaderTitle": "सामाजिक मीडिया साइन इन",
     "signIntoFacebookTooltip": "Facebook से साइन इन करें",
     "signIntoGooglePlusTooltip": "Google+ से साइन इन करें",
     "signIntoTwitterTooltip": "Twitter से साइन इन करें",

@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "閉じる"
   },
   "social_media": {
+    "signInHeaderTitle": "ソーシャル メディアのサイン イン",
     "signIntoFacebookTooltip": "Facebook を使用してサイン イン",
     "signIntoGooglePlusTooltip": "Google+ を使用してサイン イン",
     "signIntoTwitterTooltip": "Twitter を使用してサイン イン",

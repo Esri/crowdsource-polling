@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Fechar"
   },
   "social_media": {
+    "signInHeaderTitle": "Início de Sessão de Rede Social",
     "signIntoFacebookTooltip": "Iniciar sessão com Facebook",
     "signIntoGooglePlusTooltip": "Iniciar sessão com Google+",
     "signIntoTwitterTooltip": "Iniciar sessão com Twitter",

@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Закрыть"
   },
   "social_media": {
+    "signInHeaderTitle": "Войти через социальные сети",
     "signIntoFacebookTooltip": "Войти через Facebook",
     "signIntoGooglePlusTooltip": "Войти через Google+",
     "signIntoTwitterTooltip": "Войти через Twitter",

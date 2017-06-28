@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "סגור"
   },
   "social_media": {
+    "signInHeaderTitle": "כניסה לרשת חברתית",
     "signIntoFacebookTooltip": "התחבר עם Facebook",
     "signIntoGooglePlusTooltip": "התחבר עם Google+‎",
     "signIntoTwitterTooltip": "התחבר עם טוויטר",

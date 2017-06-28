@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "Zamknij"
   },
   "social_media": {
+    "signInHeaderTitle": "Logowanie przy użyciu mediów społecznościowych",
     "signIntoFacebookTooltip": "Zaloguj się, używając danych dostępowych z serwisu Facebook",
     "signIntoGooglePlusTooltip": "Zaloguj się, używając danych dostępowych z serwisu Google+",
     "signIntoTwitterTooltip": "Zaloguj się, używając danych dostępowych z serwisu Twitter",

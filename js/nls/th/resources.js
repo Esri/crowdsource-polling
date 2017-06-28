@@ -36,6 +36,7 @@ define({
     "closeButtonTooltip": "ปิด"
   },
   "social_media": {
+    "signInHeaderTitle": "เข้าสู่ระบบโซเชียลมีเดีย",
     "signIntoFacebookTooltip": "ลงชื่อเข้าใช้ด้วยเฟสปุ๊ค",
     "signIntoGooglePlusTooltip": "ลงชื่อเข้าใช้ด้วยกูเกิ้ล พลัส",
     "signIntoTwitterTooltip": "ลงชื่อเข้าใช้ด้วยทวิตเตอร์",

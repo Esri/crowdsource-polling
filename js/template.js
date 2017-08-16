@@ -221,7 +221,7 @@ define([
             // Group templates use the group param to provide the id of the group to display.
             // appid is the id of the application based on the template. We use this
             // id to retrieve application specific configuration information. The configuration
-            // information will contain the values the  user selected on the template configuration
+            // information will contain the values the user selected on the template configuration
             // panel.
             url = document.location.href;
             urlObject = urlUtils.urlToObject(url);

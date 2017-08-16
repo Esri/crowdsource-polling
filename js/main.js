@@ -771,7 +771,7 @@ define([
                             this.config.customUrlLayer.fields.length > 0) {
                             searchField = this.config.customUrlLayer.fields[0].fields[0];
 
-                            require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
+                            require(["esri/tasks/query", "esri/tasks/QueryTask"], lang.hitch(this, function (Query, QueryTask) {
                                 var query, queryTask;
                                 queryTask = new QueryTask(searchLayer.url);
                                 query = new Query();
@@ -780,17 +780,26 @@ define([
                                 query.outFields = ["*"];
                                 query.outSpatialReference = _this.map.spatialReference;
 
-                                queryTask.execute(query, function (results) {
+                                queryTask.execute(query, lang.hitch(this, function (results) {
                                     if (results && results.features && results.features.length > 0) {
-                                        var item = results.features[0];
-                                        item._layer = searchLayer;
-                                        item._graphicsLayer = searchLayer;
-                                        topic.publish("highlightItem", item);
+                                        var feature = results.features[0];
+                                        feature._layer = searchLayer;
+                                        feature._graphicsLayer = searchLayer;
+
+                                        // If selected feature is of item layer show details panel
+                                        if (this._mapData.getItemLayer().id === feature._layer.id) {
+                                            // Select the item so that its details panel will be open
+                                            topic.publish("itemSelected", feature);
+                                        }
+                                        else {
+                                            // Do the app's highlighting
+                                            topic.publish("highlightItem", feature, true);
+                                        }
                                     }
-                                }, function (error) {
+                                }), function (error) {
                                     console.log(error);
                                 });
-                            });
+                            }));
                         }
                     }
                 }
@@ -1106,7 +1115,7 @@ define([
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-                    //if selected feature is of item layer show details panle
+                    // If selected feature is of item layer show details panel
                     if (this._mapData.getItemLayer().id === feature._layer.id) {
                         // Select the item so that its details panel will be open
                         topic.publish("itemSelected", feature);

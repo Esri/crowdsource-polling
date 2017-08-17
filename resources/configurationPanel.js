@@ -224,7 +224,7 @@
         "category": "Custom URL Parameter",
         "fields": [{
             "type": "paragraph",
-            "value": "Set up the app to support a custom URL parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a URL parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application URL using the custom parameter name you define. For example, if I set the custom param value to parcels a custom URL would look like this index.html?parcel=3045"
+            "value": "Set up the app to support a custom URL parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a URL parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application URL using the custom parameter name you define. For example, if I set the custom param value to 'parcel' a custom URL would look like this index.html?parcel=3045"
         }, {
             "placeHolder": "i.e. parcels",
             "label": "URL parameter name:",

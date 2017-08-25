@@ -299,32 +299,33 @@ define([
                             this._votesField = configuredVotesField;
                         }
                     }));
-
-                    // Create search bar in issueList
-                    // Add search control with always expanded mode
-                    searchControl = SearchDijitHelper.createSearchDijit(
-                        this.map, this.config.itemInfo.itemData.operationalLayers,
-                        this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
-                        this._itemsList.searchBar, true);
-
-                    // If the search dijit is enabled, connect the results of selecting a search result with
-                    // displaying the details about the item
-                    if (searchControl) {
-                        //set the search control in _searchControls which will be used to sync text
-                        this._searchControls.itemList = searchControl;
-                        //subscribe the syncSearchText event
-                        topic.subscribe("syncSearchText", lang.hitch(this, this._syncSearchText));
-                        on.once(searchControl, "load", lang.hitch(this, function () {
-                            this._connectSearchResult(this._searchControls.itemList);
-                        }));
-                        if (searchControl.loaded) {
-                            searchControl.emit("load");
-                            this._resize();
-                        }
-                        //reset the search component width window resize
-                        on(window, "resize", lang.hitch(this, this._resize));
-                    }
                 }
+
+                // Create search bar in issueList
+                // Add search control with always expanded mode
+                searchControl = SearchDijitHelper.createSearchDijit(
+                    this.map, this.config.itemInfo.itemData.operationalLayers,
+                    this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
+                    this._itemsList.searchBar, true);
+
+                // If the search dijit is enabled, connect the results of selecting a search result with
+                // displaying the details about the item
+                if (searchControl) {
+                    //set the search control in _searchControls which will be used to sync text
+                    this._searchControls.itemList = searchControl;
+                    //subscribe the syncSearchText event
+                    topic.subscribe("syncSearchText", lang.hitch(this, this._syncSearchText));
+                    on.once(searchControl, "load", lang.hitch(this, function () {
+                        this._connectSearchResult(this._searchControls.itemList);
+                    }));
+                    if (searchControl.loaded) {
+                        searchControl.emit("load");
+                        this._resize();
+                    }
+                    //reset the search component width window resize
+                    on(window, "resize", lang.hitch(this, this._resize));
+                }
+
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
                 this._itemDetails.setItemFields(this._votesField, commentFields);
@@ -1101,8 +1102,8 @@ define([
          */
         _connectSearchResult: function (searchControl) {
             var isItemListSearchCnt = false;
-            //Set if search control is of itemList
-            if (searchControl.id === this._searchControls.itemList.id) {
+            //Set if search control is an itemList; otherwise it's a map
+            if (this._searchControls.itemList && searchControl.id === this._searchControls.itemList.id) {
                 isItemListSearchCnt = true;
             }
             on(searchControl, "select-result", lang.hitch(this, function (selectResult) {

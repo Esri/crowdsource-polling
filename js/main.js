@@ -671,11 +671,11 @@ define([
                 //----- those that are forwards from subscriptions)      -----
 
                 // Click on an item in the map
-                on(this._mapData.getItemLayer(), "click", function (evt) {
+                on(this._mapData.getItemLayer(), "click", lang.hitch(this, function (evt) {
                     if (evt.graphic) {
-                        topic.publish("itemSelected", evt.graphic);
+                        this._featureSelectedFromMap(evt.graphic);
                     }
-                });
+                }));
 
                 // Support option to reset items list whenever the map is resized while the items
                 // list is visible
@@ -810,6 +810,53 @@ define([
 
             return createMapPromise;
         },
+
+        /**
+         * Once feature is clicked on map, this function will check if it is a cluster or not.
+         * If it is a cluster it will display list of features in popup and allow user to select one from the list.
+         * If it is not a cluster then the information of that features is shown directly in details panel.
+         */
+        _featureSelectedFromMap: function (item) {
+            //if selected item is cluster process it else directly select the item
+            if (item.getChildGraphics && item.getChildGraphics().length > 0) {
+                var popupMsgDiv = domConstruct.create("div", { "class": "itemList" });
+                var childGraphics = item.getChildGraphics();
+                array.forEach(childGraphics, lang.hitch(this, function (graphic, index) {
+                    //get cluster title
+                    var title = this._itemDetails.getItemTitle(graphic) || "&nbsp;";
+                    //create item summary div
+                    var itemSummaryDiv = domConstruct.create("div", {
+                        "class": "itemSummary themeItemList",
+                        "style": { "padding": "6px" }
+                    }, popupMsgDiv);
+                    domStyle.set(itemSummaryDiv, "border-bottom-color", this.config.theme.body.text);
+                    //handle click event of each item
+                    on(itemSummaryDiv, "click", lang.hitch(this, function () {
+                        topic.publish("itemSelected", childGraphics[index]);
+                        this._helpDialogContainer.closeBtn.click();
+                    }));
+                    //add item title in summary div
+                    domConstruct.create("div", {
+                        "class": "itemTitle",
+                        "style": { "line-height": "20px", "width": "100%" },
+                        "title": title,
+                        "innerHTML": title
+                    }, itemSummaryDiv);
+                }));
+                //show cluster features list in popup window
+                this._helpDialogContainer.set("displayTitle", item.getTitle());
+                this._helpDialogContainer.set("displayText", "<div class='clusterList'></div>");
+                this._helpDialogContainer.show();
+                //after showing popup window add list in it
+                setTimeout(lang.hitch(this, function () {
+                    var element = query(".clusterList", this._helpDialogContainer.domNode)[0];
+                    domConstruct.place(popupMsgDiv, element);
+                }), 150);
+            } else {
+                topic.publish("itemSelected", item);
+            }
+        },
+
         /**
          * checks configured value for map or list view to load first and displays view accordigly on mobile view
          */

@@ -45,6 +45,8 @@
             "type": "webmap",
             "tooltip": "Map displayed in the application"
         }, {
+            "type": "appproxies"
+        }, {
             "label": "Application title",
             "fieldName": "title",
             "type": "string",

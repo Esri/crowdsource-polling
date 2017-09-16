@@ -215,7 +215,8 @@ define([
          * Resize the search control in item list according to updated window size
          **/
         _resizeSearchControl: function () {
-            var containerGeom, calculatedWidth, searchGroup, sidebarContent, searchContainerNodeElement;
+            var containerGeom, calculatedWidth, searchGroup, sidebarContent, searchContainerNodeElement,
+                searchContainerPresentationNodeElements;
             if (!this._itemsList || !this._itemsList.searchContainer) {
                 return;
             }
@@ -235,6 +236,14 @@ define([
                 containerGeom = domGeom.position(sidebarContent);
                 if (containerGeom && containerGeom.w) {
                     calculatedWidth = (containerGeom.w - 102);
+                    searchContainerPresentationNodeElements = query(
+                        ".arcgisSearch .hasMultipleSources .searchInput", this._itemsList.searchContainer
+                    );
+                    if (searchContainerPresentationNodeElements.length === 0) {
+                        // If the search dijit doesn't contain class hasMultipleSources, its dropdown
+                        // button is hidden, so we need to stretch the input field to compensate
+                        calculatedWidth += 32;
+                    }
                     if (calculatedWidth > 0) {
                         searchContainerNodeElement.style.setProperty("width",
                             calculatedWidth + "px", "important");
@@ -819,7 +828,9 @@ define([
         _featureSelectedFromMap: function (item) {
             //if selected item is cluster process it else directly select the item
             if (item.getChildGraphics && item.getChildGraphics().length > 0) {
-                var popupMsgDiv = domConstruct.create("div", { "class": "itemList" });
+                var popupMsgDiv = domConstruct.create("div", {
+                    "class": "itemList"
+                });
                 var childGraphics = item.getChildGraphics();
                 array.forEach(childGraphics, lang.hitch(this, function (graphic, index) {
                     //get cluster title
@@ -827,7 +838,9 @@ define([
                     //create item summary div
                     var itemSummaryDiv = domConstruct.create("div", {
                         "class": "itemSummary themeItemList",
-                        "style": { "padding": "6px" }
+                        "style": {
+                            "padding": "6px"
+                        }
                     }, popupMsgDiv);
                     domStyle.set(itemSummaryDiv, "border-bottom-color", this.config.theme.body.text);
                     //handle click event of each item
@@ -838,7 +851,10 @@ define([
                     //add item title in summary div
                     domConstruct.create("div", {
                         "class": "itemTitle",
-                        "style": { "line-height": "20px", "width": "100%" },
+                        "style": {
+                            "line-height": "20px",
+                            "width": "100%"
+                        },
                         "title": title,
                         "innerHTML": title
                     }, itemSummaryDiv);
@@ -852,7 +868,8 @@ define([
                     var element = query(".clusterList", this._helpDialogContainer.domNode)[0];
                     domConstruct.place(popupMsgDiv, element);
                 }), 150);
-            } else {
+            }
+            else {
                 topic.publish("itemSelected", item);
             }
         },

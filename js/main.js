@@ -215,7 +215,8 @@ define([
          * Resize the search control in item list according to updated window size
          **/
         _resizeSearchControl: function () {
-            var containerGeom, calculatedWidth, searchGroup, sidebarContent, searchContainerNodeElement;
+            var containerGeom, calculatedWidth, searchGroup, sidebarContent, searchContainerNodeElement,
+                searchContainerPresentationNodeElements;
             if (!this._itemsList || !this._itemsList.searchContainer) {
                 return;
             }
@@ -235,6 +236,14 @@ define([
                 containerGeom = domGeom.position(sidebarContent);
                 if (containerGeom && containerGeom.w) {
                     calculatedWidth = (containerGeom.w - 102);
+                    searchContainerPresentationNodeElements = query(
+                        ".arcgisSearch .hasMultipleSources .searchInput", this._itemsList.searchContainer
+                    );
+                    if (searchContainerPresentationNodeElements.length === 0) {
+                        // If the search dijit doesn't contain class hasMultipleSources, its dropdown
+                        // button is hidden, so we need to stretch the input field to compensate
+                        calculatedWidth += 32;
+                    }
                     if (calculatedWidth > 0) {
                         searchContainerNodeElement.style.setProperty("width",
                             calculatedWidth + "px", "important");
@@ -299,32 +308,33 @@ define([
                             this._votesField = configuredVotesField;
                         }
                     }));
-
-                    // Create search bar in issueList
-                    // Add search control with always expanded mode
-                    searchControl = SearchDijitHelper.createSearchDijit(
-                        this.map, this.config.itemInfo.itemData.operationalLayers,
-                        this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
-                        this._itemsList.searchBar, true);
-
-                    // If the search dijit is enabled, connect the results of selecting a search result with
-                    // displaying the details about the item
-                    if (searchControl) {
-                        //set the search control in _searchControls which will be used to sync text
-                        this._searchControls.itemList = searchControl;
-                        //subscribe the syncSearchText event
-                        topic.subscribe("syncSearchText", lang.hitch(this, this._syncSearchText));
-                        on.once(searchControl, "load", lang.hitch(this, function () {
-                            this._connectSearchResult(this._searchControls.itemList);
-                        }));
-                        if (searchControl.loaded) {
-                            searchControl.emit("load");
-                            this._resize();
-                        }
-                        //reset the search component width window resize
-                        on(window, "resize", lang.hitch(this, this._resize));
-                    }
                 }
+
+                // Create search bar in issueList
+                // Add search control with always expanded mode
+                searchControl = SearchDijitHelper.createSearchDijit(
+                    this.map, this.config.itemInfo.itemData.operationalLayers,
+                    this.config.helperServices.geocode, this.config.itemInfo.itemData.applicationProperties,
+                    this._itemsList.searchBar, true);
+
+                // If the search dijit is enabled, connect the results of selecting a search result with
+                // displaying the details about the item
+                if (searchControl) {
+                    //set the search control in _searchControls which will be used to sync text
+                    this._searchControls.itemList = searchControl;
+                    //subscribe the syncSearchText event
+                    topic.subscribe("syncSearchText", lang.hitch(this, this._syncSearchText));
+                    on.once(searchControl, "load", lang.hitch(this, function () {
+                        this._connectSearchResult(this._searchControls.itemList);
+                    }));
+                    if (searchControl.loaded) {
+                        searchControl.emit("load");
+                        this._resize();
+                    }
+                    //reset the search component width window resize
+                    on(window, "resize", lang.hitch(this, this._resize));
+                }
+
                 commentFields = this._mapData.getCommentFields();
                 this._itemsList.setFields(this._votesField);
                 this._itemDetails.setItemFields(this._votesField, commentFields);
@@ -670,11 +680,11 @@ define([
                 //----- those that are forwards from subscriptions)      -----
 
                 // Click on an item in the map
-                on(this._mapData.getItemLayer(), "click", function (evt) {
+                on(this._mapData.getItemLayer(), "click", lang.hitch(this, function (evt) {
                     if (evt.graphic) {
-                        topic.publish("itemSelected", evt.graphic);
+                        this._featureSelectedFromMap(evt.graphic);
                     }
-                });
+                }));
 
                 // Support option to reset items list whenever the map is resized while the items
                 // list is visible
@@ -771,7 +781,7 @@ define([
                             this.config.customUrlLayer.fields.length > 0) {
                             searchField = this.config.customUrlLayer.fields[0].fields[0];
 
-                            require(["esri/tasks/query", "esri/tasks/QueryTask"], function (Query, QueryTask) {
+                            require(["esri/tasks/query", "esri/tasks/QueryTask"], lang.hitch(this, function (Query, QueryTask) {
                                 var query, queryTask;
                                 queryTask = new QueryTask(searchLayer.url);
                                 query = new Query();
@@ -780,17 +790,26 @@ define([
                                 query.outFields = ["*"];
                                 query.outSpatialReference = _this.map.spatialReference;
 
-                                queryTask.execute(query, function (results) {
+                                queryTask.execute(query, lang.hitch(this, function (results) {
                                     if (results && results.features && results.features.length > 0) {
-                                        var item = results.features[0];
-                                        item._layer = searchLayer;
-                                        item._graphicsLayer = searchLayer;
-                                        topic.publish("highlightItem", item);
+                                        var feature = results.features[0];
+                                        feature._layer = searchLayer;
+                                        feature._graphicsLayer = searchLayer;
+
+                                        // If selected feature is of item layer show details panel
+                                        if (this._mapData.getItemLayer().id === feature._layer.id) {
+                                            // Select the item so that its details panel will be open
+                                            topic.publish("itemSelected", feature);
+                                        }
+                                        else {
+                                            // Do the app's highlighting
+                                            topic.publish("highlightItem", feature, true);
+                                        }
                                     }
-                                }, function (error) {
+                                }), function (error) {
                                     console.log(error);
                                 });
-                            });
+                            }));
                         }
                     }
                 }
@@ -800,6 +819,61 @@ define([
 
             return createMapPromise;
         },
+
+        /**
+         * Once feature is clicked on map, this function will check if it is a cluster or not.
+         * If it is a cluster it will display list of features in popup and allow user to select one from the list.
+         * If it is not a cluster then the information of that features is shown directly in details panel.
+         */
+        _featureSelectedFromMap: function (item) {
+            //if selected item is cluster process it else directly select the item
+            if (item.getChildGraphics && item.getChildGraphics().length > 0) {
+                var popupMsgDiv = domConstruct.create("div", {
+                    "class": "itemList"
+                });
+                var childGraphics = item.getChildGraphics();
+                array.forEach(childGraphics, lang.hitch(this, function (graphic, index) {
+                    //get cluster title
+                    var title = this._itemDetails.getItemTitle(graphic) || "&nbsp;";
+                    //create item summary div
+                    var itemSummaryDiv = domConstruct.create("div", {
+                        "class": "itemSummary themeItemList",
+                        "style": {
+                            "padding": "6px"
+                        }
+                    }, popupMsgDiv);
+                    domStyle.set(itemSummaryDiv, "border-bottom-color", this.config.theme.body.text);
+                    //handle click event of each item
+                    on(itemSummaryDiv, "click", lang.hitch(this, function () {
+                        topic.publish("itemSelected", childGraphics[index]);
+                        this._helpDialogContainer.closeBtn.click();
+                    }));
+                    //add item title in summary div
+                    domConstruct.create("div", {
+                        "class": "itemTitle",
+                        "style": {
+                            "line-height": "20px",
+                            "width": "100%"
+                        },
+                        "title": title,
+                        "innerHTML": title
+                    }, itemSummaryDiv);
+                }));
+                //show cluster features list in popup window
+                this._helpDialogContainer.set("displayTitle", item.getTitle());
+                this._helpDialogContainer.set("displayText", "<div class='clusterList'></div>");
+                this._helpDialogContainer.show();
+                //after showing popup window add list in it
+                setTimeout(lang.hitch(this, function () {
+                    var element = query(".clusterList", this._helpDialogContainer.domNode)[0];
+                    domConstruct.place(popupMsgDiv, element);
+                }), 150);
+            }
+            else {
+                topic.publish("itemSelected", item);
+            }
+        },
+
         /**
          * checks configured value for map or list view to load first and displays view accordigly on mobile view
          */
@@ -1092,8 +1166,8 @@ define([
          */
         _connectSearchResult: function (searchControl) {
             var isItemListSearchCnt = false;
-            //Set if search control is of itemList
-            if (searchControl.id === this._searchControls.itemList.id) {
+            //Set if search control is an itemList; otherwise it's a map
+            if (this._searchControls.itemList && searchControl.id === this._searchControls.itemList.id) {
                 isItemListSearchCnt = true;
             }
             on(searchControl, "select-result", lang.hitch(this, function (selectResult) {
@@ -1106,7 +1180,7 @@ define([
                     if (!feature._layer) {
                         feature._layer = selectResult.source.featureLayer;
                     }
-                    //if selected feature is of item layer show details panle
+                    // If selected feature is of item layer show details panel
                     if (this._mapData.getItemLayer().id === feature._layer.id) {
                         // Select the item so that its details panel will be open
                         topic.publish("itemSelected", feature);

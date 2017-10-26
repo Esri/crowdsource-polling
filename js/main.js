@@ -382,7 +382,7 @@ define([
                  */
                 topic.subscribe("commentAddFailed", lang.hitch(this, function (err) {
                     this._sidebarCnt.showBusy(false);
-                    topic.publish("showError", err);
+                    topic.publish("showErrorPopup", err);
                 }));
 
                 topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
@@ -521,9 +521,19 @@ define([
                 /**
                  * @param {string} err Error message to display
                  */
-                topic.subscribe("showError", lang.hitch(this, function (err) {
+                topic.subscribe("showErrorPopup", lang.hitch(this, function (err) {
                     this._helpDialogContainer.set("displayTitle", "");
                     this._helpDialogContainer.set("displayText", err);
+                    this._helpDialogContainer.show();
+                }));
+
+                /**
+                 * @param {string} message Message to display
+                 * @param {string?} title Title for help popup
+                 */
+                topic.subscribe("showMessagePopup", lang.hitch(this, function (message, title) {
+                    this._helpDialogContainer.set("displayTitle", title || "");
+                    this._helpDialogContainer.set("displayText", message);
                     this._helpDialogContainer.show();
                 }));
 
@@ -693,7 +703,7 @@ define([
                  * @param {string} err Error message for when an item's votes count change failed
                  */
                 topic.subscribe("voteUpdateFailed", lang.hitch(this, function (err) {
-                    topic.publish("showError", err);
+                    topic.publish("showErrorPopup", err);
                 }));
 
 

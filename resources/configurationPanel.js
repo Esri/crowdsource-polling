@@ -35,7 +35,10 @@
         "bodyTextColor": "black",
         "bodyBackgroundColor": "white",
         "buttonTextColor": "#206bdb",
-        "buttonBackgroundColor": "white"
+        "buttonBackgroundColor": "white",
+        "commentPeriod": "Open",
+        "commentPeriodDialogTitle": "Comment period closed",
+        "commentPeriodDialogContent": "We are no longer accepting comments for this project."
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -221,6 +224,32 @@
                 "label": "Show features in current map extent",
                 "value": "false"
             }]
+        }, {
+            "type": "subcategory",
+            "label": "Comment period"
+        }, {
+            "type": "radio",
+            "fieldName": "commentPeriod",
+            "tooltip": "Comment period status",
+            "items": [{
+                "label": "Comment period open",
+                "value": "Open",
+                "checked": true
+            }, {
+                "label": "Comment period closed",
+                "value": "Closed"
+            }]
+        }, {
+            "label": "Comment period closed window title",
+            "tooltip": "Title of window that displays when comment period is closed",
+            "type": "string",
+            "fieldName": "commentPeriodDialogTitle"
+        }, {
+            "label": "Comment period closed window content",
+            "tooltip": "Content of window that displays when comment period is closed",
+            "type": "string",
+            "fieldName": "commentPeriodDialogContent",
+            "stringFieldOption": "richtext"
         }]
     }, {
         "category": "Custom URL Parameter",

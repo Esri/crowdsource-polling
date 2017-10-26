@@ -73,6 +73,7 @@ define([
             this.commentFields = null;
             this.votedItemList = [];
             this._likeButtonClickHandler = null;
+            this._commentButtonClickHandler = null;
         },
 
         /**
@@ -101,6 +102,7 @@ define([
          * buttons and areas.
          */
         show: function () {
+            // Adjust visibility of details buttons
             if (!this.actionVisibilities.showVotes || !this.votesField) {
                 domStyle.set(this.likeButton, "display", "none");
                 domStyle.set(this.itemVotesGroup, "display", "none");
@@ -113,11 +115,37 @@ define([
                 domStyle.set(this.noCommentsDiv, "display", "none");
                 domStyle.set(this.commentsList, "display", "none");
             }
+            if (this.appConfig.commentPeriod != "Open") {
+                domClass.add(this.likeButton, "inactive");
+                domAttr.set(this.likeButton, "title", this.appConfig.commentPeriodDialogContent);
+                if (this._likeButtonClickHandler) {
+                    this._likeButtonClickHandler.remove();
+                    this._likeButtonClickHandler = null;
+                }
+                this._likeButtonClickHandler = on(this.likeButton, "click",
+                    lang.hitch(this, this.showCommentPeriodClosedPopup));
+
+                domClass.add(this.commentButton, "inactive");
+                domAttr.set(this.commentButton, "title", this.appConfig.commentPeriodDialogContent);
+                if (this._commentButtonClickHandler) {
+                    this._commentButtonClickHandler.remove();
+                    this._commentButtonClickHandler = null;
+                }
+                this._commentButtonClickHandler = on(this.commentButton, "click",
+                    lang.hitch(this, this.showCommentPeriodClosedPopup));
+            }
+
+            // Show the details
             domStyle.set(this.domNode, "display", "");
             domStyle.set("headerMessageDiv", "display", "none");
 
             // Scroll to the top of the details; needed for Firefox
             this.scrollIntoView(this.descriptionDiv);
+        },
+
+        showCommentPeriodClosedPopup: function () {
+            topic.publish("showMessagePopup",
+                this.appConfig.commentPeriodDialogContent, this.appConfig.commentPeriodDialogTitle);
         },
 
         /**
@@ -202,7 +230,7 @@ define([
                     topic.publish("closeMessage");
                     topic.publish("detailsCancel");
                 }),
-                on(this.commentButton, "click", function () {
+                this._commentButtonClickHandler = on(this.commentButton, "click", function () {
                     topic.publish("closeMessage");
                     topic.publish("getComment", self.item);
                 }),

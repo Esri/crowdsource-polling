@@ -1039,4 +1039,7 @@ img {
 .close:hover,.close:focus{color:#000;text-decoration:none;cursor:pointer;filter:alpha(opacity=50);opacity:.5}
 button.close{-webkit-appearance:none;padding:0;cursor:pointer;background:0 0;border:0}
 
-
+.alert {
+    font-size: 12px;
+    font-family: Arial;
+}

@@ -115,7 +115,7 @@ define([
                 domStyle.set(this.noCommentsDiv, "display", "none");
                 domStyle.set(this.commentsList, "display", "none");
             }
-            if (this.appConfig.commentPeriod != "Open") {
+            if (this.appConfig.commentPeriod === "Closed") {
                 domClass.add(this.likeButton, "inactive");
                 domAttr.set(this.likeButton, "title", this.appConfig.commentPeriodDialogContent);
                 if (this._likeButtonClickHandler) {

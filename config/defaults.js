@@ -76,7 +76,7 @@ define({
         "buttonBackgroundColor": "white"
     },
 
-    "commentPeriod": "Closed",
+    "commentPeriod": "Open",
     "commentPeriodDialogTitle": "Comment period closed",
     "commentPeriodDialogContent": "We are no longer accepting comments for this project.",
 

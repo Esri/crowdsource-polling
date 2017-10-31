@@ -38,7 +38,8 @@
         "buttonBackgroundColor": "white",
         "commentPeriod": "Open",
         "commentPeriodDialogTitle": "Comment period closed",
-        "commentPeriodDialogContent": "We are no longer accepting comments for this project."
+        "commentPeriodDialogContent": "We are no longer accepting comments for this project.",
+        "submitMessage": "Thank you. Your comment has been submitted."
     },
     "configurationSettings": [{
         "category": "<b>General</b>",
@@ -224,6 +225,14 @@
                 "label": "Show features in current map extent",
                 "value": "false"
             }]
+        }, {
+            "type": "subcategory",
+            "label": "Submission Message"
+        }, {
+            "label": "Message displayed after a report is submitted successfully",
+            "tooltip": "Message displayed at the top of the form acknowledging report submission",
+            "type": "string",
+            "fieldName": "submitMessage"
         }, {
             "type": "subcategory",
             "label": "Comment period"

@@ -312,12 +312,12 @@ define([
 
                 // Report results of upload
                 if (numFailed === 0) {
-                    message = string.substitute(self.i18n.numberOfAttachmentsUploaded, [numSucceeded]);
-                    domClass.replace("headerMessageType", "alert-info", "alert-danger");
+                    message = self.appConfig.submitMessage;
+                    domClass.replace("headerMessageType", "alert-success", ["alert-info", "alert-danger"]);
                 }
                 else {
                     message = string.substitute(self.i18n.numberOfAttachmentsUploadedAndFailed, [numSucceeded, numFailed]);
-                    domClass.replace("headerMessageType", "alert-danger", "alert-info");
+                    domClass.replace("headerMessageType", "alert-danger", ["alert-info", "alert-success"]);
                 }
                 topic.publish("showMessage", message);
 

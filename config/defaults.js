@@ -76,6 +76,7 @@ define({
         "buttonBackgroundColor": "white"
     },
 
+    "submitMessage": "Thank you. Your comment has been submitted.",
     "commentPeriod": "Open",
     "commentPeriodDialogTitle": "Comment period closed",
     "commentPeriodDialogContent": "We are no longer accepting comments for this project.",

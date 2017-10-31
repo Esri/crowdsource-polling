@@ -101,7 +101,7 @@ define([
     return declare(null, {
         config: {},
         map: null,
-        mapData: null,
+        _mapData: null,
         _linkToMapView: false,
         _currentlyCommenting: false,
         _hasCommentTable: false,

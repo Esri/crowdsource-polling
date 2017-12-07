@@ -43,6 +43,7 @@ define([
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleMarkerSymbol",
+    "esri/tasks/query",
     "esri/urlUtils",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
@@ -85,6 +86,7 @@ define([
     SimpleFillSymbol,
     SimpleLineSymbol,
     SimpleMarkerSymbol,
+    Query,
     urlUtils,
     registry,
     LayerAndTableMgmt,
@@ -99,7 +101,7 @@ define([
     return declare(null, {
         config: {},
         map: null,
-        mapData: null,
+        _mapData: null,
         _linkToMapView: false,
         _currentlyCommenting: false,
         _hasCommentTable: false,
@@ -380,7 +382,7 @@ define([
                  */
                 topic.subscribe("commentAddFailed", lang.hitch(this, function (err) {
                     this._sidebarCnt.showBusy(false);
-                    topic.publish("showError", err);
+                    topic.publish("showErrorPopup", err);
                 }));
 
                 topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
@@ -454,7 +456,7 @@ define([
                 }));
 
                 topic.subscribe("highlightItem", lang.hitch(this, function (item, skipZoom) {
-                    var itemExtent, mapGraphicsLayer, highlightGraphic;
+                    var itemExtent, mapGraphicsLayer, deferred = new Deferred();
 
                     // Is this item in our data layer?
                     if (item._layer.id === this._mapData.getItemLayer().id) {
@@ -465,21 +467,40 @@ define([
                             if (item.geometry.getExtent) {
                                 itemExtent = item.geometry.getExtent();
                             }
+
+                            // Use setZoom as well; it is necessary to reset the layer's feature geometry precision
                             if (itemExtent) {
-                                this.map.setExtent(itemExtent.expand(1.75));
+                                this.map.setExtent(itemExtent).then(lang.hitch(this, function () {
+                                    var zoomLevel = this.map.getZoom();
+                                    if (zoomLevel >= 0) {
+                                        this.map.setZoom(--zoomLevel).then(lang.hitch(this, function () {
+                                            deferred.resolve(true);
+                                        }));
+                                    }
+                                    else {
+                                        deferred.resolve(true);
+                                    }
+                                }), function () {
+                                    deferred.resolve(true);
+                                });
                             }
                             else {
                                 this.map.centerAt(item.geometry);
+                                deferred.resolve(true);
                             }
                         }
-
-                        // Highlight the item
-                        mapGraphicsLayer = this.map.graphics;
-                        mapGraphicsLayer.clear();
-                        highlightGraphic = this._createHighlightGraphic(item);
-                        if (highlightGraphic) {
-                            mapGraphicsLayer.add(highlightGraphic);
+                        else {
+                            deferred.resolve(true);
                         }
+
+                        // Highlight the item *after* zoom is complete
+                        deferred.then(lang.hitch(this, function () {
+                            mapGraphicsLayer = this.map.graphics;
+                            mapGraphicsLayer.clear();
+                            this._createHighlightGraphic(item).then(function (highlightGraphic) {
+                                mapGraphicsLayer.add(highlightGraphic);
+                            });
+                        }));
                     }
                 }));
 
@@ -500,9 +521,19 @@ define([
                 /**
                  * @param {string} err Error message to display
                  */
-                topic.subscribe("showError", lang.hitch(this, function (err) {
+                topic.subscribe("showErrorPopup", lang.hitch(this, function (err) {
                     this._helpDialogContainer.set("displayTitle", "");
                     this._helpDialogContainer.set("displayText", err);
+                    this._helpDialogContainer.show();
+                }));
+
+                /**
+                 * @param {string} message Message to display
+                 * @param {string?} title Title for help popup
+                 */
+                topic.subscribe("showMessagePopup", lang.hitch(this, function (message, title) {
+                    this._helpDialogContainer.set("displayTitle", title || "");
+                    this._helpDialogContainer.set("displayText", message);
                     this._helpDialogContainer.show();
                 }));
 
@@ -672,7 +703,7 @@ define([
                  * @param {string} err Error message for when an item's votes count change failed
                  */
                 topic.subscribe("voteUpdateFailed", lang.hitch(this, function (err) {
-                    topic.publish("showError", err);
+                    topic.publish("showErrorPopup", err);
                 }));
 
 
@@ -1234,52 +1265,77 @@ define([
          * @param {object} item Graphic to be used to create highlight graphic
          */
         _createHighlightGraphic: function (item) {
-            var highlightGraphic, outlineSquareSize = 30;
+            var deferred = new Deferred(),
+                highlightGraphic = null,
+                outlineSquareSize = 30,
+                now, itemLayer, itemQuery;
 
-            if (item.geometry.type === "polyline") {
-                // Create a line symbol using the configured line highlight color
+            // Create a highlight marker for a point
+            if (item.geometry.type === "point") {
+                // JSAPI does not want NaN coordinates
+                if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
+                    deferred.reject();
+                    return;
+                }
+
+                // Try to get the item's layer's symbol
+                highlightGraphic = this._mapData.getItemLayer()._getSymbol(item);
+                if (highlightGraphic && !isNaN(highlightGraphic.width) && !isNaN(highlightGraphic.height)) {
+                    outlineSquareSize = 1 + Math.max(highlightGraphic.width, highlightGraphic.height);
+                }
+
+                // Create an outline square using the configured line highlight color
                 highlightGraphic = new Graphic(item.geometry,
-                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                        this._lineHiliteColor, 3),
+                    new SimpleMarkerSymbol(
+                        SimpleMarkerSymbol.STYLE_SQUARE,
+                        outlineSquareSize,
+                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                            this._lineHiliteColor, 2),
+                        this._outlineFillColor
+                    ),
                     item.attributes, item.infoTemplate);
 
+                deferred.resolve(highlightGraphic);
             }
             else {
-                if (item.geometry.type === "point") {
-                    // JSAPI does not want NaN coordinates
-                    if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
-                        return highlightGraphic;
+                // Get a higher-resolution version of the item's graphics
+                now = Date.now();
+                itemLayer = item.getLayer();
+                itemQuery = new Query();
+                itemQuery.objectIds = [item.attributes[itemLayer.objectIdField]];
+                itemQuery.returnGeometry = true;
+                itemQuery.where = now + "=" + now; // Needed to break JSAPI cache
+                itemLayer.queryFeatures(itemQuery, lang.hitch(this, function (results) {
+                    if (results && results.features && results.features.length > 0) {
+                        var itemDetail = results.features[0];
+
+                        // Create a highlight symbol
+                        if (itemDetail.geometry.type === "polyline") {
+                            // Create a line symbol using the configured line highlight color
+                            highlightGraphic = new Graphic(itemDetail.geometry,
+                                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                    this._lineHiliteColor, 3),
+                                itemDetail.attributes, itemDetail.infoTemplate);
+
+                        }
+                        else if (itemDetail.geometry.type) {
+                            // Create a polygon symbol using the configured line & fill highlight colors
+                            highlightGraphic = new esri.Graphic(itemDetail.geometry,
+                                new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                        this._lineHiliteColor, 3), this._fillHiliteColor),
+                                itemDetail.attributes, itemDetail.infoTemplate);
+                        }
+
+                        deferred.resolve(highlightGraphic);
                     }
+                }), function (error) {
+                    deferred.reject(error);
+                });
 
-                    // Try to get the item's layer's symbol
-                    highlightGraphic = this._mapData.getItemLayer()._getSymbol(item);
-                    if (highlightGraphic && !isNaN(highlightGraphic.width) && !isNaN(highlightGraphic.height)) {
-                        outlineSquareSize = 1 + Math.max(highlightGraphic.width, highlightGraphic.height);
-                    }
-
-                    // Create an outline square using the configured line highlight color
-                    highlightGraphic = new Graphic(item.geometry,
-                        new SimpleMarkerSymbol(
-                            SimpleMarkerSymbol.STYLE_SQUARE,
-                            outlineSquareSize,
-                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                this._lineHiliteColor, 2),
-                            this._outlineFillColor
-                        ),
-                        item.attributes, item.infoTemplate);
-
-                }
-                else if (item.geometry.type) {
-                    // Create a polygon symbol using the configured line & fill highlight colors
-                    highlightGraphic = new esri.Graphic(item.geometry,
-                        new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                this._lineHiliteColor, 3), this._fillHiliteColor),
-                        item.attributes, item.infoTemplate);
-                }
             }
 
-            return highlightGraphic;
+            return deferred;
         },
 
         /**

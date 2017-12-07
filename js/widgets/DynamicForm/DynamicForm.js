@@ -167,7 +167,7 @@ define([
          * @param {array} fields Fields with which to generate form
          * @return {array} List of form entries, each of which is an object containing
          * "field" ({string}, name of field) and "input" ({object}, UI form item) or
-         * "value ({object} invisible form item value); may also publish "showError" with
+         * "value ({object} invisible form item value); may also publish "showErrorPopup" with
          * the i18n dynamic_form.unsettableRequiredField message if there's an invisible
          * and uninitialized required field
          */
@@ -533,7 +533,7 @@ define([
                         field.type !== "esriFieldTypeGUID" &&
                         field.type !== "esriFieldTypeGlobalID" &&
                         field.name !== this._item._layer.objectIdField) {
-                        topic.publish("showError", "[" + (field.alias || field.name) + "]<br>" +
+                        topic.publish("showErrorPopup", "[" + (field.alias || field.name) + "]<br>" +
                             this.appConfig.i18n.dynamic_form.unsettableRequiredField);
                     }
                 }

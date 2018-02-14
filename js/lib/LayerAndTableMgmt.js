@@ -440,6 +440,7 @@ define([
                             }));
                         }
                         else {
+                            topic.publish("showMessage", this.appConfig.submitMessage, true);
                             topic.publish("commentAdded", item);
                         }
                     }

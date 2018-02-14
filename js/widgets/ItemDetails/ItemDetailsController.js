@@ -253,7 +253,13 @@ define([
                 })
             );
 
-            topic.subscribe("showMessage", function (message) {
+            topic.subscribe("showMessage", function (message, isOK) {
+                if (isOK) {
+                    domClass.replace("headerMessageType", "alert-success", ["alert-info", "alert-danger"]);
+                }
+                else {
+                    domClass.replace("headerMessageType", "alert-danger", ["alert-info", "alert-success"]);
+                }
                 dom.byId("headerMessageContent").innerHTML = message;
                 domStyle.set("headerMessageDiv", "display", "block");
             });
@@ -308,18 +314,15 @@ define([
                 domStyle.set("commentProgressBar", "width", percentDone + "%");
             });
             topic.subscribe("stopUploadProgress", function (numSucceeded, numFailed) {
-                var message;
-
                 // Report results of upload
                 if (numFailed === 0) {
-                    message = self.appConfig.submitMessage;
-                    domClass.replace("headerMessageType", "alert-success", ["alert-info", "alert-danger"]);
+                    topic.publish("showMessage", self.appConfig.submitMessage, true);
                 }
                 else {
-                    message = string.substitute(self.i18n.numberOfAttachmentsUploadedAndFailed, [numSucceeded, numFailed]);
-                    domClass.replace("headerMessageType", "alert-danger", ["alert-info", "alert-success"]);
+                    topic.publish("showMessage",
+                        string.substitute(self.i18n.numberOfAttachmentsUploadedAndFailed, [numSucceeded, numFailed]),
+                        false);
                 }
-                topic.publish("showMessage", message);
 
                 // Clear the progress bar, but not abruptly
                 domStyle.set("commentProgressBar", "width", "100%");

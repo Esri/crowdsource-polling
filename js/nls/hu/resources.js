@@ -58,7 +58,7 @@ define({
   "item_details": {
     "likeButtonTooltip": "Szavazás az elemre",
     "likeButtonInverseTooltip": "Szavazat beszámítva",
-    "commentButtonTooltip": "Hozzászólás hozzáadása",
+    "commentButtonTooltip": "Megjegyzés hozzáadása",
     "gotoMapViewTooltip": "Váltás térképnézetre",
     "galleryButtonTooltip": "Csatolt fájlok megtekintése",
     "commentsListHeading": "Hozzászólások",

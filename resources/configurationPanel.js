@@ -47,6 +47,7 @@
             "label": "Select a map",
             "fieldName": "webmap",
             "type": "webmap",
+            "conditions": ["featurelayer"],
             "tooltip": "Map displayed in the application"
         }, {
             "type": "appproxies"

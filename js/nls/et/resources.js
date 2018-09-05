@@ -37,7 +37,7 @@ define({
   },
   "social_media": {
     "signInHeaderTitle": "Sotsiaalmeediasse sisselogimine",
-    "signIntoFacebookTooltip": "Logige sisse Facebooki konto kaudu",
+    "signIntoFacebookTooltip": "Logige sisse Facebooki kontoga",
     "signIntoGooglePlusTooltip": "Logige sisse Google+ kasutajana",
     "signIntoTwitterTooltip": "Logige sisse Twitteri konto kaudu",
     "signOutOfFacebookTooltip": "Logi välja Facebookist",
@@ -56,7 +56,7 @@ define({
     "submitButtonLabel": "Esita"
   },
   "item_details": {
-    "likeButtonTooltip": "Hääletage selle objekti kohta",
+    "likeButtonTooltip": "Hääletage selle objekti üle",
     "likeButtonInverseTooltip": "Hääl on arvesse võetud",
     "commentButtonTooltip": "Lisa kommentaar",
     "gotoMapViewTooltip": "Mine kaardivaatesse",
@@ -69,6 +69,6 @@ define({
   "item_list": {
     "linkToMapViewOptionLabel": "Filtreeri loend kaardi järgi",
     "linkToMapViewOptionTooltip": "Loetle praegusel kaardil nähtavad objektid",
-    "likesForThisItemTooltip": "Selle objekti kohta antud hääled"
+    "likesForThisItemTooltip": "Sellele objektile antud hääled"
   }
 });

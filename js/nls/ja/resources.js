@@ -67,7 +67,7 @@ define({
     "numberOfAttachmentsUploadedAndFailed": "${0} 件の添付ファイルがアップロードされました<br>${1} 件の添付ファイルはアップロードできませんでした"
   },
   "item_list": {
-    "linkToMapViewOptionLabel": "マップ別のフィルター リスト",
+    "linkToMapViewOptionLabel": "マップ範囲内のリストをフィルター",
     "linkToMapViewOptionTooltip": "現在のマップで表示できるフィーチャを一覧表示",
     "likesForThisItemTooltip": "このアイテムに投票"
   }

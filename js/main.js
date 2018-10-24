@@ -129,6 +129,9 @@ define([
             if (config) {
                 this.config = config;
 
+                // Remove access to Facebook due to unsupportable changes in its API
+                this.config.allowFacebook = false;
+
                 // Normalize string booleans
                 this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);
                 this.config.showAllFeatures = this._toBoolean(config.showAllFeatures);

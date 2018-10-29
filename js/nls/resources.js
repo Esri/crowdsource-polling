@@ -17,6 +17,10 @@ define({
     root: ({
         map: {  // Map, feature layer, and comments table loading and checking
             error: "Unable to create map",
+            licenseError: {
+                message: "Your account is not licensed to use Configurable Apps that are not public. Please ask your organization administrator to assign you a user type that includes Essential Apps or an add-on Essential Apps license.",
+                title: "Not Licensed"
+            },
             layerLoad: "Unable to fully load map",
             missingItemsFeatureLayer: "Please configure the application to use a feature layer"
         },

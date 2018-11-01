@@ -127,6 +127,8 @@ textarea {
 
 .app-error .loading-message {
     background-image: none;
+    max-width: 95%;
+    margin: 0 auto;
 }
 
 /* map */

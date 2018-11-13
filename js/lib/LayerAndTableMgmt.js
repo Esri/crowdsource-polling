@@ -377,8 +377,9 @@ define([
          * @return {publish} "updatedItemsList" with results of query
          */
         queryItems: function (extent) {
+            var now = Date.now();
             var updateQuery = new Query();
-            updateQuery.where = "1=1";
+            updateQuery.where = now + "=" + now; // Needed to break JSAPI cache
             updateQuery.returnGeometry = true;
             updateQuery.orderByFields = [this._itemLayer.objectIdField + " DESC"];
             updateQuery.outFields = ["*"];

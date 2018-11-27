@@ -16,6 +16,10 @@
 define({
   "map": {
     "error": "Karte kann nicht erstellt werden",
+    "licenseError": {
+      "message": "Ihr Konto ist nicht für die Verwendung von nicht öffentlichen konfigurierbaren Apps lizenziert. Bitten Sie den Administrator der Organisation, Ihnen einen Benutzertyp mit Essential Apps oder eine Add-On-Lizenz für Essential Apps zuzuweisen.",
+      "title": "Nicht lizenziert"
+    },
     "layerLoad": "Karte kann nicht vollständig geladen werden",
     "missingItemsFeatureLayer": "Konfigurieren Sie die Anwendung für die Verwendung eines Feature-Layers"
   },

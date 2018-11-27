@@ -16,6 +16,10 @@
 define({
   "map": {
     "error": "Nevar izveidot karti",
+    "licenseError": {
+      "message": "Jūsu kontam nav licences, lai izmantotu konfigurējamās lietotnes, kas nav publiskas. Pieprasiet savas organizācijas administratoram piešķirt jums lietotāja veidu, kurā iekļauts lietotņu komplekts Essential Apps vai papildinājumlietotņu Essential Apps licence.",
+      "title": "Nav licences"
+    },
     "layerLoad": "Nevar pilnībā ielādēt karti",
     "missingItemsFeatureLayer": "Lūdzu, konfigurējiet lietotni, lai izmantotu elementu slāni"
   },

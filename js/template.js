@@ -139,10 +139,10 @@ define([
                         this._mixinAll();
                         // If app is private and logged in user doesn't have essential apps let them know.
                         if ((this.config.appResponse && this.config.appResponse.item.access !== "public")) { // check app item
-                          if (response && response.code && response.code === "IdentityManagerBase.1") {
-                            var licenseMessage = "<h1>" + this.i18nConfig.i18n.map.licenseError.title + "</h1><p>" + this.i18nConfig.i18n.map.licenseError.message + "</p>";
-                            deferred.reject(new Error(licenseMessage));
-                          }
+                            if (response && response.code && response.code === "IdentityManagerBase.1") {
+                                var licenseMessage = "<h1>" + this.i18nConfig.i18n.map.licenseError.title + "</h1><p>" + this.i18nConfig.i18n.map.licenseError.message + "</p>";
+                                deferred.reject(new Error(licenseMessage));
+                            }
                         }
 
                         // We have all we need, let's set up a few things
@@ -278,16 +278,17 @@ define([
             }
             // check app access or signed-in status
             if (this.config.oauthappid && this.templateConfig.esriEnvironment) {
-              signedIn = IdentityManager.checkAppAccess(this.config.sharinghost + "/sharing", this.config.oauthappid);
-              signedIn.always(function (response) {
-                  deferred.resolve(response);
-              });
-            } else {
-              signedIn = IdentityManager.checkSignInStatus(this.config.sharinghost + "/sharing");
-              // resolve regardless of signed in or not.
-              signedIn.promise.always(function (response) {
-                  deferred.resolve(response);
-              });
+                signedIn = IdentityManager.checkAppAccess(this.config.sharinghost + "/sharing", this.config.oauthappid);
+                signedIn.always(function (response) {
+                    deferred.resolve(response);
+                });
+            }
+            else {
+                signedIn = IdentityManager.checkSignInStatus(this.config.sharinghost + "/sharing");
+                // resolve regardless of signed in or not.
+                signedIn.promise.always(function (response) {
+                    deferred.resolve(response);
+                });
             }
 
             return deferred.promise;

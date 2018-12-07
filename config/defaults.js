@@ -20,7 +20,7 @@ define({
     //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
     "webmap": "56197689ee7e4a8aa9f0d8da09ffe721",
-    "oauthappid": null, //"AFTKRmv16wj14N3z",
+    "oauthappid": null, //agol "arcgisWebApps",
     //Group templates must support a group url parameter. This will contain the id of the group.
     "group": "",
     //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details

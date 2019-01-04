@@ -129,8 +129,9 @@ define([
             if (config) {
                 this.config = config;
 
-                // Remove access to Facebook due to unsupportable changes in its API
+                // Remove access to Facebook and Google plus due to unsupportable changes in its API
                 this.config.allowFacebook = false;
+                this.config.allowGoogle = false;
 
                 // Normalize string booleans
                 this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);
@@ -274,7 +275,6 @@ define([
             document.title = this.config.title || "";
 
             this.config.isIE8 = this._isIE8();
-            this.config.browserCanUpload = this._browserCanUpload();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
@@ -377,6 +377,7 @@ define([
                  * @param {object} item Item that received a comment
                  */
                 topic.subscribe("commentAdded", lang.hitch(this, function (item) {
+                    this._itemDetails.destroyCommentForm();
                     topic.publish("updateComments", item);
                 }));
 
@@ -434,6 +435,9 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
+                    //Remove the non editable layer class from the details panel
+                    //as the item layer feature is selected
+                    domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
                     this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
                     this._itemDetails.clearComments();
@@ -509,6 +513,10 @@ define([
 
                 on(this.map.graphics, "click", lang.hitch(this, function (evt) {
                     evt.stopImmediatePropagation();
+                    //If non editable layers feature is clicked, skip the further processing
+                    if (evt.graphic && evt.graphic.isNonEditableFeature) {
+                        return;
+                    }
                     evt.graphic = this._currentItem;
                     this._mapData.getItemLayer().onClick(evt);
                 }));
@@ -577,7 +585,6 @@ define([
                 topic.subscribe("submitForm", lang.hitch(this, function (item, comment) {
                     this._sidebarCnt.showBusy(true);
                     this._mapData.addComment(item, comment);
-                    this._itemDetails.destroyCommentForm();
                     this._currentlyCommenting = false;
                 }));
 
@@ -1128,9 +1135,34 @@ define([
                 }, "LocateButton");
                 geoLocate.startup();
 
+                //Disable default symbol highlighting of infowindow
+                this.map.infoWindow.set("highlight", false);
+
                 // Keep info window invisible when one clicks upon a graphic
                 on(this.map, "click", lang.hitch(this, function (evt) {
                     this.map.infoWindow.hide();
+                    //Check if clicked feature does not belong to item layer
+                    //If yes, show the details panel for non editable layers feature
+                    if (evt.graphic && evt.graphic._layer.id !== this._mapData.getItemLayer().id) {
+                        evt.graphic.isNonEditableFeature = true;
+                        domClass.add(this._itemDetails.domNode, "nonEditableFeature");
+                        this._itemDetails.setItem(evt.graphic);
+                        topic.publish("showPanel", "itemDetails");
+                        var mapGraphicsLayer = this.map.graphics;
+                        mapGraphicsLayer.clear();
+                        this._createHighlightGraphic(evt.graphic, true).then(lang.hitch(this, function (highlightGraphic) {
+                            mapGraphicsLayer.add(highlightGraphic);
+                            //Zoom and set the extent of the feature as per the geometry type
+                            if (evt.graphic.geometry.type === "point") {
+                                this.map.centerAt(evt.graphic.geometry);
+                            } else {
+                                this.map.setExtent(evt.graphic.geometry.getExtent(), true);
+                            }
+                        }));
+                    } else {
+                        //If item layer feature is selected then remove the non editable class
+                        domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
+                    }
                 }));
 
                 // make sure map is loaded
@@ -1155,8 +1187,7 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
-                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
-                        this.config.browserCanUpload;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -1267,7 +1298,7 @@ define([
          * Creates a graphic that can be used for highlighting.
          * @param {object} item Graphic to be used to create highlight graphic
          */
-        _createHighlightGraphic: function (item) {
+        _createHighlightGraphic: function (item, isNonEditableFeature) {
             var deferred = new Deferred(),
                 highlightGraphic = null,
                 outlineSquareSize = 30,
@@ -1297,7 +1328,8 @@ define([
                         this._outlineFillColor
                     ),
                     item.attributes, item.infoTemplate);
-
+                //Add boolean flag in the highlight graphic to identify the non-editable layer feature
+                highlightGraphic.isNonEditableFeature = isNonEditableFeature;
                 deferred.resolve(highlightGraphic);
             }
             else {
@@ -1329,7 +1361,8 @@ define([
                                         this._lineHiliteColor, 3), this._fillHiliteColor),
                                 itemDetail.attributes, itemDetail.infoTemplate);
                         }
-
+                        //Add boolean flag in the highlight graphic to identify the non-editable layer feature
+                        highlightGraphic.isNonEditableFeature = isNonEditableFeature;
                         deferred.resolve(highlightGraphic);
                     }
                 }), function (error) {
@@ -1469,16 +1502,6 @@ define([
             isIE = !!document.getElementById("iecctest");
             docElem.removeChild(b);
             return isIE;
-        },
-
-        /**
-         * Tests if the browser is a non-IE browser or it is (IE 11 and https).
-         * @return {boolean} True if the browser can upload
-         */
-        _browserCanUpload: function () {
-            return !(window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
-                (window.navigator.userAgent.indexOf("Trident/") >= 0 &&
-                    window.location.protocol.toLowerCase() === "http:"));
         },
 
         /**

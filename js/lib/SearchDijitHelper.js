@@ -92,15 +92,8 @@ define([
                     numSources = searchSources.length;
                 }
 
-                // If the app properties have null for the layers, then the properties aren't set up for
-                // searching for this webmap and we'll add all layers
-                if (!searchAppProperties.layers) {
-                    addLayersFromMap = true;
-                    numSources += 1;
-
-                }
-                // Otherwise, just use the layers configured in the webmap--which may be an empty list
-                else if (searchAppProperties.layers.length > 0) {
+                // Check if "Search by layer" option is configured and add the layers to geocoder
+                if (searchAppProperties.layers && searchAppProperties.layers.length > 0) {
                     searchSources = searchSources.concat(
                         this.createWebMapItemSources(map, operationalLayers, searchAppProperties.layers, searchAppProperties.hintText)
                     );

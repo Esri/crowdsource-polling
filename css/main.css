@@ -680,6 +680,11 @@ label.css-label
     overflow-y: auto;
 }
 
+.nonEditableFeature .likeButton, .nonEditableFeature .commentButton, .nonEditableFeature .galleryButton,
+ .nonEditableFeature .itemComments  {
+    display: none;
+}
+
 .itemDetail .smallScreenOnly {
     display: none;
 }

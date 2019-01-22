@@ -144,6 +144,10 @@ define([
                     }
                 }
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
+                //Honor the webmap popup info settings for showing/hiding attachments
+                if (this._itemLayerInWebmap.popupInfo &&  this._itemLayer.hasAttachments) {
+                    this._itemLayer.hasAttachments = this._itemLayerInWebmap.popupInfo.showAttachments;
+                }
                 if (!this._itemLayerInWebmap || !this._itemLayer) {
                     deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
                     return;
@@ -213,6 +217,10 @@ define([
                                 this._commentTableInWebmap = result.commentTableInWebmap;
                                 this._commentTableURL = result.commentTableURL;
                                 this._commentTable = result.commentTable;
+                                //Honor the showAttachments flag for related layer
+                                if (result.commentTableInWebmap.popupInfo && this._commentTable.hasAttachments) {
+                                    this._commentTable.hasAttachments = result.commentTableInWebmap.popupInfo.showAttachments;
+                                }
                                 this._commentTableRelateID = result.commentTableRelateID;
                                 // Provides _commentFields[n].{alias, editable, length, name, nullable, type} after adjusting
                                 // to the presence of editing and visibility controls in the optional popup

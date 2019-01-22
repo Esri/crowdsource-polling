@@ -86,18 +86,6 @@
             "type": "boolean",
             "tooltip": "Enable to allow users to sign in using their Twitter credentials"
         }, {
-            "label": "Allow users to sign in using Google+",
-            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
-            "type": "conditional",
-            "fieldName": "allowGoogle",
-            "condition":false,
-            "items":[{
-                "label": "Please register your app with Google+ and provide your Google+ Client ID",
-                "tooltip": "Google+ ClientId",
-                "type": "string",
-                "fieldName": "googleplusClientId"
-            }]
-        }, {
             "label": "Sign in window text",
             "fieldName": "socialMediaDisclaimer",
             "type": "string",

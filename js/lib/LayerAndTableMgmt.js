@@ -21,6 +21,8 @@ define([
     "dojo/Deferred",
     "dojo/json",
     "dojo/on",
+    "dojo/query",
+    "dojo/dom-style",
     "dojo/promise/all",
     "dojo/topic",
     "esri/dijit/PopupTemplate",
@@ -37,6 +39,8 @@ define([
     Deferred,
     JSON,
     on,
+    dojoQuery,
+    domStyle,
     all,
     topic,
     PopupTemplate,
@@ -144,6 +148,19 @@ define([
                     }
                 }
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
+                //Check if refresh interval exist for the layer
+                //Accordingly add the refresh-tick handler
+                if (this._itemLayer.refreshInterval !== 0) {
+                    if (this.layerRefreshHandler) {
+                        this.layerRefreshHandler.remove();
+                    }
+                    //Attach refresh handle to the layer to fetch the add/updated features
+                    this.layerRefreshHandler = on(this._itemLayer, "refresh-tick",
+                        lang.hitch(this, function () {
+                            this.queryItems();
+                            this.canUpdateFeatureData = true;
+                        }));
+                }
                 //Honor the webmap popup info settings for showing/hiding attachments
                 if (this._itemLayerInWebmap.popupInfo &&  this._itemLayer.hasAttachments) {
                     this._itemLayer.hasAttachments = this._itemLayerInWebmap.popupInfo.showAttachments;

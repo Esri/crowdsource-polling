@@ -1181,11 +1181,13 @@ define([
                             //Zoom and set the extent of the feature as per the geometry type
                             if (evt.graphic.geometry.type === "point") {
                                 this.map.centerAt(evt.graphic.geometry);
-                            } else {
+                            }
+                            else {
                                 this.map.setExtent(evt.graphic.geometry.getExtent(), true);
                             }
                         }));
-                    } else {
+                    }
+                    else {
                         //If item layer feature is selected then remove the non editable class
                         domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
                     }
@@ -1372,7 +1374,8 @@ define([
                         highlightGraphic.isNonEditableFeature = isNonEditableFeature;
                         item.highlightGraphic = highlightGraphic;
                         //deferred.resolve(highlightGraphic, itemDetail);
-                    } else if (item.geometry.type === "polyline") {
+                    }
+                    else if (item.geometry.type === "polyline") {
                         // Create a line symbol using the configured line highlight color
                         highlightGraphic = new Graphic(item.geometry,
                             new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,

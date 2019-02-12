@@ -162,7 +162,7 @@ define([
                         }));
                 }
                 //Honor the webmap popup info settings for showing/hiding attachments
-                if (this._itemLayerInWebmap.popupInfo &&  this._itemLayer.hasAttachments) {
+                if (this._itemLayerInWebmap.popupInfo && this._itemLayer.hasAttachments) {
                     this._itemLayer.hasAttachments = this._itemLayerInWebmap.popupInfo.showAttachments;
                 }
                 if (!this._itemLayerInWebmap || !this._itemLayer) {

@@ -212,27 +212,27 @@
             "fieldName": "submitMessage"
         }, {
             "type": "subcategory",
-            "label": "Comment period"
+            "label": "Feedback period"
         }, {
             "type": "radio",
             "fieldName": "commentPeriod",
-            "tooltip": "Comment period status",
+            "tooltip": "Feedback period status",
             "items": [{
-                "label": "Comment period open",
+                "label": "Feedback period open",
                 "value": "Open",
                 "checked": true
             }, {
-                "label": "Comment period closed",
+                "label": "Feedback period closed",
                 "value": "Closed"
             }]
         }, {
-            "label": "Comment period closed window title",
-            "tooltip": "Title of window that displays when comment period is closed",
+            "label": "Feedback period closed window title",
+            "tooltip": "Title of window that displays when feedback period is closed",
             "type": "string",
             "fieldName": "commentPeriodDialogTitle"
         }, {
-            "label": "Comment period closed window content",
-            "tooltip": "Content of window that displays when comment period is closed",
+            "label": "Feedback period closed window content",
+            "tooltip": "Content of window that displays when feedback period is closed",
             "type": "string",
             "fieldName": "commentPeriodDialogContent",
             "stringFieldOption": "richtext"

@@ -37,8 +37,8 @@
         "buttonTextColor": "#206bdb",
         "buttonBackgroundColor": "white",
         "commentPeriod": "Open",
-        "commentPeriodDialogTitle": "Comment period closed",
-        "commentPeriodDialogContent": "We are no longer accepting comments for this project.",
+        "commentPeriodDialogTitle": "Feedback period closed",
+        "commentPeriodDialogContent": "We are no longer accepting feedbacks for this project.",
         "submitMessage": "Thank you. Your comment has been submitted."
     },
     "configurationSettings": [{

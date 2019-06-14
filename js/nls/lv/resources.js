@@ -53,17 +53,17 @@ define({
     "requiredFormItemFlag": " (nepieciešams)",
     "unsettableRequiredField": "Nepieciešamais lauks nav ne inicializēts, ne veidlapā",
     "countOfRemainingCharactersTooltip": "Atlikušās rakstzīmes",
-    "attachmentsHeading": "Uzdevumi",
+    "attachmentsHeading": "Pielikumi",
     "addAttachmentTooltip": "Pievienot pielikumu",
     "removeAttachmentTooltip": "Noņemt pielikumu",
     "cancelButtonLabel": "Atcelt",
     "submitButtonLabel": "Iesniegt"
   },
   "item_details": {
-    "likeButtonTooltip": "Balsot par šo vienumu",
-    "likeButtonInverseTooltip": "Balss pieskaitīta",
+    "likeButtonTooltip": "Balsot par šo vienību",
+    "likeButtonInverseTooltip": "Balsojums pieskaitīts",
     "commentButtonTooltip": "Pievienot komentāru",
-    "gotoMapViewTooltip": "Iet uz kartes skatu",
+    "gotoMapViewTooltip": "Doties uz kartes skatu",
     "galleryButtonTooltip": "Skatīt pievienotos failus",
     "commentsListHeading": "Komentāri",
     "noCommentsPlaceholder": "Nav komentāru",
@@ -73,6 +73,6 @@ define({
   "item_list": {
     "linkToMapViewOptionLabel": "Filtrēt sarakstu pēc kartes",
     "linkToMapViewOptionTooltip": "Saraksta elementi, kas ir redzami pašreizējā kartē",
-    "likesForThisItemTooltip": "Balsis par šo vienumu"
+    "likesForThisItemTooltip": "Balsis par šo vienību"
   }
 });

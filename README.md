@@ -26,7 +26,7 @@ The Crowdsource Polling application presents a map that can be used to gauge sen
 
 * Presents a web map that has been shared with the ArcGIS Online/Portal group configured in the application.
 * Users can review reports and provide feedback as comments and votes.
-* Users can access the content anonymously, or authenticate using their Facebook, Google+, Twitter, or ArcGIS credentials.
+* Users can access the content anonymously, or authenticate using their Twitter or ArcGIS credentials.
 * The application can also be used in browsers on tablets and desktops using [all browsers supported by ArcGIS Online][supported browsers].
 
 ## Requirements

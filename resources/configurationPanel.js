@@ -73,9 +73,6 @@
             "type": "paragraph",
             "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
         }, {
-            "type": "paragraph",
-            "value": "See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
-        }, {
             "label": "Field to store the name of authenticated commenters.",
             "fieldName": "commentNameField",
             "type": "string",

@@ -44,6 +44,7 @@ define([
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleMarkerSymbol",
     "esri/tasks/query",
+    "esri/tasks/QueryTask",
     "esri/urlUtils",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
@@ -87,6 +88,7 @@ define([
     SimpleLineSymbol,
     SimpleMarkerSymbol,
     Query,
+    QueryTask,
     urlUtils,
     registry,
     LayerAndTableMgmt,
@@ -129,8 +131,9 @@ define([
             if (config) {
                 this.config = config;
 
-                // Remove access to Facebook due to unsupportable changes in its API
+                // Remove access to Facebook and Google plus due to unsupportable changes in its API
                 this.config.allowFacebook = false;
+                this.config.allowGoogle = false;
 
                 // Normalize string booleans
                 this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);
@@ -274,7 +277,6 @@ define([
             document.title = this.config.title || "";
 
             this.config.isIE8 = this._isIE8();
-            this.config.browserCanUpload = this._browserCanUpload();
 
             // Perform setups in parallel
             setupUI = this._setupUI();
@@ -377,6 +379,7 @@ define([
                  * @param {object} item Item that received a comment
                  */
                 topic.subscribe("commentAdded", lang.hitch(this, function (item) {
+                    this._itemDetails.destroyCommentForm();
                     topic.publish("updateComments", item);
                 }));
 
@@ -434,28 +437,35 @@ define([
                  * @param {object} item Item to find out more about
                  */
                 topic.subscribe("itemSelected", lang.hitch(this, function (item) {
-                    this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
+                    //Remove the non editable layer class from the details panel
+                    //as the item layer feature is selected
+                    this._getFeatureAndCreateHighlightGraphic(item, false).then(lang.hitch(this, function (updatedItem) {
+                        item.attributes = updatedItem.attributes;
+                        item.highlightGraphic = updatedItem.highlightGraphic;
+                        domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
+                        this._itemsList.setSelection(item.attributes[item._layer.objectIdField]);
 
-                    this._itemDetails.clearComments();
-                    this._itemDetails.setItem(item);
-                    if (this._votesField) {
-                        this._mapData.refreshVoteCount(item, this._votesField).then(function (item) {
-                            topic.publish("voteUpdated", item);
-                        });
-                    }
+                        this._itemDetails.clearComments();
+                        this._itemDetails.setItem(item);
+                        if (this._votesField) {
+                            this._mapData.refreshVoteCount(item, this._votesField).then(function (item) {
+                                topic.publish("voteUpdated", item);
+                            });
+                        }
 
-                    if (this._mapData.getItemLayer().hasAttachments) {
-                        topic.publish("updateAttachments", item);
-                    }
-                    topic.publish("updateComments", item);
-                    topic.publish("showPanel", "itemDetails");
-                    topic.publish("highlightItem", item);
+                        if (this._mapData.getItemLayer().hasAttachments) {
+                            topic.publish("updateAttachments", item);
+                        }
+                        topic.publish("updateComments", item);
+                        topic.publish("showPanel", "itemDetails");
+                        topic.publish("highlightItem", item);
 
-                    // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
-                    // a no-op because that's the normal state for wider windows
-                    topic.publish("showListViewClicked");
-                    //switch toggle option to map view as currently list view will be shown
-                    this._sidebarHdr.setCurrentViewToListView(true);
+                        // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
+                        // a no-op because that's the normal state for wider windows
+                        topic.publish("showListViewClicked");
+                        //switch toggle option to map view as currently list view will be shown
+                        this._sidebarHdr.setCurrentViewToListView(true);
+                    }));
                 }));
 
                 topic.subscribe("highlightItem", lang.hitch(this, function (item, skipZoom) {
@@ -500,15 +510,17 @@ define([
                         deferred.then(lang.hitch(this, function () {
                             mapGraphicsLayer = this.map.graphics;
                             mapGraphicsLayer.clear();
-                            this._createHighlightGraphic(item).then(function (highlightGraphic) {
-                                mapGraphicsLayer.add(highlightGraphic);
-                            });
+                            mapGraphicsLayer.add(item.highlightGraphic);
                         }));
                     }
                 }));
 
                 on(this.map.graphics, "click", lang.hitch(this, function (evt) {
                     evt.stopImmediatePropagation();
+                    //If non editable layers feature is clicked, skip the further processing
+                    if (evt.graphic && evt.graphic.isNonEditableFeature) {
+                        return;
+                    }
                     evt.graphic = this._currentItem;
                     this._mapData.getItemLayer().onClick(evt);
                 }));
@@ -577,7 +589,6 @@ define([
                 topic.subscribe("submitForm", lang.hitch(this, function (item, comment) {
                     this._sidebarCnt.showBusy(true);
                     this._mapData.addComment(item, comment);
-                    this._itemDetails.destroyCommentForm();
                     this._currentlyCommenting = false;
                 }));
 
@@ -1069,6 +1080,27 @@ define([
                 }).placeAt("sidebarContent");
                 this._sidebarCnt.addPanel("itemsList", this._itemsList);
 
+                //Listen for item list load event
+                on(this._itemsList, "itemListLoaded", lang.hitch(this, function () {
+                    //Check if comment form exist and it is open
+                    //If the form is open do not update the item details panel
+                    var isCommentFormOpen = false;
+                    if (this._hasCommentTable) {
+                        isCommentFormOpen = domClass.contains(this._itemDetails.commentButton,
+                            "themeButtonInverted");
+                    }
+                    //Update the details panel only if user is on itemDetails screen
+                    if (this._mapData.canUpdateFeatureData &&
+                        this._sidebarCnt.getCurrentPanelName() === "itemDetails" && !isCommentFormOpen) {
+                        var selectedFeature;
+                        selectedFeature = query(".themeItemListSelected", this._itemsList.domNode);
+                        if (selectedFeature && selectedFeature[0]) {
+                            selectedFeature[0].click();
+                        }
+                        this._mapData.canUpdateFeatureData = false;
+                    }
+                }));
+
                 // Item details
                 this._itemDetails = new ItemDetails({
                     "appConfig": this.config
@@ -1128,9 +1160,37 @@ define([
                 }, "LocateButton");
                 geoLocate.startup();
 
+                //Disable default symbol highlighting of infowindow
+                this.map.infoWindow.set("highlight", false);
+
                 // Keep info window invisible when one clicks upon a graphic
                 on(this.map, "click", lang.hitch(this, function (evt) {
                     this.map.infoWindow.hide();
+                    //Check if clicked feature does not belong to item layer
+                    //If yes, show the details panel for non editable layers feature
+                    if (evt.graphic && evt.graphic._layer.id !== this._mapData.getItemLayer().id) {
+                        evt.graphic.isNonEditableFeature = true;
+                        domClass.add(this._itemDetails.domNode, "nonEditableFeature");
+                        this._itemDetails.setItem(evt.graphic);
+                        topic.publish("showPanel", "itemDetails");
+                        var mapGraphicsLayer = this.map.graphics;
+                        mapGraphicsLayer.clear();
+                        this._getFeatureAndCreateHighlightGraphic(evt.graphic, true).then(lang.hitch(this, function (item) {
+                            evt.graphic.attributes = item.attributes;
+                            mapGraphicsLayer.add(item.highlightGraphic);
+                            //Zoom and set the extent of the feature as per the geometry type
+                            if (evt.graphic.geometry.type === "point") {
+                                this.map.centerAt(evt.graphic.geometry);
+                            }
+                            else {
+                                this.map.setExtent(evt.graphic.geometry.getExtent(), true);
+                            }
+                        }));
+                    }
+                    else {
+                        //If item layer feature is selected then remove the non editable class
+                        domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
+                    }
                 }));
 
                 // make sure map is loaded
@@ -1155,8 +1215,7 @@ define([
                     var searchControl;
 
                     this._hasCommentTable = hasCommentTable;
-                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments &&
-                        this.config.browserCanUpload;
+                    this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
 
                     mapDataReadyDeferred.resolve("map data");
 
@@ -1265,78 +1324,81 @@ define([
 
         /**
          * Creates a graphic that can be used for highlighting.
+         * Fetch the updated feature that wil be used to show the feature details
          * @param {object} item Graphic to be used to create highlight graphic
          */
-        _createHighlightGraphic: function (item) {
+        _getFeatureAndCreateHighlightGraphic: function (item, isNonEditableFeature) {
             var deferred = new Deferred(),
                 highlightGraphic = null,
                 outlineSquareSize = 30,
-                now, itemLayer, itemQuery;
+                now, itemLayer, itemQuery, queryTask;
+            // Get a higher-resolution version of the item's graphics
+            now = Date.now();
+            queryTask = new QueryTask(item._layer.url);
+            itemLayer = item.getLayer();
+            itemQuery = new Query();
+            itemQuery.objectIds = [item.attributes[itemLayer.objectIdField]];
+            itemQuery.returnGeometry = true;
+            itemQuery.outSpatialReference = this.map.spatialReference;
+            itemQuery.outFields = ["*"];
+            itemQuery.where = now + "=" + now; // Needed to break JSAPI cache
+            queryTask.execute(itemQuery, lang.hitch(this, function (results) {
+                if (results && results.features && results.features.length > 0) {
+                    item.attributes = results.features[0].attributes;
+                    item.geometry = results.features[0].geometry;
+                    // Create a highlight marker for a point
+                    if (item.geometry.type === "point") {
+                        // JSAPI does not want NaN coordinates
+                        if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
+                            deferred.reject();
+                            return;
+                        }
 
-            // Create a highlight marker for a point
-            if (item.geometry.type === "point") {
-                // JSAPI does not want NaN coordinates
-                if (!item.geometry.x || !item.geometry.y || isNaN(item.geometry.x) || isNaN(item.geometry.y)) {
-                    deferred.reject();
-                    return;
-                }
+                        // Try to get the item's layer's symbol
+                        highlightGraphic = this._mapData.getItemLayer()._getSymbol(item);
+                        if (highlightGraphic && !isNaN(highlightGraphic.width) && !isNaN(highlightGraphic.height)) {
+                            outlineSquareSize = 1 + Math.max(highlightGraphic.width, highlightGraphic.height);
+                        }
 
-                // Try to get the item's layer's symbol
-                highlightGraphic = this._mapData.getItemLayer()._getSymbol(item);
-                if (highlightGraphic && !isNaN(highlightGraphic.width) && !isNaN(highlightGraphic.height)) {
-                    outlineSquareSize = 1 + Math.max(highlightGraphic.width, highlightGraphic.height);
-                }
-
-                // Create an outline square using the configured line highlight color
-                highlightGraphic = new Graphic(item.geometry,
-                    new SimpleMarkerSymbol(
-                        SimpleMarkerSymbol.STYLE_SQUARE,
-                        outlineSquareSize,
-                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                            this._lineHiliteColor, 2),
-                        this._outlineFillColor
-                    ),
-                    item.attributes, item.infoTemplate);
-
-                deferred.resolve(highlightGraphic);
-            }
-            else {
-                // Get a higher-resolution version of the item's graphics
-                now = Date.now();
-                itemLayer = item.getLayer();
-                itemQuery = new Query();
-                itemQuery.objectIds = [item.attributes[itemLayer.objectIdField]];
-                itemQuery.returnGeometry = true;
-                itemQuery.where = now + "=" + now; // Needed to break JSAPI cache
-                itemLayer.queryFeatures(itemQuery, lang.hitch(this, function (results) {
-                    if (results && results.features && results.features.length > 0) {
-                        var itemDetail = results.features[0];
-
-                        // Create a highlight symbol
-                        if (itemDetail.geometry.type === "polyline") {
-                            // Create a line symbol using the configured line highlight color
-                            highlightGraphic = new Graphic(itemDetail.geometry,
+                        // Create an outline square using the configured line highlight color
+                        highlightGraphic = new Graphic(item.geometry,
+                            new SimpleMarkerSymbol(
+                                SimpleMarkerSymbol.STYLE_SQUARE,
+                                outlineSquareSize,
                                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                    this._lineHiliteColor, 3),
-                                itemDetail.attributes, itemDetail.infoTemplate);
-
-                        }
-                        else if (itemDetail.geometry.type) {
-                            // Create a polygon symbol using the configured line & fill highlight colors
-                            highlightGraphic = new esri.Graphic(itemDetail.geometry,
-                                new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                        this._lineHiliteColor, 3), this._fillHiliteColor),
-                                itemDetail.attributes, itemDetail.infoTemplate);
-                        }
-
-                        deferred.resolve(highlightGraphic);
+                                    this._lineHiliteColor, 2),
+                                this._outlineFillColor
+                            ),
+                            item.attributes, item.infoTemplate);
+                        //Add boolean flag in the highlight graphic to identify the non-editable layer feature
+                        highlightGraphic.isNonEditableFeature = isNonEditableFeature;
+                        item.highlightGraphic = highlightGraphic;
+                        //deferred.resolve(highlightGraphic, itemDetail);
                     }
-                }), function (error) {
-                    deferred.reject(error);
-                });
-
-            }
+                    else if (item.geometry.type === "polyline") {
+                        // Create a line symbol using the configured line highlight color
+                        highlightGraphic = new Graphic(item.geometry,
+                            new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                this._lineHiliteColor, 3),
+                            item.attributes, item.infoTemplate);
+                        item.highlightGraphic = highlightGraphic;
+                    }
+                    else if (item.geometry.type) {
+                        // Create a polygon symbol using the configured line & fill highlight colors
+                        highlightGraphic = new esri.Graphic(item.geometry,
+                            new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                                    this._lineHiliteColor, 3), this._fillHiliteColor),
+                            item.attributes, item.infoTemplate);
+                        item.highlightGraphic = highlightGraphic;
+                    }
+                    //Add boolean flag in the highlight graphic to identify the non-editable layer feature
+                    item.isNonEditableFeature = isNonEditableFeature;
+                    deferred.resolve(item);
+                }
+            }), function (error) {
+                deferred.reject(error);
+            });
 
             return deferred;
         },
@@ -1469,16 +1531,6 @@ define([
             isIE = !!document.getElementById("iecctest");
             docElem.removeChild(b);
             return isIE;
-        },
-
-        /**
-         * Tests if the browser is a non-IE browser or it is (IE 11 and https).
-         * @return {boolean} True if the browser can upload
-         */
-        _browserCanUpload: function () {
-            return !(window.navigator.userAgent.indexOf("MSIE ") >= 0 ||
-                (window.navigator.userAgent.indexOf("Trident/") >= 0 &&
-                    window.location.protocol.toLowerCase() === "http:"));
         },
 
         /**

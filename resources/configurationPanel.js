@@ -37,8 +37,8 @@
         "buttonTextColor": "#206bdb",
         "buttonBackgroundColor": "white",
         "commentPeriod": "Open",
-        "commentPeriodDialogTitle": "Comment period closed",
-        "commentPeriodDialogContent": "We are no longer accepting comments for this project.",
+        "commentPeriodDialogTitle": "Feedback period closed",
+        "commentPeriodDialogContent": "We are no longer accepting feedbacks for this project.",
         "submitMessage": "Thank you. Your comment has been submitted."
     },
     "configurationSettings": [{
@@ -73,9 +73,6 @@
             "type": "paragraph",
             "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
         }, {
-            "type": "paragraph",
-            "value": "See the <a href='http://solutions.arcgis.com/local-government/help/crowdsource-polling/get-started/configure-social-media-signin/' target='_blank'>help</a> for the steps to register your app with Facebook and Google+."
-        }, {
             "label": "Field to store the name of authenticated commenters.",
             "fieldName": "commentNameField",
             "type": "string",
@@ -85,18 +82,6 @@
             "fieldName": "allowTwitter",
             "type": "boolean",
             "tooltip": "Enable to allow users to sign in using their Twitter credentials"
-        }, {
-            "label": "Allow users to sign in using Google+",
-            "tooltip": "Enable to allow users to sign in using their Google+ credentials",
-            "type": "conditional",
-            "fieldName": "allowGoogle",
-            "condition":false,
-            "items":[{
-                "label": "Please register your app with Google+ and provide your Google+ Client ID",
-                "tooltip": "Google+ ClientId",
-                "type": "string",
-                "fieldName": "googleplusClientId"
-            }]
         }, {
             "label": "Sign in window text",
             "fieldName": "socialMediaDisclaimer",
@@ -224,27 +209,27 @@
             "fieldName": "submitMessage"
         }, {
             "type": "subcategory",
-            "label": "Comment period"
+            "label": "Feedback period"
         }, {
             "type": "radio",
             "fieldName": "commentPeriod",
-            "tooltip": "Comment period status",
+            "tooltip": "Feedback period status",
             "items": [{
-                "label": "Comment period open",
+                "label": "Feedback period open",
                 "value": "Open",
                 "checked": true
             }, {
-                "label": "Comment period closed",
+                "label": "Feedback period closed",
                 "value": "Closed"
             }]
         }, {
-            "label": "Comment period closed window title",
-            "tooltip": "Title of window that displays when comment period is closed",
+            "label": "Feedback period closed window title",
+            "tooltip": "Title of window that displays when feedback period is closed",
             "type": "string",
             "fieldName": "commentPeriodDialogTitle"
         }, {
-            "label": "Comment period closed window content",
-            "tooltip": "Content of window that displays when comment period is closed",
+            "label": "Feedback period closed window content",
+            "tooltip": "Content of window that displays when feedback period is closed",
             "type": "string",
             "fieldName": "commentPeriodDialogContent",
             "stringFieldOption": "richtext"

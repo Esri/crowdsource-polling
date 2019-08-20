@@ -74,3 +74,8 @@
     margin-left: 40px;
     margin-right: 10px;
 }
+
+/* ---------- Search ---------- */
+.esriRTL .arcgisSearch .searchGroup .searchInput {
+    padding: 5px 24px 5px 12px;
+}

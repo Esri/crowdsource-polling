@@ -33,14 +33,14 @@ define([
     "dijit/_WidgetBase",
     "dijit/_TemplatedMixin",
     "dijit/_WidgetsInTemplateMixin",
-
+    "dojo/Evented",
     "dojo/text!./ItemListView.html"
 ], function (declare, lang, array, domConstruct, domStyle, domClass, domGeom, on, query, has, topic, nld, Switch,
     SvgHelper,
-    _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin,
+    _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Evented,
     template) {
 
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin, Evented], {
         templateString: template,
 
         /**
@@ -196,6 +196,7 @@ define([
                 this.items.sort(compareFunction);
             }
             array.forEach(this.items, lang.hitch(this, this.buildItemSummary));
+            this.emit("itemListLoaded");
         },
 
         /**

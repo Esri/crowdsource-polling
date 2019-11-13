@@ -226,18 +226,18 @@ define([
         addListeners: function () {
             var self = this;
             this.own(
-                on(this.backIcon, "click", function () {
+                on(this.backIcon, "click", lang.hitch(this, function () {
                     topic.publish("closeMessage");
-                    topic.publish("detailsCancel");
-                }),
+                    topic.publish("detailsCancel", false, this.item._layer.id);
+                })),
                 this._commentButtonClickHandler = on(this.commentButton, "click", function () {
                     topic.publish("closeMessage");
                     topic.publish("getComment", self.item);
                 }),
-                on(this.mapButton, "click", function () {
+                on(this.mapButton, "click", lang.hitch(this, function () {
                     topic.publish("closeMessage");
-                    topic.publish("detailsCancel", true);
-                }),
+                    topic.publish("detailsCancel", true, this.item._layer.id);
+                })),
                 on(this.galleryButton, "click", function () {
                     topic.publish("closeMessage");
                     topic.publish("showGallery", self.item);

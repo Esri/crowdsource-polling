@@ -46,6 +46,8 @@ define([
     "esri/tasks/query",
     "esri/tasks/QueryTask",
     "esri/urlUtils",
+    "esri/tasks/RelationshipQuery",
+    "esri/layers/FeatureLayer",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
@@ -90,6 +92,8 @@ define([
     Query,
     QueryTask,
     urlUtils,
+    RelationshipQuery,
+    FeatureLayer,
     registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
@@ -114,7 +118,7 @@ define([
         _lineHiliteColor: new Color("aqua"),
         _windowResizeTimer: null,
         _searchControls: {},
-
+        _layersDefaultDefExpr: {},
 
         startup: function (config) {
             var promise, itemInfo, error, link;
@@ -391,7 +395,7 @@ define([
                     topic.publish("showErrorPopup", err);
                 }));
 
-                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
+                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap, layerId) {
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
                     }
@@ -407,6 +411,21 @@ define([
                     else {
                         // Otherwise, we're coming from the map in narrowscreen view and will return to the map
                         topic.publish("showMapViewClicked");
+                    }
+
+                    //All the layer should be reverted only if user clicks on
+                    //back button and not on show map view button
+                    if (!forceToMap) {
+                        //Check for the object and restore the layer
+                        if (Object.keys(this._layersDefaultDefExpr).length > 0) {
+                            for (var layerID in this._layersDefaultDefExpr) {
+                                this.map._layers[layerID].setDefinitionExpression(this._layersDefaultDefExpr[layerID] || "");
+                            }
+                        }
+                        setTimeout(lang.hitch(this, function () {
+                            //Update the item list to sync the map and list control
+                            topic.publish("updateItems");
+                        }), 1000);
                     }
                 }));
 
@@ -465,6 +484,11 @@ define([
                         topic.publish("showListViewClicked");
                         //switch toggle option to map view as currently list view will be shown
                         this._sidebarHdr.setCurrentViewToListView(true);
+                        //If the show related features flag is true,
+                        //Fetch the related records of selected graphics
+                        if (this.config.showRelatedFeatures) {
+                            this._getRelatedFeatureForLayer(item);
+                        }
                     }));
                 }));
 
@@ -510,7 +534,14 @@ define([
                         deferred.then(lang.hitch(this, function () {
                             mapGraphicsLayer = this.map.graphics;
                             mapGraphicsLayer.clear();
-                            mapGraphicsLayer.add(item.highlightGraphic);
+                            //Add the highlight graphics for selected feature
+                            //IF
+                            //1. Show related feature flag is false (This is default behavior)
+                            //2. If Show related flag is true and highlight feature flag is true
+                            if (!this.config.showRelatedFeatures ||
+                                (this.config.showRelatedFeatures && this.config.highlightSelectedFeature)) {
+                                mapGraphicsLayer.add(item.highlightGraphic);
+                            }
                         }));
                     }
                 }));
@@ -801,14 +832,12 @@ define([
 
                 //----- Done -----
                 console.log("app is ready");
-
+                urlObject = urlUtils.urlToObject(document.location.href);
+                urlObject.query = urlObject.query || {};
+                urlObject.query = esriLang.stripTags(urlObject.query);
                 // Do we have a custom URL search parameter?
                 if ((this.config.customUrlLayer.id !== null && this.config.customUrlLayer.fields.length > 0 &&
-                        this.config.customUrlParam !== null)) {
-
-                    urlObject = urlUtils.urlToObject(document.location.href);
-                    urlObject.query = urlObject.query || {};
-                    urlObject.query = esriLang.stripTags(urlObject.query);
+                    this.config.customUrlParam !== null)) {
                     searchValue = null;
                     customUrlParamUC = this.config.customUrlParam.toUpperCase();
                     for (prop in urlObject.query) {
@@ -857,6 +886,41 @@ define([
                             }));
                         }
                     }
+                }
+                //Check if layer field value is passed through URL
+                if (this.config.searchLayers && urlObject.query.hasOwnProperty("value")) {
+                    var searchLayer, layer, layerDefExpr, exprString = "";
+                    //Parse the search layer string into JSON
+                    searchLayer = JSON.parse(this.config.searchLayers);
+                    //Loop through all the search layers
+                    array.forEach(searchLayer, lang.hitch(this, function (layerDetails) {
+                        //Fetch the layer to perform the further operations
+                        layer = this.map.getLayer(layerDetails.id);
+                        if (layer) {
+                            //Get the layers default definition expression
+                            layerDefExpr = layer.getDefinitionExpression();
+                            //Create a dictionary which will have the
+                            //details about the default and newly created definition expression
+                            //this details will be needed to restore the layer to its original state
+                            //Reset the expression string
+                            exprString = "";
+                            array.forEach(layerDetails.fields, lang.hitch(this, function (field, index) {
+                                if (layerDetails.fields.length - 1 === index) {
+                                    exprString += field + " =" + "'" + urlObject.query.value + "'";
+                                } else {
+                                    exprString += field + " = " + "'" + urlObject.query.value + "'" + " AND ";
+                                }
+                            }));
+                            //Once the expression string created apply the same to the layer as the
+                            //definition expression
+                            var nDefExpr = layerDefExpr ? layerDefExpr + " AND " + exprString : exprString;
+                            layer.setDefinitionExpression(nDefExpr);
+                        }
+                    }));
+                    setTimeout(lang.hitch(this, function () {
+                        //Update the item list to sync the map and list control
+                        topic.publish("updateItems");
+                    }), 1000);
                 }
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
@@ -1218,6 +1282,10 @@ define([
                     this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
 
                     mapDataReadyDeferred.resolve("map data");
+                    array.forEach(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this,
+                        function (layer) {
+                            this._layersDefaultDefExpr[layer.id] = layer.layerObject.getDefinitionExpression();
+                        }));
 
                     // Add search control
                     searchControl = SearchDijitHelper.createSearchDijit(
@@ -1571,6 +1639,91 @@ define([
             document.body.appendChild(customStyles);
 
             return customStyles;
+        },
+
+        /**
+        * Retrieves related features.
+         * @param {object} item object to be used to fetch the related records
+        */
+        _getRelatedFeatureForLayer: function (item) {
+            var relatedTableURL, relatedLayer, selectedLayer;
+            selectedLayer = item._layer;
+            // if comment field is present in config file and the layer contains related table, fetch the first related table URL
+            if (selectedLayer.relationships && selectedLayer.relationships.length > 0) {
+                array.forEach(selectedLayer.relationships, lang.hitch(this, function (parentRelationShip) {
+                    // Construct the related table URL form operational layer URL and the related table id
+                    // We are considering only first related table although the layer has many related table.
+                    // Hence, we are fetching relatedTableId from relationships[0] ie:"operationalLayer.relationships[0].relatedTableId"
+                    relatedTableURL = selectedLayer.url.substr(0, selectedLayer.url.lastIndexOf('/') + 1) + parentRelationShip.relatedTableId;
+                    //fetch comment popup table which will be used in creating comment form
+                    array.some(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this, function (currentLayer) {
+                        if (relatedTableURL) {
+                            if (currentLayer.url === relatedTableURL && currentLayer.layerObject.geometryType) {
+                                relatedLayer = currentLayer.layerObject;
+                                //get the relationship object for related layer
+                                array.some(relatedLayer.relationships, lang.hitch(this, function (relationship) {
+                                    if (relationship.id === parentRelationShip.id) {
+                                        childLayerRelationShip = relationship;
+                                        return true;
+                                    }
+                                }));
+                                this._queryComments(relatedLayer, item, selectedLayer, parentRelationShip, childLayerRelationShip);
+                            }
+                        }
+                    }));
+                }));
+            }
+        },
+
+        /**
+        * Retrieves the comments associated with an item.
+        * @param {relatedLayer} related layer object
+        * @return {item} selected feature
+        * @param {selectedLayer} active layer in application
+        * @return {parentRelationShip} relationship details of parent layer
+        * @param {childLayerRelationShip} relationship details of related layer
+        */
+        _queryComments: function (relatedLayer, item, selectedLayer, parentRelationShip, childLayerRelationShip) {
+            var updateQuery = new RelationshipQuery(), commentsTableDefinitionExpression;
+            updateQuery.objectIds = [item.attributes[selectedLayer.objectIdField]];
+            updateQuery.returnGeometry = true;
+            updateQuery.outFields = ["*"];
+            updateQuery.relationshipId = parentRelationShip.id;
+            commentsTableDefinitionExpression = relatedLayer.getDefinitionExpression();
+            //If table has definition expression set in web map then apply it
+            if (commentsTableDefinitionExpression &&
+                commentsTableDefinitionExpression !== null &&
+                commentsTableDefinitionExpression !== "") {
+                updateQuery.definitionExpression = commentsTableDefinitionExpression;
+            }
+                relatedLayer.getDefinitionExpression();
+            selectedLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
+                var featureSet, layersDefExpr, relatedLayerDefExpr;
+                featureSet = results[item.attributes[selectedLayer.objectIdField]];
+                features = featureSet ? featureSet.features : [];
+                if (item.attributes[parentRelationShip.keyField] === null) {
+                    fieldValue = "is NULL";
+                } else {
+                    fieldValue = "'" + item.attributes[parentRelationShip.keyField] + "'";
+                }
+                //If layer has default expression consider that
+                if (this._layersDefaultDefExpr[selectedLayer.id]) {
+                    layersDefExpr = this._layersDefaultDefExpr[selectedLayer.id] + " AND " +
+                        selectedLayer.objectIdField + " = " + item.attributes[selectedLayer.objectIdField];
+                } else {
+                    layersDefExpr = selectedLayer.objectIdField + " = " + item.attributes[selectedLayer.objectIdField];
+                }
+                //If related layer has default expression consider that
+                if (this._layersDefaultDefExpr[relatedLayer.id]) {
+                    relatedLayerDefExpr = this._layersDefaultDefExpr[relatedLayer.id] + " AND " +
+                        childLayerRelationShip.keyField + " = " + fieldValue
+                } else {
+                    relatedLayerDefExpr = childLayerRelationShip.keyField + " = " + fieldValue
+                }
+                selectedLayer.setDefinitionExpression(layersDefExpr);
+                relatedLayer.setDefinitionExpression(relatedLayerDefExpr);
+            }), lang.hitch(this, function (err) {
+            }));
         }
 
     });

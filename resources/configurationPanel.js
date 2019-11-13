@@ -23,6 +23,8 @@
         "allowGoogle": false,
         "googleplusClientId": "",
         "allowTwitter": true,
+        "showRelatedFeatures" : false,
+        "highlightSelectedFeature" : true,
         "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
         "showDisplayTextAsSplashScreen": false,
         "customUrlLayer": {
@@ -89,6 +91,19 @@
             "placeholder": "",
             "tooltip": "Text to display in the Sign In window",
             "stringFieldOption": "richtext"
+        },
+        {
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showRelatedFeatures",
+            "label": "Filter the map layers and show related features of selected graphic",
+            "items": [{
+                    "type": "boolean",
+                    "condition": false,
+                    "fieldName": "highlightSelectedFeature",
+                    "label": "Highlight the selected graphic",
+                    "tooltip": "Highlight the selected graphic"
+              }]
         }]
     }, {
         "category": "<b>Theme</b>",
@@ -265,6 +280,38 @@
                     "esriGeometryLine",
                     "esriGeometryPolyline",
                     "esriGeometryPolygon"
+                ]
+            }
+        }]
+    }, {
+        "category": "Select search layers and fields",
+        "fields": [{
+            "type": "Select Layers and fields",
+            "value": ""
+        }, {
+            "fieldName": "searchLayers",
+            "type": "multilayerandfieldselector",
+            "tooltip": "Select layer and fields to search",
+            "layerOptions": {
+                "supportedTypes": [
+                    "FeatureLayer"
+                ],
+                "geometryTypes": [
+                    "esriGeometryPoint",
+                    "esriGeometryLine",
+                    "esriGeometryPolyline",
+                    "esriGeometryPolygon"
+                ]
+            },
+            "fieldOptions": {
+                "supportedTypes": [
+                    "esriFieldTypeSmallInteger",
+                    "esriFieldTypeInteger",
+                    "esriFieldTypeSingle",
+                    "esriFieldTypeDouble",
+                    "esriFieldTypeString",
+                    "esriFieldTypeDate",
+                    "esriFieldTypeOID"
                 ]
             }
         }]

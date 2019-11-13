@@ -417,7 +417,7 @@ define([
                     //back button and not on show map view button
                     if (!forceToMap) {
                         //Check for the object and restore the layer
-                        if (Object.keys(this._layersDefaultDefExpr).length > 0) {
+                        if (Object.keys(this._layersDefaultDefExpr).length > 0 && this.config.showRelatedFeatures) {
                             for (var layerID in this._layersDefaultDefExpr) {
                                 this.map._layers[layerID].setDefinitionExpression(this._layersDefaultDefExpr[layerID] || "");
                             }

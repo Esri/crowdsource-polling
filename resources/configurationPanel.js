@@ -91,19 +91,6 @@
             "placeholder": "",
             "tooltip": "Text to display in the Sign In window",
             "stringFieldOption": "richtext"
-        },
-        {
-            "type": "conditional",
-            "condition": false,
-            "fieldName": "showRelatedFeatures",
-            "label": "Filter the map layers and show related features of selected graphic",
-            "items": [{
-                    "type": "boolean",
-                    "condition": false,
-                    "fieldName": "highlightSelectedFeature",
-                    "label": "Highlight the selected graphic",
-                    "tooltip": "Highlight the selected graphic"
-              }]
         }]
     }, {
         "category": "<b>Theme</b>",
@@ -176,7 +163,10 @@
                 "tooltip": "Field in the selected layer for sorting items listed in app. If omitted, items are not sorted."
             }]
         }, {
-            "label": "Sort order of features using values from the field defined above.",
+            "type": "subcategory",
+            "label": "Feature List"
+        }, {
+            "label": "Sort order of features using values from the field defined above",
             "fieldName": "ascendingSortOrder",
             "type": "radio",
             "tooltip": "Sorts features in ascending or descending order using the values of the sorting field. This parameter is ignored when no sorting field is specified.",
@@ -213,6 +203,19 @@
             }, {
                 "label": "Show features in current map extent",
                 "value": "false"
+            }]
+        }, {
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showRelatedFeatures",
+            "label": "Show only the selected polling feature and any related features on the map",
+            "tooltip": "Reference layers that are not related to the polling layer are not filtered",
+            "items": [{
+                "type": "boolean",
+                "condition": false,
+                "fieldName": "highlightSelectedFeature",
+                "label": "Highlight the selected polling feature",
+                "tooltip": "Highlight the selected feature"
             }]
         }, {
             "type": "subcategory",
@@ -253,13 +256,22 @@
         "category": "Custom URL Parameter",
         "fields": [{
             "type": "paragraph",
-            "value": "Set up the app to support a custom URL parameter. For example, if your map contains a feature layer with parcel information and you'd like to be able to find parcels using a URL parameter you can use this section to do so. Select a layer and search field then define the name of a custom param. Once you've defined these values you can append the custom search to your application URL using the custom parameter name you define. For example, if I set the custom param value to 'parcel' a custom URL would look like this index.html?parcel=3045"
+            "value": "A custom URL parameter can be used to open the app to a specific feature. For example, this URL will open an app configured to have a URL parameter named <i>parcelid</i> to the feature with a value of 1234 in the configured search field: .../index.html?appid=a1b2c3&parcelid=1234."
+        }, {
+            "type": "paragraph",
+            "value": "For best results, confiure the settings to use the URL parameter to <b>either</b> select a single feature <b>or</b> to filter the layers."
         }, {
             "placeHolder": "i.e. parcels",
             "label": "URL parameter name:",
             "fieldName": "customUrlParam",
             "type": "string",
             "tooltip": "Custom URL parameter name"
+        }, {
+            "type": "subcategory",
+            "label": "Select Feature"
+        }, {
+            "type": "paragraph",
+            "value": "Use a URL parameter to open the application to a specific feature without changing the visibility of features in the list or the map."
         }, {
             "type": "layerAndFieldSelector",
             "fieldName": "customUrlLayer",
@@ -282,10 +294,13 @@
                     "esriGeometryPolygon"
                 ]
             }
-        }]
-    }, {
-        "category": "Select layers and fields for filtering",
-        "fields": [{
+        }, {
+            "type": "subcategory",
+            "label": "Filter Layers"
+        }, {
+            "type": "paragraph",
+            "value": "Use a URL parameter to filter the map and list to show only the features that have the provided value in the selected fields."
+        }, {
             "fieldName": "searchLayers",
             "type": "multilayerandfieldselector",
             "tooltip": "Select layer and fields to search",

@@ -284,11 +284,8 @@
             }
         }]
     }, {
-        "category": "Select search layers and fields",
+        "category": "Select layers and fields for filtering",
         "fields": [{
-            "type": "Select Layers and fields",
-            "value": ""
-        }, {
             "fieldName": "searchLayers",
             "type": "multilayerandfieldselector",
             "tooltip": "Select layer and fields to search",

@@ -40,6 +40,7 @@ define([
     "esri/dijit/LocateButton",
     "esri/graphic",
     "esri/lang",
+    "esri/request",
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleMarkerSymbol",
@@ -86,6 +87,7 @@ define([
     LocateButton,
     Graphic,
     esriLang,
+    esriRequest,
     SimpleFillSymbol,
     SimpleLineSymbol,
     SimpleMarkerSymbol,
@@ -119,6 +121,7 @@ define([
         _windowResizeTimer: null,
         _searchControls: {},
         _layersDefaultDefExpr: {},
+        _layerAccessInfoObj : {},
 
         startup: function (config) {
             var promise, itemInfo, error, link;
@@ -355,7 +358,11 @@ define([
                 // Visibility function's signature:
                 // itemDetails.setActionsVisibility(showVotes, addComments, showComments, showGallery);
                 if (esriLang.isDefined(this.config.userPrivileges)) {
-                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
+                    if (!this._mapData.getItemLayer().itemId || (this._mapData.getItemLayer().itemId &&
+                        this._layerAccessInfoObj.hasOwnProperty(this._mapData.getItemLayer().itemId) &&
+                        (this._layerAccessInfoObj[this._mapData.getItemLayer().itemId] === "public"))) {
+                        userCanEdit = true;
+                    } else if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
                         array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
                         userCanEdit = false;
                     }
@@ -477,7 +484,7 @@ define([
                         }
                         topic.publish("updateComments", item);
                         topic.publish("showPanel", "itemDetails");
-                        topic.publish("highlightItem", item);
+                        topic.publish("highlightItem", item, true);
 
                         // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                         // a no-op because that's the normal state for wider windows
@@ -727,14 +734,19 @@ define([
                     };
                 }
 
-                topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
+                topic.subscribe("updatedItemsList", lang.hitch(this, function (items, isURL) {
                     this._itemsList.setItems(items, compareFunction);
                     this._sidebarCnt.showBusy(false);
+                    //If value is passed through URL and only one feature is found
+                    //select the feature and show the item details panel
+                    if (isURL && items.length === 1) {
+                        topic.publish("itemSelected", items[0]);
+                    }
                 }));
 
-                topic.subscribe("updateItems", lang.hitch(this, function () {
+                topic.subscribe("updateItems", lang.hitch(this, function (isURL) {
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null);
+                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null, isURL);
                 }));
 
                 /**
@@ -888,7 +900,8 @@ define([
                     }
                 }
                 //Check if layer field value is passed through URL
-                if (this.config.searchLayers && urlObject.query.hasOwnProperty("value")) {
+                if (this.config.searchLayers && this.config.customUrlParam !== null &&
+                    urlObject.query.hasOwnProperty(this.config.customUrlParam)) {
                     var searchLayer, layer, layerDefExpr, exprString = "";
                     //Parse the search layer string into JSON
                     searchLayer = JSON.parse(this.config.searchLayers);
@@ -906,9 +919,9 @@ define([
                             exprString = "";
                             array.forEach(layerDetails.fields, lang.hitch(this, function (field, index) {
                                 if (layerDetails.fields.length - 1 === index) {
-                                    exprString += field + " =" + "'" + urlObject.query.value + "'";
+                                    exprString += field + " =" + "'" + urlObject.query[this.config.customUrlParam] + "'";
                                 } else {
-                                    exprString += field + " = " + "'" + urlObject.query.value + "'" + " AND ";
+                                    exprString += field + " = " + "'" + urlObject.query[this.config.customUrlParam] + "'" + " AND ";
                                 }
                             }));
                             //Once the expression string created apply the same to the layer as the
@@ -919,7 +932,7 @@ define([
                     }));
                     setTimeout(lang.hitch(this, function () {
                         //Update the item list to sync the map and list control
-                        topic.publish("updateItems");
+                        topic.publish("updateItems", true);
                     }), 1000);
                 }
             }), lang.hitch(this, function (err) {
@@ -1280,8 +1293,12 @@ define([
 
                     this._hasCommentTable = hasCommentTable;
                     this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
+                    if (this._mapData.getItemLayer().itemId) {
+                        this._getLayerSharingProperty(this._mapData.getItemLayer().itemId, mapDataReadyDeferred);
+                    } else {
+                        mapDataReadyDeferred.resolve("map data");
+                    }
 
-                    mapDataReadyDeferred.resolve("map data");
                     array.forEach(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this,
                         function (layer) {
                             this._layersDefaultDefExpr[layer.id] = layer.layerObject.getDefinitionExpression();
@@ -1724,6 +1741,27 @@ define([
                 relatedLayer.setDefinitionExpression(relatedLayerDefExpr);
             }), lang.hitch(this, function (err) {
             }));
+        },
+
+        /**
+         * This function is used to get the sharing properties of layer which are added as item in AGOL
+         */
+        _getLayerSharingProperty: function (itemId, def) {
+            //Get layer's sharing property
+            esriRequest({
+                url: this.config.sharinghost + "/sharing/rest/content/items/" + itemId,
+                content: {
+                    f: 'json'
+                },
+                handleAs: 'json',
+                callbackPrams: 'callback'
+            }).then(lang.hitch(this, function (itemInfo) {
+                //Maintain the object to store the sharing properties of layers
+                this._layerAccessInfoObj[itemId] = itemInfo.access;
+                def.resolve();
+            }), function () {
+                def.reject();
+            });
         }
 
     });

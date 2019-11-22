@@ -423,8 +423,11 @@ define([
                     //All the layer should be reverted only if user clicks on
                     //back button and not on show map view button
                     if (!forceToMap) {
+                        var urlObject = urlUtils.urlToObject(document.location.href);
                         //Check for the object and restore the layer
-                        if (Object.keys(this._layersDefaultDefExpr).length > 0 && this.config.showRelatedFeatures) {
+                        //The layer should be restore only when URL paramter is not present
+                        if (Object.keys(this._layersDefaultDefExpr).length > 0 && this.config.showRelatedFeatures &&
+                            !urlObject.query.hasOwnProperty(this.config.customUrlParam)) {
                             for (var layerID in this._layersDefaultDefExpr) {
                                 this.map._layers[layerID].setDefinitionExpression(this._layersDefaultDefExpr[layerID] || "");
                             }
@@ -484,7 +487,7 @@ define([
                         }
                         topic.publish("updateComments", item);
                         topic.publish("showPanel", "itemDetails");
-                        topic.publish("highlightItem", item, true);
+                        topic.publish("highlightItem", item);
 
                         // If the screen is narrow, switch to the list view; if it isn't, switching to list view is
                         // a no-op because that's the normal state for wider windows

@@ -1465,9 +1465,6 @@ define([
       }
       this._filterDefExpr[layer.id] = layer.getDefinitionExpression();
       this.onFilterUpdated(layer.id === this.itemLayer.id);
-      //TODO : Remove the console after completing the testing
-      console.log("URL Filter : " + expressionFromURL);
-      console.log("Entire Layer Def Expr : " + layer.getDefinitionExpression());
     },
 
     /**

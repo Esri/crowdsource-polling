@@ -248,7 +248,11 @@ define([
             }
 
             // If this item's OID matches the current selection, apply the theme to highlight it
-            if (this.selectedItemOID === item.attributes[item._layer.objectIdField]) {
+            // only if showRelatedFeatures is false or showRelatedFeatures and highlightSelectedFeature
+            // is set to true
+            if (this.selectedItemOID === item.attributes[item._layer.objectIdField] &&
+                (!this.appConfig.showRelatedFeatures ||
+                    (this.appConfig.showRelatedFeatures && this.appConfig.highlightSelectedFeature))) {
                 domClass.add(itemSummaryDiv, "themeItemListSelected");
             }
         },

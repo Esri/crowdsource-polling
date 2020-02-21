@@ -32,6 +32,7 @@ define({
             signOutButtonTooltip: "Sign out",
             helpButtonLabel: "Help",
             helpButtonTooltip: "Learn more",
+            filterButtonLabel: "Filter",
             gotoListViewLabel: "List View",
             gotoListViewTooltip: "Go to list view", // Go to List view tooltip text
             gotoMapViewLabel: "Map View",
@@ -75,6 +76,20 @@ define({
             linkToMapViewOptionLabel: "Filter list by map",
             linkToMapViewOptionTooltip: "List features that are visible in the current map",
             likesForThisItemTooltip: "Votes for this item"
+        },
+        filter: {
+            filterPanelHeaderText: "Defined Filters",
+            selectOption : "Select",
+            applyButton :"Apply",
+            hintLabel: "Hint : ${hintLabelText}",
+            uniqueRadioBtnLabel: "unique",
+            valueRadioBtnLabel : "value",
+            andTextLabel: "and",
+            noFilterConfiguredMessage: "No 'Ask For Values or time enable layer' filters are configured in the web map",
+            singleFieldDateTimeLabel:"Event date and time",
+            multiFieldStartDateTimeLabel:"Start date and time",
+            multiFieldEndDateTimeLabel:"End date and time",
+
         }
     }),
     "ar": 1,

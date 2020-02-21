@@ -24,6 +24,9 @@
         "googleplusClientId": "",
         "allowTwitter": true,
         "showRelatedFeatures" : false,
+        "showFilter": false,
+        "enableAllFilters": true,
+        "showDateFilter": false,
         "highlightSelectedFeature" : true,
         "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
         "showDisplayTextAsSplashScreen": false,
@@ -68,6 +71,25 @@
             "label": "Display the help widget as a splash screen",
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
+        },{
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showFilter",
+            "label": "Allow users to show/hide filter menu",
+            "tooltip": "Allow users to show/hide filter menu",
+            "items": [{
+                "type": "boolean",
+                "condition": false,
+                "fieldName": "enableAllFilters",
+                "label": "Allow users to toggle on/off filters on load",
+                "tooltip": "Allow users to toggle on/off filters on load"
+            },{
+                "type": "boolean",
+                "condition": false,
+                "fieldName": "showDateFilter",
+                "label": "Allow users to show/hide date filters in the filter panel",
+                "tooltip": "Allow users to show/hide date filters in the filter panel"
+            }]
         }, {
             "type": "subcategory",
             "label": "Sign in options"

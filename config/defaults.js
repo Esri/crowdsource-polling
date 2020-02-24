@@ -53,6 +53,9 @@ define({
     "allowTwitter": true,
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
     "showDisplayTextAsSplashScreen": false,
+    "showFilter": false,
+    "enableAllFilters": true,
+    "showDateFilter": false,
     // Setup the app to support a custom url parameter. Use this if you want users
     // to be able to search for a string field in a layer. For example if the web map
     // has parcel data and you'd like to be able to zoom to a feature using its parcel id
@@ -92,7 +95,7 @@ define({
     "mapMarkerIcon": "[{'shape':{'type':'path','path':'m 9 5a 3 3 0 1 1-6 0 3 3 0 1 1 6 0z'},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':2,'cap':'butt','join':4}},{'shape':{'type':'path','path':'m 3 6c 3 5 3 5 3 5l 3-5'},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':2,'cap':'butt','join':4}}]",
     "galleryIcon": "[{'shape':{'type':'path','path':'M 2.2 8c 0-0.3-0.1-0.6 0-0.8 0-0.4 0.5-0.4 0.7-0.5 0.4-0.1 0.6-0.3 0.9-0.4 0.2-0.3 0.6-0.4 0.8-0.6 0.3-0.1 0.6-0.4 1-0.6 0.3-0.1 0.5-0.1 0.8-0.4 0.3-0.1 0.4-0.4 0.7-0.1 0.3 0.2 0.7 0.5 1.1 0.6l 0.1 0.1c 0.2 0 0.1 0.4 0.3 0.3 0.2 0.3 0.5-0.1 0.7-0.2 0.1-0.2 0.2-0.2 0.3-0.2 0.039 0.28-0.063 0.59 0.055 0.85 0.02 0.35 0.099 0.68 0.1 1-0.014 0.33-0.0078 0.64 0.079 0.89-0.0037 0.048-0.018 0.098-0.0022 0.15'},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':1,'cap':'butt','join':4},'fill':{'r':0,'g':0,'b':0,'a':1}},{'shape':{'type':'circle','cx':3,'cy':3,'r':1},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':1,'cap':'butt','join':4}},{'shape':{'type':'rect','x':0,'y':0,'width':10,'height':8,'r':0},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':1,'cap':'butt','join':4}}]",
     "optionsIcon": "[{'shape':{'type':'path','path':'m 2 7h 28'},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':3,'cap':'round','join':4}},{'shape':{'type':'path','path':'m 2 15h 28'},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':3,'cap':'round','join':4}},{'shape':{'type':'path','path':'m 2 23h 28'},'stroke':{'type':'stroke','color':{'r':0,'g':0,'b':0,'a':1},'style':'solid','width':3,'cap':'round','join':4}}]",
-
+    "filterIcon":"[{'shape':{'type':'path','path':'M22.907 2.579C22.743 2.226 22.39 2 22 2H2C1.611 2 1.257 2.226 1.093 2.579c-0.164 0.353-0.108 0.77 0.144 1.066L9 12.826 V19c0 0.379 0.214 0.725 0.553 0.895l4 2C13.694 21.965 13.847 22 14 22c0.183 0 0.365-0.05 0.525-0.149 C14.82 21.668 15 21.347 15 21v-8.174l7.764-9.181C23.015 3.349 23.071 2.932 22.907 2.579z M13.236 11.814 C13.084 11.995 13 12.224 13 12.46v6.922l-2-1V12.46c0-0.236-0.084-0.465-0.236-0.646L4.155 4h15.689L13.236 11.814z'},'fill':{'r':0,'g':122,'b':194,'a':1}}]",
     "facebookAppScope": "public_profile",
     "twitterSigninUrl": location.protocol + "//utility.arcgis.com/tproxy/signin",
     "twitterUserUrl": location.protocol + "//utility.arcgis.com/tproxy/proxy/1.1/account/verify_credentials.json?q=&include_entities=true&skip_status=true&locale=en",

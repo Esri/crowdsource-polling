@@ -79,3 +79,20 @@
 .esriRTL .arcgisSearch .searchGroup .searchInput {
     padding: 5px 24px 5px 12px;
 }
+
+
+
+/* ---------- Filter -------- */
+
+.esriRTL .filterRadioButtonDiv, .esriRTL .filterHintContainer, .esriRTL .filterSelectOption {
+    float: right;
+}
+
+.esriRTL .filterApplyButton {
+    float: left;
+    margin-left: 5px;
+}
+
+.esriRTL .filterListBackIcon {
+    margin-left: 10px;
+}

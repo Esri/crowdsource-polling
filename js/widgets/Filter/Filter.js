@@ -303,7 +303,7 @@ define([
         array.forEach(layer.definitionEditor.inputs, lang.hitch(this,
           function (definitionEditorInput, index) {
             //create ask for values filters based on the filters defined in the map
-            domNode.appendChild(this._createAskForValuesFilters(definitionEditorInput, layerInstance, index, applyButton));
+            domNode.appendChild(this._createAskForValuesFilters(definitionEditorInput, layerInstance, index, applyButton, layer));
           }));
         //If ask for values filter is configured, show it in the item content
         if (domNode) {
@@ -422,7 +422,7 @@ define([
     * Create the DOM for ask for values filter
     * @memberOf widgets/filter/filter
     */
-    _createAskForValuesFilters: function (definitionEditorInput, layerInstance, index, applyButton) {
+    _createAskForValuesFilters: function (definitionEditorInput, layerInstance, index, applyButton, layer) {
       var askForValueField, isCodedDomain, isTypeIdField, functionInputParam = {};
       askForValueField = definitionEditorInput.parameters[0].fieldName;
       isCodedDomain = this._hasCodedDomain(askForValueField, layerInstance);
@@ -437,7 +437,7 @@ define([
         applyButton: applyButton
       };
       //Function to append filter options in the container
-      return this._createFilterOptionBox(functionInputParam);
+      return this._createFilterOptionBox(functionInputParam, layer);
     },
 
     /**
@@ -480,7 +480,7 @@ define([
     * This function is used to create filters for the header field (only when ask for value is enabled)
     * @memberOf widgets/filter/filter
     */
-    _createFilterOptionBox: function (functionInputParam) {
+    _createFilterOptionBox: function (functionInputParam, layer) {
       var baseFilterOptionDiv, textBoxDiv, selectOptionDiv, selectOption, radioButtonParentDiv, radioButtonDiv,
         radioButtonObject = {}, formGroupDiv, hintFilterContainer, dateFieldObj, radioParamObj, hintLabelText;
       baseFilterOptionDiv = domConstruct.create("div", {
@@ -578,7 +578,8 @@ define([
           "definitionEditorInput": functionInputParam.definitionEditorInput,
           "index": functionInputParam.index,
           "formGroupDiv": formGroupDiv,
-          "askForValueField": functionInputParam.askForValueField
+          "askForValueField": functionInputParam.askForValueField,
+          "layer": layer
         };
         // initializing date picker instance
         this._createDateField(formGroupDiv, dateFieldObj, functionInputParam);
@@ -770,8 +771,57 @@ define([
         "index": obj.index,
         "askForValueField": obj.askForValueField
       };
+      //Set the attribute to each date input, this will be required while fetching the date input widget
+      domAttr.set(inputDateItem.domNode, "dateType", obj.layer.id + "_" + obj.definitionEditorInput.inputType);
+      inputDateItem.validator = lang.hitch(this, function (value) {
+        value = lang.trim(value);
+        var searchParam, searchIndex, definitionEditorInputs = obj.layer.definitionEditor.inputs;
+        //Check which dates validator is being called and accordingly create the search param
+        if (obj.definitionEditorInput.inputType === "startTime") {
+          searchIndex = functionInputParam.index + 1;
+          searchParam = obj.layer.id + "_" + "endTime";
+        }
+        if (obj.definitionEditorInput.inputType === "endTime") {
+          searchIndex = functionInputParam.index - 1;
+          searchParam = obj.layer.id + "_" + "startTime";
+        }
+        //Check if multiple fields are being enabled for time aware layer
+        //If yes, then validate the other date field control
+        //If not, always return true as user can pass the EMPTY start date and time field
+        if (definitionEditorInputs[searchIndex]) {
+          //If current date is EMPTY and other date field is not EMPTY
+          //Validate the current date field as false and other will be true
+          if (value === "" && definitionEditorInputs[searchIndex].parameters[0].currentValue !== null) {
+            this._validateDateInputField(searchParam, true);
+            return false;
+            //If both the date fields are EMPTY
+            //Validate both the date fields as true
+          } else if (value === "" && definitionEditorInputs[searchIndex].parameters[0].currentValue === null) {
+            this._validateDateInputField(searchParam, true);
+            return true;
+            //If both the date fields are not EMPTY
+            //Validate both the date fields as true
+          } else if (value !== "" && definitionEditorInputs[searchIndex].parameters[0].currentValue !== null) {
+            dateTypeInput = query("[dateType = " + searchParam + "]", this.domNode);
+            this._validateDateInputField(searchParam, true);
+            return true;
+            //If current date field is not EMPTY and other date field is EMPTY
+            //Validate the current date field as true anf other will be false
+          } else if (value !== "" && definitionEditorInputs[searchIndex].parameters[0].currentValue === null) {
+            this._validateDateInputField(searchParam, false);
+            return true;
+          }
+        } else {
+          return true;
+        }
+      });
+
       this.own(on(inputDateItem, 'change', lang.hitch(this, function (value) {
         var timeValue, dateValue, datePart, timePart;
+        //Convert the undefined values to null
+        if (!value) {
+          value = null;
+        }
         //get current time tex box value based on input type
         if (obj.definitionEditorInput.inputType === "startTime") {
           timeValue = obj.definitionEditorInput.startTime
@@ -803,6 +853,10 @@ define([
       })));
       this.own(on(inputTimeItem, 'change', lang.hitch(this, function (value) {
         var timePart, dateValue, datePart;
+        //Convert the undefined values to null
+        if (!value) {
+          value = null;
+        }
         //fetch current time tex box value based on input type
         if (obj.definitionEditorInput.inputType === "startTime") {
           obj.definitionEditorInput.startTime = value ? value.toTimeString() : null;
@@ -836,6 +890,20 @@ define([
       if (fieldValue) {
         inputDateItem.set("value", new Date(fieldValue));
         inputTimeItem.set("value", new Date(fieldValue));
+      }
+    },
+
+    /**
+    * This function validates the date field input based on the other date fields value
+    * @memberOf widgets/filter/filter
+    */
+    _validateDateInputField: function (searchParam, isValid) {
+      var dateTypeInput, dateInputState;
+      dateTypeInput = query("[dateType = " + searchParam + "]", this.domNode);
+      if (dateTypeInput && dateTypeInput.length > 0) {
+        dateFieldInput = registry.byNode(dateTypeInput[0]);
+        dateInputState = isValid ? "" : "Error";
+        dateFieldInput.set("state", dateInputState);
       }
     },
 

@@ -1017,6 +1017,14 @@ img {
     height: 15px;
     width: 15px
 }
+
+.filterListBackIconOverride {
+    margin-right: 10px;
+    height: 15px;
+    width: 15px;
+    vertical-align: middle;
+}
+
 .filterListBackIconClosed {
     transform: rotate(180deg);
 }

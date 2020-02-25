@@ -21,6 +21,7 @@ define([
   "dijit/_WidgetsInTemplateMixin",
   "dojo/text!./Filter.html",
   "dojo/_base/lang",
+  "dojo/sniff",
   "dojo/_base/array",
   "dojo/dom-construct",
   "dojo/query",
@@ -48,6 +49,7 @@ define([
   _WidgetsInTemplateMixin,
   template,
   lang,
+  has,
   array,
   domConstruct,
   query,
@@ -267,8 +269,14 @@ define([
       if (layer.definitionEditor && layer.definitionEditor.inputs) {
         domNode = domConstruct.create("div", { "style": "width: 100%" });
         backIcon = domConstruct.create("div", {
-          "class": "filterListBackIcon filterListBackIconClosed"
+          "class": "filterListBackIconClosed"
         }, itemSummaryDiv);
+        //If app is running in safari, override the back icon class 
+        if (has("safari")) {
+          domClass.add(backIcon, "filterListBackIconOverride");
+        } else {
+          domClass.add(backIcon, "filterListBackIcon");
+        }
         //Add the svg for arrow button and set the theme's header text as the color
         backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, backIcon, 15, 20);
         SvgHelper.changeColor(backIconSurface, this.appConfig.theme.header.text);

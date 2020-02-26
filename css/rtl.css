@@ -93,6 +93,6 @@
     margin-left: 5px;
 }
 
-.esriRTL .filterListBackIcon {
+.esriRTL .filterListBackIcon, .esriRTL .filterListBackIconOverride {
     margin-left: 10px;
 }

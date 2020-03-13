@@ -218,6 +218,10 @@ define([
                 this.isFilterAppliedOnItemLayer = isAppliedOnItemLayer;
                 this.onDefinitionExpressionUpdated(this.filterWidgetExpr, isAppliedOnItemLayer);
             });
+
+            this._filterObj.onFilterBackButtonClicked = lang.hitch(this, function () {
+                this.onFilterButtonClicked();
+            });
             this._filterObj.placeAt(dom.byId("filterContent"));
         },
 

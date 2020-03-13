@@ -96,6 +96,12 @@ define([
       if (this.isRTL) {
         domStyle.set(this.toggleFiltersBtn.domNode, "margin-left", "10px");
       }
+
+      var backIconSurface = SvgHelper.createSVGItem(this.appConfig.backIcon, this.iconContainer, 12, 20);
+      SvgHelper.changeColor(backIconSurface, this.appConfig.theme.header.background);
+      on(this.backIcon, "click", lang.hitch(this, function () {
+        this.onFilterBackButtonClicked();
+      }));
     },
 
     startup: function () {
@@ -1221,6 +1227,10 @@ define([
       });
       toggleSwitch.placeAt(itemSwitch);
       toggleSwitch.resize();
+      //Add the theme color to button
+      array.forEach(query(".mblSwitchBgLeft", toggleSwitch.domNode), function (item) {
+        domClass.add(item, "themeHeaderInverted");
+      });
       //Push the toggle switch instance into an object
       //This will be needed when we want on/off the filters based on parent toggle switch
       this._toggleSwitchObj[layer.id] = toggleSwitch;

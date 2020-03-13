@@ -122,6 +122,15 @@ textarea {
     background-color: #eee;
     background-image: none;
 }
+	  
+.mblSwitchBg.mblSwitchBgLeft.themeHeaderInverted {
+    border-color: white;
+}
+
+.mblSwitchBg.mblSwitchBgRight.themeHeaderInverted {
+    border-color: white;
+    background-color: white;
+}
 
 /* application-boilerplate mods */
 
@@ -1012,6 +1021,18 @@ img {
 }
 
 /* ---------- Filter List -------- */
+
+.filterHeaderBackIcon {
+    height: 100%;
+    width: 30px;
+    cursor: pointer;
+    float: left;
+}
+
+.iconWrapper {
+    padding: 6px 0 0 7px;
+}
+
 .filterListBackIcon {
     margin-right: 10px;
     height: 15px;

@@ -96,3 +96,12 @@
 .esriRTL .filterListBackIcon, .esriRTL .filterListBackIconOverride {
     margin-left: 10px;
 }
+
+.esriRTL .filterHeaderBackIcon {
+    float: right;
+}
+
+.esriRTL .iconWrapper {
+    padding: 0 10px 2px 0;
+    transform: rotate(180deg);
+}

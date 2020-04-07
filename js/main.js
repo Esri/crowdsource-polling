@@ -40,12 +40,15 @@ define([
     "esri/dijit/LocateButton",
     "esri/graphic",
     "esri/lang",
+    "esri/request",
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleLineSymbol",
     "esri/symbols/SimpleMarkerSymbol",
     "esri/tasks/query",
     "esri/tasks/QueryTask",
     "esri/urlUtils",
+    "esri/tasks/RelationshipQuery",
+    "esri/layers/FeatureLayer",
     "dijit/registry",
     "application/lib/LayerAndTableMgmt",
     "application/lib/SearchDijitHelper",
@@ -84,12 +87,15 @@ define([
     LocateButton,
     Graphic,
     esriLang,
+    esriRequest,
     SimpleFillSymbol,
     SimpleLineSymbol,
     SimpleMarkerSymbol,
     Query,
     QueryTask,
     urlUtils,
+    RelationshipQuery,
+    FeatureLayer,
     registry,
     LayerAndTableMgmt,
     SearchDijitHelper,
@@ -114,8 +120,11 @@ define([
         _lineHiliteColor: new Color("aqua"),
         _windowResizeTimer: null,
         _searchControls: {},
-
-
+        _layersDefaultDefExpr: {},
+        _layerAccessInfoObj: {},
+        _urlDefExpr: {},
+        _relatedDefExpr: {},
+        _staticTimeDefExp: {},
         startup: function (config) {
             var promise, itemInfo, error, link;
 
@@ -351,7 +360,11 @@ define([
                 // Visibility function's signature:
                 // itemDetails.setActionsVisibility(showVotes, addComments, showComments, showGallery);
                 if (esriLang.isDefined(this.config.userPrivileges)) {
-                    if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
+                    if (!this._mapData.getItemLayer().itemId || (this._mapData.getItemLayer().itemId &&
+                        this._layerAccessInfoObj.hasOwnProperty(this._mapData.getItemLayer().itemId) &&
+                        (this._layerAccessInfoObj[this._mapData.getItemLayer().itemId] === "public"))) {
+                        userCanEdit = true;
+                    } else if (array.indexOf(this.config.userPrivileges, "features:user:edit") === -1 &&
                         array.indexOf(this.config.userPrivileges, "features:user:fullEdit") === -1) {
                         userCanEdit = false;
                     }
@@ -391,7 +404,7 @@ define([
                     topic.publish("showErrorPopup", err);
                 }));
 
-                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap) {
+                topic.subscribe("detailsCancel", lang.hitch(this, function (forceToMap, layerId) {
                     if (this._currentlyCommenting) {
                         topic.publish("cancelForm");
                     }
@@ -407,6 +420,32 @@ define([
                     else {
                         // Otherwise, we're coming from the map in narrowscreen view and will return to the map
                         topic.publish("showMapViewClicked");
+                    }
+
+                    //All the layer should be reverted only if user clicks on
+                    //back button and not on show map view button
+                    if (!forceToMap) {
+                        var defExpression;
+                        //Check for the object and restore the layer
+                        //If layer has default expression that apply the same
+                        //Or if layer has url definition expression then apply that to maintain the application state
+                        if (Object.keys(this._layersDefaultDefExpr).length > 0 && this.config.showRelatedFeatures) {
+                            for (var layerID in this._layersDefaultDefExpr) {
+                                defExpression = this._layersDefaultDefExpr[layerID] ? this._layersDefaultDefExpr[layerID] : this._urlDefExpr[layerID];
+                                //Check if layer is either polling layer or related polling layer
+                                if (layerID === this._mapData.getItemLayer().id || this._isLayerRelatedToItemLayer(layerID)) {
+                                    //Check if layer has some related definition expression
+                                    //If yes, then replace the same with current definition expression
+                                    if (this._relatedDefExpr[layerID]) {
+                                        this.map._layers[layerID].setDefinitionExpression(defExpression);
+                                    }
+                                }
+                            }
+                        }
+                        setTimeout(lang.hitch(this, function () {
+                            //Update the item list to sync the map and list control
+                            topic.publish("updateItems");
+                        }), 1000);
                     }
                 }));
 
@@ -432,6 +471,7 @@ define([
                     this._helpDialogContainer.show();
                 }));
                 this._sidebarHdr.updateHelp(true);
+                this._sidebarHdr.updateFilter(this.config.showFilter);
 
                 /**
                  * @param {object} item Item to find out more about
@@ -465,6 +505,11 @@ define([
                         topic.publish("showListViewClicked");
                         //switch toggle option to map view as currently list view will be shown
                         this._sidebarHdr.setCurrentViewToListView(true);
+                        //If the show related features flag is true,
+                        //Fetch the related records of selected graphics
+                        if (this.config.showRelatedFeatures) {
+                            this._getRelatedFeatureForLayer(item);
+                        }
                     }));
                 }));
 
@@ -510,7 +555,14 @@ define([
                         deferred.then(lang.hitch(this, function () {
                             mapGraphicsLayer = this.map.graphics;
                             mapGraphicsLayer.clear();
-                            mapGraphicsLayer.add(item.highlightGraphic);
+                            //Add the highlight graphics for selected feature
+                            //IF
+                            //1. Show related feature flag is false (This is default behavior)
+                            //2. If Show related flag is true and highlight feature flag is true
+                            if (!this.config.showRelatedFeatures ||
+                                (this.config.showRelatedFeatures && this.config.highlightSelectedFeature)) {
+                                mapGraphicsLayer.add(item.highlightGraphic);
+                            }
                         }));
                     }
                 }));
@@ -696,14 +748,19 @@ define([
                     };
                 }
 
-                topic.subscribe("updatedItemsList", lang.hitch(this, function (items) {
+                topic.subscribe("updatedItemsList", lang.hitch(this, function (items, isURL) {
                     this._itemsList.setItems(items, compareFunction);
                     this._sidebarCnt.showBusy(false);
+                    //If value is passed through URL and only one feature is found
+                    //select the feature and show the item details panel
+                    if (isURL && items.length === 1) {
+                        topic.publish("itemSelected", items[0]);
+                    }
                 }));
 
-                topic.subscribe("updateItems", lang.hitch(this, function () {
+                topic.subscribe("updateItems", lang.hitch(this, function (isURL) {
                     this._sidebarCnt.showBusy(true);
-                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null);
+                    this._mapData.queryItems(this._linkToMapView ? this.map.extent : null, isURL);
                 }));
 
                 /**
@@ -756,6 +813,7 @@ define([
                     // Reduce the sidebar as much as possible wihout breaking the Layout Container
                     // and show the map
                     domStyle.set("sidebarContent", "display", "none");
+                    domStyle.set("filterContent", "display", "none");
                     domStyle.set("mapDiv", "display", "block");
                     contentContainer.resize();
                     needToggleCleanup = true;
@@ -767,6 +825,26 @@ define([
                     domStyle.set("mapDiv", "display", "");
                     domStyle.set("sidebarContent", "display", "");
                     domStyle.set("sidebarContent", "width", "");
+                    domStyle.set("filterContent", "display", "none");
+                    contentContainer.resize();
+                    //resize the search control
+                    this._resize();
+                    needToggleCleanup = true;
+                    needToggleCleanupForMobile = false;
+                }));
+
+                topic.subscribe("filterSelected", lang.hitch(this, function (err) {
+                    //Hide filter panel and map
+                    //Show side bar content
+                    if (domStyle.get("filterContent", "display") === "block") {
+                        domStyle.set("filterContent", "display", "none");
+                        domStyle.set("sidebarContent", "display", "block");
+                        domStyle.set("mapDiv", "display", "");
+                    } else {
+                        domStyle.set("sidebarContent", "display", "none");
+                        domStyle.set("filterContent", "display", "block");
+                        domStyle.set("mapDiv", "display", "");
+                    }
                     contentContainer.resize();
                     //resize the search control
                     this._resize();
@@ -783,6 +861,13 @@ define([
                     // the Layout Container
                     if (needToggleCleanup && event.currentTarget.innerWidth > 640) {
                         domStyle.set("mapDiv", "display", "");
+                        //If filter panel is shown, stop the further processing
+                        if (domStyle.get("filterContent", "display") === "block") {
+                            return;
+                        } else {
+                            //Hide the filter panel
+                            domStyle.set("filterContent", "display", "none");
+                        }
                         domStyle.set("sidebarContent", "display", "");
                         domStyle.set("sidebarContent", "width", "");
                         contentContainer.resize();
@@ -792,23 +877,25 @@ define([
                     }
                     else if (event.currentTarget.innerWidth <= 640) {
                         if (needToggleCleanupForMobile) {
-                            this._switchToListOrMapViewForMobile();
                             //Sets the map/list view toggle display in mobile view.
                             this._sidebarHdr.setCurrentViewToListView(this.config.showListViewFirst);
+                            //If filter panel is shown, stop the further processing
+                            if (domStyle.get("filterContent", "display") === "block") {
+                                return;
+                            }
+                            this._switchToListOrMapViewForMobile();
                         }
                     }
                 }));
 
                 //----- Done -----
                 console.log("app is ready");
-
+                urlObject = urlUtils.urlToObject(document.location.href);
+                urlObject.query = urlObject.query || {};
+                urlObject.query = esriLang.stripTags(urlObject.query);
                 // Do we have a custom URL search parameter?
                 if ((this.config.customUrlLayer.id !== null && this.config.customUrlLayer.fields.length > 0 &&
-                        this.config.customUrlParam !== null)) {
-
-                    urlObject = urlUtils.urlToObject(document.location.href);
-                    urlObject.query = urlObject.query || {};
-                    urlObject.query = esriLang.stripTags(urlObject.query);
+                    this.config.customUrlParam !== null)) {
                     searchValue = null;
                     customUrlParamUC = this.config.customUrlParam.toUpperCase();
                     for (prop in urlObject.query) {
@@ -858,11 +945,77 @@ define([
                         }
                     }
                 }
+                //Check if layer field value is passed through URL
+                if (this.config.searchLayers && this.config.customUrlParam !== null &&
+                    urlObject.query.hasOwnProperty(this.config.customUrlParam)) {
+                    var searchLayer, layer, layerDefExpr, exprString = "";
+                    //Parse the search layer string into JSON
+                    searchLayer = JSON.parse(this.config.searchLayers);
+                    //Loop through all the search layers
+                    array.forEach(searchLayer, lang.hitch(this, function (layerDetails) {
+                        //Fetch the layer to perform the further operations
+                        layer = this.map.getLayer(layerDetails.id);
+                        if (layer) {
+                            //Get the layers default definition expression
+                            layerDefExpr = layer.getDefinitionExpression();
+                            //Create a dictionary which will have the
+                            //details about the default and newly created definition expression
+                            //this details will be needed to restore the layer to its original state
+                            //Reset the expression string
+                            exprString = "";
+                            if (layerDetails.fields.length > 0) {
+                                array.forEach(layerDetails.fields, lang.hitch(this, function (field, index) {
+                                    if (layerDetails.fields.length - 1 === index) {
+                                        exprString += field + " =" + "'" + urlObject.query[this.config.customUrlParam] + "'";
+                                    } else {
+                                        exprString += field + " = " + "'" + urlObject.query[this.config.customUrlParam] + "'" + " AND ";
+                                    }
+                                }));
+                                //Once the expression string created apply the same to the layer as the
+                                //definition expression
+                                var nDefExpr = layerDefExpr ? "(" + layerDefExpr + ")" + " AND " + exprString : exprString;
+                                console.log(nDefExpr);
+                                this._urlDefExpr[layer.id] = exprString;
+                                layer.setDefinitionExpression(nDefExpr);
+                            }
+                        }
+                    }));
+                    setTimeout(lang.hitch(this, function () {
+                        //Update the item list to sync the map and list control
+                        topic.publish("updateItems", true);
+                    }), 1000);
+                }
             }), lang.hitch(this, function (err) {
                 this.reportError(err);
             }));
 
             return createMapPromise;
+        },
+
+        /**
+        * Function checks if the layer is related to item layer
+        */
+        _isLayerRelatedToItemLayer: function (layerID) {
+            var pollingLayer = this._mapData.getItemLayer(), relationships, relatedTableURL, isRelatedLayer = false;
+            relationships = pollingLayer.relationships ? pollingLayer.relationships : [];
+            //Loop through all the relationships and check for the valid related feature layer
+            array.some(relationships, lang.hitch(this, function (relLayer) {
+                relatedTableURL = pollingLayer.url.substr(0, pollingLayer.url.lastIndexOf('/') + 1) +
+                    relLayer.relatedTableId;
+                array.some(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this, function (currentLayer) {
+                    if (relatedTableURL) {
+                        //Url should match anf layer should be a feature layer and not the table
+                        if (currentLayer.url === relatedTableURL && currentLayer.layerObject.geometryType) {
+                            isRelatedLayer = true;
+                            return true;
+                        }
+                    }
+                }));
+                if (isRelatedLayer) {
+                    return true;
+                }
+            }));
+            return isRelatedLayer;
         },
 
         /**
@@ -1036,6 +1189,7 @@ define([
                 // Apply the theme to the border lines
                 domStyle.set("sidebarHeading", "border-bottom-color", this.config.theme.header.text);
                 domStyle.set("sidebarContent", "border-left-color", this.config.theme.header.text);
+                domStyle.set("filterContent", "border-left-color", this.config.theme.header.text);
 
 
                 //----- Add the widgets -----
@@ -1055,8 +1209,23 @@ define([
                     "appConfig": this.config,
                     "showSignin": this._socialDialog.isAvailable() && this.config.commentNameField &&
                         (this.config.commentNameField.trim().length > 0),
-                    "showHelp": this.config.displayText
+                    "showHelp": this.config.displayText,
+                    "urlDefExpr": this._urlDefExpr,
+                    "staticTimeDefExp": this._staticTimeDefExp
                 }).placeAt("sidebarHeading");
+                this._sidebarHdr.onDefinitionExpressionUpdated = lang.hitch(this, function (updatedDefExprObj,
+                    isAppliedOnItemLayer) {
+                    this.isAppliedOnPollingLayer = isAppliedOnItemLayer;
+                    for (var layerID in updatedDefExprObj) {
+                        if (this._layersDefaultDefExpr && this._layersDefaultDefExpr.hasOwnProperty(layerID)) {
+                            this._layersDefaultDefExpr[layerID] = updatedDefExprObj[layerID];
+                        }
+                    }
+                    setTimeout(lang.hitch(this, function () {
+                        //Update the item list to sync the map and list control
+                        topic.publish("updateItems", false);
+                    }), 1000);
+                });
                 popupContainer = domConstruct.create("div", {}, document.body);
                 // Popup window for help, error messages, social media
                 this._helpDialogContainer = new PopupWindow({
@@ -1089,15 +1258,39 @@ define([
                         isCommentFormOpen = domClass.contains(this._itemDetails.commentButton,
                             "themeButtonInverted");
                     }
+                    var selectedFeature;
+                    selectedFeature = query(".themeItemListSelected", this._itemsList.domNode);
                     //Update the details panel only if user is on itemDetails screen
                     if (this._mapData.canUpdateFeatureData &&
                         this._sidebarCnt.getCurrentPanelName() === "itemDetails" && !isCommentFormOpen) {
-                        var selectedFeature;
-                        selectedFeature = query(".themeItemListSelected", this._itemsList.domNode);
                         if (selectedFeature && selectedFeature[0]) {
                             selectedFeature[0].click();
                         }
                         this._mapData.canUpdateFeatureData = false;
+                    }
+                    //If selected feature is not found, clear the graphics layer
+                    //Also, since the selected feature is removed from the map, clear the related filter
+                    //from related feature layers
+                    if (selectedFeature && selectedFeature.length === 0) {
+                        this.map.graphics.clear();
+                        //Hack to clear the feature from the map once the feature is filtered from the custom filter
+                        //Since we are not doing anything with the layer's selected feature in this application
+                        //This logic will not impact the parts of functionality 
+                        this.map._layers[this._mapData.getItemLayer().id].selectFeatures([]);
+                        if (Object.keys(this._layersDefaultDefExpr).length > 0 && this.config.showRelatedFeatures) {
+                            for (var layerID in this._layersDefaultDefExpr) {
+                                defExpression = this._layersDefaultDefExpr[layerID] ? this._layersDefaultDefExpr[layerID] :
+                                    this._urlDefExpr[layerID];
+                                //Check if layer is either polling layer or related polling layer
+                                if (layerID === this._mapData.getItemLayer().id || this._isLayerRelatedToItemLayer(layerID)) {
+                                    //Check if layer has some related definition expression
+                                    //If yes, then replace the same with current definition expression
+                                    if (this._relatedDefExpr[layerID]) {
+                                        this.map._layers[layerID].setDefinitionExpression(defExpression);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }));
 
@@ -1144,6 +1337,9 @@ define([
                 // Here we'll use it to update the application to match the specified color theme.
                 this.map = response.map;
 
+                if (this._sidebarHdr) {
+                    this._sidebarHdr.map = this.map;
+                }
                 // Start up home widget
                 homeButton = new HomeButton({
                     map: this.map,
@@ -1168,28 +1364,35 @@ define([
                     this.map.infoWindow.hide();
                     //Check if clicked feature does not belong to item layer
                     //If yes, show the details panel for non editable layers feature
-                    if (evt.graphic && evt.graphic._layer.id !== this._mapData.getItemLayer().id) {
-                        evt.graphic.isNonEditableFeature = true;
-                        domClass.add(this._itemDetails.domNode, "nonEditableFeature");
-                        this._itemDetails.setItem(evt.graphic);
-                        topic.publish("showPanel", "itemDetails");
-                        var mapGraphicsLayer = this.map.graphics;
-                        mapGraphicsLayer.clear();
-                        this._getFeatureAndCreateHighlightGraphic(evt.graphic, true).then(lang.hitch(this, function (item) {
-                            evt.graphic.attributes = item.attributes;
-                            mapGraphicsLayer.add(item.highlightGraphic);
-                            //Zoom and set the extent of the feature as per the geometry type
-                            if (evt.graphic.geometry.type === "point") {
-                                this.map.centerAt(evt.graphic.geometry);
-                            }
-                            else {
-                                this.map.setExtent(evt.graphic.geometry.getExtent(), true);
-                            }
-                        }));
-                    }
-                    else {
-                        //If item layer feature is selected then remove the non editable class
-                        domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
+                    if (evt.graphic) {
+                        if (evt.graphic._layer.id !== this._mapData.getItemLayer().id) {
+                            evt.graphic.isNonEditableFeature = true;
+                            domClass.add(this._itemDetails.domNode, "nonEditableFeature");
+                            this._itemDetails.setItem(evt.graphic);
+                            topic.publish("showPanel", "itemDetails");
+                            var mapGraphicsLayer = this.map.graphics;
+                            mapGraphicsLayer.clear();
+                            this._getFeatureAndCreateHighlightGraphic(evt.graphic, true).then(lang.hitch(this, function (item) {
+                                evt.graphic.attributes = item.attributes;
+                                mapGraphicsLayer.add(item.highlightGraphic);
+                                //Zoom and set the extent of the feature as per the geometry type
+                                if (evt.graphic.geometry.type === "point") {
+                                    this.map.centerAt(evt.graphic.geometry);
+                                }
+                                else {
+                                    this.map.setExtent(evt.graphic.geometry.getExtent(), true);
+                                }
+                                //If non-editable layer feature is selected
+                                //Close the filter content and show the item details panel
+                                if (dom.byId("filterContent")) {
+                                    topic.publish("showListViewClicked");
+                                }
+                            }));
+                        }
+                        else {
+                            //If item layer feature is selected then remove the non editable class
+                            domClass.remove(this._itemDetails.domNode, "nonEditableFeature");
+                        }
                     }
                 }));
 
@@ -1208,17 +1411,35 @@ define([
 
             // Once the map and its first layer are loaded, get the layer's data
             mapCreateDeferred.then(lang.hitch(this, function () {
+                //For issue - Apply FIlters on Load is OFF, featurelist is honouring filters on load
+                array.forEach(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this,
+                    function (layer) {
+                        //Store the static filters for time aware layer
+                        if (layer.layerObject.timeInfo && !layer.definitionEditor) {
+                            this._staticTimeDefExp[layer.id] = layer.layerObject.getDefinitionExpression();
+                        }
+                        //If enable all filter flag is set to false
+                        //Remove all the filter on application load
+                        if (!this.config.enableAllFilters && this.config.showFilter) {
+                            layer.layerObject.setDefinitionExpression("");
+                        }
+                        this._layersDefaultDefExpr[layer.id] = layer.layerObject.getDefinitionExpression();
+                    }));
                 // At this point, this.config has been supplemented with
                 // the first operational layer's layerObject
                 this._mapData = new LayerAndTableMgmt(this.config);
                 this._mapData.load().then(lang.hitch(this, function (hasCommentTable) {
                     var searchControl;
-
+                    if (this._sidebarHdr) {
+                        this._sidebarHdr.itemLayer = this._mapData.getItemLayer();
+                    }
                     this._hasCommentTable = hasCommentTable;
                     this.config.acceptAttachments = hasCommentTable && this._mapData.getCommentTable().hasAttachments;
-
-                    mapDataReadyDeferred.resolve("map data");
-
+                    if (this._mapData.getItemLayer().itemId) {
+                        this._getLayerSharingProperty(this._mapData.getItemLayer().itemId, mapDataReadyDeferred);
+                    } else {
+                        mapDataReadyDeferred.resolve("map data");
+                    }
                     // Add search control
                     searchControl = SearchDijitHelper.createSearchDijit(
                         this.map, this.config.itemInfo.itemData.operationalLayers,
@@ -1571,6 +1792,117 @@ define([
             document.body.appendChild(customStyles);
 
             return customStyles;
+        },
+
+        /**
+        * Retrieves related features.
+         * @param {object} item object to be used to fetch the related records
+        */
+        _getRelatedFeatureForLayer: function (item) {
+            var relatedTableURL, relatedLayer, selectedLayer;
+            selectedLayer = item._layer;
+            // if comment field is present in config file and the layer contains related table, fetch the first related table URL
+            if (selectedLayer.relationships && selectedLayer.relationships.length > 0) {
+                array.forEach(selectedLayer.relationships, lang.hitch(this, function (parentRelationShip) {
+                    // Construct the related table URL form operational layer URL and the related table id
+                    // We are considering only first related table although the layer has many related table.
+                    // Hence, we are fetching relatedTableId from relationships[0] ie:"operationalLayer.relationships[0].relatedTableId"
+                    relatedTableURL = selectedLayer.url.substr(0, selectedLayer.url.lastIndexOf('/') + 1) + parentRelationShip.relatedTableId;
+                    //fetch comment popup table which will be used in creating comment form
+                    array.some(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this, function (currentLayer) {
+                        if (relatedTableURL) {
+                            if (currentLayer.url === relatedTableURL && currentLayer.layerObject.geometryType) {
+                                relatedLayer = currentLayer.layerObject;
+                                //get the relationship object for related layer
+                                array.some(relatedLayer.relationships, lang.hitch(this, function (relationship) {
+                                    if (relationship.id === parentRelationShip.id) {
+                                        childLayerRelationShip = relationship;
+                                        return true;
+                                    }
+                                }));
+                                this._queryComments(relatedLayer, item, selectedLayer, parentRelationShip, childLayerRelationShip);
+                            }
+                        }
+                    }));
+                }));
+            }
+        },
+
+        /**
+        * Retrieves the comments associated with an item.
+        * @param {relatedLayer} related layer object
+        * @return {item} selected feature
+        * @param {selectedLayer} active layer in application
+        * @return {parentRelationShip} relationship details of parent layer
+        * @param {childLayerRelationShip} relationship details of related layer
+        */
+        _queryComments: function (relatedLayer, item, selectedLayer, parentRelationShip, childLayerRelationShip) {
+            var updateQuery = new RelationshipQuery(), commentsTableDefinitionExpression;
+            updateQuery.objectIds = [item.attributes[selectedLayer.objectIdField]];
+            updateQuery.returnGeometry = true;
+            updateQuery.outFields = ["*"];
+            updateQuery.relationshipId = parentRelationShip.id;
+            commentsTableDefinitionExpression = relatedLayer.getDefinitionExpression();
+            //If table has definition expression set in web map then apply it
+            if (commentsTableDefinitionExpression &&
+                commentsTableDefinitionExpression !== null &&
+                commentsTableDefinitionExpression !== "") {
+                updateQuery.definitionExpression = commentsTableDefinitionExpression;
+            }
+                relatedLayer.getDefinitionExpression();
+            selectedLayer.queryRelatedFeatures(updateQuery, lang.hitch(this, function (results) {
+                var featureSet, layersDefExpr, relatedLayerDefExpr;
+                featureSet = results[item.attributes[selectedLayer.objectIdField]];
+                features = featureSet ? featureSet.features : [];
+                if (item.attributes[parentRelationShip.keyField] === null) {
+                    fieldValue = "is NULL";
+                } else {
+                    fieldValue = "'" + item.attributes[parentRelationShip.keyField] + "'";
+                }
+                //If layer has default expression consider that
+                if (this._layersDefaultDefExpr[selectedLayer.id]) {
+                    layersDefExpr = this._layersDefaultDefExpr[selectedLayer.id] + " AND " +
+                        selectedLayer.objectIdField + " = " + item.attributes[selectedLayer.objectIdField];
+                } else {
+                    layersDefExpr = selectedLayer.objectIdField + " = " + item.attributes[selectedLayer.objectIdField];
+                }
+                //If related layer has default expression consider that
+                if (this._layersDefaultDefExpr[relatedLayer.id]) {
+                    relatedLayerDefExpr = this._layersDefaultDefExpr[relatedLayer.id] + " AND " +
+                        childLayerRelationShip.keyField + " = " + fieldValue
+                } else {
+                    relatedLayerDefExpr = childLayerRelationShip.keyField + " = " + fieldValue
+                }
+                selectedLayer.setDefinitionExpression(layersDefExpr);
+                relatedLayer.setDefinitionExpression(relatedLayerDefExpr);
+                //Store the related layer def expression
+                //This will be required while resetting the layers when user comes back from item details screen
+                this._relatedDefExpr[selectedLayer.id] = selectedLayer.objectIdField + " = " + item.attributes[selectedLayer.objectIdField];
+                this._relatedDefExpr[relatedLayer.id] = childLayerRelationShip.keyField + " = " + fieldValue;
+
+            }), lang.hitch(this, function (err) {
+            }));
+        },
+
+        /**
+         * This function is used to get the sharing properties of layer which are added as item in AGOL
+         */
+        _getLayerSharingProperty: function (itemId, def) {
+            //Get layer's sharing property
+            esriRequest({
+                url: this.config.sharinghost + "/sharing/rest/content/items/" + itemId,
+                content: {
+                    f: 'json'
+                },
+                handleAs: 'json',
+                callbackPrams: 'callback'
+            }).then(lang.hitch(this, function (itemInfo) {
+                //Maintain the object to store the sharing properties of layers
+                this._layerAccessInfoObj[itemId] = itemInfo.access;
+                def.resolve();
+            }), function () {
+                def.reject();
+            });
         }
 
     });

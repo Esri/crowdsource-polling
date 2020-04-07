@@ -148,6 +148,11 @@ define([
                     }
                 }
                 this._itemLayer = this._itemLayerInWebmap.layerObject;
+                //If layer is hosted on portal
+                //Keep the item id for getting access properties of a layer
+                if (this._itemLayerInWebmap.itemId) {
+                    this._itemLayer.itemId = this._itemLayerInWebmap.itemId;
+                }
                 //Check if refresh interval exist for the layer
                 //Accordingly add the refresh-tick handler
                 if (this._itemLayer.refreshInterval !== 0) {
@@ -401,7 +406,7 @@ define([
          * @param {Extent} [extent] Outer bounds of items to retrieve
          * @return {publish} "updatedItemsList" with results of query
          */
-        queryItems: function (extent) {
+        queryItems: function (extent, isURL) {
             var now = Date.now();
             var updateQuery = new Query();
             updateQuery.where = now + "=" + now; // Needed to break JSAPI cache
@@ -413,7 +418,7 @@ define([
             }
 
             this._itemLayer.queryFeatures(updateQuery, lang.hitch(this, function (results) {
-                topic.publish("updatedItemsList", results ? results.features : []);
+                topic.publish("updatedItemsList", results ? results.features : [], isURL);
             }), lang.hitch(this, function (err) {
                 console.log(err.message || "queryFeatures");
             }));

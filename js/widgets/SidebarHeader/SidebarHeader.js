@@ -20,6 +20,7 @@ define([
     "dijit/_TemplatedMixin",
     "dojo/text!./SidebarHeader.html",
     "dojo/dom",
+    "dijit/registry",
     "dojo/_base/lang",
     "dojo/_base/window",
     "dojo/dom-attr",
@@ -28,13 +29,15 @@ define([
     "dojo/dom-style",
     "dojo/on",
     "dojo/topic",
-    "application/lib/SvgHelper"
+    "application/lib/SvgHelper",
+    "application/widgets/Filter/Filter"
 ], function (
     declare,
     _WidgetBase,
     _TemplatedMixin,
     template,
     dom,
+    registry,
     lang,
     win,
     domAttr,
@@ -43,12 +46,15 @@ define([
     domStyle,
     on,
     topic,
-    SvgHelper
+    SvgHelper,
+    Filter
 ) {
     return declare([_WidgetBase, _TemplatedMixin], {
         templateString: template,
         widgetsInTemplate: true,
         currentViewIsListView: true,
+        _filterObj: null,
+        isFilterAppliedOnItemLayer: false,
 
         /**
          * Widget constructor
@@ -65,7 +71,8 @@ define([
         postCreate: function () {
             var i18n = this.appConfig.i18n.sidebar_header,
                 signInBtnOnClick, signInMenuBtnOnClick, optionsIconSurface,
-                helpMenuItem, helpBtnOnClick, helpMenuBtnOnClick, viewToggleMenuBtnOnClick, optionsOnClick;
+                helpMenuItem, helpBtnOnClick, helpMenuBtnOnClick, viewToggleMenuBtnOnClick, optionsOnClick,
+                filterBtnOnClick, filterMenuBtnClick;
             //set value of currentViewIsListView to configured value for showListViewFirst
             this.currentViewIsListView = this.appConfig.showListViewFirst;
             // Run any parent postCreate processes - can be done at any point
@@ -78,6 +85,7 @@ define([
             domStyle.set(this.optionsDropdown, "border-color", this.appConfig.theme.header.text);
 
             domStyle.set(this.signInBtn, "display", "none");
+            domStyle.set(this.filterBtn, "display", "none");
             if (this.showSignin) {
                 this.signInMenuItem = domConstruct.create("div", {
                     className: "sideHdrOptionsMenuItem textButton themeHeaderHover"
@@ -102,6 +110,38 @@ define([
             //switch toggler button while checking current view displayed
             this.setCurrentViewToListView(this.appConfig.showListViewFirst);
             topic.subscribe("toggleMenu", lang.hitch(this, this._toggleMenu));
+
+            if (this.appConfig.showFilter) {
+                //Add title and text for filter button
+                this.filterBtn.title = i18n.filterButtonLabel;
+
+                var filterBtnSurface;
+
+                filterBtnSurface = SvgHelper.createSVGItem(this.appConfig.filterIcon, this.filterBtn, 22, 22);
+                SvgHelper.changeColor(filterBtnSurface, this.appConfig.theme.header.text);
+                //Add filter button menu in mobile
+                filterBtnMenuItem = domConstruct.create("div", {
+                    className: "sideHdrOptionsMenuItem textButton themeHeaderHover",
+                    title: i18n.filterButtonLabel,
+                    innerHTML: i18n.filterButtonLabel
+                }, this.optionsDropdown);
+
+                //Listen for filter button click event in the app header
+                filterBtnOnClick = on(this.filterBtn, "click", lang.hitch(this, function () {
+                    if (!this._filterObj) {
+                        this._createFilterObject();
+                    }
+                    this.onFilterButtonClicked();
+                }));
+                //Listen for filter menu selected event in the mobile menu
+                filterMenuBtnClick = on(filterBtnMenuItem, "click", lang.hitch(this, function () {
+                    if (!this._filterObj) {
+                        this._createFilterObject();
+                    }
+                    topic.publish("filterSelected");
+                }));
+                this.own(filterBtnOnClick, filterMenuBtnClick);
+            }
 
             if (this.showHelp) {
                 var helpIconSurface;
@@ -163,6 +203,46 @@ define([
             }
         },
 
+        _createFilterObject: function () {
+            //Create filter widget
+            this._filterObj = new Filter({
+                appConfig: this.appConfig,
+                map: this.map,
+                urlDefExpr: this.urlDefExpr,
+                itemLayer: this.itemLayer,
+                staticTimeDefExp: this.staticTimeDefExp
+            });
+            //Update the expressions once the filter's are updated
+            this._filterObj.onFilterUpdated = lang.hitch(this, function (isAppliedOnItemLayer) {
+                this.filterWidgetExpr = this._filterObj._filterDefExpr;
+                this.isFilterAppliedOnItemLayer = isAppliedOnItemLayer;
+                this.onDefinitionExpressionUpdated(this.filterWidgetExpr, isAppliedOnItemLayer);
+            });
+
+            this._filterObj.onFilterBackButtonClicked = lang.hitch(this, function () {
+                this.onFilterButtonClicked();
+            });
+            this._filterObj.placeAt(dom.byId("filterContent"));
+        },
+
+        /**
+         * Toggle the filter panel based on the current state
+         */
+        onFilterButtonClicked: function () {
+            if (domStyle.get(dom.byId("filterContent"), "display") === "block") {
+                dom.byId("filterContent").style.display = "none";
+                dom.byId("sidebarContent").style.display = "block";
+                registry.byId("contentDiv").resize();
+                //If filter is applied on polling layer, reset the panel to item list
+                if (this.isFilterAppliedOnItemLayer) {
+                    topic.publish("showPanel", "itemsList");
+                }
+            } else {
+                dom.byId("sidebarContent").style.display = "none";
+                dom.byId("filterContent").style.display = "block";
+            }
+        },
+
         /**
          * Toggles the item in menu list and switches to map/list view based on the current view.
          */
@@ -194,6 +274,19 @@ define([
             }
             else {
                 domStyle.set(this.helpBtn, "display", "none");
+            }
+        },
+
+        /**
+         * Sets display of help trigger.
+         * @param {boolean} showIfEnabled Show help trigger if help is enabled
+         */
+        updateFilter: function (showFilter) {
+            if (showFilter) {
+                domStyle.set(this.filterBtn, "display", "inline-block");
+            }
+            else {
+                domStyle.set(this.filterBtn, "display", "none");
             }
         },
 

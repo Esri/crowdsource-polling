@@ -1414,16 +1414,19 @@ define([
                 //For issue - Apply FIlters on Load is OFF, featurelist is honouring filters on load
                 array.forEach(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this,
                     function (layer) {
-                        //Store the static filters for time aware layer
-                        if (layer.layerObject.timeInfo && !layer.definitionEditor) {
-                            this._staticTimeDefExp[layer.id] = layer.layerObject.getDefinitionExpression();
+                        //Consider only feature layers while dealing with the definition expression
+                        if (layer.layerType === "ArcGISFeatureLayer") {
+                            //Store the static filters for time aware layer
+                            if (layer.layerObject.timeInfo && !layer.definitionEditor) {
+                                this._staticTimeDefExp[layer.id] = layer.layerObject.getDefinitionExpression();
+                            }
+                            //If enable all filter flag is set to false
+                            //Remove all the filter on application load
+                            if (!this.config.enableAllFilters && this.config.showFilter) {
+                                layer.layerObject.setDefinitionExpression("");
+                            }
+                            this._layersDefaultDefExpr[layer.id] = layer.layerObject.getDefinitionExpression();
                         }
-                        //If enable all filter flag is set to false
-                        //Remove all the filter on application load
-                        if (!this.config.enableAllFilters && this.config.showFilter) {
-                            layer.layerObject.setDefinitionExpression("");
-                        }
-                        this._layersDefaultDefExpr[layer.id] = layer.layerObject.getDefinitionExpression();
                     }));
                 // At this point, this.config has been supplemented with
                 // the first operational layer's layerObject

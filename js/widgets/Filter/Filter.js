@@ -162,37 +162,40 @@ define([
       //Check if filters are configured for a layer and accordingly show them in the list format
       array.forEach(this.appConfig.itemInfo.itemData.operationalLayers, lang.hitch(this,
         function (layer, index) {
-          var staticDefExpr;
-          //Check if layer has time info
-          //If yes, then create a custom object of dates for ask for values filter
-          if (layer.layerObject.timeInfo && this.appConfig.showDateFilter) {
-            staticDefExpr = this._checkAndCreateTimeEnabledFilters(layer);
-            var parameterizedExpForTimeLayer = this._parameterizedExpForTimeLayer(layer);
-          }
-          //If layer has "Ask For Values" filters store parameterized expression
-          if (layer.definitionEditor) {
-            isFilterConfigured = true;
-            //If layer has parameterized expression
-            //Check if the newly created time definition expression needs to be added/appended
-            if (layer.definitionEditor.parameterizedExpression) {
-              if (parameterizedExpForTimeLayer) {
-                this._parameterizedExpressions[layer.id] = "(" + layer.definitionEditor.parameterizedExpression + ")" + " AND " + "(" + parameterizedExpForTimeLayer.pExpression + ")";
+          //Consider only feature layers while creating filter list
+          if (layer.layerType === "ArcGISFeatureLayer") {
+            var staticDefExpr;
+            //Check if layer has time info
+            //If yes, then create a custom object of dates for ask for values filter
+            if (layer.layerObject.timeInfo && this.appConfig.showDateFilter) {
+              staticDefExpr = this._checkAndCreateTimeEnabledFilters(layer);
+              var parameterizedExpForTimeLayer = this._parameterizedExpForTimeLayer(layer);
+            }
+            //If layer has "Ask For Values" filters store parameterized expression
+            if (layer.definitionEditor) {
+              isFilterConfigured = true;
+              //If layer has parameterized expression
+              //Check if the newly created time definition expression needs to be added/appended
+              if (layer.definitionEditor.parameterizedExpression) {
+                if (parameterizedExpForTimeLayer) {
+                  this._parameterizedExpressions[layer.id] = "(" + layer.definitionEditor.parameterizedExpression + ")" + " AND " + "(" + parameterizedExpForTimeLayer.pExpression + ")";
+                } else {
+                  this._parameterizedExpressions[layer.id] = layer.definitionEditor.parameterizedExpression
+                }
               } else {
-                this._parameterizedExpressions[layer.id] = layer.definitionEditor.parameterizedExpression
+                //If layer do not have parameterize expression, it is time enabled layer
+                this._parameterizedExpressions[layer.id] = "(" + parameterizedExpForTimeLayer.pExpression + ")";
               }
-            } else {
-              //If layer do not have parameterize expression, it is time enabled layer
-              this._parameterizedExpressions[layer.id] = "(" + parameterizedExpForTimeLayer.pExpression + ")";
+              //Once expression for time aware layer is created, check if layer has static filter that needs to considered
+              //This is a specific case when "no ask for values" filters are being added on layer btu a static filter is added
+              if (staticDefExpr) {
+                this._parameterizedExpressions[layer.id] = "(" + staticDefExpr + ")" + " AND " + this._parameterizedExpressions[layer.id];
+              }
+              this._distinctValuesObj[layer.id] = {};
+              //Since the filters are configured, remove the no filter configure message
+              domStyle.set(this.noFilterConfigured, "display", "none");
+              this._addFilterItem(layer, index);
             }
-            //Once expression for time aware layer is created, check if layer has static filter that needs to considered
-            //This is a specific case when "no ask for values" filters are being added on layer btu a static filter is added
-            if (staticDefExpr) {
-              this._parameterizedExpressions[layer.id] = "(" + staticDefExpr + ")" + " AND " + this._parameterizedExpressions[layer.id];
-            }
-            this._distinctValuesObj[layer.id] = {};
-            //Since the filters are configured, remove the no filter configure message
-            domStyle.set(this.noFilterConfigured, "display", "none");
-            this._addFilterItem(layer, index);
           }
         }));
       //Disabled the filter button if no "ask for values" filter is configured

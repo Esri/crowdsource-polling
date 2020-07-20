@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Logg ut",
     "helpButtonLabel": "Hjelp",
     "helpButtonTooltip": "Lær mer",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Listevisning",
     "gotoListViewTooltip": "Gå til listevisning",
     "gotoMapViewLabel": "Kartvisning",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrer listen etter kart",
     "linkToMapViewOptionTooltip": "Vis elementer som er tilgjengelige i gjeldende kart",
     "likesForThisItemTooltip": "Stem på dette elementet"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Definerte filtre",
+    "selectOption": "Velg",
+    "applyButton": "Bruk",
+    "hintLabel": "Hint : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unik",
+    "valueRadioBtnLabel": "verdi",
+    "andTextLabel": "og",
+    "noFilterConfiguredMessage": "Det er ikke konfigurert filter av typen \"Spør om verdier eller tidsaktiver lag\" for webkartet",
+    "singleFieldDateTimeLabel": "Dato og tidspunkt for hendelse",
+    "multiFieldStartDateTimeLabel": "Startdato og -tidspunkt",
+    "multiFieldEndDateTimeLabel": "Sluttdato og -tidspunkt"
   }
 });

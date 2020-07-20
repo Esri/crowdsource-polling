@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Izrakstīties",
     "helpButtonLabel": "Palīdzība",
     "helpButtonTooltip": "Papildinformācija",
+    "filterButtonLabel": "Filtrēt",
     "gotoListViewLabel": "Saraksta skats",
     "gotoListViewTooltip": "Pāriet uz saraksta skatu",
     "gotoMapViewLabel": "Kartes skats",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrēt sarakstu pēc kartes",
     "linkToMapViewOptionTooltip": "Saraksta elementi, kas ir redzami pašreizējā kartē",
     "likesForThisItemTooltip": "Balsis par šo vienību"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Definētie filtri",
+    "selectOption": "Izvēlēties",
+    "applyButton": "Lietot",
+    "hintLabel": "Padoms: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unikāls",
+    "valueRadioBtnLabel": "vērtība",
+    "andTextLabel": "un",
+    "noFilterConfiguredMessage": "Tīmekļa kartē nav konfigurēts neviens filtrs “Pieprasīt vērtības vai laika iespējotu slāni”",
+    "singleFieldDateTimeLabel": "Pasākuma datums un laiks",
+    "multiFieldStartDateTimeLabel": "Sākuma datums un laiks",
+    "multiFieldEndDateTimeLabel": "Beigu datums un laiks"
   }
 });

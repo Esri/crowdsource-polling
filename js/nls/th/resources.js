@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "ออกจากระบบ",
     "helpButtonLabel": "ช่วยเหลือ",
     "helpButtonTooltip": "เรียนรู้เพิ่มเติม",
+    "filterButtonLabel": "ตัวกรอง",
     "gotoListViewLabel": "รายการมุมมอง",
     "gotoListViewTooltip": "ไปที่การแสดงรายการ",
     "gotoMapViewLabel": "มุมมองแผนที่",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "รายการตัวกรองโดยแผนที่",
     "linkToMapViewOptionTooltip": "รายการฟีเจอร์ที่ปรากฎในแผนที่",
     "likesForThisItemTooltip": "โหวตเพื่อสิ่งนี้"
+  },
+  "filter": {
+    "filterPanelHeaderText": "ตัวกรองที่กำหนดไว้",
+    "selectOption": "เลือก",
+    "applyButton": "ใช้",
+    "hintLabel": "เคล็ดลับ : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "ไม่ซ้ำกัน",
+    "valueRadioBtnLabel": "มูลค่า",
+    "andTextLabel": "และ",
+    "noFilterConfiguredMessage": "ไม่ได้กำหนดค่าตัวกรอง 'สอบถามค่าหรือชั้นข้อมูลที่รองรับเวลา' ไว้ในเว็บแมป",
+    "singleFieldDateTimeLabel": "วันที่และเวลาของเหตุการณ์",
+    "multiFieldStartDateTimeLabel": "วันที่และเวลาเริ่มต้น",
+    "multiFieldEndDateTimeLabel": "วันที่และเวลาสิ้นสุด"
   }
 });

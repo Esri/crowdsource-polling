@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Deconectare",
     "helpButtonLabel": "Ajutor",
     "helpButtonTooltip": "Aflaţi mai multe",
+    "filterButtonLabel": "Filtrare",
     "gotoListViewLabel": "Vizualizare listă",
     "gotoListViewTooltip": "Accesare vizualizare listă",
     "gotoMapViewLabel": "Vizualizare hartă",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrare listă după hartă",
     "linkToMapViewOptionTooltip": "Obiecte spaţiale din listă care sunt vizibile pe harta curentă",
     "likesForThisItemTooltip": "Voturi pentru acest element"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtre definite",
+    "selectOption": "Selectare",
+    "applyButton": "Aplicare",
+    "hintLabel": "Sugestie : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unic",
+    "valueRadioBtnLabel": "valoare",
+    "andTextLabel": "şi",
+    "noFilterConfiguredMessage": "Nu sunt configurate filtrele „Solicitare valori sau strat tematic cu funcția temporizală activată” pe harta web",
+    "singleFieldDateTimeLabel": "Data și ora evenimentului",
+    "multiFieldStartDateTimeLabel": "Data și ora începerii",
+    "multiFieldEndDateTimeLabel": "Data și ora încheierii"
   }
 });

@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Abmelden",
     "helpButtonLabel": "Hilfe",
     "helpButtonTooltip": "Weitere Informationen",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Listenansicht",
     "gotoListViewTooltip": "Zur Listenansicht wechseln",
     "gotoMapViewLabel": "Kartenansicht",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Liste nach Karte filtern",
     "linkToMapViewOptionTooltip": "Features auflisten, die in der aktuellen Karte sichtbar sind",
     "likesForThisItemTooltip": "Stimmen für dieses Element"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Definierte Filter",
+    "selectOption": "Auswählen",
+    "applyButton": "Übernehmen",
+    "hintLabel": "Hinweis: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "eindeutig",
+    "valueRadioBtnLabel": "Wert",
+    "andTextLabel": "und",
+    "noFilterConfiguredMessage": "In der Web-App wurden keine Filter für 'Werte abfragen oder Zeiteigenschaften für Layer aktivieren' konfiguriert",
+    "singleFieldDateTimeLabel": "Datum und Uhrzeit des Events",
+    "multiFieldStartDateTimeLabel": "Startdatum und -uhrzeit",
+    "multiFieldEndDateTimeLabel": "Enddatum und -uhrzeit"
   }
 });

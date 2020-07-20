@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "로그아웃",
     "helpButtonLabel": "도움말",
     "helpButtonTooltip": "자세한 정보",
+    "filterButtonLabel": "필터",
     "gotoListViewLabel": "목록 보기",
     "gotoListViewTooltip": "목록 보기로 이동",
     "gotoMapViewLabel": "맵 보기",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "맵별 필터 목록",
     "linkToMapViewOptionTooltip": "현재 맵에 보이는 피처를 나열합니다.",
     "likesForThisItemTooltip": "이 항목에 투표"
+  },
+  "filter": {
+    "filterPanelHeaderText": "정의된 필터",
+    "selectOption": "선택",
+    "applyButton": "적용",
+    "hintLabel": "힌트 : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "고유",
+    "valueRadioBtnLabel": "value",
+    "andTextLabel": "및",
+    "noFilterConfiguredMessage": "웹맵에 구성된 '값 요청 또는 시간 활성화 레이어' 필터가 없음",
+    "singleFieldDateTimeLabel": "이벤트 날짜와 시간",
+    "multiFieldStartDateTimeLabel": "시작 날짜와 시간",
+    "multiFieldEndDateTimeLabel": "종료 날짜와 시간"
   }
 });

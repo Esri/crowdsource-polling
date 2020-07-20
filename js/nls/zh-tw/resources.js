@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "登出",
     "helpButtonLabel": "說明",
     "helpButtonTooltip": "瞭解詳細資訊",
+    "filterButtonLabel": "篩選器",
     "gotoListViewLabel": "清單視圖(L)",
     "gotoListViewTooltip": "轉至清單檢視",
     "gotoMapViewLabel": "地圖視圖",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "按地圖的篩選程式清單",
     "linkToMapViewOptionTooltip": "條列在目前地圖上可見的圖徵",
     "likesForThisItemTooltip": "票選此項目"
+  },
+  "filter": {
+    "filterPanelHeaderText": "定義的篩選器",
+    "selectOption": "選擇",
+    "applyButton": "應用",
+    "hintLabel": "提示 : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "唯一",
+    "valueRadioBtnLabel": "值",
+    "andTextLabel": "和",
+    "noFilterConfiguredMessage": "未在 Web 地圖中配置「詢問值或時間啟用圖層」篩選器",
+    "singleFieldDateTimeLabel": "事件日期和時間",
+    "multiFieldStartDateTimeLabel": "開始日期和時間",
+    "multiFieldEndDateTimeLabel": "結束日期和時間"
   }
 });

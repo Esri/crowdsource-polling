@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "יציאה",
     "helpButtonLabel": "עזרה",
     "helpButtonTooltip": "מידע נוסף",
+    "filterButtonLabel": "פילטר",
     "gotoListViewLabel": "תצוגת רשימה",
     "gotoListViewTooltip": "עבור לתצוגת רשימה",
     "gotoMapViewLabel": "תצוגת מפה",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "סנן את הרשימה לפי מפה",
     "linkToMapViewOptionTooltip": "ציין ישויות שנראות במפה הנוכחית",
     "likesForThisItemTooltip": "הצבעות עבור פריט זה"
+  },
+  "filter": {
+    "filterPanelHeaderText": "פילטרים מוגדרים",
+    "selectOption": "בחר",
+    "applyButton": "בצע",
+    "hintLabel": "רמז : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "ייחודי",
+    "valueRadioBtnLabel": "ערך",
+    "andTextLabel": "וגם",
+    "noFilterConfiguredMessage": "לא הוגדרו פילטרים מסוג 'בקש ערכים או שכבה מאופשרת זמן' במפת האינטרנט.",
+    "singleFieldDateTimeLabel": "תאריך ושעה של אירוע",
+    "multiFieldStartDateTimeLabel": "תאריך וזמן התחלה",
+    "multiFieldEndDateTimeLabel": "תאריך וזמן סיום"
   }
 });

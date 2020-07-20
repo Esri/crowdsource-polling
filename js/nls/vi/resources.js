@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Đăng xuất",
     "helpButtonLabel": "Trợ giúp",
     "helpButtonTooltip": "Tìm hiểu thêm",
+    "filterButtonLabel": "Lọc",
     "gotoListViewLabel": "Chế độ xem dạng Danh sách",
     "gotoListViewTooltip": "Đến chế độ xem dạng danh sách",
     "gotoMapViewLabel": "Chế độ xem Bản đồ",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Lọc danh sách theo bản đồ",
     "linkToMapViewOptionTooltip": "Liệt kê các đối tượng hiện ra trên bản đồ hiện tại",
     "likesForThisItemTooltip": "Bình chọn cho mục này"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Bộ lọc được xác định",
+    "selectOption": "Chọn",
+    "applyButton": "Áp dụng",
+    "hintLabel": "Gợi ý: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "duy nhất",
+    "valueRadioBtnLabel": "giá trị",
+    "andTextLabel": "và",
+    "noFilterConfiguredMessage": "Không có bộ lọc 'Hỏi giá trị hoặc lớp kích hoạt thời gian' được cấu hình trên bản đồ web",
+    "singleFieldDateTimeLabel": "Ngày giờ sự kiện",
+    "multiFieldStartDateTimeLabel": "Ngày giờ bắt đầu",
+    "multiFieldEndDateTimeLabel": "Ngày giờ kết thúc"
   }
 });

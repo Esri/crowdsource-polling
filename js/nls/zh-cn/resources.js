@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "登出",
     "helpButtonLabel": "帮助",
     "helpButtonTooltip": "了解详细信息",
+    "filterButtonLabel": "过滤器",
     "gotoListViewLabel": "列表视图",
     "gotoListViewTooltip": "转至列表视图",
     "gotoMapViewLabel": "地图视图",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "按地图过滤列表",
     "linkToMapViewOptionTooltip": "列出在当前地图中可见的要素",
     "likesForThisItemTooltip": "投票支持此项目"
+  },
+  "filter": {
+    "filterPanelHeaderText": "定义的过滤器",
+    "selectOption": "选择",
+    "applyButton": "应用",
+    "hintLabel": "提示：${hintLabelText}",
+    "uniqueRadioBtnLabel": "唯一",
+    "valueRadioBtnLabel": "值",
+    "andTextLabel": "和",
+    "noFilterConfiguredMessage": "Web 地图中未配置“请求值或启用时间的图层”过滤器",
+    "singleFieldDateTimeLabel": "事件日期和时间",
+    "multiFieldStartDateTimeLabel": "起始日期和时间",
+    "multiFieldEndDateTimeLabel": "结束日期和时间"
   }
 });

@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Tanca la sessió",
     "helpButtonLabel": "Ajuda",
     "helpButtonTooltip": "Més informació",
+    "filterButtonLabel": "Filtre",
     "gotoListViewLabel": "Visualització de llista",
     "gotoListViewTooltip": "Ves a la visualització de llista",
     "gotoMapViewLabel": "Visualització del mapa",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtra la llista per mapa",
     "linkToMapViewOptionTooltip": "Enumera les entitats visibles al mapa actual",
     "likesForThisItemTooltip": "Vots per a aquest element"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtres definits",
+    "selectOption": "Selecciona",
+    "applyButton": "Aplica",
+    "hintLabel": "Suggeriment: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "únic",
+    "valueRadioBtnLabel": "valor",
+    "andTextLabel": "i",
+    "noFilterConfiguredMessage": "No s'ha configurat cap filtre \"Demana valors o Capa amb funció de temps habilitada\" al mapa web",
+    "singleFieldDateTimeLabel": "Data i hora de l'esdeveniment",
+    "multiFieldStartDateTimeLabel": "Data i hora d'inici",
+    "multiFieldEndDateTimeLabel": "Data i hora de finalització"
   }
 });

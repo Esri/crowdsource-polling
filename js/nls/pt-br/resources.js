@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Sair",
     "helpButtonLabel": "Ajuda",
     "helpButtonTooltip": "Mais informações",
+    "filterButtonLabel": "Filtrar",
     "gotoListViewLabel": "Visualização da Lista",
     "gotoListViewTooltip": "Ir para visualização da lista",
     "gotoMapViewLabel": "Visualização do Mapa",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrar lista por mapa",
     "linkToMapViewOptionTooltip": "Listar feições que são visíveis no mapa atual",
     "likesForThisItemTooltip": "Votos por este item"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtros Definidos",
+    "selectOption": "Selecionar",
+    "applyButton": "Aplicar",
+    "hintLabel": "Sugestão : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "exclusivo",
+    "valueRadioBtnLabel": "valor",
+    "andTextLabel": "e",
+    "noFilterConfiguredMessage": "Nenhum dos filtros 'Solicitar Valores ou camada habilitada ao tempo' está configurado no mapa da web",
+    "singleFieldDateTimeLabel": "Data e hora do evento",
+    "multiFieldStartDateTimeLabel": "Data e hora inicial",
+    "multiFieldEndDateTimeLabel": "Data e hora final"
   }
 });

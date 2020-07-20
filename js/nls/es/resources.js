@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Cerrar sesión",
     "helpButtonLabel": "Ayuda",
     "helpButtonTooltip": "Más información",
+    "filterButtonLabel": "Filtro",
     "gotoListViewLabel": "vista de la lista",
     "gotoListViewTooltip": "Ir a la vista de lista",
     "gotoMapViewLabel": "Vista del mapa",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrar lista por mapa",
     "linkToMapViewOptionTooltip": "Enumerar las entidades visibles en el mapa actual",
     "likesForThisItemTooltip": "Votos para este elemento"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtros definidos",
+    "selectOption": "Seleccionar",
+    "applyButton": "Aplicar",
+    "hintLabel": "Sugerencia: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "único",
+    "valueRadioBtnLabel": "valor",
+    "andTextLabel": "y",
+    "noFilterConfiguredMessage": "No hay ningún filtro 'Pedir valores o Capa con función de tiempo habilitada' configurado en el mapa web",
+    "singleFieldDateTimeLabel": "Fecha y hora del evento",
+    "multiFieldStartDateTimeLabel": "Fecha y hora de inicio",
+    "multiFieldEndDateTimeLabel": "Fecha y hora de finalización"
   }
 });

@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Odhlásit se",
     "helpButtonLabel": "Nápověda",
     "helpButtonTooltip": "Více informací",
+    "filterButtonLabel": "Filtr",
     "gotoListViewLabel": "Zobrazení seznamu",
     "gotoListViewTooltip": "Přejít na zobrazení seznamu",
     "gotoMapViewLabel": "Zobrazení mapy",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrovat seznam podle mapy",
     "linkToMapViewOptionTooltip": "Vypsat prvky, které jsou viditelné v současné mapě",
     "likesForThisItemTooltip": "Hlasy pro tuto položku"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Definované filtry",
+    "selectOption": "Vybrat",
+    "applyButton": "Použít",
+    "hintLabel": "Nápověda: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unikátní",
+    "valueRadioBtnLabel": "hodnota",
+    "andTextLabel": "a",
+    "noFilterConfiguredMessage": "Ve webové mapě nejsou nakonfigurovány žádné filtry pro 'Vrstvu dotazu na hodnoty nebo aktivace času'",
+    "singleFieldDateTimeLabel": "Datum a čas události",
+    "multiFieldStartDateTimeLabel": "Datum a čas zahájení",
+    "multiFieldEndDateTimeLabel": "Datum a čas konce"
   }
 });

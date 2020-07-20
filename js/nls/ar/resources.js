@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "تسجيل الخروج",
     "helpButtonLabel": "المساعدة",
     "helpButtonTooltip": "على المزيد عن",
+    "filterButtonLabel": "تصفية",
     "gotoListViewLabel": "عرض القائمة",
     "gotoListViewTooltip": "الانتقال إلى عرض القائمة",
     "gotoMapViewLabel": "عرض الخريطة",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "تصفية القائمة بواسطة الخريطة",
     "linkToMapViewOptionTooltip": "إدراج المعالم المرئية في الخريطة الحالية",
     "likesForThisItemTooltip": "تصويت لهذا العنصر"
+  },
+  "filter": {
+    "filterPanelHeaderText": "عوامل التصفية المحددة",
+    "selectOption": "تحديد",
+    "applyButton": "تطبيق",
+    "hintLabel": "تلميح: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "فريد",
+    "valueRadioBtnLabel": "القيمة",
+    "andTextLabel": "و",
+    "noFilterConfiguredMessage": "لم يُجرى تكوين عوامل تصفية \"طلب القيم أو طبقة تمكين الوقت\" في خريطة الويب.",
+    "singleFieldDateTimeLabel": "تاريخ الحدث ووقته",
+    "multiFieldStartDateTimeLabel": "تاريخ البدء ووقته",
+    "multiFieldEndDateTimeLabel": "تاريخ الانتهاء ووقته"
   }
 });

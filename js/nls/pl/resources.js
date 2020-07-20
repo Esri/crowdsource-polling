@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Wyloguj się",
     "helpButtonLabel": "Pomoc",
     "helpButtonTooltip": "Dowiedz się więcej",
+    "filterButtonLabel": "Filtruj",
     "gotoListViewLabel": "Widok listy",
     "gotoListViewTooltip": "Przejdź do widoku listy",
     "gotoMapViewLabel": "Widok mapy",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtruj listę wg mapy",
     "linkToMapViewOptionTooltip": "Wyświetl listę obiektów widocznych na bieżącej mapie",
     "likesForThisItemTooltip": "Głosy oddane na ten element"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Zdefiniuj filtry",
+    "selectOption": "Wybierz",
+    "applyButton": "Zastosuj",
+    "hintLabel": "Wskazówka: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unikalny",
+    "valueRadioBtnLabel": "value",
+    "andTextLabel": "i",
+    "noFilterConfiguredMessage": "Nie skonfigurowano na mapie internetowej żadnych filtrów 'Pytaj o wartości lub warstwę czasową'",
+    "singleFieldDateTimeLabel": "Data i czas wydarzenia",
+    "multiFieldStartDateTimeLabel": "Data i czas rozpoczęcia",
+    "multiFieldEndDateTimeLabel": "Data i czas zakończenia"
   }
 });

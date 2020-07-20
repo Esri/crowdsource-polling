@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Odjavite se",
     "helpButtonLabel": "Pomoć",
     "helpButtonTooltip": "Saznaj više",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Prikaz liste",
     "gotoListViewTooltip": "Idi na prikaz liste",
     "gotoMapViewLabel": "Prikaz mape",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtriraj listu po mapi",
     "linkToMapViewOptionTooltip": "Navedi geoobjekte koji su vidljivi na trenutnoj mapi",
     "likesForThisItemTooltip": "Glasovi za ovu stavku"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Definisani filteri",
+    "selectOption": "Izaberi",
+    "applyButton": "Primeni",
+    "hintLabel": "Savet: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "jedinstveno",
+    "valueRadioBtnLabel": "vrednost",
+    "andTextLabel": "i",
+    "noFilterConfiguredMessage": "Nema podešenih filtera za 'Pitaj za vrednosti ili vremenski ograničen sloj' na veb mapi",
+    "singleFieldDateTimeLabel": "Datum i vreme događaja",
+    "multiFieldStartDateTimeLabel": "Datum i vreme početka",
+    "multiFieldEndDateTimeLabel": "Datum i vreme završetka"
   }
 });

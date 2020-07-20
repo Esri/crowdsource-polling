@@ -71,25 +71,6 @@
             "label": "Display the help widget as a splash screen",
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
-        },{
-            "type": "conditional",
-            "condition": false,
-            "fieldName": "showFilter",
-            "label": "Allow users to show/hide filter menu",
-            "tooltip": "Allow users to show/hide filter menu",
-            "items": [{
-                "type": "boolean",
-                "condition": false,
-                "fieldName": "enableAllFilters",
-                "label": "Allow users to toggle on/off filters on load",
-                "tooltip": "Allow users to toggle on/off filters on load"
-            },{
-                "type": "boolean",
-                "condition": false,
-                "fieldName": "showDateFilter",
-                "label": "Allow users to show/hide date filters in the filter panel",
-                "tooltip": "Allow users to show/hide date filters in the filter panel"
-            }]
         }, {
             "type": "subcategory",
             "label": "Sign in options"
@@ -214,6 +195,22 @@
                 "value": "false"
             }]
         }, {
+            "type": "conditional",
+            "condition": false,
+            "fieldName": "showRelatedFeatures",
+            "label": "Show only the selected polling feature and any related features on the map",
+            "tooltip": "Reference layers that are not related to the polling layer are not filtered",
+            "items": [{
+                "type": "boolean",
+                "condition": false,
+                "fieldName": "highlightSelectedFeature",
+                "label": "Highlight the selected polling feature",
+                "tooltip": "Highlight the selected feature"
+            }]
+        }, {
+            "type": "subcategory",
+            "label": "Filters"
+        }, {
             "label": "Initial feature display",
             "fieldName": "showAllFeatures",
             "type": "radio",
@@ -229,15 +226,21 @@
         }, {
             "type": "conditional",
             "condition": false,
-            "fieldName": "showRelatedFeatures",
-            "label": "Show only the selected polling feature and any related features on the map",
-            "tooltip": "Reference layers that are not related to the polling layer are not filtered",
+            "fieldName": "showFilter",
+            "label": "Allow attribute filters",
+            "tooltip": "Expose filters configured on the layer in the web map that have the Ask For Values property enabled and/or allow filtering time-aware layers using the time slider properties.",
             "items": [{
                 "type": "boolean",
                 "condition": false,
-                "fieldName": "highlightSelectedFeature",
-                "label": "Highlight the selected polling feature",
-                "tooltip": "Highlight the selected feature"
+                "fieldName": "enableAllFilters",
+                "label": "Apply all configured filters when the application loads",
+                "tooltip": "Applies all filters using their default configured values when the application loads."
+            },{
+                "type": "boolean",
+                "condition": false,
+                "fieldName": "showDateFilter",
+                "label": "Filter time-aware layers using the time slider settings",
+                "tooltip": "Allows filtering features in time-aware layers by the values in a date/time field by exposing the time slider settings for start and end date."
             }]
         }, {
             "type": "subcategory",

@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Logga ut",
     "helpButtonLabel": "Hjälp",
     "helpButtonTooltip": "Läs mer",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Listvy",
     "gotoListViewTooltip": "Gå till listvy",
     "gotoMapViewLabel": "Kartvy",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrera lista efter karta",
     "linkToMapViewOptionTooltip": "Visa en lista med geoobjekt som är synliga på den aktuella kartan",
     "likesForThisItemTooltip": "Röster på det här objektet"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Definierade filter",
+    "selectOption": "Välj",
+    "applyButton": "Verkställ",
+    "hintLabel": "Tips: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unik",
+    "valueRadioBtnLabel": "värde",
+    "andTextLabel": "och",
+    "noFilterConfiguredMessage": "Inga filter för \"Fråga efter värden eller tidsaktiverat lager\" är konfigurerade i webbkartan",
+    "singleFieldDateTimeLabel": "Evenemangets datum och tid",
+    "multiFieldStartDateTimeLabel": "Startdatum och -tid",
+    "multiFieldEndDateTimeLabel": "Slutdatum och -tid"
   }
 });

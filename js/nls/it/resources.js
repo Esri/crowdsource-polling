@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Disconnetti",
     "helpButtonLabel": "?",
     "helpButtonTooltip": "Ulteriori informazioni",
+    "filterButtonLabel": "Filtro",
     "gotoListViewLabel": "Visualizzazione elenco",
     "gotoListViewTooltip": "Passa a vista elenco",
     "gotoMapViewLabel": "Vista mappa",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtra elenco per mappa",
     "linkToMapViewOptionTooltip": "Elenca feature visibili nella mappa corrente",
     "likesForThisItemTooltip": "Voti per questo elemento"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtri definiti",
+    "selectOption": "Seleziona",
+    "applyButton": "Applica",
+    "hintLabel": "Suggerimento: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "univoco",
+    "valueRadioBtnLabel": "valore",
+    "andTextLabel": "e",
+    "noFilterConfiguredMessage": "Nessun filtro \"Richiedi valore o layer abilitato per variazioni temporali\" configurato nella Web Map",
+    "singleFieldDateTimeLabel": "Data e ora evento",
+    "multiFieldStartDateTimeLabel": "Data e ora di inizio",
+    "multiFieldEndDateTimeLabel": "Data e ora di fine"
   }
 });

@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Выход",
     "helpButtonLabel": "Справка",
     "helpButtonTooltip": "Более подробно",
+    "filterButtonLabel": "Фильтр",
     "gotoListViewLabel": "Вид списка",
     "gotoListViewTooltip": "Перейти в вид списка",
     "gotoMapViewLabel": "Вид карты",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Фильтр списка по картам",
     "linkToMapViewOptionTooltip": "Список объектов, видимых в текущей карте",
     "likesForThisItemTooltip": "Голоса, поданные за этот элемент"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Заданные фильтры",
+    "selectOption": "Выбрать",
+    "applyButton": "Применить",
+    "hintLabel": "Подсказка : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "уникальный",
+    "valueRadioBtnLabel": "значение",
+    "andTextLabel": "и",
+    "noFilterConfiguredMessage": "В веб-карте нет настроенных фильтров \"запрашивать значения или слои с включенным временем\"",
+    "singleFieldDateTimeLabel": "Дата и время события",
+    "multiFieldStartDateTimeLabel": "Дата и время начала",
+    "multiFieldEndDateTimeLabel": "Дата и время окончания"
   }
 });

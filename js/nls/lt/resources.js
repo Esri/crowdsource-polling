@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Atsijunkite",
     "helpButtonLabel": "Pagalba",
     "helpButtonTooltip": "Sužinokite daugiau",
+    "filterButtonLabel": "Filtruoti",
     "gotoListViewLabel": "Sąrašo vaizdas",
     "gotoListViewTooltip": "Pereiti į sąrašo vaizdą",
     "gotoMapViewLabel": "Žemėlapio vaizdas",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrų sąrašas pagal žemėlapį",
     "linkToMapViewOptionTooltip": "Pateikti elementus, nematomus šiame žemėlapyje",
     "likesForThisItemTooltip": "Balsai už šį elementą"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Apibrėžkite filtrus",
+    "selectOption": "Pasirinkite",
+    "applyButton": "Taikyti",
+    "hintLabel": "Užuomina: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unikalus",
+    "valueRadioBtnLabel": "reikšmė",
+    "andTextLabel": "ir",
+    "noFilterConfiguredMessage": "Internetiniame žemėlapyje nėra sukonfigūruoti filtrai „Klausti reikšmių“ arba filtrai, veikiantys sluoksniuose, kuriuose įgalintas laikas",
+    "singleFieldDateTimeLabel": "Įvykio data ir laikas",
+    "multiFieldStartDateTimeLabel": "Pradžios data ir laikas",
+    "multiFieldEndDateTimeLabel": "Pabaigos data ir laikas"
   }
 });

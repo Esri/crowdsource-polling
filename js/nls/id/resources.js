@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Keluar",
     "helpButtonLabel": "Bantuan",
     "helpButtonTooltip": "Pelajari selengkapnya",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Tampilan Daftar",
     "gotoListViewTooltip": "Pergi ke tampilan daftar",
     "gotoMapViewLabel": "Tampilan Peta",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Daftar filter menurut peta",
     "linkToMapViewOptionTooltip": "Daftar fitur yang terlihat pada peta saat ini",
     "likesForThisItemTooltip": "Pilihan untuk item ini"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filter yang Ditentukan",
+    "selectOption": "Pilih",
+    "applyButton": "Terapkan",
+    "hintLabel": "Petunjuk: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unik",
+    "valueRadioBtnLabel": "nilai",
+    "andTextLabel": "dan",
+    "noFilterConfiguredMessage": "Tidak ada filter 'Minta Nilai atau layer yang diaktifkan berdasarkan waktu' yang dikonfigurasikan dalam peta web",
+    "singleFieldDateTimeLabel": "Tanggal dan waktu acara",
+    "multiFieldStartDateTimeLabel": "Tanggal dan waktu mulai",
+    "multiFieldEndDateTimeLabel": "Tanggal dan waktu berakhir"
   }
 });

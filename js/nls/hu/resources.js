@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Kijelentkezés",
     "helpButtonLabel": "Súgó",
     "helpButtonTooltip": "További információk",
+    "filterButtonLabel": "Szűrő",
     "gotoListViewLabel": "Listanézet",
     "gotoListViewTooltip": "Váltás listanézetre",
     "gotoMapViewLabel": "Térképnézet",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Lista szűrése térkép alapján",
     "linkToMapViewOptionTooltip": "Az aktuális térképen látható vektoros elemek felsorolása",
     "likesForThisItemTooltip": "Elem szavazatai"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Létrehozott szűrők",
+    "selectOption": "Kiválasztás",
+    "applyButton": "Alkalmaz",
+    "hintLabel": "Útmutatás : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "egyedi",
+    "valueRadioBtnLabel": "érték",
+    "andTextLabel": "és",
+    "noFilterConfiguredMessage": "A webtérképen nincs konfigurált „Értékek bekérése vagy idő által engedélyezett réteg” szűrő",
+    "singleFieldDateTimeLabel": "Esemény dátuma és ideje",
+    "multiFieldStartDateTimeLabel": "Kezdés dátuma és időpontja",
+    "multiFieldEndDateTimeLabel": "Befejezés dátuma és időpontja"
   }
 });

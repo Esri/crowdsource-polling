@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Logi välja",
     "helpButtonLabel": "Abi",
     "helpButtonTooltip": "Lisateave",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Vaadete loend",
     "gotoListViewTooltip": "Mine vaadete loendisse",
     "gotoMapViewLabel": "Kaardivaade",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtreeri loend kaardi järgi",
     "linkToMapViewOptionTooltip": "Loetle praegusel kaardil nähtavad objektid",
     "likesForThisItemTooltip": "Sellele objektile antud hääled"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Määratletud filtrid",
+    "selectOption": "Vali",
+    "applyButton": "Rakenda",
+    "hintLabel": "Vihje : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "kordumatu",
+    "valueRadioBtnLabel": "väärtus",
+    "andTextLabel": "ja",
+    "noFilterConfiguredMessage": "Filtreid \"Küsi väärtusi või aja alusel aktiveeritavat kihti\" ei ole veebikaardil konfigureeritud",
+    "singleFieldDateTimeLabel": "Sündmuse kuupäev ja kellaaeg",
+    "multiFieldStartDateTimeLabel": "Alguskuupäev ja -kellaaeg",
+    "multiFieldEndDateTimeLabel": "Lõppkuupäev ja -kellaaeg"
   }
 });

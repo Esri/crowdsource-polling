@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "サイン アウト",
     "helpButtonLabel": "ヘルプ",
     "helpButtonTooltip": "詳細を見る",
+    "filterButtonLabel": "フィルター",
     "gotoListViewLabel": "リスト ビュー",
     "gotoListViewTooltip": "リスト ビューに移動",
     "gotoMapViewLabel": "マップ ビュー",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "マップ範囲内のリストをフィルター",
     "linkToMapViewOptionTooltip": "現在のマップで表示できるフィーチャを一覧表示",
     "likesForThisItemTooltip": "このアイテムに投票"
+  },
+  "filter": {
+    "filterPanelHeaderText": "定義済みフィルター",
+    "selectOption": "選択",
+    "applyButton": "適用",
+    "hintLabel": "ヒント: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "一意",
+    "valueRadioBtnLabel": "値",
+    "andTextLabel": "および",
+    "noFilterConfiguredMessage": "「値の確認または時間対応レイヤー」フィルターが、Web マップで構成されていません。",
+    "singleFieldDateTimeLabel": "イベント日時",
+    "multiFieldStartDateTimeLabel": "開始日時",
+    "multiFieldEndDateTimeLabel": "終了日時"
   }
 });

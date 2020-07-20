@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Kirjaudu ulos",
     "helpButtonLabel": "Ohje",
     "helpButtonTooltip": "Lisätietoja",
+    "filterButtonLabel": "Suodata",
     "gotoListViewLabel": "Luettelonäkymä",
     "gotoListViewTooltip": "Siirry luettelonäkymään",
     "gotoMapViewLabel": "Karttanäkymä",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Suodata luettelo kartan perusteella",
     "linkToMapViewOptionTooltip": "Luettele kohteet, jotka näkyvät nykyisessä kartassa",
     "likesForThisItemTooltip": "ääntä tälle kohteelle"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Määritetyt suodattimet",
+    "selectOption": "Valitse",
+    "applyButton": "Käytä",
+    "hintLabel": "Vihje: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "yksilöllinen",
+    "valueRadioBtnLabel": "value",
+    "andTextLabel": "ja",
+    "noFilterConfiguredMessage": "Web-karttaan ei ole määritetty yhtään Pyydä arvoja- tai Karttataso, jossa on aikamääre käytössä -suodattimia",
+    "singleFieldDateTimeLabel": "Tapahtuman päivämäärä ja aika",
+    "multiFieldStartDateTimeLabel": "Aloituspäivämäärä ja -aika",
+    "multiFieldEndDateTimeLabel": "Lopetuspäivämäärä ja -aika"
   }
 });

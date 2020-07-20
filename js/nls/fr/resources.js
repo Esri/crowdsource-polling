@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Déconnexion",
     "helpButtonLabel": "Aide",
     "helpButtonTooltip": "En savoir plus",
+    "filterButtonLabel": "Filtre",
     "gotoListViewLabel": "Vue Liste",
     "gotoListViewTooltip": "Accéder à la vue Liste",
     "gotoMapViewLabel": "Vue cartographique",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrer la liste par cartes",
     "linkToMapViewOptionTooltip": "Répertorier les entités visibles sur la carte active",
     "likesForThisItemTooltip": "Voter pour cet élément"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtres définis",
+    "selectOption": "Sélectionner",
+    "applyButton": "Appliquer",
+    "hintLabel": "Astuce : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unique",
+    "valueRadioBtnLabel": "valeur",
+    "andTextLabel": "et",
+    "noFilterConfiguredMessage": "Aucun filtre 'Demander des valeurs ou activer le temps sur une couche' n’est configuré dans la carte Web",
+    "singleFieldDateTimeLabel": "Date et heure de l’événement",
+    "multiFieldStartDateTimeLabel": "Date et heure de début",
+    "multiFieldEndDateTimeLabel": "Date et heure de fin"
   }
 });

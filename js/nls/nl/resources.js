@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Meld u af",
     "helpButtonLabel": "Help",
     "helpButtonTooltip": "Meer weten",
+    "filterButtonLabel": "Filter",
     "gotoListViewLabel": "Lijstweergave",
     "gotoListViewTooltip": "Ga naar lijstweergave",
     "gotoMapViewLabel": "Kaartweergave",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Lijst filteren op kaart",
     "linkToMapViewOptionTooltip": "Lijstobjecten die zichtbaar zijn in de huidige kaart",
     "likesForThisItemTooltip": "Stemmen op dit item"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Gedefinieerde filters",
+    "selectOption": "Selecteren",
+    "applyButton": "Toepassen",
+    "hintLabel": "Hint : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "uniek",
+    "valueRadioBtnLabel": "waarde",
+    "andTextLabel": "en",
+    "noFilterConfiguredMessage": "Er zijn geen filters 'Vragen naar waarden of tijd inschakelen voor laag' geconfigureerd in de webmap",
+    "singleFieldDateTimeLabel": "Datum en tijd van de gebeurtenis",
+    "multiFieldStartDateTimeLabel": "Startdatum en -tijd",
+    "multiFieldEndDateTimeLabel": "Einddatum en -tijd"
   }
 });

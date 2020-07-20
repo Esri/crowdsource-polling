@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Έξοδος",
     "helpButtonLabel": "Βοήθεια",
     "helpButtonTooltip": "Μάθετε περισσότερα",
+    "filterButtonLabel": "Φίλτρο",
     "gotoListViewLabel": "Προβολή λίστας",
     "gotoListViewTooltip": "Μετάβαση στην προβολή λίστας",
     "gotoMapViewLabel": "Προβολή χάρτη",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Φιλτράρισμα λίστας βάσει χάρτη",
     "linkToMapViewOptionTooltip": "Αναγραφή στοιχείων που είναι ορατά στον τρέχοντα χάρτη",
     "likesForThisItemTooltip": "Ψήφοι για αυτό το αντικείμενο"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Καθορισμένα φίλτρα",
+    "selectOption": "Επιλογή",
+    "applyButton": "Εφαρμογή",
+    "hintLabel": "Υπόδειξη: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "unique",
+    "valueRadioBtnLabel": "value",
+    "andTextLabel": "και",
+    "noFilterConfiguredMessage": "Δεν έχει παραμετροποιηθεί κανένα φίλτρο για «Ερώτηση για τιμές ή θεματικό επίπεδο με χρονικές πληροφορίες» στον web χάρτη.",
+    "singleFieldDateTimeLabel": "Ημερομηνία και ώρα εκδήλωσης",
+    "multiFieldStartDateTimeLabel": "Ημερομηνία και ώρα έναρξης",
+    "multiFieldEndDateTimeLabel": "Ημερομηνία και ώρα λήξης"
   }
 });

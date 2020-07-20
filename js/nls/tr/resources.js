@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Oturumu kapat",
     "helpButtonLabel": "Yardım",
     "helpButtonTooltip": "Daha fazla bilgi",
+    "filterButtonLabel": "Filtrele",
     "gotoListViewLabel": "Liste Görünümü",
     "gotoListViewTooltip": "List görünümüne git",
     "gotoMapViewLabel": "Harita Görünümü",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Listeyi haritaya göre filtrele",
     "linkToMapViewOptionTooltip": "Geçerli haritada görünen detayları listele",
     "likesForThisItemTooltip": "oy, bu öğe için"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Tanımlı Filtreler",
+    "selectOption": "Seç",
+    "applyButton": "Uygula",
+    "hintLabel": "İpucu : ${hintLabelText}",
+    "uniqueRadioBtnLabel": "benzersiz",
+    "valueRadioBtnLabel": "değer",
+    "andTextLabel": "ve",
+    "noFilterConfiguredMessage": "Web haritasında 'Değer İsteme veya zaman etkinleştirme katmanı' filtreleri yapılandırılmamış",
+    "singleFieldDateTimeLabel": "Etkinlik tarihi ve saati",
+    "multiFieldStartDateTimeLabel": "Başlangıç tarihi ve saati",
+    "multiFieldEndDateTimeLabel": "Bitiş tarihi ve saati"
   }
 });

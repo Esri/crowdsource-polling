@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Terminar Sessão",
     "helpButtonLabel": "Ajuda",
     "helpButtonTooltip": "Saiba mais",
+    "filterButtonLabel": "Filtro",
     "gotoListViewLabel": "Visualização da Lista",
     "gotoListViewTooltip": "Ir para a vista de lista",
     "gotoMapViewLabel": "Vista de Mapa",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Filtrar lista por mapa",
     "linkToMapViewOptionTooltip": "Listar elementos visíveis no mapa atual",
     "likesForThisItemTooltip": "Votos para este item"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Filtros definidos",
+    "selectOption": "Selecionar",
+    "applyButton": "Aplicar",
+    "hintLabel": "Dica: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "único",
+    "valueRadioBtnLabel": "valor",
+    "andTextLabel": "e",
+    "noFilterConfiguredMessage": "Não existem filtros 'Ask For Values or time enable layer' configurados no web map",
+    "singleFieldDateTimeLabel": "Data e hora do evento",
+    "multiFieldStartDateTimeLabel": "Data e hora de início",
+    "multiFieldEndDateTimeLabel": "Data e hora de fim"
   }
 });

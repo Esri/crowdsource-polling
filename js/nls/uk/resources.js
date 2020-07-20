@@ -31,6 +31,7 @@ define({
     "signOutButtonTooltip": "Вийти із системи",
     "helpButtonLabel": "Довідка",
     "helpButtonTooltip": "Докладніше",
+    "filterButtonLabel": "Фільтр",
     "gotoListViewLabel": "Вид списку",
     "gotoListViewTooltip": "Перейти до виду списку",
     "gotoMapViewLabel": "Вид карти",
@@ -74,5 +75,18 @@ define({
     "linkToMapViewOptionLabel": "Фільтрувати список за картою",
     "linkToMapViewOptionTooltip": "Скласти перелік об'єктів, які видимі у поточній карті",
     "likesForThisItemTooltip": "Голосів за цей елемент"
+  },
+  "filter": {
+    "filterPanelHeaderText": "Задані фільтри",
+    "selectOption": "Вибрати",
+    "applyButton": "Застосувати",
+    "hintLabel": "Підказка: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "унікальне",
+    "valueRadioBtnLabel": "значення",
+    "andTextLabel": "та",
+    "noFilterConfiguredMessage": "Фільтри «Запитувати значення або шар, пристосований для роботи з часовими даними» не налаштовано у веб-карті",
+    "singleFieldDateTimeLabel": "Ввести дату та час",
+    "multiFieldStartDateTimeLabel": "Дата та час початку",
+    "multiFieldEndDateTimeLabel": "Дата та час завершення"
   }
 });

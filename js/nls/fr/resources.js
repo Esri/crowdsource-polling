@@ -25,9 +25,9 @@ define({
   },
   "sidebar_header": {
     "menuButtonTooltip": "Afficher le menu",
-    "signInButton": "Connexion",
-    "signInButtonTooltip": "Se connecter",
-    "signOutButton": "Déconnexion",
+    "signInButton": "Se connecter",
+    "signInButtonTooltip": "Connexion",
+    "signOutButton": "Se déconnecter",
     "signOutButtonTooltip": "Déconnexion",
     "helpButtonLabel": "Aide",
     "helpButtonTooltip": "En savoir plus",
@@ -41,7 +41,7 @@ define({
     "closeButtonTooltip": "Fermer"
   },
   "social_media": {
-    "signInHeaderTitle": "Connexion au réseau social",
+    "signInHeaderTitle": "Connexion via un réseau social",
     "signIntoFacebookTooltip": "Se connecter avec Facebook",
     "signIntoGooglePlusTooltip": "Se connecter avec Google+",
     "signIntoTwitterTooltip": "Se connecter avec Twitter",

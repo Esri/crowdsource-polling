@@ -23,6 +23,7 @@ define([
     "dojo/Deferred",
     "dojo/dom",
     "dojo/dom-class",
+    "dojo/html",
     "dojo/dom-construct",
     "dojo/dom-style",
     "dojo/dom-geometry",
@@ -58,6 +59,7 @@ define([
     "application/widgets/PopupWindow/SocialMediaSignin",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
+    "application/utils/utils",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
     "dojo/domReady!"
@@ -70,6 +72,7 @@ define([
     Deferred,
     dom,
     domClass,
+    html,
     domConstruct,
     domStyle,
     domGeom,
@@ -104,7 +107,8 @@ define([
     PopupWindow,
     SocialMediaSignin,
     SidebarContentController,
-    SidebarHeader
+    SidebarHeader,
+    AppUtils
 ) {
     return declare(null, {
         config: {},
@@ -133,6 +137,12 @@ define([
             //  Dojo Mobile's click setting of 'true' breaks feature layer click generation
             // See https://bugs.dojotoolkit.org/ticket/15878
             window.document.dojoClick = false;
+
+            if (this._isIE()) {
+                setTimeout(lang.hitch(this, function () {
+                    this._showWarningMessage(config);
+                }), 500);
+            }
 
             // config will contain application and user defined info for the template such as i18n strings,
             // the web map id and application id
@@ -1906,6 +1916,57 @@ define([
             }), function () {
                 def.reject();
             });
+        },
+
+        /**
+         * Show message in modal dialog
+         * @memberOf js/main
+         */
+        _showWarningMessage: function (config) {
+            var warningDOM, warningMessageModal, message, logoWrapper;
+            // Initialize help widget
+            warningDOM = domConstruct.create("div", {
+                "class": "esriCTSupportedBrowsersImage"
+            });
+            //show the message as per AGOL/Portal hosted app
+            if (this._isAGOLHosted()) {
+                message = AppUtils.parseWarningMessage(config.i18n.map.warningMessageAGOL);
+            } else {
+                message = AppUtils.parseWarningMessage(config.i18n.map.warningMessageEnterprise);
+            }
+            //Create DOM for showing text and browser icons
+            textContent = domConstruct.create("div", {
+                innerHTML: message
+            }, warningDOM);
+            //Add DOM for browser icon
+            logoWrapper = domConstruct.create("div", {}, warningDOM);
+            html.set(logoWrapper, AppUtils.getBrowserSupportLogoTemplate(), {
+                parseContent: true
+            });
+
+            this._helpDialogContainer.set("displayTitle", config.i18n.map.warningMessageTitle);
+            this._helpDialogContainer.set("displayText", warningDOM.innerHTML);
+            this._helpDialogContainer.show();
+
+        },
+
+        /**
+         * This function is used to check if app is hosted on AGOL or portal
+         * @memberOf js/main
+         */
+        _isAGOLHosted: function () {
+            return window.location.hostname.indexOf('arcgis.com') > -1;
+        },
+
+        /**
+         * This function is used to check if app is running in IE browser
+         * @memberOf js/main
+         */
+        _isIE: function () {
+            ua = navigator.userAgent;
+            /* MSIE used to detect old browsers and Trident used to newer ones*/
+            var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+            return is_ie;
         }
 
     });

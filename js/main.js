@@ -59,7 +59,6 @@ define([
     "application/widgets/PopupWindow/SocialMediaSignin",
     "application/widgets/SidebarContentController/SidebarContentController",
     "application/widgets/SidebarHeader/SidebarHeader",
-    "application/widgets/Help/Help",
     "application/utils/utils",
     "dijit/layout/LayoutContainer",
     "dijit/layout/ContentPane",
@@ -109,7 +108,6 @@ define([
     SocialMediaSignin,
     SidebarContentController,
     SidebarHeader,
-    Help,
     AppUtils
 ) {
     return declare(null, {
@@ -1946,13 +1944,10 @@ define([
                 parseContent: true
             });
 
-            warningMessageModal = new Help({
-                "appConfig": {
-                    "helpDialogTitle": config.i18n.map.warningMessageTitle,
-                    "helpDialogContent": warningDOM.innerHTML
-                }
-            });
-            warningMessageModal.startup();
+            this._helpDialogContainer.set("displayTitle", config.i18n.map.warningMessageTitle);
+            this._helpDialogContainer.set("displayText", warningDOM.innerHTML);
+            this._helpDialogContainer.show();
+
         },
 
         /**

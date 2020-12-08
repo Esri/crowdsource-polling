@@ -170,6 +170,7 @@ define([
                     link.href = "./css/rtl.css";
                     document.getElementsByTagName("head")[0].appendChild(link);
                 }
+                this._checkSelfContent();
 
                 promise = this._launch(itemInfo);
             }
@@ -179,6 +180,18 @@ define([
             }
 
             return promise;
+        },
+
+        _checkSelfContent: function () {
+            if (this.config.appResponse && 
+              this.config.templateConfig.esriEnvironment &&
+              this.config.appResponse.item &&
+              this.config.appResponse.item.access == "public" &&
+              this.config.appResponse.item.contentOrigin &&
+              this.config.appResponse.item.contentOrigin != "self"){
+                var redirectUrl = "https://www.arcgis.com/apps/CrowdsourcePolling/index.html?appId=" + this.config.appResponse.item.id;
+                window.location.replace("../shared/origin/index.html?appUrl=" + redirectUrl);
+            }
         },
 
         /**

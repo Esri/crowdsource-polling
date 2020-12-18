@@ -536,6 +536,36 @@ textarea {
     margin-right: 0.5em;
 }
 
+.esriCTModelDialog .modal-body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    height: 250px;
+    height: 300px;
+    margin-bottom: 15px;
+}
+
+.esriCTSupportedBrowsersImage {
+    text-align: center;
+}
+
+#browser-logo-list {
+    display: flex;
+    align-items: center;
+    margin: 30px;
+    padding: 0;
+}
+
+.browser-logo {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.browser-logo img {
+    width: 3rem;
+    height: auto;
+}
+
+
 .esriCTClear
 {
     clear: both;

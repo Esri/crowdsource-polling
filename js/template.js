@@ -144,6 +144,7 @@ define([
                                 deferred.reject(new Error(licenseMessage));
                             }
                         }
+
                         // We have all we need, let's set up a few things
                         this._completeApplication();
                         deferred.resolve(this.config);

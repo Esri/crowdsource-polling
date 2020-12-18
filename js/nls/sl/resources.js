@@ -20,6 +20,9 @@ define({
       "message": "Vaš račun ni licenciran za uporabo konfigurabilnih aplikacij, ki niso javne. Prosite administratorja v vaši organizaciji, da vam dodeli tip uporabnika, ki vsebuje aplikacije Essential Apps ali licenco za dodatne aplikacije Essential Apps.",
       "title": "Brez licence"
     },
+    "warningMessageTitle": "Omejena podpora brskalnika",
+    "warningMessageAGOL": "Uporabljate zastarel brskalnik. Nekateri deli te aplikacije v tem brskalniku morda ne bodo delovali optimalno oz. sploh ne bodo delovali. Ta brskalnik v prihodnosti ne bo več podprt.</br></br>Prosimo, uporabljajte najnovejše različice <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ali <edge-link>Microsoft Edge</edge-link>.</br></br>Za več informacij o podpori brskalnika si oglejte našo dokumentacijo. Posredujte povratne informacije prek <feedback-link>GeoNet, skupnosti podjetja Esri</feedback-link>.",
+    "warningMessageEnterprise": "Uporabljate brskalnik, ki več ni podprt. Nekateri deli te aplikacije v tem brskalniku morda ne bodo delovali optimalno oz. sploh ne bodo delovali.</br></br>Prosimo, uporabljajte najnovejše različice <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ali <edge-link>Microsoft Edge</edge-link>.",
     "layerLoad": "Karte ni mogoče v celoti naložiti",
     "missingItemsFeatureLayer": "Konfigurirajte aplikacijo za uporabo geoobjektnega sloja"
   },

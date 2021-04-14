@@ -26,7 +26,6 @@ define([
     "dojo/on",
     "dojo/topic",
     "application/lib/SocialFB",
-    "application/lib/SocialGP",
     "application/lib/SocialTW"
 ], function (
     declare,
@@ -40,7 +39,6 @@ define([
     on,
     topic,
     SocialFB,
-    SocialGP,
     SocialTW
 ) {
     return declare([PopupWindow, _TemplatedMixin], {
@@ -66,7 +64,7 @@ define([
         postCreate: function () {
             var pThis = this,
                 i18n = this.appConfig.i18n.social_media,
-                facebook, google, twitter;
+                facebook, twitter;
 
             // Run any parent postCreate processes - can be done at any point
             this.inherited(arguments);
@@ -109,47 +107,6 @@ define([
                         }
                         else {
                             facebook.signIn();
-                        }
-                    });
-                }
-            }
-
-            // Google+
-            function GPCallback(response) {
-                pThis._signedInUser = null;
-                pThis._currentProvider = null;
-                var googleUser = response;
-                if (googleUser) {
-                    if (googleUser.name) {
-                        pThis.buttonGP.title = i18n.signOutOfGooglePlusTooltip;
-                        pThis._signedInUser = {
-                            "name": googleUser.name,
-                            "canSignOut": true,
-                            "provider": "GooglePlus"
-                        };
-                        pThis._currentProvider = google;
-                        pThis.hide();
-                    }
-                    else {
-                        pThis.buttonGP.title = i18n.signIntoGooglePlusTooltip;
-                        domStyle.set(pThis.buttonGP, "display", "inline-block");
-                    }
-                }
-                topic.publish("signinUpdate");
-            }
-
-            if (this.appConfig.allowGoogle) {
-                google = new SocialGP(this.appConfig);
-                if (google.isAvailable()) {
-                    google.init(GPCallback);
-
-                    this.buttonGP = this.addButton("images/gp-29.png", i18n.signIntoGooglePlusTooltip);
-                    on(this.buttonGP, "click", function () {
-                        if (google.isSignedIn()) {
-                            google.signOut();
-                        }
-                        else {
-                            google.signIn();
                         }
                     });
                 }
@@ -200,7 +157,7 @@ define([
             this.disclaimer.innerHTML = this.appConfig.socialMediaDisclaimer;
 
             // Is there anything that can be logged into?
-            this._isAvailable = (facebook !== undefined) || (google !== undefined) || (twitter !== undefined);
+            this._isAvailable = (facebook !== undefined) || (twitter !== undefined);
         },
 
         /**

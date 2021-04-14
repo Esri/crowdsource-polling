@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "تسجيل الدخول إلى شبكات التواصل الاجتماعي",
     "signIntoFacebookTooltip": "تسجيل الدخول باستخدام Facebook",
-    "signIntoGooglePlusTooltip": "تسجيل الدخول باستخدام Google+",
     "signIntoTwitterTooltip": "تسجيل الدخول باستخدام Twitter",
     "signOutOfFacebookTooltip": "تسجيل الخروج من Facebook",
-    "signOutOfGooglePlusTooltip": "تسجيل الخروج من Google+",
     "signOutOfTwitterTooltip": "تسجيل الخروج من Twitter"
   },
   "dynamic_form": {

@@ -150,9 +150,8 @@ define([
             if (config) {
                 this.config = config;
 
-                // Remove access to Facebook and Google plus due to unsupportable changes in its API
+                // Remove access to Facebook and due to unsupportable changes in its API
                 this.config.allowFacebook = false;
-                this.config.allowGoogle = false;
 
                 // Normalize string booleans
                 this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);

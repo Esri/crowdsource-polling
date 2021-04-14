@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Connexion via un réseau social",
     "signIntoFacebookTooltip": "Se connecter avec Facebook",
-    "signIntoGooglePlusTooltip": "Se connecter avec Google+",
     "signIntoTwitterTooltip": "Se connecter avec Twitter",
     "signOutOfFacebookTooltip": "Se déconnecter de Facebook",
-    "signOutOfGooglePlusTooltip": "Se déconnecter de Google+",
     "signOutOfTwitterTooltip": "Se déconnecter de Twitter"
   },
   "dynamic_form": {

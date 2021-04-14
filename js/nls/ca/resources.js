@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Inici de sessió a les xarxes socials",
     "signIntoFacebookTooltip": "Inicia la sessió amb el Facebook",
-    "signIntoGooglePlusTooltip": "Inicia la sessió amb el Google+",
     "signIntoTwitterTooltip": "Inicia la sessió amb el Twitter",
     "signOutOfFacebookTooltip": "Tanca la sessió del Facebook",
-    "signOutOfGooglePlusTooltip": "Tanca la sessió del Google+",
     "signOutOfTwitterTooltip": "Tanca la sessió del Twitter"
   },
   "dynamic_form": {

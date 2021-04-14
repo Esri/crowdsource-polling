@@ -46,8 +46,6 @@ define({
     "commentNameField": "NAME",
     "allowFacebook": false,
     "facebookAppId": "",
-    "allowGoogle": false,
-    "googleplusClientId": "",
     "showRelatedFeatures" : false,
     "highlightSelectedFeature" : true, //This flag will work only if "showRelatedFeatures" is true
     "allowTwitter": true,

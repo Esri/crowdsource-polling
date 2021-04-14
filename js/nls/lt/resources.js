@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Prisijungimas per socialinius tinklus",
     "signIntoFacebookTooltip": "Prisijungti naudojant Facebook",
-    "signIntoGooglePlusTooltip": "Prisijungti naudojant Google+",
     "signIntoTwitterTooltip": "Prisijungti naudojant Twitter",
     "signOutOfFacebookTooltip": "Atsijungti nuo Facebook",
-    "signOutOfGooglePlusTooltip": "Atsijungti nuo Google+",
     "signOutOfTwitterTooltip": "Atsijungti nuo Twitter"
   },
   "dynamic_form": {

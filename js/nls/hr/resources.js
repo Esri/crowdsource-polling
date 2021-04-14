@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Prijava putem društvenih medija",
     "signIntoFacebookTooltip": "Prijava preko Facebooka",
-    "signIntoGooglePlusTooltip": "Prijava preko Google+",
     "signIntoTwitterTooltip": "Prijava preko Twittera",
     "signOutOfFacebookTooltip": "Odjava s Facebooka",
-    "signOutOfGooglePlusTooltip": "Odjava s Google+",
     "signOutOfTwitterTooltip": "Odjava s Twittera"
   },
   "dynamic_form": {

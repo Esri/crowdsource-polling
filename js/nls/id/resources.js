@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Masuk Melalui Media Sosial",
     "signIntoFacebookTooltip": "Masuk dengan Facebook",
-    "signIntoGooglePlusTooltip": "Masuk dengan Google+",
     "signIntoTwitterTooltip": "Masuk dengan Twitter",
     "signOutOfFacebookTooltip": "Keluar dari Facebook",
-    "signOutOfGooglePlusTooltip": "Keluar dari Google+",
     "signOutOfTwitterTooltip": "Keluar dari Twitter"
   },
   "dynamic_form": {

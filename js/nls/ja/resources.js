@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "ソーシャル メディアのサイン イン",
     "signIntoFacebookTooltip": "Facebook を使用してサイン イン",
-    "signIntoGooglePlusTooltip": "Google+ を使用してサイン イン",
     "signIntoTwitterTooltip": "Twitter を使用してサイン イン",
     "signOutOfFacebookTooltip": "Facebook からサイン アウト",
-    "signOutOfGooglePlusTooltip": "Google+ からサイン アウト",
     "signOutOfTwitterTooltip": "Twitter からサイン アウト"
   },
   "dynamic_form": {

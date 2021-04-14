@@ -20,8 +20,6 @@
         "commentNameField": "NAME",
         "allowFacebook": false,
         "facebookAppId": "",
-        "allowGoogle": false,
-        "googleplusClientId": "",
         "allowTwitter": true,
         "showRelatedFeatures" : false,
         "showFilter": false,

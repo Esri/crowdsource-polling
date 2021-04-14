@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Logowanie przy użyciu mediów społecznościowych",
     "signIntoFacebookTooltip": "Zaloguj się, używając danych dostępowych z serwisu Facebook",
-    "signIntoGooglePlusTooltip": "Zaloguj się, używając danych dostępowych z serwisu Google+",
     "signIntoTwitterTooltip": "Zaloguj się, używając danych dostępowych z serwisu Twitter",
     "signOutOfFacebookTooltip": "Wyloguj się z Facebooka",
-    "signOutOfGooglePlusTooltip": "Wyloguj się z Google+",
     "signOutOfTwitterTooltip": "Wyloguj się z Twittera"
   },
   "dynamic_form": {

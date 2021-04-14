@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Prijave družbenih omrežij",
     "signIntoFacebookTooltip": "Prijavite se z računom Facebook",
-    "signIntoGooglePlusTooltip": "Prijavite se z računom Google+",
     "signIntoTwitterTooltip": "Prijavite se z računom Twitter",
     "signOutOfFacebookTooltip": "Odjavite se iz Facebooka",
-    "signOutOfGooglePlusTooltip": "Odjavite se iz Google+",
     "signOutOfTwitterTooltip": "Odjavite se iz Twitterja"
   },
   "dynamic_form": {

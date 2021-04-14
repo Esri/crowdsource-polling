@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "Sosyal Medya Oturumu",
     "signIntoFacebookTooltip": "Facebook ile oturum aç",
-    "signIntoGooglePlusTooltip": "Google+ ile oturum aç",
     "signIntoTwitterTooltip": "Twitter ile oturum aç",
     "signOutOfFacebookTooltip": "Facebook oturumunu kapat",
-    "signOutOfGooglePlusTooltip": "Google+ oturumunu kapat",
     "signOutOfTwitterTooltip": "Twitter oturumunu kapat"
   },
   "dynamic_form": {

@@ -46,10 +46,8 @@ define({
   "social_media": {
     "signInHeaderTitle": "소셜 미디어 로그인",
     "signIntoFacebookTooltip": "Facebook으로 로그인",
-    "signIntoGooglePlusTooltip": "Google+로 로그인",
     "signIntoTwitterTooltip": "Twitter로 로그인",
     "signOutOfFacebookTooltip": "Facebook 로그아웃",
-    "signOutOfGooglePlusTooltip": "Google+ 로그아웃",
     "signOutOfTwitterTooltip": "Twitter 로그아웃"
   },
   "dynamic_form": {

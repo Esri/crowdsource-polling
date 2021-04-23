@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Είσοδος σε μέσα κοινωνικής δικτύωσης",
     "signIntoFacebookTooltip": "Σύνδεση με Facebook",
+    "signIntoGooglePlusTooltip": "Σύνδεση με Google+",
     "signIntoTwitterTooltip": "Σύνδεση με Twitter",
     "signOutOfFacebookTooltip": "Αποσύνδεση από το Facebook",
+    "signOutOfGooglePlusTooltip": "Αποσύνδεση από το Google+",
     "signOutOfTwitterTooltip": "Αποσύνδεση από το Twitter"
   },
   "dynamic_form": {

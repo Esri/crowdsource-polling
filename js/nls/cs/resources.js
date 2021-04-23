@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Přihlášení prostřednictvím sociálních sítí",
     "signIntoFacebookTooltip": "Přihlásit se pomocí Facebooku",
+    "signIntoGooglePlusTooltip": "Přihlásit se pomocí Google+",
     "signIntoTwitterTooltip": "Přihlásit se pomocí Twitteru",
     "signOutOfFacebookTooltip": "Odhlásit se z Facebooku",
+    "signOutOfGooglePlusTooltip": "Odhlásit se z Google+",
     "signOutOfTwitterTooltip": "Odhlásit se z Twitteru"
   },
   "dynamic_form": {

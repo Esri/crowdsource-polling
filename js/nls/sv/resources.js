@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Inloggning med sociala medier",
     "signIntoFacebookTooltip": "Logga in med Facebook",
+    "signIntoGooglePlusTooltip": "Logga in med Google+",
     "signIntoTwitterTooltip": "Logga in med Twitter",
     "signOutOfFacebookTooltip": "Logga ut från Facebook",
+    "signOutOfGooglePlusTooltip": "Logga ut från Google+",
     "signOutOfTwitterTooltip": "Logga ut från Twitter"
   },
   "dynamic_form": {

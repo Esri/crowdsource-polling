@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Sotsiaalmeediasse sisselogimine",
     "signIntoFacebookTooltip": "Logige sisse Facebooki kontoga",
+    "signIntoGooglePlusTooltip": "Logige sisse Google+ kasutajana",
     "signIntoTwitterTooltip": "Logige sisse Twitteri konto kaudu",
     "signOutOfFacebookTooltip": "Logi välja Facebookist",
+    "signOutOfGooglePlusTooltip": "Logi välja Google+ kontost",
     "signOutOfTwitterTooltip": "Logi välja Twitterist"
   },
   "dynamic_form": {

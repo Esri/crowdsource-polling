@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Conectare la reţelele de socializare",
     "signIntoFacebookTooltip": "Autentificare cu Facebook",
+    "signIntoGooglePlusTooltip": "Autentificare cu Google+",
     "signIntoTwitterTooltip": "Autentificare cu Twitter",
     "signOutOfFacebookTooltip": "Deconectare de la Facebook",
+    "signOutOfGooglePlusTooltip": "Deconectare de la Google+",
     "signOutOfTwitterTooltip": "Deconectare de la Twitter"
   },
   "dynamic_form": {

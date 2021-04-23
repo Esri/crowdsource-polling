@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Sosiaalisen median sisäänkirjautuminen",
     "signIntoFacebookTooltip": "Kirjaudu sisään Facebook-tunnuksella",
+    "signIntoGooglePlusTooltip": "Kirjaudu sisään Google+-tunnuksella",
     "signIntoTwitterTooltip": "Kirjaudu sisään Twitter-tunnuksella",
     "signOutOfFacebookTooltip": "Kirjaudu ulos Facebookista",
+    "signOutOfGooglePlusTooltip": "Kirjaudu ulos Google+:sta",
     "signOutOfTwitterTooltip": "Kirjaudu ulos Twitteristä"
   },
   "dynamic_form": {

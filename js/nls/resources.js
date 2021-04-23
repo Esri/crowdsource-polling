@@ -47,8 +47,10 @@ define({
         social_media: {  // Social media sign-in/out
             signInHeaderTitle : "Social Media Sign In",
             signIntoFacebookTooltip: "Sign in with Facebook",
+            signIntoGooglePlusTooltip: "Sign in with Google+",
             signIntoTwitterTooltip: "Sign in with Twitter",
             signOutOfFacebookTooltip: "Sign out of Facebook",
+            signOutOfGooglePlusTooltip: "Sign out of Google+",
             signOutOfTwitterTooltip: "Sign out of Twitter"
         },
         dynamic_form: {  // General-purpose form; used to receive comment entry

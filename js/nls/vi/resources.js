@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Đăng nhập truyền thông xã hội",
     "signIntoFacebookTooltip": "Đăng nhập bằng Facebook",
+    "signIntoGooglePlusTooltip": "Đăng nhập bằng Google+",
     "signIntoTwitterTooltip": "Đăng nhập bằng Twitter",
     "signOutOfFacebookTooltip": "Đăng xuất khỏi Facebook",
+    "signOutOfGooglePlusTooltip": "Đăng xuất khỏi Google+",
     "signOutOfTwitterTooltip": "Đăng xuất khỏi Twitter"
   },
   "dynamic_form": {

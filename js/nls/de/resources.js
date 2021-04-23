@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Anmeldung bei sozialen Medien",
     "signIntoFacebookTooltip": "Mit Facebook anmelden",
+    "signIntoGooglePlusTooltip": "Mit Google+ anmelden",
     "signIntoTwitterTooltip": "Mit Twitter anmelden",
     "signOutOfFacebookTooltip": "Bei Facebook abmelden",
+    "signOutOfGooglePlusTooltip": "Bei Google+ abmelden",
     "signOutOfTwitterTooltip": "Bei Twitter abmelden"
   },
   "dynamic_form": {

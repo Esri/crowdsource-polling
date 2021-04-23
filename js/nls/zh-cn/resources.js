@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "社交媒体登录",
     "signIntoFacebookTooltip": "使用 Facebook 登录",
+    "signIntoGooglePlusTooltip": "使用 Google+ 登录",
     "signIntoTwitterTooltip": "使用 Twitter 登录",
     "signOutOfFacebookTooltip": "登出 Facebook",
+    "signOutOfGooglePlusTooltip": "登出 Google+",
     "signOutOfTwitterTooltip": "登出 Twitter"
   },
   "dynamic_form": {

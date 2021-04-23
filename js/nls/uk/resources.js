@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Увійти через соціальні мережі",
     "signIntoFacebookTooltip": "Увійти через Facebook",
+    "signIntoGooglePlusTooltip": "Увійти через Google+",
     "signIntoTwitterTooltip": "Увійти через Twitter",
     "signOutOfFacebookTooltip": "Вийти з Facebook",
+    "signOutOfGooglePlusTooltip": "Вийти з Google+",
     "signOutOfTwitterTooltip": "Вийти з Twitter"
   },
   "dynamic_form": {

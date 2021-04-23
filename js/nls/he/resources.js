@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "כניסה לרשת חברתית",
     "signIntoFacebookTooltip": "התחבר עם Facebook",
+    "signIntoGooglePlusTooltip": "התחבר עם Google+‎",
     "signIntoTwitterTooltip": "התחבר עם טוויטר",
     "signOutOfFacebookTooltip": "התנתק מ-Facebook",
+    "signOutOfGooglePlusTooltip": "התנתק מ-Google+‎",
     "signOutOfTwitterTooltip": "התנתק מ-Twitter"
   },
   "dynamic_form": {

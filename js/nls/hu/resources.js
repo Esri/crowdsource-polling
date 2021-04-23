@@ -46,8 +46,10 @@ define({
   "social_media": {
     "signInHeaderTitle": "Bejelentkezés közösségi médián keresztül",
     "signIntoFacebookTooltip": "Bejelentkezés Facebook-azonosítóval",
+    "signIntoGooglePlusTooltip": "Bejelentkezés Google+-azonosítóval",
     "signIntoTwitterTooltip": "Bejelentkezés Twitter-azonosítóval",
     "signOutOfFacebookTooltip": "Kijelentkezés a Facebookból",
+    "signOutOfGooglePlusTooltip": "Kijelentkezés a Google+-ból",
     "signOutOfTwitterTooltip": "Kijelentkezés a Twitterből"
   },
   "dynamic_form": {

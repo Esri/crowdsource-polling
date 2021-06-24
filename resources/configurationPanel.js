@@ -20,7 +20,7 @@
         "commentNameField": "NAME",
         "allowFacebook": false,
         "facebookAppId": "",
-        "allowTwitter": true,
+        "allowTwitter": false,
         "showRelatedFeatures" : false,
         "showFilter": false,
         "enableAllFilters": true,

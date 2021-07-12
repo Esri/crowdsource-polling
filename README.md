@@ -18,7 +18,7 @@
 
 Crowdsource Polling is a configurable web application template that allows users to submit comments or feedback on existing plans and proposals. The application is responsively designed to be used on tablets and desktop computers.
 
-The Crowdsource Polling application presents a map that can be used to gauge sentiment on specific plans or proposals. Users can anonymously submit new comments and/or vote on the importance of the plan or proposal. They also can authenticate with their social media credentials and have an open dialog with other members of the community.
+The Crowdsource Polling application presents a map that can be used to gauge sentiment on specific plans or proposals. Users can anonymously submit new comments and/or vote on the importance of the plan or proposal. 
 
 [![Image of the Constituent Engagement app][Thumbnail]][Preview]
 
@@ -26,7 +26,7 @@ The Crowdsource Polling application presents a map that can be used to gauge sen
 
 * Presents a web map that has been shared with the ArcGIS Online/Portal group configured in the application.
 * Users can review reports and provide feedback as comments and votes.
-* Users can access the content anonymously, or authenticate using their Twitter or ArcGIS credentials.
+* Users can access the content anonymously, or authenticate using their ArcGIS credentials.
 * The application can also be used in browsers on tablets and desktops using [all browsers supported by ArcGIS Online][supported browsers].
 
 ## Requirements
@@ -55,7 +55,7 @@ The Crowdsource Polling application presents a map that can be used to gauge sen
 3. Change the sharing host, found in defaults.js inside the config folder for the application, to the sharing URL for ArcGIS Online or Portal. For ArcGIS Online users, keep the default value of www.arcgis.com or specify the name of your organization.
   - ArcGIS Online Example:  `"sharinghost": location.protocol + "//" + "<your organization name>.maps.arcgis.com"`
   - Portal Example where `arcgis` is the name of the Web Adapter: `"sharinghost": location.protocol + "//" + "webadapter.domain.com/arcgis"`
-4. If you are using Portal or a local install of the ArcGIS API for JavaScript, change all references to the ArcGIS API for JavaScript in index.html to refer to your local copy of the API. Search for the references containing `"//js.arcgis.com/3.37"` and replace this portion of the reference with the url to your local install.
+4. If you are using Portal or a local install of the ArcGIS API for JavaScript, change all references to the ArcGIS API for JavaScript in index.html to refer to your local copy of the API. Search for the references containing `"//js.arcgis.com/3.35"` and replace this portion of the reference with the url to your local install.
   - For example: `"//webadaptor.domain.com/arcgis/jsapi/jsapi"` where `arcgis` is the name of your Web Adaptor.
 5. Copy a group ID from Portal/ArcGIS Online and replace the default group ID in the application’s default.js file. You can now run the application on your web server or configure the application further.
 

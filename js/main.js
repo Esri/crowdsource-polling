@@ -153,6 +153,9 @@ define([
                 // Remove access to Facebook and due to unsupportable changes in its API
                 this.config.allowFacebook = false;
 
+                // Remove access to Twitter at 9.2 due to Twitter proxy retirement
+                this.config.allowTwitter = false;
+
                 // Normalize string booleans
                 this.config.ascendingSortOrder = this._toBoolean(this.config.ascendingSortOrder);
                 this.config.showAllFeatures = this._toBoolean(config.showAllFeatures);

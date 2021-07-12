@@ -20,13 +20,12 @@
         "commentNameField": "NAME",
         "allowFacebook": false,
         "facebookAppId": "",
-        "allowTwitter": true,
+        "allowTwitter": false,
         "showRelatedFeatures" : false,
         "showFilter": false,
         "enableAllFilters": true,
         "showDateFilter": false,
-        "highlightSelectedFeature" : true,
-        "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
+        "highlightSelectedFeature" : true,        
         "showDisplayTextAsSplashScreen": false,
         "customUrlLayer": {
             "id": null,
@@ -69,29 +68,6 @@
             "label": "Display the help widget as a splash screen",
             "fieldName": "showDisplayTextAsSplashScreen",
             "type": "boolean"
-        }, {
-            "type": "subcategory",
-            "label": "Sign in options"
-        }, {
-            "type": "paragraph",
-            "value": "Allow your users to sign in to this application using their social media credentials. Comments submitted by authenticated users will have the commenters name automatically stored with their feedback."
-        }, {
-            "label": "Field to store the name of authenticated commenters.",
-            "fieldName": "commentNameField",
-            "type": "string",
-            "tooltip": "Field in a table with a geodatabase relationship to the selected feature layer for storing the name of authenticated commenters. Table must exist in map. Field name is case-sensitive."
-        }, {
-            "label": "Allow users to sign in using Twitter",
-            "fieldName": "allowTwitter",
-            "type": "boolean",
-            "tooltip": "Enable to allow users to sign in using their Twitter credentials"
-        }, {
-            "label": "Sign in window text",
-            "fieldName": "socialMediaDisclaimer",
-            "type": "string",
-            "placeholder": "",
-            "tooltip": "Text to display in the Sign In window",
-            "stringFieldOption": "richtext"
         }]
     }, {
         "category": "<b>Theme</b>",

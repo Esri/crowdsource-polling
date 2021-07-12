@@ -48,7 +48,7 @@ define({
     "facebookAppId": "",
     "showRelatedFeatures" : false,
     "highlightSelectedFeature" : true, //This flag will work only if "showRelatedFeatures" is true
-    "allowTwitter": true,
+    "allowTwitter": false,
     "socialMediaDisclaimer": "Choose how you would like to sign in to this application. The name associated with your social media account will be added to any comments you post.",
     "showDisplayTextAsSplashScreen": false,
     "showFilter": false,

@@ -114,7 +114,7 @@ define([
         load: function () {
             var deferred = new Deferred();
             setTimeout(lang.hitch(this, function () {
-                var opLayers, iOpLayer = 0,
+                var opLayers, iOpLayer = 0, isValidFeatureLayer = false,
                     promises = [];
 
                 // Operational layer provides item fields and formats
@@ -127,15 +127,33 @@ define([
                 opLayers = this.appConfig.itemInfo.itemData.operationalLayers;
                 if (this.appConfig.featureLayer && this.appConfig.featureLayer.id) {
                     for (iOpLayer = 0; iOpLayer < opLayers.length; iOpLayer++) {
-                        if (this.appConfig.featureLayer.id === opLayers[iOpLayer].id) {
+                        if (this.appConfig.featureLayer.id === opLayers[iOpLayer].id &&
+                            opLayers[iOpLayer].layerType === "ArcGISFeatureLayer" &&
+                            !opLayers[iOpLayer].hasOwnProperty("featureCollection")) {
+                            isValidFeatureLayer = true;
                             break;
                         }
                     }
                 }
 
-                // Or if configured to an unmatching feature layer, use the first
-                if (iOpLayer === opLayers.length) {
-                    iOpLayer = 0;
+                // Or if configured to an un matching feature layer
+                // then use the first available feature layer from the web map
+                if (!isValidFeatureLayer) {
+                    for (var i = 0; i < opLayers.length; i++) {
+                        if (opLayers[i].layerType === "ArcGISFeatureLayer" &&
+                            !opLayers[i].hasOwnProperty("featureCollection")) {
+                            iOpLayer = i;
+                            isValidFeatureLayer = true;
+                            break;
+                        }
+                    }
+                }
+
+                // if no valid feature layer is configured or no feature layer is being present in the 
+                // web map then show the warning message
+                if (!isValidFeatureLayer) {
+                    deferred.reject(this.appConfig.i18n.map.missingItemsFeatureLayer);
+                    return;
                 }
 
                 // Get the layer definition

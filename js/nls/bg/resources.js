@@ -15,81 +15,81 @@
  */
 define({
   "map": {
-    "error": "Impossible de créer la carte",
+    "error": "Не може да се създаде карта",
     "licenseError": {
-      "message": "La licence de votre compte ne permet pas d’utiliser des applications configurables non publiques. Demandez à l’administrateur de votre organisation de vous attribuer un type d’utilisateur qui inclut une licence Essential Apps ou une licence Essential Apps additionnelle.",
-      "title": "Pas de licence"
+      "message": "Вашият акаунт не е лицензиран да използва Configurable Apps, които не са публични. Помолете администратора на Вашата организация да Ви направи тип потребител, който включва основни приложения или допълнителен лиценз за основни приложения.",
+      "title": "Не е лицензиран"
     },
-    "warningMessageTitle": "Prise en charge limitée du navigateur",
-    "warningMessageAGOL": "Vous utilisez un navigateur obsolète. Certaines parties de cette application risquent de ne pas fonctionner de manière optimale ou de ne pas fonctionner du tout dans ce navigateur. Ce navigateur ne sera plus pris en charge à l’avenir.</br></br>Utilisez les dernières versions de <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ou <edge-link>Microsoft Edge</edge-link>.</br></br>Pour plus d’informations sur les navigateurs pris en charge, consultez la documentation. Envoyez vos commentaires via <feedback-link>GeoNet, la communauté Esri</feedback-link>.",
-    "warningMessageEnterprise": "Vous utilisez un navigateur qui n’est plus pris en charge. Certaines parties de cette application risquent de ne pas fonctionner de manière optimale ou de ne pas fonctionner du tout dans ce navigateur.</br></br>Utilisez les dernières versions de <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> ou <edge-link>Microsoft Edge</edge-link>.",
-    "layerLoad": "Impossible de charger entièrement la carte",
-    "missingItemsFeatureLayer": "Veuillez configurer l'application pour utiliser une couche d'entités"
+    "warningMessageTitle": "Ограничена поддръжка на браузър",
+    "warningMessageAGOL": "Използвате остарял браузър. Някои части на това приложение може да не работят оптимално или изобщо да не работят с този браузър. Поддръжката на този браузър ще бъде преустановена в бъдеще. </br></br>Използвайте последните версии на<chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> или<edge-link>Microsoft Edge</edge-link>.</br></br>За повече информация относно поддръжката на браузъра вижте нашата документация. Напишете ни Вашия отзив през <feedback-link>GeoNet, Esri Community</feedback-link>.",
+    "warningMessageEnterprise": "Използвате браузър, който вече не се поддържа. Някои части на това приложение може да не работят оптимално или изобщо да не работят с този браузър.</br></br>Използвайте последните версии на <chrome-link>Google Chrome</chrome-link>, <firefox-link>Mozilla Firefox</firefox-link>, <safari-link>Apple Safari</safari-link> или<edge-link>Microsoft Edge</edge-link>.",
+    "layerLoad": "Картата не може да се зареди напълно",
+    "missingItemsFeatureLayer": "Моля, конфигурирайте приложението, за да използвате обектен слой"
   },
   "sidebar_header": {
-    "menuButtonTooltip": "Afficher le menu",
-    "signInButton": "Se connecter",
-    "signInButtonTooltip": "Connexion",
-    "signOutButton": "Se déconnecter",
-    "signOutButtonTooltip": "Déconnexion",
-    "helpButtonLabel": "Aide",
-    "helpButtonTooltip": "En savoir plus",
-    "filterButtonLabel": "Filtre",
-    "gotoListViewLabel": "Vue Liste",
-    "gotoListViewTooltip": "Accéder à la vue Liste",
-    "gotoMapViewLabel": "Vue cartographique",
-    "gotoMapViewTooltip": "Accéder à la vue cartographique"
+    "menuButtonTooltip": "Показване на меню",
+    "signInButton": "Регистрация",
+    "signInButtonTooltip": "Вписване",
+    "signOutButton": "Отписване",
+    "signOutButtonTooltip": "Отписване",
+    "helpButtonLabel": "Помощ",
+    "helpButtonTooltip": "Научете повече",
+    "filterButtonLabel": "Филтър",
+    "gotoListViewLabel": "Изглед на списък",
+    "gotoListViewTooltip": "Към изглед на списък",
+    "gotoMapViewLabel": "Изглед на карта",
+    "gotoMapViewTooltip": "Към изглед на карта"
   },
   "popup_Close": {
-    "closeButtonTooltip": "Fermer"
+    "closeButtonTooltip": "Затваряне"
   },
   "social_media": {
-    "signInHeaderTitle": "Connexion via un réseau social",
-    "signIntoFacebookTooltip": "Se connecter avec Facebook",
-    "signIntoGooglePlusTooltip": "Se connecter avec Google+",
-    "signIntoTwitterTooltip": "Se connecter avec Twitter",
-    "signOutOfFacebookTooltip": "Se déconnecter de Facebook",
-    "signOutOfGooglePlusTooltip": "Se déconnecter de Google+",
-    "signOutOfTwitterTooltip": "Se déconnecter de Twitter"
+    "signInHeaderTitle": "Влизане в социални мрежи",
+    "signIntoFacebookTooltip": "Регистрация с Facebook",
+    "signIntoGooglePlusTooltip": "Регистрация с Google+",
+    "signIntoTwitterTooltip": "Регистрация с Twitter",
+    "signOutOfFacebookTooltip": "Отписване от Facebook",
+    "signOutOfGooglePlusTooltip": "Отписване от Google+",
+    "signOutOfTwitterTooltip": "Отписване от Twitter"
   },
   "dynamic_form": {
-    "optionalFormItemFlag": " (facultatif)",
-    "requiredFormItemFlag": " (requis)",
-    "unsettableRequiredField": "Un champ obligatoire n'est pas initialisé ou ne figure pas dans le formulaire",
-    "countOfRemainingCharactersTooltip": "Caractères restants",
-    "attachmentsHeading": "Pièces jointes",
-    "addAttachmentTooltip": "Ajouter une pièce jointe",
-    "removeAttachmentTooltip": "Supprimer une pièce jointe",
-    "cancelButtonLabel": "Annuler",
-    "submitButtonLabel": "Envoyer"
+    "optionalFormItemFlag": " (по избор)",
+    "requiredFormItemFlag": " (задължително)",
+    "unsettableRequiredField": "Задължителното поле не е инициализирано, нито е във формата",
+    "countOfRemainingCharactersTooltip": "Оставащи символи",
+    "attachmentsHeading": "Прикачени файлове",
+    "addAttachmentTooltip": "Добавяне на прикачен файл",
+    "removeAttachmentTooltip": "Премахване на прикачен файл",
+    "cancelButtonLabel": "Отказ",
+    "submitButtonLabel": "Изпращане"
   },
   "item_details": {
-    "likeButtonTooltip": "Voter pour cet élément",
-    "likeButtonInverseTooltip": "Vote comptabilisé",
-    "commentButtonTooltip": "Ajouter un commentaire",
-    "gotoMapViewTooltip": "Accéder à la vue cartographique",
-    "galleryButtonTooltip": "Voir les fichiers joints",
-    "commentsListHeading": "Commentaires",
-    "noCommentsPlaceholder": "Aucun commentaire",
-    "numberOfAttachmentsUploaded": "${0} pièces(s) jointe(s) chargée(s)",
-    "numberOfAttachmentsUploadedAndFailed": "${0} pièces(s) jointe(s) chargée(s)<br>${1} pièces jointes n’ont pas pu être chargées"
+    "likeButtonTooltip": "Гласувайте за този елемент",
+    "likeButtonInverseTooltip": "Гласът е преброен",
+    "commentButtonTooltip": "Добавяне на коментар",
+    "gotoMapViewTooltip": "Към изглед на карта",
+    "galleryButtonTooltip": "Вижте прикачените файлове",
+    "commentsListHeading": "Коментари",
+    "noCommentsPlaceholder": "Няма коментари",
+    "numberOfAttachmentsUploaded": "Качени са ${0} прикачен(и) файл(ове)",
+    "numberOfAttachmentsUploadedAndFailed": "Качени са ${0} прикачен(и) файл(ове) <br> Неуспешно качване на${1} прикачен(и) файл(ове)"
   },
   "item_list": {
-    "linkToMapViewOptionLabel": "Filtrer la liste par cartes",
-    "linkToMapViewOptionTooltip": "Répertorier les entités visibles sur la carte active",
-    "likesForThisItemTooltip": "Voter pour cet élément"
+    "linkToMapViewOptionLabel": "Филтриране на списък по карта",
+    "linkToMapViewOptionTooltip": "Списък на обекти, които са видими в текущата карта",
+    "likesForThisItemTooltip": "Гласове за този елемент"
   },
   "filter": {
-    "filterPanelHeaderText": "Filtres définis",
-    "selectOption": "Sélectionner",
-    "applyButton": "Appliquer",
-    "hintLabel": "Astuce : ${hintLabelText}",
-    "uniqueRadioBtnLabel": "unique",
-    "valueRadioBtnLabel": "valeur",
-    "andTextLabel": "et",
-    "noFilterConfiguredMessage": "Aucun filtre 'Demander des valeurs ou activer le temps sur une couche' n’est configuré dans la carte Web",
-    "singleFieldDateTimeLabel": "Date et heure de l’événement",
-    "multiFieldStartDateTimeLabel": "Date et heure de début",
-    "multiFieldEndDateTimeLabel": "Date et heure de fin"
+    "filterPanelHeaderText": "Определени филтри",
+    "selectOption": "Избор",
+    "applyButton": "Прилагане",
+    "hintLabel": "Съвет: ${hintLabelText}",
+    "uniqueRadioBtnLabel": "уникални",
+    "valueRadioBtnLabel": "стойност",
+    "andTextLabel": "и",
+    "noFilterConfiguredMessage": "В уеб картата не са конфигурирани филтри „Търсене на стойности или слой с активирано време“",
+    "singleFieldDateTimeLabel": "Дата и час на събитие",
+    "multiFieldStartDateTimeLabel": "Начална дата и час",
+    "multiFieldEndDateTimeLabel": "Крайна дата и час"
   }
 });

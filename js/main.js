@@ -1394,8 +1394,11 @@ define([
                     this.map.infoWindow.hide();
                     //Check if clicked feature does not belong to item layer
                     //If yes, show the details panel for non editable layers feature
+                    //Make sure the layer has url, this will filter the feature collection layer
                     if (evt.graphic) {
-                        if (evt.graphic._layer.id !== this._mapData.getItemLayer().id) {
+                        if (this._mapData.getItemLayer() &&
+                            evt.graphic._layer.id !== this._mapData.getItemLayer().id &&
+                            evt.graphic._layer.url) {
                             evt.graphic.isNonEditableFeature = true;
                             domClass.add(this._itemDetails.domNode, "nonEditableFeature");
                             this._itemDetails.setItem(evt.graphic);
@@ -1445,7 +1448,8 @@ define([
                 array.forEach(this.config.itemInfo.itemData.operationalLayers, lang.hitch(this,
                     function (layer) {
                         //Consider only feature layers while dealing with the definition expression
-                        if (layer.layerType === "ArcGISFeatureLayer") {
+                        if (layer.layerType === "ArcGISFeatureLayer" && !layer.hasOwnProperty("featureCollection") &&
+                            layer.layerObject) {
                             //Store the static filters for time aware layer
                             if (layer.layerObject.timeInfo && !layer.definitionEditor) {
                                 this._staticTimeDefExp[layer.id] = layer.layerObject.getDefinitionExpression();

@@ -266,7 +266,7 @@ define([
             // be a different item's details--they go into the same scrollable div). The scrollIntoView can't change this
             // unless it occurs a little later than the default behavior, hence the setTimeout.
             setTimeout(function () {
-                nodeToMakeVisible.scrollIntoView();
+                nodeToMakeVisible.scrollIntoView({ behavior: "smooth", block: "nearest"});
             }, 500);
         },
 

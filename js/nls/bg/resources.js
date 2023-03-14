@@ -28,7 +28,7 @@ define({
   },
   "sidebar_header": {
     "menuButtonTooltip": "Показване на меню",
-    "signInButton": "Регистрация",
+    "signInButton": "Вписване",
     "signInButtonTooltip": "Вписване",
     "signOutButton": "Отписване",
     "signOutButtonTooltip": "Отписване",
@@ -45,9 +45,9 @@ define({
   },
   "social_media": {
     "signInHeaderTitle": "Влизане в социални мрежи",
-    "signIntoFacebookTooltip": "Регистрация с Facebook",
-    "signIntoGooglePlusTooltip": "Регистрация с Google+",
-    "signIntoTwitterTooltip": "Регистрация с Twitter",
+    "signIntoFacebookTooltip": "Вписване чрез Facebook",
+    "signIntoGooglePlusTooltip": "Вписване чрез Google+",
+    "signIntoTwitterTooltip": "Вписване чрез Twitter",
     "signOutOfFacebookTooltip": "Отписване от Facebook",
     "signOutOfGooglePlusTooltip": "Отписване от Google+",
     "signOutOfTwitterTooltip": "Отписване от Twitter"
